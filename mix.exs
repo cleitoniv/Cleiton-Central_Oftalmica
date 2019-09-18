@@ -43,7 +43,9 @@ defmodule Tecnovix.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:absinthe_phoenix, "~> 1.4.0"}
+      {:absinthe_phoenix, "~> 1.4.0"},
+      {:postgrex, "~> 0.14"},
+      {:scrivener_ecto, "~> 2.0"}
     ]
   end
 
