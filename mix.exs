@@ -45,7 +45,8 @@ defmodule Tecnovix.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:absinthe_phoenix, "~> 1.4.0"},
       {:postgrex, "~> 0.14"},
-      {:scrivener_ecto, "~> 2.0"}
+      {:scrivener_ecto, "~> 2.0"},
+      {:dataloader, "~> 1.0"}
     ]
   end
 
