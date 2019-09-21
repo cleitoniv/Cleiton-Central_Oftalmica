@@ -46,7 +46,8 @@ defmodule Tecnovix.MixProject do
       {:postgrex, "~> 0.14"},
       {:scrivener_ecto, "~> 2.0"},
       {:dataloader, "~> 1.0"},
-      {:httpoison, "~> 1.5"}
+      {:httpoison, "~> 1.5"},
+      {:jose, "~> 1.9"}
     ]
   end
 
