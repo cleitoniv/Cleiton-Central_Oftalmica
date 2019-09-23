@@ -8,7 +8,7 @@ defmodule Tecnovix.DAO do
 
   alias Tecnovix.Repo
   import Ecto.Query
-  
+
   defp build_fragments(conditions) when is_list(conditions) do
     Enum.reduce(conditions, dynamic(true), fn condition, acc ->
       dynamic([p], ^acc and ^condition)
@@ -26,6 +26,7 @@ defmodule Tecnovix.DAO do
         |> Enum.filter(fn func -> filter_module_func(func) end)
         |> Enum.flat_map(fn func -> get_valid_func(func, params) end)
         |> Enum.map(fn func -> get_filter_from_module(module, func, params) end)
+
       {:ok, filters}
     else
       _ -> {:error, :invalid_parameters}
@@ -87,13 +88,6 @@ defmodule Tecnovix.DAO do
   `State |> preload(:cities) |> Tecnovix.DAO.index([], params)`, dessa forma cada estado tera uma chave cities com um array
   de cidades e sera filtrado pelas condicoes passadas no segundo argumento.
   """
-<<<<<<< HEAD
-  def index(schema, conditions, params) do
-    schema
-    |> select([u], u)
-    |> where(^build_fragments(conditions))
-    |> Repo.paginate(params)
-=======
   def index(schema, {:ok, filters}, params) do
     try do
       schema
@@ -103,7 +97,6 @@ defmodule Tecnovix.DAO do
     rescue
       _ -> {:error, :invalid_parameters}
     end
->>>>>>> f42f68ae5f2eb7d770fa408f8b1d0e038be7c1b7
   end
 
   def index(_schema, {:error, :invalid_parameters} = error, _params), do: error
@@ -157,27 +150,27 @@ defmodule Tecnovix.DAO do
       def get_schema() do
         unquote(schema)
       end
+
       @doc false
-<<<<<<< HEAD
-      def index(sc, conditions, params) do
-        Tecnovix.DAO.index(sc, conditions, params)
-=======
       def index(sc, params) do
         Tecnovix.DAO.index(sc, Tecnovix.DAO.get_filters(__MODULE__, params), params)
->>>>>>> f42f68ae5f2eb7d770fa408f8b1d0e038be7c1b7
       end
+
       @doc false
       def create(params) do
         Tecnovix.DAO.create(unquote(schema), %unquote(schema){}, params)
       end
+
       @doc false
       def update(changeset, params) do
         Tecnovix.DAO.update(unquote(schema), changeset, params)
       end
+
       @doc false
       def delete(changeset) do
         Tecnovix.DAO.delete(changeset)
       end
+
       @doc false
       def show(id) do
         Tecnovix.DAO.show(unquote(schema), id)
