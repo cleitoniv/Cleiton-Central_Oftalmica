@@ -81,7 +81,7 @@ defmodule Tecnovix.DAO do
       end
       @doc false
       def index(sc, conditions, params) do
-        Tecnovix.DAO.index(sc, conditions)
+        Tecnovix.DAO.index(sc, conditions, params)
       end
       @doc false
       def create(params) do
