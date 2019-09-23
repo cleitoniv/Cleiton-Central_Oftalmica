@@ -9,10 +9,6 @@ defmodule Tecnovix.DAO do
   alias Tecnovix.Repo
   import Ecto.Query
   
-  @doc """
-  Helper que ajuda a buildar consultas com multiplas condicoes, usa a funcao `Ecto.Query.dynamic/2`, e espera
-  `conditions` como um array de `Ecto.Query.dynamic/2`
-  """
   defp build_fragments(conditions) when is_list(conditions) do
     Enum.reduce(conditions, dynamic(true), fn condition, acc ->
       dynamic([p], ^acc and ^condition)
@@ -27,11 +23,11 @@ defmodule Tecnovix.DAO do
   `State |> preload(:cities) |> Tecnovix.DAO.index([])`, dessa forma cada estado tera uma chave cities com um array
   de cidades e sera filtrado pelas condicoes passadas no segundo argumento.  
   """
-  def index(schema, conditions) do
+  def index(schema, conditions, params) do
     schema
     |> select([u], u)
     |> where(^build_fragments(conditions))
-    |> Repo.all()
+    |> Repo.paginate(params)
   end
 
   @doc """
@@ -84,7 +80,7 @@ defmodule Tecnovix.DAO do
         unquote(schema)
       end
       @doc false
-      def index(sc, conditions) do
+      def index(sc, conditions, params) do
         Tecnovix.DAO.index(sc, conditions)
       end
       @doc false

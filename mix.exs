@@ -20,7 +20,7 @@ defmodule Tecnovix.MixProject do
   def application do
     [
       mod: {Tecnovix.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :scrivener_ecto]
     ]
   end
 
