@@ -1,4 +1,4 @@
-defmodule Tecnovix.Wirecard.Account do
+defmodule Tecnovix.Resource.Wirecard.Account do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,28 +6,47 @@ defmodule Tecnovix.Wirecard.Account do
     embeds_one :email, Email do
       field :address, :string
     end
+
     embeds_one :person, Person do
       field :name, :string
-      field :last_name, :string
+      field :lastName, :string
+
       embeds_one :taxDocument, TaxDocument do
         field :type, :string
         field :number, :string
       end
+
       embeds_one :identityDocument, IdentityDocument do
         field :type, :string
         field :number, :string
         field :issuer, :string
         field :issueDate, :date
       end
+
       field :birthDate, :date
+      field :nationality, :string
+
+      embeds_one :parentsName, ParentsName do
+        field :mother, :string
+        field :father, :string
+      end
+
+      embeds_many :alternativePhones, AlternativePhones do
+        field :countryCode, :string
+        field :areaCode, :string
+        field :number, :string
+      end
+
       embeds_one :phone, Phone do
         field :countryCode, :string
         field :areaCode, :string
         field :number, :string
       end
+
       embeds_one :address, Address do
-        field :street, :integer
+        field :street, :string
         field :streetNumber, :string
+        field :complement, :string
         field :district, :string
         field :zipCode, :string
         field :city, :string
@@ -35,6 +54,7 @@ defmodule Tecnovix.Wirecard.Account do
         field :country, :string
       end
     end
+
     field :type, :string
     field :transparentAccount, :boolean
   end
@@ -44,7 +64,7 @@ defmodule Tecnovix.Wirecard.Account do
     |> cast(params, [:type, :transparentAccount])
     |> cast_embed(:email, with: &email_changeset/2)
     |> cast_embed(:person, with: &person_changeset/2)
-    |> validate_required([:transparentAccount, :type])
+    |> validate_required([:transparentAccount, :type, :email, :person])
     |> validate_inclusion(:type, ["COSUMER", "MERCHANT"])
   end
 
@@ -56,12 +76,20 @@ defmodule Tecnovix.Wirecard.Account do
 
   defp person_changeset(changeset, params) do
     changeset
-    |> cast(params, [:name, :last_name, :birthDate])
+    |> cast(params, [:name, :lastName, :birthDate])
     |> cast_embed(:phone, with: &phone_changeset/2)
+    |> cast_embed(:parentsName, with: &parents_changeset/2)
+    |> cast_embed(:alternativePhones, with: &phone_changeset/2)
     |> cast_embed(:address, with: &address_changeset/2)
     |> cast_embed(:identityDocument, with: &identity_changeset/2)
-    |> cast_embed(:tax_document, with: &tax_changeset/2)
-    |> validate_required([:birthDate])
+    |> cast_embed(:taxDocument, with: &tax_changeset/2)
+    |> validate_required([:birthDate, :phone, :address, :identityDocument, :taxDocument])
+  end
+
+  def parents_changeset(changeset, params) do
+    changeset
+    |> cast(params, [:mother, :father])
+    |> validate_required([:mother, :father])
   end
 
   defp phone_changeset(changeset, params) do
@@ -73,10 +101,17 @@ defmodule Tecnovix.Wirecard.Account do
 
   defp address_changeset(changeset, params) do
     changeset
-    |> cast(params, [:street, :streetNumber, :complement, :district, :zipCode,
-                    :city, :country, :state])
-    |> validate_required([:street, :streetNumber, :district, :zipCode, :city, :country,
-                    :state])
+    |> cast(params, [
+      :street,
+      :streetNumber,
+      :complement,
+      :district,
+      :zipCode,
+      :city,
+      :country,
+      :state
+    ])
+    |> validate_required([:street, :streetNumber, :district, :zipCode, :city, :country, :state])
     |> validate_length(:state, is: 2)
     |> validate_length(:country, is: 3)
   end

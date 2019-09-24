@@ -16,3 +16,5 @@ config :tecnovix, TecnovixWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"

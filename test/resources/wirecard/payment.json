@@ -1,0 +1,40 @@
+{
+   "installmentCount":6,
+   "statementDescriptor":"Minha Loja",
+   "fundingInstrument":{
+      "method":"CREDIT_CARD",
+      "creditCard":{
+         "holder":{
+            "fullname":"Roberto Oliveira",
+            "birthdate":"1988-12-30",
+            "taxDocument":{
+               "type":"CPF",
+               "number":"78994193600"
+            },
+            "phone":{
+               "countryCode":"55",
+               "areaCode":"11",
+               "number":"22849560"
+            },
+            "billingAddress":{
+               "city":"Belo Horizonte",
+               "district":"Savassi",
+               "street":"Avenida Contorno",
+               "streetNumber":"400",
+               "zipCode":"76932800",
+               "state":"MG",
+               "country":"BRA"
+            }
+         }
+      }
+   },
+   "device":{
+      "ip":"127.0.0.1",
+      "geolocation":{
+         "latitude":-33.867,
+         "longitude":151.206
+      },
+      "userAgent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36",
+      "fingerprint":"QAZXswedCVGrtgBNHyujMKIkolpQAZXswedCVGrtgBNHyujMKIkolpQAZXswedCVGrtgBNHyujMKIkolpQAZXswedCVGrtgBNHyujMKIkolp"
+   }
+}
