@@ -56,7 +56,7 @@ defmodule Tecnovix.Resource.Wirecard.Cliente do
     end
   end
 
-  defp tax_changeset(changeset, params) do
+  def tax_changeset(changeset, params) do
     changeset
     |> cast(params, [:type, :number])
     |> validate_required([:type, :number])
@@ -65,7 +65,7 @@ defmodule Tecnovix.Resource.Wirecard.Cliente do
     |> validate_inclusion(:type, ["CPF", "CNPJ"])
   end
 
-  defp phone_changeset(changeset, params) do
+  def phone_changeset(changeset, params) do
     changeset
     |> cast(params, [:countryCode, :areaCode, :number])
     |> validate_required([:countryCode, :areaCode, :number])

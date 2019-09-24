@@ -1,35 +1,31 @@
 defmodule Tecnovix.Resource.Wirecard.Payment do
   use Ecto.Schema
   import Ecto.Changeset
-
   embedded_schema do
     field :installmentCount, :integer
     field :statementDescriptor, :string
 
       embeds_one :fundingInstrument, FundingInstrument do
         field :method, :string
-
         embeds_one :creditCard, CreditCard do
+          field :number, :string
           field :expirationMonth, :string
           field :expirationYear, :string
-          field :number, :string
           field :cvc, :string
-
+          field :hash, :string
+          field :store, :boolean
           embeds_one :holder, Holder do
             field :fullname, :string
             field :birthdate, :date
-
-            embeds_one :taxDocument, TaxDocument do
-              field :type, :string
-              field :number, :string
-            end
-
             embeds_one :phone, Phone do
               field :countryCode, :string
               field :areaCode, :string
               field :number, :string
             end
-
+            embeds_one :taxDocument, TaxDocument do
+              field :type, :string
+              field :number, :string
+            end
             embeds_one :billingAddress, BillingAddress do
               field :city, :string
               field :district, :string
@@ -76,35 +72,45 @@ defmodule Tecnovix.Resource.Wirecard.Payment do
   end
 
   defp funding_inst_changeset(changeset, params) do
-    case Map.fetch!(params, "method") do
-      "CREDIT_CARD" -> credit_card_changeset(changeset, params)
-      "BOLETO" -> boleto_changeset(changeset, params)
-    end
-  end
-
-  defp identify_type(params, type) do
-    Enum.any?(Map.keys(params), fn key -> key == type end)
+    changeset
+    |> cast(params, [:method])
+    |> cast_embed(:creditCard, with: &credit_card_changeset/2)
+    |> cast_embed(:boleto, with: &boleto_changeset/2)
   end
 
   defp credit_card_changeset(changeset, params) do
+    changeset
+    |> cast(params, [:number, :expirationYear, :expirationMonth, :cvc, :hash,
+                    :id, :store])
+    |> cast_embed(:holder, with: &holder_changeset/2)
+  end
 
-    cond do
-      identify_type(params, "hash") ->
-        changeset
-        |> cast(params, [:hash])
-        |> validate_required([:hash])
+  defp holder_changeset(changeset, params) do
+    IO.puts "OK"
+    IO.inspect Map.keys(params)
+    changeset
+    |> cast(params, [:fullname, :birthdate])
+    |> cast_embed(:taxDocument, with: &tax_changeset/2)
+    |> cast_embed(:phone, with: &phone_changeset/2)
+    |> cast_embed(:billingAddress, with: &billing_changeset/2)
+  end
 
-      identify_type(params, "id") ->
-        changeset
-        |> cast(params, [:id])
-        |> validate_required([:id])
-      true ->
-        changeset
-        |> cast(params, [:method])
-        |> cast_embed(:holder, with: &Tecnovix.Resource.Wirecard.CreditCard.holder_changeset/2)
-        |> validate_required([:method, :holder])
-        |> validate_length(:number, max: 18)
-    end
+  defp tax_changeset(changeset, params) do
+    IO.puts "HELLO_--------------------"
+    IO.inspect params
+
+    changeset
+    |> cast(params, [:type, :number])
+  end
+
+  defp phone_changeset(changeset, params) do
+    changeset
+    |> cast(params, [:countryCode, :areaCode, :number])
+  end
+
+  def billing_changeset(changeset, params) do
+    changeset
+    |> cast(params, [:streetNumber, :complement, :district, :city, :state, :country, :zipCode])
   end
 
   defp boleto_changeset(changeset, params) do

@@ -22,11 +22,11 @@ defmodule Tecnovix.Resources.SchemaTest do
     assert changeset.valid?
   end
 
-  test "create credit card", _context do
-    params = TestHelper.parse_json("credit_card.json")
-    changeset = CreditCard.changeset(%CreditCard{}, params)
-    assert changeset.valid?
-  end
+  # test "create credit card", _context do
+  #   params = TestHelper.parse_json("credit_card.json")
+  #   changeset = CreditCard.changeset(%CreditCard{}, params)
+  #   assert changeset.valid?
+  # end
 
   test "create order", _context do
     params = TestHelper.parse_json("order.json")
