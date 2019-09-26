@@ -13,7 +13,7 @@ defmodule TecnovixWeb.Auth.Commom do
 
   use Plug.Builder
 
-  @salt System.fetch_env!("SALT")
+  @salt Application.fetch_env!(:tecnovix, :salt)
   @exp 3_600
 
   @doc false

@@ -1,7 +1,5 @@
 defmodule Tecnovix.TestHelper do
 
-  alias Tecnovix.Resource.Wirecard.{Account, Order, CreditCard, Payment, Cliente}
-  alias Tecnovix.Resource.Wirecard.SDK
   alias Tecnovix.Resource.Wirecard.Actions
   alias Tecnovix.TestHelper
 

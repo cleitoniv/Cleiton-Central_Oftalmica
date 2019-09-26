@@ -3,7 +3,6 @@ defmodule Tecnovix.Resources.SchemaTest do
 
   alias Tecnovix.Resource.Wirecard.Account
   alias Tecnovix.Resource.Wirecard.Cliente
-  alias Tecnovix.Resource.Wirecard.CreditCard
   alias Tecnovix.Resource.Wirecard.Order
   alias Tecnovix.Resource.Wirecard.Order
   alias Tecnovix.Resource.Wirecard.Payment
