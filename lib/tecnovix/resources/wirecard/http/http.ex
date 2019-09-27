@@ -15,11 +15,8 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
   end
 
   def http_post(_data, {:error, :not_supported} = error), do: error
-<<<<<<< HEAD
 
-=======
   
->>>>>>> 11a031fa6032578eb6f52638e5834962eb1d61c2
   def http_post(url) do
     HTTPoison.post(url, [], [
       {"Authorization", "OAuth " <> @access_token},
