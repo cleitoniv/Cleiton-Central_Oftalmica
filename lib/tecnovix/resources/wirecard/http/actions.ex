@@ -1,4 +1,7 @@
 defmodule Tecnovix.Resource.Wirecard.Actions do
+  @moduledoc """
+  Encapsula as acoes da API da Wirecard.
+  """
 
   alias Tecnovix.Resource.Wirecard.{Account, Order, CreditCard, Payment, Cliente}
   alias Tecnovix.Resource.Wirecard.SDK
@@ -22,7 +25,7 @@ defmodule Tecnovix.Resource.Wirecard.Actions do
   end
 
   @doc """
-  Cria uma ordem de compra na wirecard 
+  Cria uma ordem de compra na wirecard
   """
   def create_order(order_params) do
     %Order{}
