@@ -37,11 +37,8 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
       {"Content-Type", "application/json"}
     ])
   end
-<<<<<<< HEAD
 
-=======
   
->>>>>>> 11a031fa6032578eb6f52638e5834962eb1d61c2
   def url(type) do
     case Enum.any?(@supported, fn method -> method == type end) do
       true -> @endpoint <> Atom.to_string(type)
