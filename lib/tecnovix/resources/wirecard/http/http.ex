@@ -4,6 +4,7 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
   @endpoint Application.fetch_env!(:tecnovix, :wirecard_endpoint)
   @access_token Application.fetch_env!(:tecnovix, :moip_access_token)
 
+   
   @supported [:accounts, :customers, :orders, :payments, :escrows]
 
   def http_post(data, url) when is_binary(url) do
@@ -14,7 +15,11 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
   end
 
   def http_post(_data, {:error, :not_supported} = error), do: error
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 11a031fa6032578eb6f52638e5834962eb1d61c2
   def http_post(url) do
     HTTPoison.post(url, [], [
       {"Authorization", "OAuth " <> @access_token},
@@ -35,7 +40,11 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
       {"Content-Type", "application/json"}
     ])
   end
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 11a031fa6032578eb6f52638e5834962eb1d61c2
   def url(type) do
     case Enum.any?(@supported, fn method -> method == type end) do
       true -> @endpoint <> Atom.to_string(type)

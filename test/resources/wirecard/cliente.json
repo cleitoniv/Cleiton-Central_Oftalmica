@@ -1,0 +1,25 @@
+{
+  "ownId": "meu_id_customer",
+  "fullname": "João Silva",
+  "email": "joao@email.com",
+  "birthDate": "1990-10-22",
+  "taxDocument": {
+    "type": "CPF",
+    "number": "22288866644"
+  },
+  "phone": {
+    "countryCode": "55",
+    "areaCode": "11",
+    "number": "55552266"
+  },
+  "shippingAddress": {
+    "city": "São Paulo",
+    "complement": "10",
+    "district": "Itaim Bibi",
+    "street": "Avenida Faria Lima",
+    "streetNumber": "500",
+    "zipCode": "01234000",
+    "state": "SP",
+    "country": "BRA"
+  }
+}

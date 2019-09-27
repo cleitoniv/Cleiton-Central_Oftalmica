@@ -13,7 +13,7 @@ defmodule TecnovixWeb.Auth.Commom do
 
   use Plug.Builder
 
-  @salt System.fetch_env!("SALT")
+  @salt Application.fetch_env!(:tecnovix, :salt)
   @exp 3_600
 
   @doc false
@@ -27,7 +27,7 @@ defmodule TecnovixWeb.Auth.Commom do
 
   @doc """
   Autenticacao interna. Adicionar o caso de `{:error, :invalid}` no fallback para evitar possiveis erros
-  com status 500. 
+  com status 500.
   """
   def commom_auth(conn = %Plug.Conn{}, _opts) do
     with {:ok, token} <- get_token(conn),

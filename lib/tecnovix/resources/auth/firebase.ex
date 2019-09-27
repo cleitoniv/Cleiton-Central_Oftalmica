@@ -15,7 +15,7 @@ defmodule TecnovixWeb.Auth.Firebase do
 
   use Plug.Builder
 
-  @public_key File.read!("lib/tecnovix_web/auth/public_key.json")
+  @public_key File.read!("lib/tecnovix/resources/auth/public_key.json")
               |> Jason.decode!()
               |> JOSE.JWK.from_firebase()
 
@@ -62,7 +62,7 @@ defmodule TecnovixWeb.Auth.Firebase do
   @doc """
   Verifica a JWT passada na requisiçao.
 
-  Retorna `{true, %JOSE.JWT{}, %JOSE.JWS{}}` para tokens validas  
+  Retorna `{true, %JOSE.JWT{}, %JOSE.JWS{}}` para tokens validas
   """
   def verify_jwt({:init, token}) do
     token
