@@ -126,6 +126,13 @@ defmodule Tecnovix.DAO do
   end
 
   @doc """
+  Retorna registros baseados em parametros variados
+  """
+  def get_by(schema, params) do
+    Repo.get_by(schema, params)
+  end
+
+  @doc """
   Funcao que atualiza um registro no banco.
 
   Espera um `%Ecto.Changeset{}` com uma chave id.
@@ -176,11 +183,17 @@ defmodule Tecnovix.DAO do
         Tecnovix.DAO.show(unquote(schema), id)
       end
 
+      @doc false
+      def get_by(params) do
+        Tecnovix.DAO.get_by(unquote(schema), params)
+      end
+
       defoverridable index: 2
       defoverridable create: 1
       defoverridable update: 2
       defoverridable delete: 1
       defoverridable show: 1
+      defoverridable get_by: 1
     end
   end
 end
