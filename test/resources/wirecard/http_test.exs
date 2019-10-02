@@ -4,7 +4,6 @@ defmodule Tecnovix.Resource.Wirecard.HttpTest do
   alias Tecnovix.Resource.Wirecard.Actions
 
   test "Create account", _context do
-
     {:ok, resp} = TestHelper.create_account()
     assert resp.status_code == 201
   end

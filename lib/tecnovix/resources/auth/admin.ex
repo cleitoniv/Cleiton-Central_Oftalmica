@@ -32,7 +32,7 @@ defmodule TecnovixWeb.Auth.Commom do
   def commom_auth(conn = %Plug.Conn{}, _opts) do
     with {:ok, token} <- get_token(conn),
          {:ok, user} <- Phoenix.Token.verify(TecnovixWeb.Endpoint, @salt, token, max_age: @exp) do
-      put_private(conn, :auth, user)
+      put_private(conn, :auth, {:ok, user})
     else
       error ->
         halt(conn)

@@ -1,6 +1,6 @@
 defmodule Tecnovix.Resource.Wirecard.Account do
   @moduledoc false
-  
+
   use Ecto.Schema
   import Ecto.Changeset
 

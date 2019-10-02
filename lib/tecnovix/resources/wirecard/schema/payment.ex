@@ -3,15 +3,18 @@ defmodule Tecnovix.Resource.Wirecard.Payment do
 
   use Ecto.Schema
   import Ecto.Changeset
-  
+
   embedded_schema do
     field :installmentCount, :integer
     field :statementDescriptor, :string
+
     embeds_one :escrow, Escrow do
       field :description, :string
     end
+
     embeds_one :fundingInstrument, FundingInstrument do
       field :method, :string
+
       embeds_one :creditCard, CreditCard do
         field :number, :string
         field :expirationMonth, :string
@@ -19,18 +22,22 @@ defmodule Tecnovix.Resource.Wirecard.Payment do
         field :cvc, :string
         field :hash, :string
         field :store, :boolean
+
         embeds_one :holder, Holder do
           field :fullname, :string
           field :birthdate, :date
+
           embeds_one :phone, Phone do
             field :countryCode, :string
             field :areaCode, :string
             field :number, :string
           end
+
           embeds_one :taxDocument, TaxDocument do
             field :type, :string
             field :number, :string
           end
+
           embeds_one :billingAddress, BillingAddress do
             field :city, :string
             field :district, :string
@@ -43,6 +50,7 @@ defmodule Tecnovix.Resource.Wirecard.Payment do
           end
         end
       end
+
       embeds_one :boleto, Boleto do
         field :expirationDate
 
@@ -92,14 +100,16 @@ defmodule Tecnovix.Resource.Wirecard.Payment do
 
   defp credit_card_changeset(changeset, params) do
     cond do
-      Map.has_key?(params, "hash") -> 
+      Map.has_key?(params, "hash") ->
         changeset
         |> cast(params, [:hash, :store])
         |> cast_embed(:holder, with: &holder_changeset/2)
+
       Map.has_key?(params, "id") ->
         changeset
         |> cast(params, [:id, :store])
         |> cast_embed(:holder, with: &holder_changeset/2)
+
       true ->
         changeset
         |> cast(params, [:number, :expirationMonth, :expirationYear, :cvc, :store])

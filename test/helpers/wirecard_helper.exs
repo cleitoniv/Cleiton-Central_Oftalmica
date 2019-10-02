@@ -1,5 +1,4 @@
 defmodule Tecnovix.TestHelper do
-
   alias Tecnovix.Resource.Wirecard.Actions
   alias Tecnovix.TestHelper
 
@@ -20,7 +19,6 @@ defmodule Tecnovix.TestHelper do
   end
 
   def create_order(cliente) do
-
     cliente = Jason.decode!(cliente.body)
 
     order_params = TestHelper.parse_json("order.json")
@@ -40,5 +38,4 @@ defmodule Tecnovix.TestHelper do
 
     Actions.create_payment(params, order_id)
   end
-
 end

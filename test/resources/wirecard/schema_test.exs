@@ -36,7 +36,7 @@ defmodule Tecnovix.Resources.SchemaTest do
   test "create payment", _context do
     params = TestHelper.parse_json("payment.json")
     changeset = Payment.changeset(%Payment{}, params)
-    IO.inspect changeset
+    IO.inspect(changeset)
     assert changeset.valid?
   end
 end

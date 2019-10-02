@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.Router do
   use TecnovixWeb, :router
+  import TecnovixWeb.Auth.Firebase
 
   pipeline :browser do
     plug :accepts, ["html"]

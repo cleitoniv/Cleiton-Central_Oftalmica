@@ -1,6 +1,6 @@
 defmodule Tecnovix.Resource.Wirecard.CreditCard do
   @moduledoc false
-  
+
   use Ecto.Schema
   import Ecto.Changeset
   @primary_key {:id, :string, []}
@@ -43,11 +43,11 @@ defmodule Tecnovix.Resource.Wirecard.CreditCard do
   end
 
   def changeset(changeset, params \\ %{}) do
-      changeset
-      |> cast(params, [:method])
-      |> cast_embed(:creditCard, with: &credit_card_changeset/2)
-      |> validate_inclusion(:method, ["CREDIT_CARD"])
-      |> validate_required([:method, :creditCard])
+    changeset
+    |> cast(params, [:method])
+    |> cast_embed(:creditCard, with: &credit_card_changeset/2)
+    |> validate_inclusion(:method, ["CREDIT_CARD"])
+    |> validate_required([:method, :creditCard])
   end
 
   defp credit_card_changeset(changeset, params) do

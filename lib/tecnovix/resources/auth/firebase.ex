@@ -15,9 +15,18 @@ defmodule TecnovixWeb.Auth.Firebase do
 
   use Plug.Builder
 
-  @public_key File.read!("lib/tecnovix/resources/auth/public_key.json")
-              |> Jason.decode!()
-              |> JOSE.JWK.from_firebase()
+  def get_firebase_keys() do
+    with {:ok, resp} <-
+           HTTPoison.get(
+             "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+           ) do
+      {:ok,
+       Jason.decode!(resp.body)
+       |> JOSE.JWK.from_firebase()}
+    else
+      _ -> {:error, :not_authorized}
+    end
+  end
 
   @doc """
   Retira a token da request
@@ -41,17 +50,20 @@ defmodule TecnovixWeb.Auth.Firebase do
   Identifica a public key usada para gerar a IdToken passada.
   """
   def get_public_key(payload = %JOSE.JWS{}) do
-    @public_key
-    |> Map.keys()
-    |> Enum.filter(fn key -> key == payload.fields["kid"] end)
-    |> Enum.fetch(0)
+    with {:ok, public_keys} <- get_firebase_keys() do
+      public_keys
+      |> Map.keys()
+      |> Enum.filter(fn key -> key == payload.fields["kid"] end)
+      |> Enum.fetch(0)
+      |> get_jwk(public_keys)
+    end
   end
 
   @doc """
   Após a identificacao da chave publica, retorna a JWK referente para verificar a token
   """
-  def get_jwk({:ok, key}) do
-    @public_key
+  def get_jwk({:ok, key}, firebase) do
+    firebase
     |> Map.get(key)
   end
 
@@ -68,7 +80,6 @@ defmodule TecnovixWeb.Auth.Firebase do
     token
     |> peek()
     |> get_public_key()
-    |> get_jwk()
     |> verify_jwt(token)
   end
 
@@ -81,7 +92,7 @@ defmodule TecnovixWeb.Auth.Firebase do
   def firebase_auth(conn = %Plug.Conn{}, _opts) do
     with {:ok, token} <- get_token(conn),
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}) do
-      put_private(conn, :auth, jwt)
+      put_private(conn, :auth, {:ok, jwt})
     else
       _ ->
         halt(conn)
