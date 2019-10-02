@@ -21,8 +21,8 @@ defmodule Tecnovix.Resource.View do
       end
 
       @doc false
-      def render("item.json", %{item: item}) do
-        Map.take(item, unquote(fields))
+      def render("item.json", %{item: t} = item) do
+        __MODULE__.build(item)
       end
     end
   end
