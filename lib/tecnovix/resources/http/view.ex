@@ -1,6 +1,6 @@
 defmodule Tecnovix.Resource.View do
-  defmacro __using__(fields: fields, model: model) do
-    quote bind_quoted: [fields: fields, model: model] do
+  defmacro __using__(model: model) do
+    quote bind_quoted: [model: model] do
       use TecnovixWeb, :view
 
       @doc false
@@ -22,6 +22,7 @@ defmodule Tecnovix.Resource.View do
 
       @doc false
       def render("item.json", %{item: t} = item) do
+        # Todo modulo de View deve implementar uma funcao `build/1` para renderizar o item
         __MODULE__.build(item)
       end
     end

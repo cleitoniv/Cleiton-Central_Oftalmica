@@ -33,14 +33,17 @@ defmodule Tecnovix.DAO do
     end
   end
 
+  # Após identificar a funcao de filtro, aplica a funcao e retorna o filtro
   defp get_filter_from_module(module, func, params) do
     apply(module, func, [params])
   end
 
+  # Transforma nome de funcao em String
   defp transform_module_func({func, _arity}) do
     Atom.to_string(func)
   end
 
+  # Identifica fucoes de filtro que terminam com "_filter"
   defp filter_module_func(func) do
     String.ends_with?(func, "_filter")
   end
