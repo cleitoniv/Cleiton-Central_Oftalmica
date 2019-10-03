@@ -3,7 +3,7 @@ defmodule TecnovixWeb.ChatSocket do
 
   channel "chat:*", Tecnovix.Chat.Channel
 
-  def connect(%{"token" => token}, socket) do
+  def connect(%{"token" => _token}, socket) do
     {:ok, socket}
   end
 

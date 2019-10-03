@@ -4,7 +4,7 @@ defmodule Tecnovix.Chat.Presence do
   use Phoenix.Presence, otp_app: :tecnovix, pubsub_server: Tecnovix.PubSub
   alias Tecnovix.Chat.Presence
 
-  # Wrapper do Prese para tracking do usuario
+  # Wrapper do Presence para tracking do usuario
   def track_user(socket, user) do
     Presence.track(socket, user.uid, %{
       typing: false,

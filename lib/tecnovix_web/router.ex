@@ -1,6 +1,5 @@
 defmodule TecnovixWeb.Router do
   use TecnovixWeb, :router
-  import TecnovixWeb.Auth.Firebase
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -19,7 +18,13 @@ defmodule TecnovixWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", TecnovixWeb do
-  #   pipe_through :api
-  # end
+  scope "/api" do
+    pipe_through :api
+
+    forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: TecnovixWeb.Graphql.Schema,
+      interface: :simple
+  end
 end
