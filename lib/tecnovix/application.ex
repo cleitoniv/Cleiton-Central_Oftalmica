@@ -14,7 +14,8 @@ defmodule Tecnovix.Application do
       TecnovixWeb.Endpoint,
       # Starts a worker by calling: Tecnovix.Worker.start_link(arg)
       # {Tecnovix.Worker, arg},
-      {Absinthe.Subscription, [TecnovixWeb.Endpoint]}
+      {Absinthe.Subscription, [TecnovixWeb.Endpoint]},
+      {Tecnovix.Chat.Presence, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

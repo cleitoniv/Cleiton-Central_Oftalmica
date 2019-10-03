@@ -4,6 +4,9 @@ defmodule TecnovixWeb.Endpoint do
   #
   # You should set gzip to true if you are running phx.digest
   # when deploying your static files in production.
+
+  socket "/socket", TecnovixWeb.ChatSocket, websocket: true, longpoll: false
+
   plug Plug.Static,
     at: "/",
     from: :tecnovix,
