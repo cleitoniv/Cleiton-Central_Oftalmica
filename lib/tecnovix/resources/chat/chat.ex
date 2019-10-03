@@ -1,6 +1,6 @@
 defmodule Tecnovix.Chat.Channel do
   @moduledoc false
-  
+
   use TecnovixWeb, :channel
   alias Tecnovix.Chat.Presence
 
@@ -15,6 +15,7 @@ defmodule Tecnovix.Chat.Channel do
     msg =
       put_time(msg)
       |> put_sender(socket)
+
     broadcast!(socket, "incoming:message", msg)
     {:noreply, socket}
   end
@@ -46,6 +47,7 @@ defmodule Tecnovix.Chat.Channel do
   # Insere a hora do envio da mensagem
   defp put_time(msg) when is_map(msg) do
     {:ok, datetime} = DateTime.now("Etc/UTC")
+
     msg
     |> Map.put("send_at", DateTime.to_string(datetime))
   end
