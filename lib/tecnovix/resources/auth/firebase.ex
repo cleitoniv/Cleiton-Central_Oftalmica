@@ -99,4 +99,22 @@ defmodule TecnovixWeb.Auth.Firebase do
         {:error, :not_authorized}
     end
   end
+
+  @doc false
+  def create_user(%{email: _email, password: _password} = params) do
+    params = Map.put(params, :returnSecureToken, true)
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" <> @firebase_api_key
+    HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
+  end
+
+  @doc false
+  def sign_in(%{email: _email, password: _password} = params) do
+    params = Map.put(params, :returnSecureToken, true)
+
+    url =
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" <>
+        @firebase_api_key
+
+    HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
+  end
 end
