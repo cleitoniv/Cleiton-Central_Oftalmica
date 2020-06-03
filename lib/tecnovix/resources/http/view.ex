@@ -6,6 +6,7 @@ defmodule Tecnovix.Resource.View do
       @doc false
       def render("index.json", %{list: list}) do
         %{
+          success: true,
           page: list.page_number,
           page_size: list.page_size,
           total: list.total_entries,
@@ -17,7 +18,7 @@ defmodule Tecnovix.Resource.View do
 
       @doc false
       def render("show.json", %{item: item}) do
-        %{data: __MODULE__.render("item.json", %{item: item})}
+        %{success: true, data: __MODULE__.render("item.json", %{item: item})}
       end
 
       @doc false

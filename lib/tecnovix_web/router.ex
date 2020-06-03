@@ -21,6 +21,8 @@ defmodule TecnovixWeb.Router do
   scope "/api" do
     pipe_through :api
 
+    resources "/user", TecnovixWeb.ClientesController
+
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,
