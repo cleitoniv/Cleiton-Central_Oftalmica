@@ -79,3 +79,5 @@ config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 
 config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"
 config :tecnovix, :salt, "SALT"
+config :tecnovix, :firebase_api_key, "AIzaSyB48TsW9wZvwqfclaygSlW83WXNukqR45o"
+config :tecnovix, :sync_users_salt, "B9cwPTrRRrk/W+4psbuf2AI7Z6G/ncMDdunFXp52LqpwgiBTVUCYyBbjbre90S2v"

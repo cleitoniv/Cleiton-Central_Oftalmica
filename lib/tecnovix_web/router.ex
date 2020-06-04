@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.Router do
   use TecnovixWeb, :router
+  import TecnovixWeb.Auth.SyncUsers
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,6 +14,10 @@ defmodule TecnovixWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :user do
+    plug :sync_users_auth
+  end
+
   scope "/", TecnovixWeb do
     pipe_through :browser
   end
@@ -20,6 +25,11 @@ defmodule TecnovixWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api" do
     pipe_through :api
+
+    resources "/user",  TecnovixWeb.SyncUsersController, only: [:create]
+    post "/login", TecnovixWeb.SyncUsersController, :login
+    pipe_through :user
+    post "/teste", TecnovixWeb.SyncUsersController, :run
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
 
