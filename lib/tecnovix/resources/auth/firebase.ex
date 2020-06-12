@@ -15,6 +15,8 @@ defmodule TecnovixWeb.Auth.Firebase do
 
   use Plug.Builder
 
+@firebase_api_key Application.fetch_env!(:tecnovix, :firebase_api_key)
+
   def get_firebase_keys() do
     with {:ok, resp} <-
            HTTPoison.get(
