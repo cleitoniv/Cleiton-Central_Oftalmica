@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.Router do
   use TecnovixWeb, :router
+  import TecnovixWeb.Auth.SyncUsers
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,6 +14,10 @@ defmodule TecnovixWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :user_sync do
+    plug :sync_users_auth
+  end
+
   scope "/", TecnovixWeb do
     pipe_through :browser
   end
@@ -22,6 +27,29 @@ defmodule TecnovixWeb.Router do
     pipe_through :api
 
     resources "/user", TecnovixWeb.ClientesController
+    resources "/user_sync", TecnovixWeb.SyncUsersController
+    post "/user_sync/login", TecnovixWeb.SyncUsersController, :login
+    post "/sync/clientes", TecnovixWeb.ClientesController, :insert_or_update
+    post "/sync/atend_pref_cliente", TecnovixWeb.AtendPrefClienteController, :insert_or_update
+    post "/sync/contas_a_receber", TecnovixWeb.ContasAReceberController, :insert_or_update
+    post "/sync/contrato_de_parceria", TecnovixWeb.ContratoDeParceriaController, :insert_or_update
+
+    post "/sync/descricao_generica_do_produto",
+         TecnovixWeb.DescricaoGenericaDoProdutoController,
+         :insert_or_update
+
+    post "/sync/itens_do_contrato_de_parceria",
+         TecnovixWeb.ItensDoContratoDeParceriaController,
+         :insert_or_update
+
+    post "/sync/itens_dos_pedidos_de_venda",
+         TecnovixWeb.ItensDosPedidosDeVendaController,
+         :insert_or_update
+
+    post "/sync/itens_pre_devolucao", TecnovixWeb.ItensPreDevolucaoController, :insert_or_update
+    post "/sync/pedidos_de_venda", TecnovixWeb.PedidosDeVendaController, :insert_or_update
+    post "/sync/pre_devolucao", TecnovixWeb.PreDevolucaoController, :insert_or_update
+    post "/sync/vendedores", TecnovixWeb.VendedoresController, :insert_or_update
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
 

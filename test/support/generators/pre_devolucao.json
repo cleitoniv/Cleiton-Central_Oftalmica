@@ -1,0 +1,10 @@
+{
+  "cliente_id": 1,
+  "filial": "123",
+  "cod_pre_dev": "teste",
+  "tipo_pre_dev": "1",
+  "inclusao": "2020-01-01",
+  "cliente": "Victor",
+  "loja": "ES",
+  "status": "1"
+}

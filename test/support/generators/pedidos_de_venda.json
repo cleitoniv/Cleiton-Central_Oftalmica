@@ -1,0 +1,11 @@
+{
+  "cliente_id": 1,
+  "filial": "123",
+  "numero": "123256",
+  "cliente": "teste",
+  "tipo_venda": "1",
+  "tipo_venda_ret_id": 1,
+  "pd_correios": "1",
+  "vendedor_1": "teste",
+  "status_ped": 1
+}

@@ -1,0 +1,12 @@
+{
+  "contrato_de_parceria_id": 1,
+  "descricao_generica_do_produto_id": 1,
+  "filial": "1234",
+  "contrato_n": "123456",
+  "item": "12",
+  "produto": "Lente",
+  "preco_venda": "1.5",
+  "total": "1.5",
+  "cliente": "Estou escrevendo isso somente para testar!",
+  "loja": "Estou escrevendo isso somente para testar!"
+}

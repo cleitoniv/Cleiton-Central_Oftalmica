@@ -1,7 +1,7 @@
 defmodule TecnovixWeb.UsersTest do
   use TecnovixWeb.ConnCase, async: false
 
-  alias TecnovixWeb.Support.Generator
+  alias Tecnovix.Support.Generator
 
   test "Users - GET PUT POST DELETE" do
     user_param = Generator.user_param()
@@ -16,7 +16,9 @@ defmodule TecnovixWeb.UsersTest do
 
     user =
       build_conn()
-      |> put("/api/user/#{user["id"]}", %{"param" => %{user_param | "email" => "thiagoboeker@gmail"}})
+      |> put("/api/user/#{user["id"]}", %{
+        "param" => %{user_param | "email" => "thiagoboeker@gmail"}
+      })
       |> json_response(200)
       |> Map.get("data")
 
