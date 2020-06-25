@@ -22,9 +22,6 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-config :tecnovix, :firebase_api_key_client, "AIzaSyB48TsW9wZvwqfclaygSlW83WXNukqR45o"
-config :tecnovix, :firebase_api_key_vendor, "AIzaSyAw-mBe2kkFmslL0ryrgYY0_9jIbKWWkJQ"
-
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
