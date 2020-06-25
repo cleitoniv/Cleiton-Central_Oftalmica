@@ -1,0 +1,33 @@
+image: bitwalker/alpine-elixir:1.9.1
+definitions:
+  services:
+    database:
+      image: postgres:9.6
+      environment:
+        POSTGRES_PASSWORD: pipelines-test
+  steps:
+    - step: &build-test
+        name: Testes
+        deployment: test
+        script:
+          - apk add build-base
+          - MIX_ENV=test mix deps.get
+          - MIX_ENV=test mix ecto.create
+          - MIX_ENV=test mix ecto.migrate
+          - mix test
+        services:
+          - database
+    - step: &build-staging
+        name: Deploy Heroku DEV
+        deployment: staging
+        script:
+          - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD
+
+pipelines:
+  branches:
+    master:
+      - step: *build-test
+      - step: *build-staging
+  pull-requests:
+    "**":
+      - step: *build-test
