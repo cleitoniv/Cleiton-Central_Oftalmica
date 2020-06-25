@@ -12,7 +12,7 @@ defmodule TecnovixWeb.Auth.Firebase do
     end
     `
   """
-
+  @firebase_api_key Application.fetch_env!(:tecnovix, :firebase_api_key)
   use Plug.Builder
 
   def get_firebase_keys() do

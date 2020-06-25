@@ -5,7 +5,7 @@ defmodule Tecnovix.MixProject do
     [
       app: :tecnovix,
       version: "0.1.0",
-      elixir: "~> 1.9.1",
+      elixir: "~> 1.10.2",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -47,7 +47,9 @@ defmodule Tecnovix.MixProject do
       {:scrivener_ecto, "~> 2.0"},
       {:dataloader, "~> 1.0"},
       {:httpoison, "~> 1.5"},
-      {:jose, "~> 1.9"}
+      {:jose, "~> 1.9"},
+      {:bcrypt_elixir, "~> 2.0"},
+      {:guardian, "~> 2.0"}
     ]
   end
 
