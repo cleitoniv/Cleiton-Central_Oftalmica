@@ -16,6 +16,7 @@ defmodule TecnovixWeb.Auth.Firebase do
   use Plug.Builder
 
   @firebase_api_key Application.fetch_env!(:tecnovix, :firebase_api_key)
+  action_fallback Tecnovix.Resources.Fallback
 
   def get_firebase_keys() do
     with {:ok, resp} <-
@@ -102,6 +103,33 @@ defmodule TecnovixWeb.Auth.Firebase do
     end
   end
 
+  def cliente_auth(conn = %Plug.Conn{}, _opts) do
+    with {:ok, token} <- get_token(conn),
+         {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
+         {:ok, user} <- Tecnovix.ClientesModel.search_register_email(jwt.fields["email"]),
+           true <- user.sit_app != "D"  do
+      put_private(conn, :auth, {:ok, user})
+    else
+      false -> {:error, :cliente_desativado}
+      _ ->
+        conn
+        |> user_cliente_auth()
+    end
+  end
+
+  def user_cliente_auth(conn) do
+    with {:ok, token} <- get_token(conn),
+         {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
+         {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]),
+        true <- user.status == 1 do
+      put_private(conn, :auth, {:ok, user})
+    else
+      false -> {:error, :inatived}
+      _ ->
+      halt(conn)
+      {:error, :not_authorized}
+    end
+end
   @doc false
   def create_user(%{email: _email, password: _password} = params) do
     params = Map.put(params, :returnSecureToken, true)
