@@ -2,12 +2,33 @@ defmodule TecnovixWeb.Support.Generator do
 alias TecnovixWeb.Auth.Firebase
 import Plug.Conn
 
+  def logs_param() do
+    %{
+      "data" => "2018-11-15 11:00:00",
+      "ip" => "123456",
+      "dispositivo" => "Samsung",
+      "acao_realizada" => "teste"
+    }
+  end
+
   def user_param() do
     %{
       "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
       "fisica_jurid" => "F",
       "cnpj_cpf" => String.slice(Ecto.UUID.autogenerate(), 1..14),
-      "sit_app" => "A"
+      "sit_app" => "A",
+      "nome" => "Victor",
+      "ddd" => "027",
+      "telefone" => "12-3-45.6",
+      "data_nascimento" => "2020-07-07",
+      "ramo" => "1",
+      "endereco" => "teste",
+      "numero" => "teste",
+      "bairro" => "teste",
+      "cep" => "--teste",
+      "cdmunicipio" => "teste",
+      "municipio" => "teste",
+      "crm_medico" => "teste"
     }
   end
 

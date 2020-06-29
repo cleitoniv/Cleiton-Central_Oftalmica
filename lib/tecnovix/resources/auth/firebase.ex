@@ -1,4 +1,5 @@
 defmodule TecnovixWeb.Auth.Firebase do
+  use TecnovixWeb, :controller
   @moduledoc """
   Autentica o usuario do Firebase. Esta no formato de Plug
 
@@ -14,7 +15,6 @@ defmodule TecnovixWeb.Auth.Firebase do
   """
 
   use Plug.Builder
-
   @firebase_api_key Application.fetch_env!(:tecnovix, :firebase_api_key)
   action_fallback Tecnovix.Resources.Fallback
 

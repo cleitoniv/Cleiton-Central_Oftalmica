@@ -30,12 +30,14 @@ defmodule TecnovixWeb.Router do
     pipe_through :api
     resources "/user", TecnovixWeb.ClientesController
 
-    scope "/client" do
+    scope "/cliente" do
       pipe_through :guest
       post "/", TecnovixWeb.ClientesController, :create_user
       pipe_through :cliente
+      post "/", TecnovixWeb.ClientesController, :create
+      post "/logs", TecnovixWeb.LogsClienteController, :create_logs
       get "/message", TecnovixWeb.ClientesController, :run
-      post "/user", TecnovixWeb.UsuariosClienteController, :create_user
+      post "/cliente_user", TecnovixWeb.UsuariosClienteController, :create_user
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
