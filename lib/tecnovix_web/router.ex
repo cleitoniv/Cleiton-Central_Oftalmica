@@ -30,6 +30,12 @@ defmodule TecnovixWeb.Router do
     pipe_through :api
     resources "/user", TecnovixWeb.ClientesController
 
+    scope "/usuarios_cliente" do
+      pipe_through :cliente
+
+      put "/:id", TecnovixWeb.UsuariosClienteController, :update_users
+    end
+
     scope "/cliente" do
       pipe_through :guest
       post "/", TecnovixWeb.ClientesController, :create_user

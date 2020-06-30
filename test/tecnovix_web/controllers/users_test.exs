@@ -75,4 +75,36 @@ defmodule TecnovixWeb.UsersTest do
      |> json_response(201)
      |> Map.get("data")
  end
+
+ test "update" do
+   user_firebase = Generator.user()
+   user_param = Generator.user_param()
+   user_client_param = Generator.users_cliente()
+
+   user =
+     build_conn()
+     |> Generator.put_auth(user_firebase["idToken"])
+     |> post("/api/cliente", %{"param" => user_param})
+     |> json_response(201)
+     |> Map.get("data")
+
+   user_client =
+     build_conn()
+     |> Generator.put_auth(user_firebase["idToken"])
+     |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
+     |> json_response(201)
+     |> Map.get("data")
+
+   user_client_update =
+     build_conn()
+     |> Generator.put_auth(user_firebase["idToken"])
+     |> put("/api/usuarios_cliente/#{user_client["id"]}", %{"param" => %{user_client_param | "cargo" => "Assistente"}})
+     |> json_response(200)
+     |> Map.get("data")
+
+    {:ok, register} = Tecnovix.UsuariosClienteModel.search_register_email(user_client["email"])
+
+    assert register.email == user_client["email"]
+    assert user_client["cliente_id"] == user["id"]
+ end
 end
