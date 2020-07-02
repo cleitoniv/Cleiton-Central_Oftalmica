@@ -9,7 +9,8 @@ defmodule Tecnovix.UsuariosClienteSchema do
     field :nome, :string
     field :email, :string
     field :cargo, :string
-    field :status, :integer
+    field :status, :integer, default: 1
+    field :senha_enviada, :integer, default: 0
 
     timestamps()
   end
@@ -23,6 +24,10 @@ defmodule Tecnovix.UsuariosClienteSchema do
   def update(struct, params \\ %{}) do
     struct
     |> cast(params, [:nome, :cargo])
-    |> validate_required([:nome])
+  end
+
+  def update_senha(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:senha_enviada])
   end
 end

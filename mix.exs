@@ -47,7 +47,8 @@ defmodule Tecnovix.MixProject do
       {:scrivener_ecto, "~> 2.0"},
       {:dataloader, "~> 1.0"},
       {:httpoison, "~> 1.5"},
-      {:jose, "~> 1.9"}
+      {:jose, "~> 1.9"},
+      {:bamboo, "~> 1.5"}
     ]
   end
 

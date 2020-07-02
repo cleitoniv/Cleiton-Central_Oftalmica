@@ -2,11 +2,16 @@ defmodule Tecnovix.UsuariosClienteModel do
   use Tecnovix.DAO, schema: Tecnovix.UsuariosClienteSchema
   alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.Repo
-  import Ecto.Changeset
 
   def update(user, params) do
     user
     |> UsuariosClienteSchema.update(params)
+    |> Repo.update()
+  end
+
+  def update_senha(user, params) do
+    user
+    |> UsuariosClienteSchema.update_senha(params)
     |> Repo.update()
   end
 

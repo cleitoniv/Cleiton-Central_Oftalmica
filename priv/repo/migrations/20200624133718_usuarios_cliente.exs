@@ -9,6 +9,7 @@ defmodule Tecnovix.Repo.Migrations.UsuariosCliente do
       add :email, :string, size: 255
       add :cargo, :string, size: 255
       add :status, :integer
+      add :senha_enviada, :integer
 
       timestamps()
     end
