@@ -33,15 +33,47 @@ defmodule TecnovixWeb.UsuariosClienteController do
   def update_users(conn, %{"id" => id, "param" => params}) do
     {:ok, cliente} = conn.private.auth
     with {:ok, user} <- UsuariosClienteModel.search_user(id),
-         user.cliente_id == cliente.id,
+         true <- user.cliente_id == cliente.id,
          {:ok, user} <- UsuariosClienteModel.update(user, params) do
-            conn
-            |> put_status(:ok)
-            |> put_resp_content_type("application/json")
-            |> render("show.json", %{item: user})
+     {:ok, cliente} = conn.private.auth
+     LogsClienteModel.create(
+     %{
+       "cliente_id" => cliente.id,
+       "data" => DateTime.utc_now(),
+       "ip" => "teste",
+       "dispositivo" => "teste",
+       "acao_realizada" => "Atualizou o usuário"
+     }
+     )
+      conn
+      |> put_status(:ok)
+      |> put_resp_content_type("application/json")
+      |> render("show.json", %{item: user})
       else
         _ -> {:error, :invalid_parameter}
     end
+  end
+
+  def delete_users(conn, %{"id" => id}) do
+    with {:ok, user} <- UsuariosClienteModel.search_user(id),
+         {:ok, user} <- UsuariosClienteModel.update_status(user, %{"status" => 0}) do
+         {:ok, cliente} = conn.private.auth
+         LogsClienteModel.create(
+         %{
+           "cliente_id" => cliente.id,
+           "data" => DateTime.utc_now(),
+           "ip" => "teste",
+           "dispositivo" => "teste",
+           "acao_realizada" => "Usuario deletado"
+         }
+         )
+         conn
+         |> put_status(:ok)
+         |> put_resp_content_type("application/json")
+         |> render("show.json", %{item: user})
+     else
+       _ -> {:error, :invalid_parameter}
+     end
   end
 
   def create_user(conn, %{"param" => params}) do

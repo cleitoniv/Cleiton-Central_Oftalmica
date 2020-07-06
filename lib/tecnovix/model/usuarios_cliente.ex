@@ -15,6 +15,12 @@ defmodule Tecnovix.UsuariosClienteModel do
     |> Repo.update()
   end
 
+  def update_status(user, params) do
+    user
+    |> UsuariosClienteSchema.update_status(params)
+    |> Repo.update()
+  end
+
   def search_user(id) do
     case Repo.get_by(UsuariosClienteSchema, id: id) do
       nil ->

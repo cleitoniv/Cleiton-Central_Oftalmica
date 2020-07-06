@@ -11,6 +11,7 @@ defmodule TecnovixWeb.UsersTest do
      build_conn()
      |> Generator.put_auth(user_firebase["idToken"])
      |> post("/api/cliente", %{"param" => user_param})
+     |> IO.inspect
      |> json_response(201)
 
    user_client =
@@ -21,7 +22,7 @@ defmodule TecnovixWeb.UsersTest do
      |> Map.get("data")
 
   Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)
-  
+
   user_client_firebase = Generator.create_user_firebase(user_client["email"])
 
      build_conn()
@@ -98,7 +99,12 @@ defmodule TecnovixWeb.UsersTest do
      |> put("/api/usuarios_cliente/#{user_client["id"]}", %{"param" => %{user_client_param | "cargo" => "Assistente"}})
      |> json_response(200)
 
-    {:ok, register} = Tecnovix.UsuariosClienteModel.search_register_email(user_client["email"])
+     {:ok, register} = Tecnovix.UsuariosClienteModel.search_register_email(user_client["email"])
+
+     build_conn()
+     |> Generator.put_auth(user_firebase["idToken"])
+     |> delete("/api/usuarios_cliente/#{user_client["id"]}")
+     |> json_response(200)
 
     assert register.email == user_client["email"]
     assert user_client["cliente_id"] == user["id"]
@@ -116,5 +122,12 @@ defmodule TecnovixWeb.UsersTest do
     email |> Tecnovix.Mailer.deliver_now
 
     assert_delivered_email email
+ end
+
+ test "update firebase" do
+   user_firebase = Generator.user()
+   {:ok, user} = TecnovixWeb.Auth.Firebase.update_profile(%{idToken: user_firebase["idToken"], displayName: "Victor"})
+   Jason.decode!(user.body)
+   |> IO.inspect
  end
 end
