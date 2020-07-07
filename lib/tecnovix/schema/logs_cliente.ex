@@ -18,7 +18,15 @@ defmodule Tecnovix.LogsClienteSchema do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:cliente_id, :usuario_cliente_id, :uid, :data, :ip, :dispositivo, :acao_realizada])
+    |> cast(params, [
+      :cliente_id,
+      :usuario_cliente_id,
+      :uid,
+      :data,
+      :ip,
+      :dispositivo,
+      :acao_realizada
+    ])
     |> validate_required([:cliente_id, :data])
   end
 end

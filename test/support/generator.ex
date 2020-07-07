@@ -1,6 +1,6 @@
 defmodule TecnovixWeb.Support.Generator do
-alias TecnovixWeb.Auth.Firebase
-import Plug.Conn
+  alias TecnovixWeb.Auth.Firebase
+  import Plug.Conn
 
   def logs_param() do
     %{
@@ -33,7 +33,11 @@ import Plug.Conn
   end
 
   def user() do
-    with {:ok, user = %{status_code: 200}} <- Firebase.create_user(%{email: "victorcliente#{Ecto.UUID.autogenerate()}@gmail.com", password: "123456"}) do
+    with {:ok, user = %{status_code: 200}} <-
+           Firebase.create_user(%{
+             email: "victorcliente#{Ecto.UUID.autogenerate()}@gmail.com",
+             password: "123456"
+           }) do
       Jason.decode!(user.body)
     end
   end
@@ -52,8 +56,18 @@ import Plug.Conn
     }
   end
 
+  def users_cliente2() do
+    %{
+      "nome" => "teste",
+      "email" => "teste#{Ecto.UUID.autogenerate()}@gmail.com",
+      "cargo" => "Administrativo",
+      "status" => 1
+    }
+  end
+
   def create_user_firebase(email) do
-    with {:ok, user = %{status_code: 200}} <- Firebase.create_user(%{email: email, password: "123456"}) do
+    with {:ok, user = %{status_code: 200}} <-
+           Firebase.create_user(%{email: email, password: "123456"}) do
       Jason.decode!(user.body)
     end
   end

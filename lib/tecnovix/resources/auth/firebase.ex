@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.Auth.Firebase do
   use TecnovixWeb, :controller
+
   @moduledoc """
   Autentica o usuario do Firebase. Esta no formato de Plug
 
@@ -107,10 +108,12 @@ defmodule TecnovixWeb.Auth.Firebase do
     with {:ok, token} <- get_token(conn),
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
          {:ok, user} <- Tecnovix.ClientesModel.search_register_email(jwt.fields["email"]),
-           true <- user.sit_app != "D"  do
+         true <- user.sit_app != "D" do
       put_private(conn, :auth, {:ok, user})
     else
-      false -> {:error, :cliente_desativado}
+      false ->
+        {:error, :cliente_desativado}
+
       _ ->
         conn
         |> user_cliente_auth()
@@ -121,15 +124,18 @@ defmodule TecnovixWeb.Auth.Firebase do
     with {:ok, token} <- get_token(conn),
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
          {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]),
-        true <- user.status == 1 do
+         true <- user.status == 1 do
       put_private(conn, :auth, {:ok, user})
     else
-      false -> {:error, :inatived}
+      false ->
+        {:error, :inatived}
+
       _ ->
-      halt(conn)
-      {:error, :not_authorized}
+        halt(conn)
+        {:error, :not_authorized}
     end
-end
+  end
+
   @doc false
   def create_user(%{email: _email, password: _password} = params) do
     params = Map.put(params, :returnSecureToken, true)

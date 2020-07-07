@@ -11,4 +11,10 @@ defmodule TecnovixWeb.UsuariosClienteView do
       status: item.status
     }
   end
+
+  def render("users.json", %{item: item}) do
+    %{
+      sucess: true, data: render_many(item, __MODULE__, "show.json", as: :item)
+    }
+  end
 end

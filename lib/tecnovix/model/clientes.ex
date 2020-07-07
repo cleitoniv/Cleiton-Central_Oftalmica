@@ -24,6 +24,7 @@ defmodule Tecnovix.ClientesModel do
     case Repo.get_by(ClientesSchema, email: email) do
       nil ->
         {:error, :not_found}
+
       v ->
         {:ok, v}
     end
@@ -31,19 +32,22 @@ defmodule Tecnovix.ClientesModel do
 
   defp formatting_telefone(changeset) do
     update_change(changeset, :telefone, fn telefone ->
-    String.replace(telefone, "-", "")
-    |> String.replace(".", "") end)
+      String.replace(telefone, "-", "")
+      |> String.replace(".", "")
+    end)
   end
 
   defp formatting_cnpj_cpf(changeset) do
     update_change(changeset, :cnpj_cpf, fn cnpj_cpf ->
-    String.replace(cnpj_cpf, "-", "")
-    |> String.replace(".", "") end)
+      String.replace(cnpj_cpf, "-", "")
+      |> String.replace(".", "")
+    end)
   end
 
   defp formatting_cep(changeset) do
     update_change(changeset, :cep, fn cep ->
-    String.replace(cep, "-", "")
-    |> String.replace(".", "") end)
+      String.replace(cep, "-", "")
+      |> String.replace(".", "")
+    end)
   end
 end

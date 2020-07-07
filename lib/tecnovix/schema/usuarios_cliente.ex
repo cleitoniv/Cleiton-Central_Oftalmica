@@ -17,7 +17,7 @@ defmodule Tecnovix.UsuariosClienteSchema do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params,[:cliente_id, :uid, :nome, :email, :cargo, :status])
+    |> cast(params, [:cliente_id, :uid, :nome, :email, :cargo, :status])
     |> validate_required([:cliente_id, :nome, :email, :status])
   end
 

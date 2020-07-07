@@ -75,12 +75,44 @@ defmodule Tecnovix.ClientesSchema do
     case params["fisica_jurid"] do
       "F" ->
         changeset
-        |> validate_required([:nome, :email, :ddd, :telefone, :data_nascimento, :ramo, :fisica_jurid, :cnpj_cpf, :endereco, :numero,
-        :bairro, :cep, :cdmunicipio, :municipio, :crm_medico])
+        |> validate_required([
+          :nome,
+          :email,
+          :ddd,
+          :telefone,
+          :data_nascimento,
+          :ramo,
+          :fisica_jurid,
+          :cnpj_cpf,
+          :endereco,
+          :numero,
+          :bairro,
+          :cep,
+          :cdmunicipio,
+          :municipio,
+          :crm_medico
+        ])
+
       "J" ->
         changeset
-        |> validate_required([:nome, :email, :ddd, :telefone, :data_nascimento, :ramo, :fisica_jurid, :cnpj_cpf, :nome_empresarial, :endereco, :numero,
-        :bairro, :cep, :cdmunicipio, :municipio, :cod_cnae])
+        |> validate_required([
+          :nome,
+          :email,
+          :ddd,
+          :telefone,
+          :data_nascimento,
+          :ramo,
+          :fisica_jurid,
+          :cnpj_cpf,
+          :nome_empresarial,
+          :endereco,
+          :numero,
+          :bairro,
+          :cep,
+          :cdmunicipio,
+          :municipio,
+          :cod_cnae
+        ])
     end
   end
 end

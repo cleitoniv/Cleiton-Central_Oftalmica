@@ -7,22 +7,27 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def create(conn, %{"param" => params}) do
     with {:ok, user} <- UsuariosClienteModel.create(params) do
-      case Email.send_email({user.nome,user.email}) do #verificando se o email foi enviado com sucesso
+      # verificando se o email foi enviado com sucesso
+      case Email.send_email({user.nome, user.email}) do
         {_send, {:delivered_email, _email}} ->
-        UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1}) #atualizando o campo senha_enviada para 1(indicando que o email foi enviado)
+          # atualizando o campo senha_enviada para 1(indicando que o email foi enviado)
+          UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
+
         _ ->
-         {:error, :invalid_parameter}
+          {:error, :invalid_parameter}
       end
+
       {:ok, cliente} = conn.private.auth
-      LogsClienteModel.create(
-      %{
+
+      LogsClienteModel.create(%{
         "cliente_id" => cliente.id,
         "data" => DateTime.utc_now(),
         "ip" => "teste",
         "dispositivo" => "teste",
         "acao_realizada" => "Realizou o cadastro"
-      }
-      ) #registrando a acao na tabela logs_cliente
+      })
+
+      # registrando a acao na tabela logs_cliente
       conn
       |> put_status(:created)
       |> put_resp_content_type("application/json")
@@ -32,48 +37,49 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def update_users(conn, %{"id" => id, "param" => params}) do
     {:ok, cliente} = conn.private.auth
+
     with {:ok, user} <- UsuariosClienteModel.search_user(id),
          true <- user.cliente_id == cliente.id,
          {:ok, user} <- UsuariosClienteModel.update(user, params) do
-     {:ok, cliente} = conn.private.auth
-     LogsClienteModel.create(
-     %{
-       "cliente_id" => cliente.id,
-       "data" => DateTime.utc_now(),
-       "ip" => "teste",
-       "dispositivo" => "teste",
-       "acao_realizada" => "Atualizou o usuário"
-     }
-     )
+      {:ok, cliente} = conn.private.auth
+
+      LogsClienteModel.create(%{
+        "cliente_id" => cliente.id,
+        "data" => DateTime.utc_now(),
+        "ip" => "teste",
+        "dispositivo" => "teste",
+        "acao_realizada" => "Atualizou o usuário"
+      })
+
       conn
       |> put_status(:ok)
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: user})
-      else
-        _ -> {:error, :invalid_parameter}
+    else
+      _ -> {:error, :invalid_parameter}
     end
   end
 
   def delete_users(conn, %{"id" => id}) do
     with {:ok, user} <- UsuariosClienteModel.search_user(id),
          {:ok, user} <- UsuariosClienteModel.update_status(user, %{"status" => 0}) do
-         {:ok, cliente} = conn.private.auth
-         LogsClienteModel.create(
-         %{
-           "cliente_id" => cliente.id,
-           "data" => DateTime.utc_now(),
-           "ip" => "teste",
-           "dispositivo" => "teste",
-           "acao_realizada" => "Usuario deletado"
-         }
-         )
-         conn
-         |> put_status(:ok)
-         |> put_resp_content_type("application/json")
-         |> render("show.json", %{item: user})
-     else
-       _ -> {:error, :invalid_parameter}
-     end
+      {:ok, cliente} = conn.private.auth
+
+      LogsClienteModel.create(%{
+        "cliente_id" => cliente.id,
+        "data" => DateTime.utc_now(),
+        "ip" => "teste",
+        "dispositivo" => "teste",
+        "acao_realizada" => "Usuario deletado"
+      })
+
+      conn
+      |> put_status(:ok)
+      |> put_resp_content_type("application/json")
+      |> render("show.json", %{item: user})
+    else
+      _ -> {:error, :invalid_parameter}
+    end
   end
 
   def create_user(conn, %{"param" => params}) do
@@ -81,8 +87,20 @@ defmodule TecnovixWeb.UsuariosClienteController do
       {:ok, %ClientesSchema{} = user} ->
         params = Map.put(params, "cliente_id", user.id)
         __MODULE__.create(conn, %{"param" => params})
+
       _ ->
-      {:error, :invalid_parameter}
+        {:error, :invalid_parameter}
+    end
+  end
+
+  def show_users(conn, _params) do
+    with user <- UsuariosClienteModel.show_users() do
+      conn
+      |> put_status(:ok)
+      |> put_resp_content_type("application/json")
+      |> render("users.json", %{item: user})
+    else
+      _ -> {:error, :not_list}
     end
   end
 end

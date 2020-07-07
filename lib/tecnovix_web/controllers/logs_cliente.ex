@@ -10,23 +10,26 @@ defmodule TecnovixWeb.LogsClienteController do
       |> put_resp_content_type("application/json")
       |> put_view(TecnovixWeb.LogsClienteView)
       |> render("show.json", %{item: user_logs})
-      else
-        _ ->
+    else
+      _ ->
         {:error, :invalid_parameter}
     end
   end
 
   def create_logs(conn, %{"param" => params}) do
-
     case conn.private.auth do
-      {:ok, %ClientesSchema{} = user} -> #logs para o cliente
+      # logs para o cliente
+      {:ok, %ClientesSchema{} = user} ->
         params = Map.put(params, "cliente_id", user.id)
         __MODULE__.create(conn, %{"param" => params})
-      {:ok, %UsuariosClienteSchema{} = client_user} -> #logs para o usuario_cliente
+
+      # logs para o usuario_cliente
+      {:ok, %UsuariosClienteSchema{} = client_user} ->
         params = Map.put(params, "cliente_id", client_user.cliente_id)
         params = Map.put(params, "usuario_cliente_id", client_user.id)
         __MODULE__.create(conn, %{"param" => params})
-        _ ->
+
+      _ ->
         {:error, :invalid_parameter}
     end
   end
