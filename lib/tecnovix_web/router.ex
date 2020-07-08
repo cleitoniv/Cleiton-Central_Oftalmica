@@ -31,6 +31,11 @@ defmodule TecnovixWeb.Router do
     pipe_through :api
     resources "/user", TecnovixWeb.ClientesController
 
+    scope "/atend_pref_cliente" do
+      pipe_through :cliente
+      post "/", TecnovixWeb.AtendPrefClienteController, :atend_pref
+    end
+
     scope "/usuarios_cliente" do
       pipe_through :cliente
 
