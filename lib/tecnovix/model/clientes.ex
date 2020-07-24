@@ -6,8 +6,6 @@ defmodule Tecnovix.ClientesModel do
 
   def create(params) do
     %ClientesSchema{}
-    # |> change(%{})
-    # |> put_change(:uid, conn.private.auth)
     |> ClientesSchema.changeset(params)
     |> formatting_telefone()
     |> formatting_cnpj_cpf()
