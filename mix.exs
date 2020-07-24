@@ -49,7 +49,7 @@ defmodule Tecnovix.MixProject do
       {:httpoison, "~> 1.5"},
       {:jose, "~> 1.9"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:guardian, "~> 2.0"}
+      {:guardian, "~> 2.0"},
       {:bamboo, "~> 1.5"}
     ]
   end
