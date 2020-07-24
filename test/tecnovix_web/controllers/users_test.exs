@@ -3,49 +3,6 @@ defmodule TecnovixWeb.UsersTest do
   alias TecnovixWeb.Auth.Firebase
   alias TecnovixWeb.Support.Generator
 
-  # test "Users - GET PUT POST DELETE" do
-  #   user_param = Generator.user_param()
-  #
-  #   user =
-  #     build_conn()
-  #     |> post("/api/user", %{"param" => user_param})
-  #     |> json_response(201)
-  #     |> Map.get("data")
-  #
-  #   assert user["cnpj_cpf"] == user_param["cnpj_cpf"]
-  #
-  #   user =
-  #     build_conn()
-  #     |> put("/api/user/#{user["id"]}", %{"param" => %{user_param | "email" => "thiagoboeker@gmail"}})
-  #     |> json_response(200)
-  #     |> Map.get("data")
-  #
-  #   assert user["email"] == "thiagoboeker@gmail"
-  #
-  #   user =
-  #     build_conn()
-  #     |> get("/api/user/#{user["id"]}")
-  #     |> json_response(302)
-  #     |> Map.get("data")
-  #
-  #   assert user["cnpj_cpf"] == user_param["cnpj_cpf"]
-  #
-  #   users =
-  #     build_conn()
-  #     |> get("/api/user?page=1&page_size=20")
-  #     |> json_response(200)
-  #     |> Map.get("data")
-  #
-  #   assert length(users) > 0
-  #
-  #   user =
-  #     build_conn()
-  #     |> delete("/api/user/#{user["id"]}")
-  #     |> json_response(200)
-  #     |> Map.get("data")
-  #
-  #   assert user["cnpj_cpf"] == user_param["cnpj_cpf"]
-  # end
  test "user" do
    user_firebase = Generator.user()
    user_client_param = Generator.users_cliente()
@@ -54,13 +11,13 @@ defmodule TecnovixWeb.UsersTest do
    user =
      build_conn()
      |> Generator.put_auth(user_firebase["idToken"])
-     |> post("/api/client", %{"param" => user_param})
+     |> post("/api/cliente", %{"param" => user_param})
      |> json_response(201)
 
    user_client =
      build_conn()
      |> Generator.put_auth(user_firebase["idToken"])
-     |> post("/api/client/user", %{"param" => user_client_param})
+     |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
      |> json_response(201)
      |> Map.get("data")
 
@@ -68,12 +25,54 @@ defmodule TecnovixWeb.UsersTest do
 
      build_conn()
      |> Generator.put_auth(user_firebase["idToken"])
-     |> get("/api/client/message")
+     |> get("/api/cliente/message")
      |> json_response(200)
 
      build_conn()
      |> Generator.put_auth(user_client_firebase["idToken"])
-     |> get("/api/client/message")
+     |> get("/api/cliente/message")
      |> json_response(200)
+ end
+
+ test "cadastro cliente" do
+   user_firebase = Generator.user()
+   user_param = Generator.user_param()
+
+   user =
+     build_conn()
+     |> Generator.put_auth(user_firebase["idToken"])
+     |> post("/api/cliente", %{"param" => user_param})
+     |> json_response(201)
+     |> Map.get("data")
+
+     refute user_param["cnpj_cpf"] == user["cnpj_cpf"] #test de da formatacao do cpf_cnpj
+ end
+
+ test "logs cliente" do
+   logs_param = Generator.logs_param()
+   user_firebase = Generator.user()
+   user_param = Generator.user_param()
+   user_client_param = Generator.users_cliente()
+
+   build_conn()
+   |> Generator.put_auth(user_firebase["idToken"])
+   |> post("/api/cliente", %{"param" => user_param})
+   |> recycle()
+   |> post("/api/cliente/logs", %{"param" => logs_param})
+   |> json_response(200)
+ end
+
+ test "cadastro existente" do
+   user_firebase = Generator.user()
+   user_param = Generator.user_param()
+
+   user =
+     build_conn()
+     |> Generator.put_auth(user_firebase["idToken"])
+     |> post("/api/cliente", %{"param" => user_param})
+     |> recycle()
+     |> post("/api/cliente", %{"param" => user_param})
+     |> json_response(201)
+     |> Map.get("data")
  end
 end

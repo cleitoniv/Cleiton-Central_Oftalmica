@@ -2,7 +2,7 @@ defmodule Tecnovix.UsuariosClienteSchema do
   use Ecto.Schema
   import Ecto.Changeset
   alias Tecnovix.ClientesSchema
-  
+
   schema "usuarios_cliente" do
     belongs_to :cliente, ClientesSchema
     field :uid, :string

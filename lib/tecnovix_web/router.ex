@@ -59,12 +59,14 @@ defmodule TecnovixWeb.Router do
     post "/sync/pre_devolucao", TecnovixWeb.PreDevolucaoController, :insert_or_update
     post "/sync/vendedores", TecnovixWeb.VendedoresController, :insert_or_update
 
-    scope "/client" do
+    scope "/cliente" do
       pipe_through :guest
       post "/", TecnovixWeb.ClientesController, :create_user
       pipe_through :cliente
+      post "/", TecnovixWeb.ClientesController, :create
+      post "/logs", TecnovixWeb.LogsClienteController, :create_logs
       get "/message", TecnovixWeb.ClientesController, :run
-      post "/user", TecnovixWeb.UsuariosClienteController, :create_user
+      post "/cliente_user", TecnovixWeb.UsuariosClienteController, :create_user
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
