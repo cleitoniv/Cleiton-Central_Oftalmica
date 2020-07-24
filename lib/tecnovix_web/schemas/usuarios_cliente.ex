@@ -19,4 +19,10 @@ defmodule Tecnovix.UsuariosClienteSchema do
     |> cast(params,[:cliente_id, :uid, :nome, :email, :cargo, :status])
     |> validate_required([:cliente_id, :nome, :email, :status])
   end
+
+  def update(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:nome, :cargo])
+    |> validate_required([:nome])
+  end
 end

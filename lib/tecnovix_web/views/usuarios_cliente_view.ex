@@ -3,6 +3,7 @@ defmodule TecnovixWeb.UsuariosClienteView do
 
   def build(%{item: item}) do
     %{
+      id: item.id,
       cliente_id: item.cliente_id,
       uid: item.uid,
       nome: item.nome,

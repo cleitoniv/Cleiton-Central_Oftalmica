@@ -59,6 +59,12 @@ defmodule TecnovixWeb.Router do
     post "/sync/pre_devolucao", TecnovixWeb.PreDevolucaoController, :insert_or_update
     post "/sync/vendedores", TecnovixWeb.VendedoresController, :insert_or_update
 
+    scope "/usuarios_cliente" do
+      pipe_through :cliente
+
+      put "/:id", TecnovixWeb.UsuariosClienteController, :update_users
+    end
+
     scope "/cliente" do
       pipe_through :guest
       post "/", TecnovixWeb.ClientesController, :create_user
