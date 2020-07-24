@@ -1,4 +1,4 @@
-defmodule TecnovixWeb.UsersTest do
+defmodule TecnovixWeb.UsersClientTest do
   use TecnovixWeb.ConnCase, async: false
   alias TecnovixWeb.Auth.Firebase
   alias TecnovixWeb.Support.Generator
