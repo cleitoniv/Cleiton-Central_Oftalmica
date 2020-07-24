@@ -1,7 +1,8 @@
 defmodule TecnovixWeb.Router do
   use TecnovixWeb, :router
   import TecnovixWeb.Auth.SyncUsers
-
+  import TecnovixWeb.Auth.Firebase
+  
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -17,6 +18,14 @@ defmodule TecnovixWeb.Router do
   pipeline :user_sync do
     plug :sync_users_auth
   end
+  
+  pipeline :cliente do
+    plug :cliente_auth
+  end
+
+  pipeline :guest do
+    plug :firebase_auth
+  end
 
   scope "/", TecnovixWeb do
     pipe_through :browser
@@ -25,7 +34,6 @@ defmodule TecnovixWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api" do
     pipe_through :api
-
     resources "/user", TecnovixWeb.ClientesController
     resources "/user_sync", TecnovixWeb.SyncUsersController
     post "/user_sync/login", TecnovixWeb.SyncUsersController, :login
@@ -50,6 +58,14 @@ defmodule TecnovixWeb.Router do
     post "/sync/pedidos_de_venda", TecnovixWeb.PedidosDeVendaController, :insert_or_update
     post "/sync/pre_devolucao", TecnovixWeb.PreDevolucaoController, :insert_or_update
     post "/sync/vendedores", TecnovixWeb.VendedoresController, :insert_or_update
+
+    scope "/client" do
+      pipe_through :guest
+      post "/", TecnovixWeb.ClientesController, :create_user
+      pipe_through :cliente
+      get "/message", TecnovixWeb.ClientesController, :run
+      post "/user", TecnovixWeb.UsuariosClienteController, :create_user
+    end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
 
