@@ -1,4 +1,4 @@
-image: bitwalker/alpine-elixir:1.9.1
+image: bitwalker/alpine-elixir:1.10.3
 definitions:
   services:
     database:
