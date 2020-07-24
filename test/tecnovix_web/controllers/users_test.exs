@@ -3,131 +3,153 @@ defmodule TecnovixWeb.UsersTest do
   alias TecnovixWeb.Support.Generator
   use Bamboo.Test
 
- test "user" do
-   user_firebase = Generator.user()
-   user_client_param = Generator.users_cliente()
-   user_param = Generator.user_param()
+  test "user" do
+    user_firebase = Generator.user()
+    user_client_param = Generator.users_cliente()
+    user_param = Generator.user_param()
 
-     build_conn()
-     |> Generator.put_auth(user_firebase["idToken"])
-     |> post("/api/cliente", %{"param" => user_param})
-     |> IO.inspect
-     |> json_response(201)
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente", %{"param" => user_param})
+    |> IO.inspect()
+    |> json_response(201)
 
-   user_client =
-     build_conn()
-     |> Generator.put_auth(user_firebase["idToken"])
-     |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
-     |> json_response(201)
-     |> Map.get("data")
+    user_client =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
+      |> json_response(201)
+      |> Map.get("data")
 
-  Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)
+    Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)
 
-  user_client_firebase = Generator.create_user_firebase(user_client["email"])
+    user_client_firebase = Generator.create_user_firebase(user_client["email"])
 
-     build_conn()
-     |> Generator.put_auth(user_firebase["idToken"])
-     |> get("/api/cliente/message")
-     |> json_response(200)
-     build_conn()
-     |> Generator.put_auth(user_client_firebase["idToken"])
-     |> get("/api/cliente/message")
-     |> json_response(200)
- end
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> get("/api/cliente/message")
+    |> json_response(200)
 
- test "cadastro cliente" do
-   user_firebase = Generator.user()
-   user_param = Generator.user_param()
+    build_conn()
+    |> Generator.put_auth(user_client_firebase["idToken"])
+    |> get("/api/cliente/message")
+    |> json_response(200)
+  end
 
-   user =
-     build_conn()
-     |> Generator.put_auth(user_firebase["idToken"])
-     |> post("/api/cliente", %{"param" => user_param})
-     |> json_response(201)
-     |> Map.get("data")
+  test "cadastro cliente" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
 
-     refute user_param["cnpj_cpf"] == user["cnpj_cpf"] #test de da formatacao do cpf_cnpj
- end
+    user =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
 
- test "logs cliente" do
-   logs_param = Generator.logs_param()
-   user_firebase = Generator.user()
-   user_param = Generator.user_param()
+    # test de da formatacao do cpf_cnpj
+    refute user_param["cnpj_cpf"] == user["cnpj_cpf"]
+  end
 
-   build_conn()
-   |> Generator.put_auth(user_firebase["idToken"])
-   |> post("/api/cliente", %{"param" => user_param})
-   |> recycle()
-   |> post("/api/cliente/logs", %{"param" => logs_param})
-   |> json_response(200)
- end
+  test "logs cliente" do
+    logs_param = Generator.logs_param()
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
 
- test "cadastro existente" do
-   user_firebase = Generator.user()
-   user_param = Generator.user_param()
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente", %{"param" => user_param})
+    |> recycle()
+    |> post("/api/cliente/logs", %{"param" => logs_param})
+    |> json_response(200)
+  end
 
-     build_conn()
-     |> Generator.put_auth(user_firebase["idToken"])
-     |> post("/api/cliente", %{"param" => user_param})
-     |> recycle()
-     |> post("/api/cliente", %{"param" => user_param})
-     |> json_response(201)
-     |> Map.get("data")
- end
+  test "cadastro existente" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
 
- test "update" do
-   user_firebase = Generator.user()
-   user_param = Generator.user_param()
-   user_client_param = Generator.users_cliente()
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente", %{"param" => user_param})
+    |> recycle()
+    |> post("/api/cliente", %{"param" => user_param})
+    |> json_response(201)
+    |> Map.get("data")
+  end
 
-   user =
-     build_conn()
-     |> Generator.put_auth(user_firebase["idToken"])
-     |> post("/api/cliente", %{"param" => user_param})
-     |> json_response(201)
-     |> Map.get("data")
+  test "update" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    user_client_param = Generator.users_cliente()
 
-   user_client =
-     build_conn()
-     |> Generator.put_auth(user_firebase["idToken"])
-     |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
-     |> json_response(201)
-     |> Map.get("data")
+    user =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
 
-     build_conn()
-     |> Generator.put_auth(user_firebase["idToken"])
-     |> put("/api/usuarios_cliente/#{user_client["id"]}", %{"param" => %{user_client_param | "cargo" => "Assistente"}})
-     |> json_response(200)
+    user_client =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
+      |> json_response(201)
+      |> Map.get("data")
 
-     {:ok, register} = Tecnovix.UsuariosClienteModel.search_register_email(user_client["email"])
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> put("/api/usuarios_cliente/#{user_client["id"]}", %{
+      "param" => %{user_client_param | "cargo" => "Assistente"}
+    })
+    |> json_response(200)
 
-     build_conn()
-     |> Generator.put_auth(user_firebase["idToken"])
-     |> delete("/api/usuarios_cliente/#{user_client["id"]}")
-     |> json_response(200)
+    {:ok, register} = Tecnovix.UsuariosClienteModel.search_register_email(user_client["email"])
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> delete("/api/usuarios_cliente/#{user_client["id"]}")
+    |> json_response(200)
 
     assert register.email == user_client["email"]
     assert user_client["cliente_id"] == user["id"]
- end
+  end
 
- test "testing email" do
-   user = "victorasilva0707@gmail.com"
-   email = Tecnovix.Email.content_email(user)
+  test "testing email" do
+    user = "victorasilva0707@gmail.com"
+    email = Tecnovix.Email.content_email(user)
 
     assert email.to == user
     assert email.subject == "Central Oftalmica"
 
     email = Tecnovix.Email.content_email(user)
 
-    email |> Tecnovix.Mailer.deliver_now
+    email |> Tecnovix.Mailer.deliver_now()
 
-    assert_delivered_email email
- end
+    assert_delivered_email(email)
+  end
 
- test "update firebase" do
-   user_firebase = Generator.user()
-   {:ok, user} = TecnovixWeb.Auth.Firebase.update_profile(%{idToken: user_firebase["idToken"], displayName: "Victor"})
-   Jason.decode!(user.body)
-   |> IO.inspect
- end
+  test "show all users" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    user_client_param = Generator.users_cliente()
+
+    user =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    user_client =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/usuarios_cliente")
+      |> json_response(200)
+  end
 end

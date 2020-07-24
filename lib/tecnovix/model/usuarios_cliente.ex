@@ -2,6 +2,12 @@ defmodule Tecnovix.UsuariosClienteModel do
   use Tecnovix.DAO, schema: Tecnovix.UsuariosClienteSchema
   alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.Repo
+  import Ecto.Query
+
+  def show_users() do
+    UsuariosClienteSchema
+    |> Repo.all()
+  end
 
   def update(user, params) do
     user
