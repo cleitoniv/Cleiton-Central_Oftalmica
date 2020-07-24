@@ -63,6 +63,7 @@ defmodule TecnovixWeb.Router do
       pipe_through :cliente
 
       put "/:id", TecnovixWeb.UsuariosClienteController, :update_users
+      delete "/:id", TecnovixWeb.UsuariosClienteController, :delete_users
     end
 
     scope "/cliente" do

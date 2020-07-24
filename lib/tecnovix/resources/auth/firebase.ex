@@ -147,4 +147,10 @@ end
 
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
   end
+
+  def update_profile(%{idToken: _idToken, displayName: _displayName} = params) do
+    params = Map.put(params, :returnSecureToken, true)
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" <> @firebase_api_key
+    HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
+  end
 end
