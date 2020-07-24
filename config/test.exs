@@ -27,3 +27,7 @@ config :tecnovix, :firebase_api_key_vendor, "AIzaSyAw-mBe2kkFmslL0ryrgYY0_9jIbKW
 config :tecnovix,
        :sync_users_salt,
        "B9cwPTrRRrk/W+4psbuf2AI7Z6G/ncMDdunFXp52LqpwgiBTVUCYyBbjbre90S2v"
+
+config :tecnovix, Tecnovix.Mailer,
+  adapter: Bamboo.TestAdapter,
+  api_key: "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"

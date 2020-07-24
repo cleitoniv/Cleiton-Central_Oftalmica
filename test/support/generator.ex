@@ -40,7 +40,7 @@ import Plug.Conn
   end
   
   def user() do
-    with {:ok, user = %{status_code: 200}} <- Firebase.create_user(%{email: "victor#{Ecto.UUID.autogenerate()}@gmail.com", password: "123456"}) do
+    with {:ok, user = %{status_code: 200}} <- Firebase.create_user(%{email: "victorcliente#{Ecto.UUID.autogenerate()}@gmail.com", password: "123456"}) do
       Jason.decode!(user.body)
     end
   end

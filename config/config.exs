@@ -25,6 +25,12 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :tecnovix, :remetente, "thiago2kboeker@gmail.com"
+
+config :tecnovix, Tecnovix.Mailer,
+  adapter: Bamboo.SendGridAdapter,
+  api_key: "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"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
