@@ -40,6 +40,7 @@ defmodule Tecnovix.AtendPrefClienteSchema do
     |> validate_fields(:sex_tarde)
     |> validate_fields(:sab_manha)
     |> validate_fields(:sab_tarde)
+    |> unique_constraint(:cod_cliente)
   end
 
   def validate_fields(changeset, dia) do

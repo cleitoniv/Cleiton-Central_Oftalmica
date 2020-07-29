@@ -100,7 +100,6 @@ defmodule TecnovixWeb.UsersTest do
     |> json_response(200)
 
     assert register.email == user_client["email"]
-    assert user_client["cliente_id"] == user["id"]
   end
 
   test "testing email" do

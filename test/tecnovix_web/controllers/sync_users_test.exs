@@ -1,6 +1,6 @@
 defmodule Tecnovix.SyncUsers do
   use TecnovixWeb.ConnCase, async: false
-  alias Tecnovix.Support.Generator
+  alias TecnovixWeb.Support.Generator
 
   test "Create Sync User" do
     user_param = Generator.sync_users()
