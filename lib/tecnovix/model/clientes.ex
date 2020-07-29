@@ -4,6 +4,15 @@ defmodule Tecnovix.ClientesModel do
   alias Tecnovix.ClientesSchema
   import Ecto.Changeset
 
+  def insert_or_update(params) do
+    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: params["cnpj_cpf"]) do
+      create(params)
+    else
+      cliente ->
+        {:ok, cliente}
+    end
+  end
+
   def create(params) do
     %ClientesSchema{}
     |> ClientesSchema.changeset(params)
