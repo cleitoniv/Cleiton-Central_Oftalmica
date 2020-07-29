@@ -167,7 +167,7 @@ defmodule TecnovixWeb.UsersTest do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/atend_pref_cliente", %{"param" => %{"cliente_id" => user["id"], "cod_cliente" => "1234", "seg_tarde" => 1}})
       |> recycle()
-      |> post("/api/atend_pref_cliente", %{"param" => %{"cliente_id" => user["id"], "cod_cliente" => "1234", "seg_tarde" => 1}})
+      |> post("/api/atend_pref_cliente", %{"param" => %{"cliente_id" => user["id"], "cod_cliente" => "5678", "seg_tarde" => 1}})
       |> recycle()
       |> Generator.put_auth(user_client_firebase["idToken"])
       |> post("/api/atend_pref_cliente", %{"param" => %{"cliente_id" => user_client["id"], "cod_cliente" => "1224", "sab_manha" => 1}})
