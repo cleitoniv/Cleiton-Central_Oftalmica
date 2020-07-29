@@ -9,6 +9,10 @@ defmodule Tecnovix.UsuariosClienteModel do
     |> Repo.all()
   end
 
+  def cliente_id_filter(params) do
+    dynamic([a], a.cliente_id == ^params["cliente_id"])
+  end
+
   def update(user, params) do
     user
     |> UsuariosClienteSchema.update(params)
