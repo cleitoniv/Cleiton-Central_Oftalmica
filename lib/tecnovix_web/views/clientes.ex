@@ -3,6 +3,7 @@ defmodule TecnovixWeb.ClientesView do
 
   def build(%{item: item}) do
     %{
+      id: item.id,
       uid: item.uid,
       codigo: item.codigo,
       loja: item.loja,
@@ -34,7 +35,7 @@ defmodule TecnovixWeb.ClientesView do
 
   def render("show_cliente.json", %{item: item}) do
     %{
-      sucess: true,
+      success: true,
       data: %{
       id: item.id,
       uid: item.uid,
@@ -87,7 +88,7 @@ defmodule TecnovixWeb.ClientesView do
 
   def render("show_usuario.json", %{item: item}) do
     %{
-      sucess: true,
+      success: true,
       data: %{
       nome: item.nome,
       email: item.email,

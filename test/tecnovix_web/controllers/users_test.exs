@@ -194,15 +194,14 @@ defmodule TecnovixWeb.UsersTest do
       |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
       |> json_response(201)
       |> Map.get("data")
-
+      
       user_client_firebase = Generator.create_user_firebase(user_client["email"])
 
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/atend_pref_cliente", %{"param" => %{"cliente_id" => user["id"], "cod_cliente" => "1234", "seg_tarde" => 1}})
+      |> post("/api/atend_pref_cliente", %{"param" => %{"cliente_id" => user["id"], "cod_cliente" => "4321", "seg_tarde" => 1}})
       |> recycle()
       |> get("/api/cliente")
       |> json_response(200)
-      |> IO.inspect
   end
 end

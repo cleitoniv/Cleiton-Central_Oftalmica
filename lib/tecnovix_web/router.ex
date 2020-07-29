@@ -77,7 +77,6 @@ defmodule TecnovixWeb.Router do
       post "/", TecnovixWeb.ClientesController, :create_user
       pipe_through :cliente
       get "/", TecnovixWeb.ClientesController, :show
-      post "/", TecnovixWeb.ClientesController, :create
       post "/logs", TecnovixWeb.LogsClienteController, :create_logs
       get "/message", TecnovixWeb.ClientesController, :run
       post "/cliente_user", TecnovixWeb.UsuariosClienteController, :create_user
