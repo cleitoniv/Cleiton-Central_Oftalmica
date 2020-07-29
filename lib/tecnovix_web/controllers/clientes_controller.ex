@@ -7,6 +7,15 @@ defmodule TecnovixWeb.ClientesController do
 
   action_fallback Tecnovix.Resources.Fallback
 
+  def insert_or_update(conn, params) do
+    with {:ok, cliente} <- AtendPrefClienteModel.insert_or_update(params) do
+      conn
+      |> put_status(:ok)
+      |> put_resp_content_type("application/json")
+      |> render("item.json", %{item: cliente})
+    end
+  end
+
   def create_user(conn, %{"param" => params}) do
     {:ok, jwt} = conn.private.auth
     params = Map.put(params, "email", jwt.fields["email"])
