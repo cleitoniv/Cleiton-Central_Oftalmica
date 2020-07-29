@@ -5,7 +5,7 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Changeset
 
   def insert_or_update(params) do
-    is_nil(Repo.get_by(ClientesSchema, cnpj_cpf: params["cnpj_cpf"])) do
+    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: params["cnpj_cpf"]) do
       create(params)
     else
       cliente ->
