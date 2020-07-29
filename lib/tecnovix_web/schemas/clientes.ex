@@ -28,7 +28,7 @@ defmodule Tecnovix.ClientesSchema do
     field :vendedor, :string
     field :crm_medico, :string
     field :dia_remessa, :string
-    field :wirecard_client_id, :string
+    field :wirecard_cliente_id, :string
     field :fcm_token, :string
 
     timestamps()
@@ -62,7 +62,7 @@ defmodule Tecnovix.ClientesSchema do
       :vendedor,
       :crm_medico,
       :dia_remessa,
-      :wirecard_client_id,
+      :wirecard_cliente_id,
       :fcm_token
     ])
     |> validate_required([:fisica_jurid, :cnpj_cpf, :email])

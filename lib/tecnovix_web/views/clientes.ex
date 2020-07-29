@@ -27,7 +27,7 @@ defmodule TecnovixWeb.ClientesView do
       vendedor: item.vendedor,
       crm_medico: item.crm_medico,
       dia_remessa: item.dia_remessa,
-      wirecard_client_id: item.wirecard_client_id,
+      wirecard_cliente_id: item.wirecard_cliente_id,
       fcm_token: item.fcm_token
     }
   end
