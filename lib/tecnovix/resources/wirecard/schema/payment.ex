@@ -139,7 +139,7 @@ defmodule Tecnovix.Resource.Wirecard.Payment do
   def billing_changeset(changeset, params) do
     changeset
     |> cast(params, [:streetNumber, :complement, :district, :city, :state, :country, :zipCode])
-    |> validate_required([:streetNumber, :distrcit, :city, :state, :country, :zipCode])
+    |> validate_required([:streetNumber, :district, :city, :state, :country, :zipCode])
   end
 
   defp boleto_changeset(changeset, params) do

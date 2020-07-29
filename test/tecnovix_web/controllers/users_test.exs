@@ -8,12 +8,14 @@ defmodule TecnovixWeb.UsersTest do
     user_client_param = Generator.users_cliente()
     user_param = Generator.user_param()
 
+    #criando o cliente
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente", %{"param" => user_param})
-    |> IO.inspect()
     |> json_response(201)
+    |> IO.inspect
 
+    #criando o usuario cliente
     user_client =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
@@ -21,7 +23,7 @@ defmodule TecnovixWeb.UsersTest do
       |> json_response(201)
       |> Map.get("data")
 
-    Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)
+    Tecnovix.Repo.all(Tecnovix.LogsClienteSchema) #Motrando a Logs
 
     user_client_firebase = Generator.create_user_firebase(user_client["email"])
 
@@ -62,19 +64,6 @@ defmodule TecnovixWeb.UsersTest do
     |> recycle()
     |> post("/api/cliente/logs", %{"param" => logs_param})
     |> json_response(200)
-  end
-
-  test "cadastro existente" do
-    user_firebase = Generator.user()
-    user_param = Generator.user_param()
-
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente", %{"param" => user_param})
-    |> recycle()
-    |> post("/api/cliente", %{"param" => user_param})
-    |> json_response(201)
-    |> Map.get("data")
   end
 
   test "update" do
@@ -149,8 +138,9 @@ defmodule TecnovixWeb.UsersTest do
 
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/usuarios_cliente")
+      |> get("/api/usuarios_cliente?page=1&page_size=20")
       |> json_response(200)
+      |> IO.inspect
   end
 
   test "atend pref" do

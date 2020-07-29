@@ -41,7 +41,7 @@ defmodule TecnovixWeb.Router do
 
       put "/:id", TecnovixWeb.UsuariosClienteController, :update_users
       delete "/:id", TecnovixWeb.UsuariosClienteController, :delete_users
-      get "/", TecnovixWeb.UsuariosClienteController, :show_users
+      get "/", TecnovixWeb.UsuariosClienteController, :cliente_index
     end
 
     scope "/cliente" do
