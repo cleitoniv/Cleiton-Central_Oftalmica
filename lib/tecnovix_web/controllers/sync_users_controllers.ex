@@ -13,7 +13,7 @@ defmodule TecnovixWeb.SyncUsersController do
             refresh_token = Phoenix.Token.sign(TecnovixWeb.Endpoint, @salt, "refresh_token")
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{acess_token: token, refresh_token: refresh_token, expires_in: 3_600}))
+      |> send_resp(200, Jason.encode!(%{access_token: token, refresh_token: refresh_token, expires_in: 3_600}))
     else
       _ ->
       conn
@@ -30,7 +30,7 @@ defmodule TecnovixWeb.SyncUsersController do
 
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{acess_token: token, refresh_token: refresh_token, expires_in: 3_600 * 12}))
+      |> send_resp(200, Jason.encode!(%{access_token: token, refresh_token: refresh_token, expires_in: 3_600 * 12}))
     else
       _ ->
       conn
