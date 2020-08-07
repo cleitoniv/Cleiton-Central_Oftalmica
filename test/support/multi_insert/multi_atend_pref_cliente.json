@@ -1,0 +1,36 @@
+[
+{
+  "cod_cliente": "123456",
+  "loja_cliente": "ES",
+  "seg_manha": 1,
+  "seg_tarde": 2,
+  "ter_manha": 3,
+  "ter_tarde": 4,
+  "qua_manha": 5,
+  "qua_tarde": 6,
+  "qui_manha": 7,
+  "qui_tarde": 8,
+  "sex_manha": 9,
+  "sex_tarde": 0,
+  "sab_manha": 1,
+  "sab_tarde": 2,
+  "observacoes": "Estou escrevendo isso somente para testar!"
+},
+{
+  "cod_cliente": "654321",
+  "loja_cliente": "RJ",
+  "seg_manha": 1,
+  "seg_tarde": 2,
+  "ter_manha": 3,
+  "ter_tarde": 4,
+  "qua_manha": 5,
+  "qua_tarde": 6,
+  "qui_manha": 7,
+  "qui_tarde": 8,
+  "sex_manha": 9,
+  "sex_tarde": 0,
+  "sab_manha": 1,
+  "sab_tarde": 2,
+  "observacoes": "Estou escrevendo isso somente para testar!"
+}
+]

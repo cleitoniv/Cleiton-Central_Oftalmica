@@ -72,4 +72,11 @@ defmodule Tecnovix.SyncUsers do
 
     assert refresh_login["message"] == "Credenciais ou token inválido"
   end
+
+  test "endpoint auth" do
+    params = %{username: "victoraugusto", password: "123456"}
+
+    Tecnovix.EndpointAuth.auth(params)
+    |> IO.inspect
+  end
 end

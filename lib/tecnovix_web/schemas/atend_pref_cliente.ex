@@ -25,8 +25,24 @@ defmodule Tecnovix.AtendPrefClienteSchema do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params,[:cliente_id, :cod_cliente, :loja_cliente, :seg_manha, :seg_tarde, :ter_manha, :ter_tarde, :qua_manha,
-    :qua_tarde, :qui_manha, :qui_tarde, :sex_manha, :sex_tarde, :sab_manha, :sab_tarde, :observacoes])
+    |> cast(params, [
+      :cliente_id,
+      :cod_cliente,
+      :loja_cliente,
+      :seg_manha,
+      :seg_tarde,
+      :ter_manha,
+      :ter_tarde,
+      :qua_manha,
+      :qua_tarde,
+      :qui_manha,
+      :qui_tarde,
+      :sex_manha,
+      :sex_tarde,
+      :sab_manha,
+      :sab_tarde,
+      :observacoes
+    ])
     |> validate_required([:cod_cliente])
     |> validate_fields(:seg_manha)
     |> validate_fields(:seg_tarde)
@@ -47,6 +63,7 @@ defmodule Tecnovix.AtendPrefClienteSchema do
     cond do
       get_field(changeset, dia) == 1 ->
         changeset
+
       true ->
         put_change(changeset, dia, 0)
     end

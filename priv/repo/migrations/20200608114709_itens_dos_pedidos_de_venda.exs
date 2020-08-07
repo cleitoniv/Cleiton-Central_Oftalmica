@@ -10,7 +10,7 @@ defmodule Tecnovix.Repo.Migrations.ItensDosPedidosDeVenda do
       add :produto, :string, size: 15
       add :quantidade, :decimal
       add :prc_unitario, :decimal
-      add :olho, :string , size: 1
+      add :olho, :string, size: 1
       add :paciente, :string, size: 50
       add :num_pac, :string, size: 20
       add :dt_nas_pac, :string, size: 8

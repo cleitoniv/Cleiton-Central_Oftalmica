@@ -34,6 +34,9 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :not_list}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(401, Jason.decode!(%{"success" => false, "data" => "Não foi possível listar os usuários."}))
+    |> send_resp(
+      401,
+      Jason.decode!(%{"success" => false, "data" => "Não foi possível listar os usuários."})
+    )
   end
 end
