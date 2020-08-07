@@ -6,19 +6,15 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Changeset
 
 def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    multi =
-    Enum.reduce(params["data"], Multi.new(), fn cliente, multi ->
-      with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
-        multi
-        |> Multi.insert(Ecto.UUID.autogenerate, ClientesSchema.changeset(%ClientesSchema{}, cliente))
-      else
-        changeset ->
-          multi
-          |> Multi.update(Ecto.UUID.autogenerate, ClientesSchema.changeset(changeset, cliente))
-      end
-    end)
-      Repo.transaction(multi)
-  end
+  Enum.reduce(params["data"], %{}, fn cliente, _acc ->
+    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
+      create(cliente)
+    else
+      changeset ->
+      __MODULE__.update(changeset, cliente)
+    end
+  end)
+end
 
 def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do
   with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf) do

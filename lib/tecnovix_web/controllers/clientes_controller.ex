@@ -8,7 +8,7 @@ defmodule TecnovixWeb.ClientesController do
   action_fallback Tecnovix.Resources.Fallback
 
   def insert_or_update(conn, params) do
-    with {:ok, cliente} <- ClientesModel.insert_or_update(params) do
+    with cliente <- ClientesModel.insert_or_update(params) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{sucess: true}))

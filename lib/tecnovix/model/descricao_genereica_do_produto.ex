@@ -5,19 +5,15 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    multi =
-      Enum.reduce(params["data"], Multi.new(), fn descricao, multi ->
+      Enum.reduce(params["data"], %{}, fn descricao, _acc ->
         with nil <- Repo.get_by(DescricaoSchema, grupo: descricao["grupo"]),
              nil <- Repo.get_by(DescricaoSchema, codigo: params["codigo"]) do
-        multi
-        |> Multi.insert(Ecto.UUID.autogenerate(), DescricaoSchema.changeset(%DescricaoSchema{}, descricao))
+        create(descricao)
         else
           changeset ->
-            multi
-            |> Multi.update(Ecto.UUID.autogenerate(), DescricaoSchema.changeset(changeset, descricao))
+            __MODULE__.update(changeset, descricao)
         end
      end)
-     Repo.transaction(multi)
   end
 
   def insert_or_update(%{"grupo" => grupo, "codigo" => codigo} = params) do

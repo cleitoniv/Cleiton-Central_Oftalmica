@@ -5,18 +5,14 @@ defmodule Tecnovix.VendedoresModel do
   alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    multi =
-      Enum.reduce(params["data"], Multi.new(), fn vendedores, multi ->
+      Enum.reduce(params["data"], %{}, fn vendedores, _acc ->
         with nil <- Repo.get_by(VendedoresSchema, cnpj_cpf: vendedores["cnpj_cpf"]) do
-          multi
-          |> Multi.insert(Ecto.UUID.autogenerate(), VendedoresSchema.changeset(%VendedoresSchema{}, vendedores))
+          create(vendedores)
         else
           changeset ->
-          multi
-          |> Multi.update(Ecto.UUID.autogenerate(), VendedoresSchema.changeset(changeset, vendedores))
+          __MODULE__.update(changeset, vendedores)
         end
       end)
-      Repo.transaction(multi)
   end
 
   def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do

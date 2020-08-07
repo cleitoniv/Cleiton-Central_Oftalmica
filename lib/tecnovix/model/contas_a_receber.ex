@@ -5,22 +5,17 @@ defmodule Tecnovix.ContasAReceberModel do
   alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    multi =
-      Enum.reduce(params["data"], Multi.new(), fn contas, multi ->
+      Enum.reduce(params["data"], %{}, fn contas, _acc ->
         with nil <- Repo.get_by(ContasAReceberSchema, filial: contas["filial"]),
              nil <- Repo.get_by(ContasAReceberSchema, no_titulo: contas["no_titulo"]),
              nil <- Repo.get_by(ContasAReceberSchema, cliente: contas["cliente"]),
              nil <- Repo.get_by(ContasAReceberSchema, loja: contas["loja"]) do
-          multi
-          |> Multi.insert(Ecto.UUID.autogenerate, ContasAReceberSchema.changeset(%ContasAReceberSchema{}, contas))
+          create(contas)
         else
-          contas ->
-            multi
-            |> Multi.update(Ecto.UUID.autogenerate, ContasAReceberSchema.changeset(contas, params))
+          changeset ->
+            __MODULE__.update(changeset, contas)
         end
-      end
-        )
-      Repo.transaction(multi)
+      end)
   end
 
   def insert_or_update(

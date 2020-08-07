@@ -6,19 +6,15 @@ defmodule Tecnovix.AtendPrefClienteModel do
   alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    multi =
-      Enum.reduce(params["data"], Multi.new(), fn atend_pref, multi ->
+      Enum.reduce(params["data"], %{}, fn atend_pref, _acc ->
         with nil <- Repo.get_by(AtendPrefClienteSchema, cod_cliente: atend_pref["cod_cliente"]),
              nil <- Repo.get_by(AtendPrefClienteSchema, loja_cliente: atend_pref["loja_cliente"]) do
-           multi
-           |> Multi.insert(Ecto.UUID.autogenerate(), AtendPrefClienteSchema.changeset(%AtendPrefClienteSchema{}, atend_pref))
+           create(atend_pref)
         else
           changeset ->
-            multi
-            |> Multi.update(Ecto.UUID.autogenerate(), AtendPrefClienteSchema.changeset(changeset, atend_pref))
+            __MODULE__.update(changeset, atend_pref)
         end
       end)
-      Repo.transaction(multi)
   end
 
   def insert_or_update(%{"cod_cliente" => cod_cliente, "loja_cliente" => loja_cliente} = params) do

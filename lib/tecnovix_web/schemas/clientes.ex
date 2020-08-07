@@ -30,8 +30,6 @@ defmodule Tecnovix.ClientesSchema do
     field :dia_remessa, :string
     field :wirecard_cliente_id, :string
     field :fcm_token, :string
-
-    timestamps()
   end
 
   def changeset(struct, params \\ {}) do

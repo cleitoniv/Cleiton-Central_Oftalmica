@@ -5,22 +5,18 @@ defmodule Tecnovix.ItensPreDevolucaoModel do
   alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    multi =
-      Enum.reduce(params["data"], Multi.new(), fn itens, multi ->
+      Enum.reduce(params["data"], %{}, fn itens, _acc ->
         with nil <- Repo.get_by(ItensSchema, filial: itens["filial"]),
              nil <- Repo.get_by(ItensSchema, cod_pre_dev: itens["cod_pre_dev"]),
              nil <- Repo.get_by(ItensSchema, filial_orig: itens["filial_orig"]),
              nil <- Repo.get_by(ItensSchema, produto: itens["produto"]),
              nil <- Repo.get_by(ItensSchema, quant: itens["quant"]) do
-         multi
-         |> Multi.insert(Ecto.UUID.autogenerate(), ItensSchema.changeset(%ItensSchema{}, itens))
+         create(itens)
        else
          changeset ->
-         multi
-         |> Multi.update(Ecto.UUID.autogenerate(), ItensSchema.changeset(changeset, itens))
+         __MODULE__.update(changeset, itens)
        end
       end)
-      Repo.transaction(multi)
   end
 
   def insert_or_update(
