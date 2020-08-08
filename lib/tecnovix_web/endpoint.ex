@@ -38,5 +38,7 @@ defmodule TecnovixWeb.Endpoint do
     key: "_tecnovix_key",
     signing_salt: "ZIIA9BBS"
 
+  plug CORSPlug, origin: "*"
+
   plug TecnovixWeb.Router
 end

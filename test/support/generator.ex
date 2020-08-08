@@ -1,6 +1,17 @@
 defmodule TecnovixWeb.Support.Generator do
   alias TecnovixWeb.Auth.Firebase
+  alias Tecnovix.SyncUsersModel
+  import Phoenix.ConnTest
   import Plug.Conn
+
+  @endpoint TecnovixWeb.Endpoint
+
+  def sync_user(user, password) do
+    {:ok, _} = SyncUsersModel.create(%{"username" => user, "password" => password})
+    build_conn()
+    |> post("/api/user_sync/login", %{"username" => user, "password" => password})
+    |> json_response(200)
+  end
 
   def logs_param() do
     %{

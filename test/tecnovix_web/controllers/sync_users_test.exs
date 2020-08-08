@@ -1,40 +1,24 @@
 defmodule Tecnovix.SyncUsers do
   use TecnovixWeb.ConnCase, async: false
   alias TecnovixWeb.Support.Generator
+  alias Tecnovix.Endpoints.ProtheusProd
 
   test "Create Sync User" do
-    user_param = Generator.sync_users()
-
-    user =
-      build_conn()
-      |> post("/api/user_sync", %{"param" => user_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    assert user["username"] == user_param.username
+    Generator.sync_user("thiagoboeker", "123456")
 
     _login =
       build_conn()
-      |> post("/api/user_sync/login", %{"username" => user["username"], "password" => "123456"})
+      |> post("/api/user_sync/login", %{"username" => "thiagoboeker", "password" => "123456"})
       |> json_response(200)
   end
 
   test "token" do
-    # gerando um usuario válido
-    user_param = Generator.sync_users()
-
-    user =
-      build_conn()
-      |> post("/api/user_sync", %{"param" => user_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    assert user["username"] == user_param.username
+    Generator.sync_user("thiagoboeker", "123456")
 
     # testing auth token
     user_login =
       build_conn()
-      |> post("/api/user_sync/login", %{"username" => user["username"], "password" => "123456"})
+      |> post("/api/user_sync/login", %{"username" => "thiagoboeker", "password" => "123456"})
       |> json_response(200)
 
     # testing auth refresh_token
@@ -46,15 +30,7 @@ defmodule Tecnovix.SyncUsers do
 
   test "testing invalid credencials" do
     # gerando um usuario válido
-    user_param = Generator.sync_users()
-
-    user =
-      build_conn()
-      |> post("/api/user_sync", %{"param" => user_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    assert user["username"] == user_param.username
+    Generator.sync_user("thiagoboeker", "123456")
 
     # testing false username
     user_login =
@@ -73,10 +49,7 @@ defmodule Tecnovix.SyncUsers do
     assert refresh_login["message"] == "Credenciais ou token inválido"
   end
 
-  test "endpoint auth" do
-    params = %{username: "victoraugusto", password: "123456"}
-
-    Tecnovix.EndpointAuth.auth(params)
-    |> IO.inspect
+  test "Central Endpoint Prod" do
+    ProtheusProd.new_token(%{"username" => "TECNOVIX", "password" => "TecnoVix200505"})
   end
 end
