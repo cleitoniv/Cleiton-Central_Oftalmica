@@ -4,11 +4,10 @@ defmodule TecnovixWeb.ContasAReceberController do
   alias Tecnovix.ContasAReceberModel
 
   def insert_or_update(conn, params) do
-    with {:ok, contas} <- ContasAReceberModel.insert_or_update(params) do
+    with {:ok, _contas} <- ContasAReceberModel.insert_or_update(params) do
       conn
-      |> put_status(:ok)
       |> put_resp_content_type("application/json")
-      |> render("item.json", %{item: contas})
+      |> send_resp(200, Jason.encode!(%{sucess: true}))
     end
   end
 end

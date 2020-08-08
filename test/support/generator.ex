@@ -28,7 +28,9 @@ defmodule TecnovixWeb.Support.Generator do
       "cep" => "--teste",
       "cdmunicipio" => "teste",
       "municipio" => "teste",
-      "crm_medico" => "teste"
+      "crm_medico" => "teste",
+      "cod_cliente" => "nil",
+      "loja_cliente" => "12"
     }
   end
 
@@ -38,7 +40,7 @@ defmodule TecnovixWeb.Support.Generator do
       password: "123456"
     }
   end
-  
+
   def user() do
     with {:ok, user = %{status_code: 200}} <-
            Firebase.create_user(%{

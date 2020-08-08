@@ -1,0 +1,14 @@
+[{
+  "cliente_id": 1,
+  "filial": "123",
+  "no_titulo": "65413",
+  "tipo": "123",
+  "cliente": "123456",
+  "dt_emissao": "2020-01-01",
+  "vencto_real": "2020-01-01",
+  "virtitulo": "1.25",
+  "saldo": "1.5",
+  "loja": "ES",
+  "cod_barras": "Estou escrevendo isso somente para testar!"
+}
+]
