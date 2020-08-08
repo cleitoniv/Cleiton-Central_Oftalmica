@@ -6,19 +6,21 @@ defmodule Tecnovix.ContratoDeParceriaModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     Enum.reduce(params["data"], %{}, fn contrato, _acc ->
-      with nil <- Repo.get_by(ContratoDeParceriaSchema, filial: contrato["filial"]),
-           nil <- Repo.get_by(ContratoDeParceriaSchema, contrato_n: contrato["contrato_n"]) do
-           create(contrato)
+      with nil <-
+             Repo.get_by(ContratoDeParceriaSchema,
+               filial: contrato["filial"],
+               contrato_n: contrato["contrato_n"]
+             ) do
+        create(contrato)
       else
-       changeset ->
-         __MODULE__.update(changeset, contrato)
+        changeset ->
+          __MODULE__.update(changeset, contrato)
       end
     end)
   end
 
   def insert_or_update(%{"filial" => filial, "contrato_n" => contrato_n} = params) do
-    with nil <- Repo.get_by(ContratoDeParceriaSchema, filial: filial),
-         nil <- Repo.get_by(ContratoDeParceriaSchema, contrato_n: contrato_n) do
+    with nil <- Repo.get_by(ContratoDeParceriaSchema, filial: filial, contrato_n: contrato_n) do
       __MODULE__.create(params)
     else
       contrato ->

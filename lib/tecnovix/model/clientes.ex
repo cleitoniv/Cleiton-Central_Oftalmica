@@ -5,29 +5,29 @@ defmodule Tecnovix.ClientesModel do
   alias Tecnovix.ClientesSchema
   import Ecto.Changeset
 
-def insert_or_update(%{"data" => data} = params) when is_list(data) do
-  Enum.reduce(params["data"], %{}, fn cliente, _acc ->
-    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
-      create(cliente)
-    else
-      changeset ->
-      __MODULE__.update(changeset, cliente)
-    end
-  end)
-end
-
-def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do
-  with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf) do
-    __MODULE__.create(params)
-  else
-    cliente ->
-      __MODULE__.update(cliente, params)
+  def insert_or_update(%{"data" => data} = params) when is_list(data) do
+    Enum.reduce(params["data"], %{}, fn cliente, _acc ->
+      with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
+        create(cliente)
+      else
+        changeset ->
+          __MODULE__.update(changeset, cliente)
+      end
+    end)
   end
-end
 
-def insert_or_update(_params) do
-  {:error, :invalid_parameter}
-end
+  def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do
+    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf) do
+      __MODULE__.create(params)
+    else
+      cliente ->
+        __MODULE__.update(cliente, params)
+    end
+  end
+
+  def insert_or_update(_params) do
+    {:error, :invalid_parameter}
+  end
 
   def create(params) do
     %ClientesSchema{}

@@ -9,4 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-Tecnovix.SyncUsersModel.create(%{"username" => "centralof_api", "password" => "centralof_api08082020"})
+Tecnovix.SyncUsersModel.create(%{
+  "username" => "centralof_api",
+  "password" => "centralof_api08082020"
+})
