@@ -4,11 +4,10 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
   def insert_or_update(conn, params) do
-    with {:ok, descricao} <- DescricaoModel.insert_or_update(params) do
+    with {:ok, _descricao} <- DescricaoModel.insert_or_update(params) do
       conn
-      |> put_status(:ok)
       |> put_resp_content_type("application/json")
-      |> render("item.json", %{item: descricao})
+      |> send_resp(200, Jason.encode!(%{sucess: true}))
     end
   end
 end

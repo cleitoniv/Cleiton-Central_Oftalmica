@@ -14,7 +14,8 @@ defmodule TecnovixWeb.UsuariosClienteView do
 
   def render("users.json", %{item: item}) do
     %{
-      success: true, data: render_many(item, __MODULE__, "show.json", as: :item)
+      success: true,
+      data: render_many(item, __MODULE__, "show.json", as: :item)
     }
   end
 end

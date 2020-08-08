@@ -1,0 +1,10 @@
+[{
+  "cliente_id": 1,
+  "filial": "1234",
+  "contrato_n": "123456",
+  "docto_orig": "123456789",
+  "emissao": "2020-01-01",
+  "cliente": "123456",
+  "loja": "ES"
+}
+]

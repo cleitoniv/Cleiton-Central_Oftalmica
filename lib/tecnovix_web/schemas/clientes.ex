@@ -30,8 +30,6 @@ defmodule Tecnovix.ClientesSchema do
     field :dia_remessa, :string
     field :wirecard_cliente_id, :string
     field :fcm_token, :string
-
-    timestamps()
   end
 
   def changeset(struct, params \\ {}) do
@@ -71,6 +69,7 @@ defmodule Tecnovix.ClientesSchema do
     |> unique_constraint(:cnpj_cpf)
     |> unique_constraint(:uid)
     |> unique_constraint(:codigo)
+    |> validations_fisic_jurid(params)
   end
 
   def validations_fisic_jurid(changeset, params \\ %{}) do
@@ -94,6 +93,10 @@ defmodule Tecnovix.ClientesSchema do
           :municipio,
           :crm_medico
         ])
+        |> unique_constraint(:email)
+        |> unique_constraint(:cnpj_cpf)
+        |> unique_constraint(:uid)
+        |> unique_constraint(:codigo)
 
       "J" ->
         changeset
@@ -115,6 +118,10 @@ defmodule Tecnovix.ClientesSchema do
           :municipio,
           :cod_cnae
         ])
+        |> unique_constraint(:email)
+        |> unique_constraint(:cnpj_cpf)
+        |> unique_constraint(:uid)
+        |> unique_constraint(:codigo)
     end
   end
 end

@@ -30,7 +30,6 @@ defmodule Tecnovix.Repo.Migrations.Clientes do
       add :dia_remessa, :string, size: 1
       add :wirecard_cliente_id, :string, size: 45
       add :fcm_token, :string, size: 255
-      timestamps(type: :utc_datetime)
     end
 
     create unique_index(:clientes, [:uid])

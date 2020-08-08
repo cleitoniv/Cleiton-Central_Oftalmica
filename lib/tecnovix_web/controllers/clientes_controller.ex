@@ -8,11 +8,10 @@ defmodule TecnovixWeb.ClientesController do
   action_fallback Tecnovix.Resources.Fallback
 
   def insert_or_update(conn, params) do
-    with {:ok, cliente} <- ClientesModel.insert_or_update(params) do
+    with cliente <- ClientesModel.insert_or_update(params) do
       conn
-      |> put_status(:ok)
       |> put_resp_content_type("application/json")
-      |> render("item.json", %{item: cliente})
+      |> send_resp(200, Jason.encode!(%{sucess: true}))
     end
   end
 
@@ -33,7 +32,9 @@ defmodule TecnovixWeb.ClientesController do
     case conn.private.auth do
       {:ok, %Tecnovix.ClientesSchema{} = cliente} ->
         {:ok, map} = ClientesModel.show(cliente.id)
-        user = Map.put(map, :atend_pref_cliente, AtendPrefClienteModel.get_by(cliente_id: cliente.id))
+
+        user =
+          Map.put(map, :atend_pref_cliente, AtendPrefClienteModel.get_by(cliente_id: cliente.id))
 
         conn
         |> put_status(:ok)
@@ -43,9 +44,13 @@ defmodule TecnovixWeb.ClientesController do
 
       {:ok, %Tecnovix.UsuariosClienteSchema{} = usuario} ->
         {:ok, map} = UsuariosClienteModel.show(usuario.id)
+
         user =
-        Map.put(map, :cliente, ClientesModel.get_by(id: usuario.cliente_id))
-        |> Map.put(:atend_pref_cliente, AtendPrefClienteModel.get_by(cliente_id: usuario.cliente_id))
+          Map.put(map, :cliente, ClientesModel.get_by(id: usuario.cliente_id))
+          |> Map.put(
+            :atend_pref_cliente,
+            AtendPrefClienteModel.get_by(cliente_id: usuario.cliente_id)
+          )
 
         conn
         |> put_status(:ok)
@@ -53,7 +58,8 @@ defmodule TecnovixWeb.ClientesController do
         |> put_view(TecnovixWeb.ClientesView)
         |> render("show_usuario.json", %{item: user})
 
-        _ -> {:error, :invalid_parameter}
+      _ ->
+        {:error, :invalid_parameter}
     end
   end
 end

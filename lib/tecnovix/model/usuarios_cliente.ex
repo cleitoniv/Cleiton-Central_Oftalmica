@@ -35,6 +35,7 @@ defmodule Tecnovix.UsuariosClienteModel do
     case Repo.get_by(UsuariosClienteSchema, id: id) do
       nil ->
         {:error, :not_found}
+
       v ->
         {:ok, v}
     end
@@ -44,6 +45,7 @@ defmodule Tecnovix.UsuariosClienteModel do
     case Repo.get_by(UsuariosClienteSchema, email: email) do
       nil ->
         {:error, :not_found}
+
       v ->
         {:ok, v}
     end

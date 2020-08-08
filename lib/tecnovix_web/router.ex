@@ -18,7 +18,7 @@ defmodule TecnovixWeb.Router do
   pipeline :user_sync do
     plug :sync_users_auth
   end
-  
+
   pipeline :cliente do
     plug :cliente_auth
   end
