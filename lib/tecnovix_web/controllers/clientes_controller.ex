@@ -44,8 +44,9 @@ defmodule TecnovixWeb.ClientesController do
       {:ok, %Tecnovix.UsuariosClienteSchema{} = usuario} ->
         {:ok, map} = UsuariosClienteModel.show(usuario.id)
         user =
-        Map.put(map, :cliente, ClientesModel.get_by(id: usuario.cliente_id))
-        |> Map.put(:atend_pref_cliente, AtendPrefClienteModel.get_by(cliente_id: usuario.cliente_id))
+          map
+          |> Map.put(:cliente, ClientesModel.get_by(id: usuario.cliente_id))
+          |> Map.put(:atend_pref_cliente, AtendPrefClienteModel.get_by(cliente_id: usuario.cliente_id))
 
         conn
         |> put_status(:ok)
