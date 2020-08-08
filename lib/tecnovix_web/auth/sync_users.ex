@@ -1,7 +1,9 @@
 defmodule TecnovixWeb.Auth.SyncUsers do
-  use Plug.Builder
+  use TecnovixWeb, :controller
 
   @sync_users_salt Application.fetch_env!(:tecnovix, :sync_users_salt)
+
+  alias Tecnovix.Resources.Fallback
 
   def get_token(conn = %Plug.Conn{}) do
     case get_req_header(conn, "authorization") do
@@ -16,8 +18,7 @@ defmodule TecnovixWeb.Auth.SyncUsers do
       put_private(conn, :auth, {:ok, sync_user})
     else
       error ->
-        halt(conn)
-        error
+        Fallback.call(conn, error)
     end
   end
 
