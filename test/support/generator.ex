@@ -8,6 +8,7 @@ defmodule TecnovixWeb.Support.Generator do
 
   def sync_user(user, password) do
     {:ok, _} = SyncUsersModel.create(%{"username" => user, "password" => password})
+
     build_conn()
     |> post("/api/user_sync/login", %{"username" => user, "password" => password})
     |> json_response(200)
