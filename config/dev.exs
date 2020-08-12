@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :tecnovix, Tecnovix.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "vitinho01",
   database: "tecnovix_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
@@ -74,6 +74,9 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
+
 
 config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 

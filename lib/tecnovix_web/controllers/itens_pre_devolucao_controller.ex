@@ -3,6 +3,8 @@ defmodule TecnovixWeb.ItensPreDevolucaoController do
   use Tecnovix.Resource.Routes, model: Tecnovix.ItensPreDevolucaoModel
   alias Tecnovix.ItensPreDevolucaoModel
 
+  action_fallback Tecnovix.Resources.Fallback
+
   def insert_or_update(conn, params) do
     with {:ok, _itens} <- ItensPreDevolucaoModel.insert_or_update(params) do
       conn

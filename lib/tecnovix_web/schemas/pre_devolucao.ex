@@ -11,6 +11,7 @@ defmodule Tecnovix.PreDevolucaoSchema do
     field :cliente, :string
     field :loja, :string
     field :status, :string
+    has_many :items, Tecnovix.ItensPreDevolucaoSchema, foreign_key: :pre_devolucao_id, on_replace: :delete
 
     timestamps()
   end
@@ -28,5 +29,6 @@ defmodule Tecnovix.PreDevolucaoSchema do
       :status
     ])
     |> validate_required([:cliente_id, :filial, :cod_pre_dev, :tipo_pre_dev])
+    |> cast_assoc(:items)
   end
 end

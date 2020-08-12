@@ -2,7 +2,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   use Tecnovix.DAO, schema: Tecnovix.DescricaoGenericaDoProdutoSchema
   alias Tecnovix.Repo
   alias Tecnovix.DescricaoGenericaDoProdutoSchema, as: DescricaoSchema
-  alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     Enum.reduce(params["data"], %{}, fn descricao, _acc ->

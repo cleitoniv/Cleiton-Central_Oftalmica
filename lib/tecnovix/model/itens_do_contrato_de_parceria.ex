@@ -2,7 +2,6 @@ defmodule Tecnovix.ItensDoContratoDeParceriaModel do
   use Tecnovix.DAO, schema: Tecnovix.ItensDoContratoParceriaSchema
   alias Tecnovix.Repo
   alias Tecnovix.ItensDoContratoParceriaSchema, as: ItensSchema
-  alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     Enum.reduce(params["data"], %{}, fn itens, _acc ->

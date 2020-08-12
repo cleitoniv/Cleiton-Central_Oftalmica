@@ -4,14 +4,11 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   @central_endpoint Application.fetch_env!(:tecnovix, :central_endpoint)
 
   @impl true
-  def new_token(%{"username" => username, "password" => password}) do
-    url =
-      "#{@central_endpoint}/rest/api/oauth2/v1/token?grant_type=password&username=#{username}&password=#{
-        password
-      }"
+  def new_token(%{"username" => username, "password" => password} = params) do
+    url = "#{@central_endpoint}/rest/api/oauth2/v1/token?grant_type=password&username=#{username}&password=#{password}"
 
     IO.inspect(url)
-    HTTPoison.post(url, "", [{"Content-Type", "application/x-www-form-urlencoded"}])
+    HTTPoison.post(url, "", [{"Content-Type", "application/json"}])
   end
 
   @impl true
