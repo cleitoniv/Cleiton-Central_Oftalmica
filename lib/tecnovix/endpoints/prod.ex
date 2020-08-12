@@ -1,28 +1,60 @@
 defmodule Tecnovix.Endpoints.ProtheusProd do
   @behaviour Tecnovix.Endpoints.Protheus
+  alias Tecnovix.Endpoints.Protheus
 
-  @central_endpoint Application.fetch_env!(:tecnovix, :central_endpoint)
+  @header [{"Content-Type", "application/x-www-form-urlencoded"}]
 
   @impl true
-  def new_token(%{"username" => username, "password" => password}) do
-    url =
-      "#{@central_endpoint}/rest/api/oauth2/v1/token?grant_type=password&username=#{username}&password=#{
-        password
-      }"
-
-    IO.inspect(url)
-    HTTPoison.post(url, "", [{"Content-Type", "application/x-www-form-urlencoded"}])
+  def token(%{username: _username, password: _password} = params) do
+    params = Map.put(params, :grant_type, "password")
+    url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
+    HTTPoison.post(url, [], @header)
   end
 
   @impl true
-  def refresh_token(params) do
+  def get_by_cpf(_params) do
   end
 
   @impl true
-  def dicrest(params) do
+  def get_by_cnpj(_params) do
   end
 
   @impl true
-  def get_cliente(params) do
+  def get_address_by_cep(_params) do
+  end
+
+  @impl true
+  def get_delivery_prevision(_params) do
+  end
+
+  @impl true
+  def get_product_by_serial(_params) do
+  end
+
+  @impl true
+  def get_client_products(_params) do
+  end
+
+  @impl true
+  def get_client_points(_params) do
+  end
+
+  @impl true
+  def generate_boleto(_params) do
+  end
+
+  @impl true
+  def refresh_token(%{refresh_token: _token} = params) do
+    params = Map.put(params, :grant_type, "refresh_token")
+    url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
+    HTTPoison.post(url, [], @header)
+  end
+
+  @impl true
+  def get_cliente(%{cnpj_cpf: cnpj_cpf, token: token}) do
+    params = %{"A1_CGC" => cnpj_cpf}
+    url = Protheus.generate_url("/rest/fwmodel/sa1rest", params)
+    header = Protheus.authenticate(@header, token)
+    HTTPoison.get(url, header)
   end
 end
