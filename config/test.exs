@@ -32,4 +32,4 @@ config :tecnovix, Tecnovix.Mailer,
   adapter: Bamboo.TestAdapter,
   api_key: "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"
 
-config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
+config :tecnovix, :central_endpoint, "http://hom.app.centraloftalmica.com:8080"
