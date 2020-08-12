@@ -1,0 +1,23 @@
+{
+  "cliente_id": 1,
+  "filial": "1234",
+  "contrato_n": "123456",
+  "docto_orig": "123456789",
+  "emissao": "2020-01-01",
+  "cliente": "123456",
+  "loja": "ES",
+  "items": [
+    {
+      "contrato_de_parceria_id": 1,
+      "descricao_generica_do_produto_id": 1,
+      "filial": "1234",
+      "contrato_n": "123456",
+      "item": "12",
+      "produto": "Lente",
+      "preco_venda": "1.5",
+      "total": "1.5",
+      "cliente": "Estou escrevendo isso somente para testar!",
+      "loja": "Estou escrevendo isso somente para testar!"
+    }
+  ]
+}

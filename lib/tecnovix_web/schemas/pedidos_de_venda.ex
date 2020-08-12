@@ -1,6 +1,7 @@
 defmodule Tecnovix.PedidosDeVendaSchema do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Tecnovix.ItensDosPedidosDeVendaSchema
 
   schema "pedidos_de_venda" do
     field :cliente_id, :integer
@@ -12,6 +13,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :pd_correios, :string
     field :vendedor_1, :string
     field :status_ped, :integer
+    has_many :items, ItensDosPedidosDeVendaSchema, foreign_key: :pedido_de_venda_id, on_replace: :delete
 
     timestamps()
   end
@@ -30,5 +32,6 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :status_ped
     ])
     |> validate_required([:cliente_id, :filial])
+    |> cast_assoc(:items)
   end
 end

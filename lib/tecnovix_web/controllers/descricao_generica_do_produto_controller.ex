@@ -3,6 +3,8 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
   use Tecnovix.Resource.Routes, model: Tecnovix.DescricaoGenericaDoProdutoModel
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
+  action_fallback Tecnovix.Resources.Fallback
+
   def insert_or_update(conn, params) do
     with {:ok, _descricao} <- DescricaoModel.insert_or_update(params) do
       conn

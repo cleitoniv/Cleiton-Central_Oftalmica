@@ -2,7 +2,6 @@ defmodule Tecnovix.ContratoDeParceriaModel do
   use Tecnovix.DAO, schema: Tecnovix.ContratoDeParceriaSchema
   alias Tecnovix.Repo
   alias Tecnovix.ContratoDeParceriaSchema
-  alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     Enum.reduce(params["data"], %{}, fn contrato, _acc ->
@@ -14,7 +13,8 @@ defmodule Tecnovix.ContratoDeParceriaModel do
         create(contrato)
       else
         changeset ->
-          __MODULE__.update(changeset, contrato)
+          Repo.preload(changeset, :items)
+          |> __MODULE__.update(contrato)
       end
     end)
   end

@@ -4,6 +4,8 @@ defmodule TecnovixWeb.LogsClienteController do
   alias Tecnovix.ClientesSchema
   alias Tecnovix.UsuariosClienteSchema
 
+  action_fallback Tecnovix.Resources.Fallback
+
   def create(conn, %{"param" => params}) do
     with {:ok, user_logs} <- Tecnovix.LogsClienteModel.create(params) do
       conn

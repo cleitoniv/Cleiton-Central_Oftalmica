@@ -4,6 +4,8 @@ defmodule TecnovixWeb.AtendPrefClienteController do
   alias Tecnovix.AtendPrefClienteModel
   alias Tecnovix.LogsClienteModel
 
+  action_fallback Tecnovix.Resources.Fallback
+
   def insert_or_update(conn, params) do
     with {:ok, _atend_pref} <- AtendPrefClienteModel.insert_or_update(params) do
       conn

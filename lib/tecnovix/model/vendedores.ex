@@ -2,7 +2,6 @@ defmodule Tecnovix.VendedoresModel do
   use Tecnovix.DAO, schema: Tecnovix.VendedoresSchema
   alias Tecnovix.Repo
   alias Tecnovix.VendedoresSchema
-  alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     Enum.reduce(params["data"], %{}, fn vendedores, _acc ->

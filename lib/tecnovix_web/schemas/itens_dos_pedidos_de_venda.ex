@@ -3,7 +3,6 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
   import Ecto.Changeset
 
   schema "itens_dos_pedidos_de_venda" do
-    field :pedido_de_venda_id, :integer
     field :descricao_generica_do_produto_id, :integer
     field :filial, :string
     field :nocontrato, :string
@@ -24,7 +23,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :nota_fiscal, :string
     field :serie_nf, :string
     field :num_pedido, :string
-
+    belongs_to :pedido_de_venda, Tecnovix.PedidosDeVendaSchema
     timestamps()
   end
 
