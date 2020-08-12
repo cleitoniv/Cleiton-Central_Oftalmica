@@ -10,6 +10,7 @@ defmodule Tecnovix.SyncUsers do
       build_conn()
       |> post("/api/user_sync/login", %{"username" => "thiagoboeker", "password" => "123456"})
       |> json_response(200)
+      |> IO.inspect
   end
 
   test "token" do
@@ -50,7 +51,11 @@ defmodule Tecnovix.SyncUsers do
   end
 
   test "Central Endpoint Prod" do
-    ProtheusProd.new_token(%{"username" => "TECNOVIX", "password" => "TecnoVix200505"})
-    |> IO.inspect
+    {:ok, resp} = ProtheusProd.token(%{username: "TECNOVIX", password: "TecnoVix200505"})
+    body = Jason.decode!(resp.body)
+    {:ok, resp} = ProtheusProd.refresh_token(%{refresh_token: body["refresh_token"]})
+    body = Jason.decode!(resp.body)
+    {:ok, cliente} = ProtheusProd.get_cliente(%{cnpj_cpf: "03601285720", token: body["access_token"]})
+    IO.inspect cliente
   end
 end
