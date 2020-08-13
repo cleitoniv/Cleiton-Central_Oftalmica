@@ -4,7 +4,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   alias Tecnovix.PreDevolucaoSchema
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(params["data"], %{}, fn devolucao, _acc ->
+    Enum.reduce(data, %{}, fn devolucao, _acc ->
       with nil <-
              Repo.get_by(PreDevolucaoSchema,
                filial: devolucao["filial"],

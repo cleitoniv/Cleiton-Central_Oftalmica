@@ -4,9 +4,8 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   alias Tecnovix.DescricaoGenericaDoProdutoSchema, as: DescricaoSchema
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(params["data"], %{}, fn descricao, _acc ->
-      with nil <- Repo.get_by(DescricaoSchema, grupo: descricao["grupo"]),
-           nil <- Repo.get_by(DescricaoSchema, codigo: params["codigo"]) do
+    Enum.reduce(data, %{}, fn descricao, _acc ->
+      with nil <- Repo.get_by(DescricaoSchema, grupo: descricao["grupo"], codigo: descricao["codigo"]) do
         create(descricao)
       else
         changeset ->
@@ -16,8 +15,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   end
 
   def insert_or_update(%{"grupo" => grupo, "codigo" => codigo} = params) do
-    with nil <- Repo.get_by(DescricaoSchema, grupo: grupo),
-         nil <- Repo.get_by(DescricaoSchema, codigo: codigo) do
+    with nil <- Repo.get_by(DescricaoSchema, grupo: grupo, codigo: codigo) do
       __MODULE__.create(params)
     else
       descricao ->
