@@ -8,17 +8,13 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   @impl true
   def refresh_token(_params) do
   end
-  
+
   @impl true
   def get_cliente(_params) do
   end
 
   @impl true
-  def get_by_cpf(_params) do
-  end
-
-  @impl true
-  def get_by_cnpj(_params) do
+  def get_by_cnpj_cpf(_params) do
   end
 
   @impl true

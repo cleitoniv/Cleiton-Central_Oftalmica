@@ -12,11 +12,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   @impl true
-  def get_by_cpf(_params) do
-  end
-
-  @impl true
-  def get_by_cnpj(_params) do
+  def get_by_cnpj_cpf(_params) do
   end
 
   @impl true
