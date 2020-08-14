@@ -1,12 +1,14 @@
 defmodule TecnovixWeb.UsuariosClienteController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.UsuariosClienteModel
-  alias Tecnovix.{Auth.Firebase, Email, UsuariosClienteModel, ClientesSchema, LogsClienteModel}
+  alias Tecnovix.{Email, UsuariosClienteModel, ClientesSchema, LogsClienteModel}
+  alias TecnovixWeb.Auth.Firebase
   alias TecnovixWeb.LogsClienteController
   action_fallback Tecnovix.Resources.Fallback
 
   def create(conn, %{"param" => params}) do
-    with {:ok, user} <- UsuariosClienteModel.create(params) do
+    with {:ok, user} <- UsuariosClienteModel.create(params),
+          {:ok, %{status_code: 200}} <- Firebase.create_user(%{email: user.email, password: user.password}) do
       # verificando se o email foi enviado com sucesso
       case Email.send_email({user.nome, user.email}) do
         {_send, {:delivered_email, _email}} ->
@@ -32,6 +34,9 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> put_status(:created)
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: user})
+    else
+      _ ->
+        {:error, :register_error}
     end
   end
 

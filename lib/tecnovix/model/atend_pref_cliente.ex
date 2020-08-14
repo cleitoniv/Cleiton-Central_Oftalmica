@@ -3,7 +3,6 @@ defmodule Tecnovix.AtendPrefClienteModel do
 
   alias Tecnovix.Repo
   alias Tecnovix.AtendPrefClienteSchema
-  alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     Enum.reduce(params["data"], %{}, fn atend_pref, _acc ->
