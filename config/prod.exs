@@ -14,6 +14,8 @@ config :tecnovix, TecnovixWeb.Endpoint,
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :ssl, protocol_version: :"tlsv1.2"
+
 # Do not print debug messages in production
 config :logger, level: :info
 

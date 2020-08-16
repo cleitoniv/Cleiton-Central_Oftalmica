@@ -3,6 +3,8 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
   use Tecnovix.Resource.Routes, model: Tecnovix.ContratoDeParceriaModel
   alias Tecnovix.ContratoDeParceriaModel
 
+  action_fallback Tecnovix.Resources.Fallback
+
   def insert_or_update(conn, params) do
     with {:ok, _contrato} <- ContratoDeParceriaModel.insert_or_update(params) do
       conn

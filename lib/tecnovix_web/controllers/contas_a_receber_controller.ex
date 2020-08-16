@@ -3,6 +3,8 @@ defmodule TecnovixWeb.ContasAReceberController do
   use Tecnovix.Resource.Routes, model: Tecnovix.ContasAReceberModel
   alias Tecnovix.ContasAReceberModel
 
+  action_fallback Tecnovix.Resources.Fallback
+
   def insert_or_update(conn, params) do
     with {:ok, _contas} <- ContasAReceberModel.insert_or_update(params) do
       conn

@@ -1,7 +1,6 @@
 defmodule Tecnovix.ClientesModel do
   use Tecnovix.DAO, schema: Tecnovix.ClientesSchema
   alias Tecnovix.Repo
-  alias Ecto.Multi
   alias Tecnovix.ClientesSchema
   import Ecto.Changeset
 

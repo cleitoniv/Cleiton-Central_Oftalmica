@@ -2,7 +2,6 @@ defmodule Tecnovix.ContasAReceberModel do
   use Tecnovix.DAO, schema: Tecnovix.ContasAReceberSchema
   alias Tecnovix.Repo
   alias Tecnovix.ContasAReceberSchema
-  alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     Enum.reduce(params["data"], %{}, fn contas, _acc ->
