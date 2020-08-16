@@ -51,6 +51,8 @@ config :logger, level: :info
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
 
+plug Plug.SSL
+
 config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 
 config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"

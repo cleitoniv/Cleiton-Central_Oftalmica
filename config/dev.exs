@@ -55,6 +55,7 @@ config :tecnovix, TecnovixWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
+
 config :tecnovix, TecnovixWeb.Endpoint,
   live_reload: [
     patterns: [
@@ -89,3 +90,5 @@ config :tecnovix,
 config :tecnovix, Tecnovix.Mailer,
   adapter: Bamboo.LocalAdapter,
   api_key: "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"
+
+config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
