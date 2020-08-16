@@ -30,6 +30,9 @@ defmodule Tecnovix.ClientesSchema do
     field :dia_remessa, :string
     field :wirecard_cliente_id, :string
     field :fcm_token, :string
+    has_one :cliente_id, Tecnovix.AtendPrefClienteSchema, foreign_key: :cliente_id
+
+
     timestamps(type: :utc_datetime)
   end
 

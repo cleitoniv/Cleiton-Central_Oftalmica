@@ -13,7 +13,10 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :pd_correios, :string
     field :vendedor_1, :string
     field :status_ped, :integer
-    has_many :items, ItensDosPedidosDeVendaSchema, foreign_key: :pedido_de_venda_id, on_replace: :delete
+
+    has_many :items, ItensDosPedidosDeVendaSchema,
+      foreign_key: :pedido_de_venda_id,
+      on_replace: :delete
 
     timestamps()
   end

@@ -33,6 +33,8 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/atend_pref_cliente", multi_param)
     |> json_response(200)
+
+    IO.inspect Tecnovix.Repo.all(Tecnovix.AtendPrefClienteSchema)
   end
 
   test "insert or update of the table CONTAS_A_RECEBER" do

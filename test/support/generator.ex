@@ -23,6 +23,30 @@ defmodule TecnovixWeb.Support.Generator do
     }
   end
 
+  def cartao_cliente() do
+    %{
+      "cliente_id" => "1",
+      "nome_titular" => "Victor",
+      "cpf_titular" => "8888888888",
+      "telefone_titular" => "996211804",
+      "data_nascimento_titular" => "2020-08-14",
+      "primeiros_6_digitos" => "123456",
+      "ultimos_4_digitos" => "1234",
+      "mes_validade" => 08,
+      "ano_validade" => 2020,
+      "bandeira" => "M",
+      "status" => 1,
+      "wirecard_cartao_credito_hash" => "1212121",
+      "cep_endereco_cobranca" => ":string",
+      "logradouro_endereco_cobranca" => ":string",
+      "numero_endereco_cobranca" => "",
+      "complemento_endereco_cobranca" => "",
+      "bairro_enderco_cobranca" => "",
+      "cidade_endereco_cobranca" => "",
+      "festado_endereco_cobranca" => ""
+    }
+  end
+
   def user_param() do
     %{
       "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
@@ -43,6 +67,29 @@ defmodule TecnovixWeb.Support.Generator do
       "crm_medico" => "teste",
       "cod_cliente" => "nil",
       "loja_cliente" => "12"
+    }
+  end
+
+  def wirecard_cliente_param() do
+    %{
+      "uid" => Ecto.UUID.autogenerate(),
+      "birthDate" => "2020-08-14",
+      "type" => "CPF",
+      "number" => "22288866644",
+      "phone" => "27996211804",
+      "city" => "São Paulo",
+      "complement" => "10",
+      "district" => "Itaim Bibi",
+      "street" => "Avenida Faria Lima",
+      "streetNumber" => "500",
+      "zipCode" => "01234000",
+      "state" => "SP",
+      "country" => "BRA",
+      "email" => "victor@gmail.com",
+      "name" => "Victor Silva",
+      "ownId" => "1",
+      "fixed" => 2100,
+      "complement" => "Teste"
     }
   end
 
@@ -73,7 +120,8 @@ defmodule TecnovixWeb.Support.Generator do
       "nome" => "Victor",
       "email" => "victor#{Ecto.UUID.autogenerate()}@gmail.com",
       "cargo" => "Administrativo",
-      "status" => 1
+      "status" => 1,
+      "password" => "123456"
     }
   end
 
