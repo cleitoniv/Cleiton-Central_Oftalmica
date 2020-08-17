@@ -77,7 +77,6 @@ config :phoenix, :plug_init_mode, :runtime
 
 config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
 
-
 config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 
 config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"

@@ -10,7 +10,10 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
     field :emissao, :date
     field :cliente, :string
     field :loja, :string
-    has_many :items, Tecnovix.ItensDoContratoParceriaSchema, foreign_key: :contrato_de_parceria_id, on_replace: :delete
+
+    has_many :items, Tecnovix.ItensDoContratoParceriaSchema,
+      foreign_key: :contrato_de_parceria_id,
+      on_replace: :delete
 
     timestamps()
   end

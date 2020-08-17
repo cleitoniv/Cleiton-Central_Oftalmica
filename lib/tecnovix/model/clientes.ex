@@ -3,6 +3,11 @@ defmodule Tecnovix.ClientesModel do
   alias Tecnovix.Repo
   alias Tecnovix.ClientesSchema
   import Ecto.Changeset
+  import Ecto.Query
+
+  def ystapp_filter(params) do
+    dynamic([c], c.sit_app == ^params["ystapp"])
+  end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     Enum.reduce(params["data"], %{}, fn cliente, _acc ->

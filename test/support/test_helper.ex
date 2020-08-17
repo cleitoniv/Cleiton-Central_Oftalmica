@@ -8,4 +8,14 @@ defmodule Tecnovix.TestHelp do
     File.read!("test/support/multi_insert/" <> path)
     |> Jason.decode!()
   end
+
+  def cliente() do
+    File.read!("test/support/protheus/cliente.json")
+    |> Jason.decode!()
+  end
+
+  def items(path) do
+    File.read!("test/support/wirecard/" <> path)
+    |> Jason.decode()
+  end
 end

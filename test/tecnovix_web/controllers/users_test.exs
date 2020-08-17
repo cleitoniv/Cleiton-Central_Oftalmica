@@ -13,7 +13,6 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente", %{"param" => user_param})
     |> json_response(201)
-    |> IO.inspect()
 
     # criando o usuario cliente
     user_client =
@@ -26,17 +25,17 @@ defmodule TecnovixWeb.UsersTest do
     # Motrando a Logs
     Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)
 
-    user_client_firebase = Generator.create_user_firebase(user_client["email"])
+    # user_client_firebase = Generator.create_user_firebase(user_client["email"])
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/message")
     |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(user_client_firebase["idToken"])
-    |> get("/api/cliente/message")
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(user_client_firebase["idToken"])
+    # |> get("/api/cliente/message")
+    # |> json_response(200)
   end
 
   test "cadastro cliente" do

@@ -5,7 +5,8 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     Enum.reduce(data, %{}, fn descricao, _acc ->
-      with nil <- Repo.get_by(DescricaoSchema, grupo: descricao["grupo"], codigo: descricao["codigo"]) do
+      with nil <-
+             Repo.get_by(DescricaoSchema, grupo: descricao["grupo"], codigo: descricao["codigo"]) do
         create(descricao)
       else
         changeset ->

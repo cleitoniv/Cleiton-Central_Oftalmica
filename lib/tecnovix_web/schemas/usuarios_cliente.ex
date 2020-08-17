@@ -8,6 +8,7 @@ defmodule Tecnovix.UsuariosClienteSchema do
     field :uid, :string
     field :nome, :string
     field :email, :string
+    field :password, :string, virtual: true
     field :cargo, :string
     field :status, :integer, default: 1
     field :senha_enviada, :integer, default: 0
@@ -17,8 +18,8 @@ defmodule Tecnovix.UsuariosClienteSchema do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:cliente_id, :uid, :nome, :email, :cargo, :status])
-    |> validate_required([:cliente_id, :nome, :email, :status])
+    |> cast(params, [:cliente_id, :uid, :nome, :email, :cargo, :status, :password])
+    |> validate_required([:cliente_id, :nome, :email, :status, :password])
   end
 
   def update(struct, params \\ %{}) do

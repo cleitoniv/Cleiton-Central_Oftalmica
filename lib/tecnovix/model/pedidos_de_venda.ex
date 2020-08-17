@@ -29,7 +29,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def insert_or_update(params) do
-    IO.inspect params
+    IO.inspect(params)
     {:error, :invalid_parameter}
   end
 end

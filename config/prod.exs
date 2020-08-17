@@ -66,6 +66,8 @@ config :tecnovix,
 
 config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
 
+config :tecnovix, :protheus_username, "TECNOVIX"
+config :tecnovix, :protheus_password, "TecnoVix200505"
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
 import_config "prod.secret.exs"
