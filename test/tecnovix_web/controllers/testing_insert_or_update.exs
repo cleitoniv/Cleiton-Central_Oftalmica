@@ -2,6 +2,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
   use TecnovixWeb.ConnCase
   alias Tecnovix.TestHelp
   alias TecnovixWeb.Support.Generator
+  alias Tecnovix.Repo
 
   test "insert or update of the table CLIENTES" do
     %{"access_token" => token} = Generator.sync_user("thiagoboeker", "123456")
@@ -13,10 +14,13 @@ defmodule TecnovixWeb.InsertOrUpdate do
     build_conn()
     |> Generator.put_auth(token)
     |> post("/api/sync/clientes", single_param)
+    |> IO.inspect
     |> recycle()
     |> Generator.put_auth(token)
     |> post("/api/sync/clientes", multi_param)
     |> json_response(200)
+
+    IO.inspect Tecnovix.ClientesSchema |> Repo.all()
   end
 
   test "insert or update of the table ATEND_PREF_CLIENTES" do
