@@ -126,6 +126,7 @@ defmodule Tecnovix.ClientesSchema do
         |> unique_constraint(:cnpj_cpf)
         |> unique_constraint(:uid)
         |> unique_constraint(:codigo)
+      _ -> changeset
     end
   end
 end
