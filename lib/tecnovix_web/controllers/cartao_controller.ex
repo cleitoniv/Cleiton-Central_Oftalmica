@@ -2,28 +2,22 @@ defmodule TecnovixWeb.CartaoController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.CartaoDeCreditoModel
   alias Tecnovix.CartaoDeCreditoModel, as: CartaoModel
-  alias Tecnovix.Resource.Wirecard.Actions
+  alias Tecnovix.Resource.Wirecard.Actions, as: Wirecard
 
-  def create_cc(conn, params, cliente) do
-    wirecard_cliente = __MODULE__.wirecard_cliente(cliente)
+  def create_order(conn, %{"items" => items}) do
+    IO.inspect {:ok, cliente} = conn.private.auth
 
-    with {:ok, %{status_code: 201} = cliente_param} <- Actions.create_cliente(wirecard_cliente),
-         {:ok, cliente} <- __MODULE__.create(params, cliente_param) do
-      conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(201, Jason.decode!(%{sucess: true}))
+    with order_params <- CartaoModel.order_params(cliente, items),
+          wirecard_order <- __MODULE__.wirecard_order(order_params),
+         {:ok, %{status_code: 201} = _order} <- Wirecard.create_order(wirecard_order) do
+
+           conn
+           |> put_resp_content_type("application/json")
+           |> send_resp(200, Jason.encode!(%{sucess: true}))
     else
       _ ->
         {:error, :not_created}
     end
-  end
-
-  def create(params, cliente) do
-    cliente = Jason.decode!(cliente.body)
-
-    params
-    |> Map.put("wirecard_cartao_credito_id", cliente["id"])
-    |> CartaoModel.create()
   end
 
   def wirecard_order(params) do
@@ -37,13 +31,13 @@ defmodule TecnovixWeb.CartaoController do
       },
       "items" => params["items"],
       "customer" => %{
-        "email" => params["email"],
-        "fullname" => params["name"],
-        "ownId" => params["ownId"],
-        "birthDate" => params["birthDate"],
-        "taxDocument" => params["taxDocument"],
-        "phone" => params["phone"],
-        "shippingAddress" => params["shippingAddress"]
+          "ownId" => params["customers"]["ownId"],
+          "fullname" => params["customers"]["fullname"],
+          "email" => params["customers"]["email"],
+          "birthDate" => params["customers"]["birthDate"],
+          "taxDocument" => params["customers"]["taxDocument"],
+          "phone" => params["customers"]["phone"],
+          "shippingAddress" => params["customers"]["shippingAddress"]
       },
       "receivers" => [
         %{
@@ -57,34 +51,6 @@ defmodule TecnovixWeb.CartaoController do
           }
         }
       ]
-    }
-  end
-
-  def wirecard_cliente(params) do
-    %{
-      "ownId" => params["uid"],
-      "fullname" => params["name"],
-      "email" => params["email"],
-      "birthDate" => params["birthDate"],
-      "taxDocument" => %{
-        "type" => "CPF",
-        "number" => params["number"]
-      },
-      "phone" => %{
-        "countryCode" => "55",
-        "areaCode" => String.slice(params["phone"], 0, 2),
-        "number" => String.slice(params["phone"], 2, 20)
-      },
-      "shippingAddress" => %{
-        "city" => params["city"],
-        "district" => params["district"],
-        "street" => params["street"],
-        "streetNumber" => params["streetNumber"],
-        "zipCode" => params["zipCode"],
-        "state" => params["state"],
-        "country" => "BRA",
-        "complement" => params["complement"]
-      }
     }
   end
 end

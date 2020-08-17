@@ -13,4 +13,9 @@ defmodule Tecnovix.TestHelp do
     File.read!("test/support/protheus/cliente.json")
     |> Jason.decode!()
   end
+
+  def items(path) do
+    File.read!("test/support/wirecard/" <> path)
+    |> Jason.decode()
+  end
 end

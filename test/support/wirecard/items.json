@@ -1,0 +1,9 @@
+[
+  {
+    "product": "Descrição do pedido",
+    "category": "VIDEO_GAME_SOFTWARE",
+    "quantity": 1,
+    "detail": "Mais info...",
+    "price": 22000
+  }
+]
