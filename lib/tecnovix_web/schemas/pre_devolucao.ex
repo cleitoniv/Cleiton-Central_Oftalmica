@@ -11,7 +11,10 @@ defmodule Tecnovix.PreDevolucaoSchema do
     field :cliente, :string
     field :loja, :string
     field :status, :string
-    has_many :items, Tecnovix.ItensPreDevolucaoSchema, foreign_key: :pre_devolucao_id, on_replace: :delete
+
+    has_many :items, Tecnovix.ItensPreDevolucaoSchema,
+      foreign_key: :pre_devolucao_id,
+      on_replace: :delete
 
     timestamps()
   end

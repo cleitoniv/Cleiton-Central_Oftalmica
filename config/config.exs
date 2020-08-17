@@ -12,7 +12,6 @@ config :tecnovix,
 
 config :ssl, protocol_version: :"tlsv1.2"
 
-
 # Configures the endpoint
 config :tecnovix, TecnovixWeb.Endpoint,
   url: [host: "localhost"],

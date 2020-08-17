@@ -4,7 +4,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   alias Tecnovix.PedidosDeVendaModel
 
   action_fallback Tecnovix.Resources.Fallback
-  
+
   def insert_or_update(conn, params) do
     with {:ok, _pedido} <- PedidosDeVendaModel.insert_or_update(params) do
       conn

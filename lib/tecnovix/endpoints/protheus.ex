@@ -27,6 +27,7 @@ defmodule Tecnovix.Endpoints.Protheus do
     case Mix.env() do
       :test -> Tecnovix.Endpoints.ProtheusTest
       :prod -> Tecnovix.Endpoints.ProtheusProd
+      :dev -> Tecnovix.Endpoints.ProtheusTest
     end
   end
 end

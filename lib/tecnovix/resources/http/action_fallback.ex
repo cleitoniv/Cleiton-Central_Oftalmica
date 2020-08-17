@@ -15,6 +15,12 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :protheus_not_found}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, Jason.encode!(%{"status" => "NOT_FOUND"}))
+  end
+
   def call(conn, {:error, :not_found}) do
     conn
     |> put_resp_content_type("application/json")
@@ -34,6 +40,12 @@ defmodule Tecnovix.Resources.Fallback do
     |> put_resp_content_type("application/json")
     |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Usuario inativo."}))
     |> halt()
+  end
+
+  def call(conn, {:error, :register_error}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Erro no registro."}))
   end
 
   def call(conn, {:error, :not_list}) do
