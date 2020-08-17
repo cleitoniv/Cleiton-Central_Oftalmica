@@ -14,10 +14,6 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   @impl true
-  def get_by_cnpj_cpf(_params) do
-  end
-
-  @impl true
   def get_address_by_cep(_params) do
   end
 
