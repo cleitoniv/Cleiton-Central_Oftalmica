@@ -86,6 +86,7 @@ defmodule TecnovixWeb.Router do
       get "/message", TecnovixWeb.ClientesController, :run
       post "/cliente_user", TecnovixWeb.UsuariosClienteController, :create_user
       post "/create_order", TecnovixWeb.CartaoController, :create_order
+      post "/create_payment", TecnovixWeb.CartaoController, :create_payment
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

@@ -23,8 +23,8 @@ defmodule TecnovixWeb.AtendPrefClienteController do
     end
   end
 
-  #SOMENTE O REPRESENTANTE PODERAR ALTERAR O ATENDIMENTO PREFERENCIAL
-  #USUARIO CLIENTE E O CLIENTE SÓ PODERAR VER
+  # SOMENTE O REPRESENTANTE PODERAR ALTERAR O ATENDIMENTO PREFERENCIAL
+  # USUARIO CLIENTE E O CLIENTE SÓ PODERAR VER
 
   def atend_pref(conn, %{"param" => params}) do
     {:ok, cliente} = conn.private.auth

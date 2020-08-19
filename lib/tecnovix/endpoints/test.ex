@@ -23,12 +23,16 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
   @impl true
   def get_cliente(%{cnpj_cpf: "036012857201"}) do
-    {:ok, %{status_code: 404, body: Jason.encode!(%{errorCode: 404, errorMessage: "Cliente nao encontrado!"})}}
+    {:ok,
+     %{
+       status_code: 404,
+       body: Jason.encode!(%{errorCode: 404, errorMessage: "Cliente nao encontrado!"})
+     }}
   end
 
   @impl true
   def get_cliente(_params) do
-    resp = Jason.encode!(Tecnovix.TestHelp.cliente)
+    resp = Jason.encode!(Tecnovix.TestHelp.cliente())
 
     {:ok, %{status_code: 200, body: resp}}
   end

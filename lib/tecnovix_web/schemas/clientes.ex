@@ -22,7 +22,7 @@ defmodule Tecnovix.ClientesSchema do
     field :ddd, :string
     field :telefone, :string
     field :bloqueado, :string
-    field :sit_app, :string
+    field :sit_app, :string, default: "N"
     field :cod_cnae, :string
     field :ramo, :string
     field :vendedor, :string
@@ -31,7 +31,6 @@ defmodule Tecnovix.ClientesSchema do
     field :wirecard_cliente_id, :string
     field :fcm_token, :string
     has_one :cliente_id, Tecnovix.AtendPrefClienteSchema, foreign_key: :cliente_id
-
 
     timestamps(type: :utc_datetime)
   end
@@ -69,10 +68,7 @@ defmodule Tecnovix.ClientesSchema do
     ])
     |> validate_required([:fisica_jurid, :cnpj_cpf, :email])
     |> validate_inclusion(:fisica_jurid, ["F", "J"])
-    |> unique_constraint(:email)
-    |> unique_constraint(:cnpj_cpf)
-    |> unique_constraint(:uid)
-    |> unique_constraint(:codigo)
+    |> unique_constraint(:clientes_contraint)
     |> validations_fisic_jurid(params)
   end
 
@@ -97,10 +93,7 @@ defmodule Tecnovix.ClientesSchema do
           :municipio,
           :crm_medico
         ])
-        |> unique_constraint(:email)
-        |> unique_constraint(:cnpj_cpf)
-        |> unique_constraint(:uid)
-        |> unique_constraint(:codigo)
+        |> unique_constraint(:clientes_contraint)
 
       "J" ->
         changeset
@@ -122,11 +115,10 @@ defmodule Tecnovix.ClientesSchema do
           :municipio,
           :cod_cnae
         ])
-        |> unique_constraint(:email)
-        |> unique_constraint(:cnpj_cpf)
-        |> unique_constraint(:uid)
-        |> unique_constraint(:codigo)
-      _ -> changeset
+        |> unique_constraint(:clientes_contraint)
+
+      _ ->
+        changeset
     end
   end
 end

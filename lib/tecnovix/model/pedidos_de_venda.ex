@@ -4,19 +4,20 @@ defmodule Tecnovix.PedidosDeVendaModel do
   alias Tecnovix.PedidosDeVendaSchema
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(params["data"], %{}, fn pedidos, _acc ->
-      with nil <-
-             Repo.get_by(PedidosDeVendaSchema,
-               filial: pedidos["filial"],
-               numero: pedidos["numero"]
-             ) do
-        create(pedidos)
-      else
-        changeset ->
-          Repo.preload(changeset, :items)
-          |> __MODULE__.update(pedidos)
-      end
-    end)
+    {:ok,
+     Enum.reduce(params["data"], %{}, fn pedidos, _acc ->
+       with nil <-
+              Repo.get_by(PedidosDeVendaSchema,
+                filial: pedidos["filial"],
+                numero: pedidos["numero"]
+              ) do
+         create(pedidos)
+       else
+         changeset ->
+           Repo.preload(changeset, :items)
+           |> __MODULE__.update(pedidos)
+       end
+     end)}
   end
 
   def insert_or_update(%{"filial" => filial, "numero" => numero} = params) do

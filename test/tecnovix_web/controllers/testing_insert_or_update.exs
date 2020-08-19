@@ -14,13 +14,12 @@ defmodule TecnovixWeb.InsertOrUpdate do
     build_conn()
     |> Generator.put_auth(token)
     |> post("/api/sync/clientes", single_param)
-    |> IO.inspect
     |> recycle()
     |> Generator.put_auth(token)
     |> post("/api/sync/clientes", multi_param)
     |> json_response(200)
 
-    IO.inspect Tecnovix.ClientesSchema |> Repo.all()
+    IO.inspect(Tecnovix.ClientesSchema |> Repo.all())
   end
 
   test "insert or update of the table ATEND_PREF_CLIENTES" do
@@ -38,7 +37,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> post("/api/sync/atend_pref_cliente", multi_param)
     |> json_response(200)
 
-    IO.inspect Tecnovix.Repo.all(Tecnovix.AtendPrefClienteSchema)
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.AtendPrefClienteSchema))
   end
 
   test "insert or update of the table CONTAS_A_RECEBER" do

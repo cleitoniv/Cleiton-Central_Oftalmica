@@ -21,6 +21,13 @@ defmodule Tecnovix.Resources.Fallback do
     |> send_resp(200, Jason.encode!(%{"status" => "NOT_FOUND"}))
   end
 
+  def call(conn, {:error, :order_not_created}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "O pedido não foi criado."}))
+    |> halt()
+  end
+
   def call(conn, {:error, :not_found}) do
     conn
     |> put_resp_content_type("application/json")
@@ -32,6 +39,16 @@ defmodule Tecnovix.Resources.Fallback do
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Parametro inválido."}))
+    |> halt()
+  end
+
+  def call(conn, {:error, :payment_not_created}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "O pagamento não foi criado."})
+    )
     |> halt()
   end
 

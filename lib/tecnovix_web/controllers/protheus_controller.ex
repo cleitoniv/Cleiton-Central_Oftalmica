@@ -5,7 +5,6 @@ defmodule TecnovixWeb.ProtheusController do
 
   action_fallback Tecnovix.Resources.Fallback
 
-
   def get_cliente(conn, %{"cnpj_cpf" => cnpj_cpf}) do
     protheus = Protheus.stub()
 
@@ -21,5 +20,8 @@ defmodule TecnovixWeb.ProtheusController do
       _ ->
         {:error, :protheus_not_found}
     end
+  end
+
+  def get_products() do
   end
 end
