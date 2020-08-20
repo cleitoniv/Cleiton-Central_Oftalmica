@@ -3,7 +3,6 @@ defmodule Tecnovix.Repo.Migrations.AlterCartao do
 
   def change do
     alter table(:cartao_credito_cliente) do
-      remove :cartao_number
       add :cartao_number, :string
       remove :mes_validade
       add :mes_validade, :string
