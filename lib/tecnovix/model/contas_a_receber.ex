@@ -5,7 +5,7 @@ defmodule Tecnovix.ContasAReceberModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
-     Enum.reduce(params["data"], %{}, fn contas, _acc ->
+     Enum.map(params["data"], fn contas ->
        with nil <-
               Repo.get_by(ContasAReceberSchema,
                 filial: contas["filial"],

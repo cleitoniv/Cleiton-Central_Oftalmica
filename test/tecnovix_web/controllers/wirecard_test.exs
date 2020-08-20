@@ -79,16 +79,15 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/create_order", %{"items" => items})
       |> json_response(200)
-
+      |> Map.get("data")
     {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente/create_payment", %{
       "cartao" => cartao.id,
-      "order_id" => order["order"]["id"]
+      "order_id" => order["id"]
     })
     |> json_response(200)
-    |> IO.inspect()
   end
 end

@@ -5,7 +5,7 @@ defmodule Tecnovix.ContratoDeParceriaModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
-     Enum.reduce(params["data"], %{}, fn contrato, _acc ->
+     Enum.map(params["data"], fn contrato ->
        with nil <-
               Repo.get_by(ContratoDeParceriaSchema,
                 filial: contrato["filial"],

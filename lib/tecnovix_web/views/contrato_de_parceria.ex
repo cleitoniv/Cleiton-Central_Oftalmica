@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.ContratoDeParceriaView do
   use Tecnovix.Resource.View, model: Tecnovix.ContratoDeParceriaModel
+  import TecnovixWeb.ErrorParserView
 
   def build(%{item: item}) do
     %{
@@ -12,4 +13,6 @@ defmodule TecnovixWeb.ContratoDeParceriaView do
       loja: item.loja
     }
   end
+
+  multi_parser("contrato.json", [:contrato_n, :loja])
 end

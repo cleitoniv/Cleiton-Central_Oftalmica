@@ -6,10 +6,11 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   action_fallback Tecnovix.Resources.Fallback
 
   def insert_or_update(conn, params) do
-    with {:ok, _pedido} <- PedidosDeVendaModel.insert_or_update(params) do
+    with {:ok, pedido} <- PedidosDeVendaModel.insert_or_update(params) do
       conn
+      |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{sucess: true}))
+      |> render("pedidos.json", %{item: pedido})
     end
   end
 end

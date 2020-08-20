@@ -5,7 +5,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
-     Enum.reduce(data, %{}, fn itens, _acc ->
+     Enum.map(data, fn itens ->
        with nil <-
               Repo.get_by(ItensSchema,
                 filial: itens["filial"],

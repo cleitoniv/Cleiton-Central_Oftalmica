@@ -5,7 +5,7 @@ defmodule Tecnovix.VendedoresModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
-     Enum.reduce(params["data"], %{}, fn vendedores, _acc ->
+     Enum.map(params["data"], fn vendedores ->
        with nil <- Repo.get_by(VendedoresSchema, cnpj_cpf: vendedores["cnpj_cpf"]) do
          create(vendedores)
        else

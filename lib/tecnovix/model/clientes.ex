@@ -11,7 +11,7 @@ defmodule Tecnovix.ClientesModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
-     Enum.reduce(params["data"], %{}, fn cliente, _acc ->
+     Enum.map(params["data"], fn cliente ->
        with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
          create(cliente)
        else

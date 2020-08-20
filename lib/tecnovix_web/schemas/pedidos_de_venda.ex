@@ -4,7 +4,6 @@ defmodule Tecnovix.PedidosDeVendaSchema do
   alias Tecnovix.ItensDosPedidosDeVendaSchema
 
   schema "pedidos_de_venda" do
-    field :cliente_id, :integer
     field :filial, :string
     field :numero, :string
     field :cliente, :string
@@ -13,7 +12,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :pd_correios, :string
     field :vendedor_1, :string
     field :status_ped, :integer
-
+    belongs_to :cliente_id, Tecnovix.ClientesSchema
     has_many :items, ItensDosPedidosDeVendaSchema,
       foreign_key: :pedido_de_venda_id,
       on_replace: :delete

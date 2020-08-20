@@ -19,6 +19,18 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
   @impl true
   def refresh_token(_params) do
+    resp =
+      Jason.encode!(%{
+        "access_token" =>
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUT1RWUy1BRFZQTC1GV0pXVCIsInN1YiI6IlRFQ05PVklYIiwiaWF0IjoxNTk2NDU3NDQwLCJ1c2VyaWQiOiIwMDAxMTQiLCJleHAiOjE1OTY0NjEwNDB9.LpCMk6u/r1Ntc+s9ynuCJR+wYo1pk2gp+zOtioQWHaY=",
+        "refresh_token" =>
+          "A0YbiO0BNViv4iuzYnPwZnOa.GFcY-fcAWT-xziu-c3GRB26IOc7IUGVbPp-bRvMLdOnrugmKOtuS3MgPQkbbCR97LTSbmrUOa2CdoVl/Gl63yEzHy1pqVntoZIAnIYPXqv7zHP8xcZ8J.3aSHXLmwRGCR9076g6eN7kItmQLHlJRE-a-DlR2W2y4=",
+        "scope" => "default",
+        "token_type" => "Bearer",
+        "expires_in" => 3600
+      })
+
+    {:ok, %{status_code: 201, body: resp}}
   end
 
   @impl true

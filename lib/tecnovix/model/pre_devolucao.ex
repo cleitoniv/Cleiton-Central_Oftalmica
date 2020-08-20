@@ -5,13 +5,13 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
-     Enum.reduce(data, %{}, fn devolucao, _acc ->
+     Enum.map(params["data"], fn devolucao ->
        with nil <-
               Repo.get_by(PreDevolucaoSchema,
                 filial: devolucao["filial"],
                 cod_pre_dev: devolucao["cod_pre_dev"]
               ) do
-         create(params)
+         create(devolucao)
        else
          changeset ->
            Repo.preload(changeset, :items)
