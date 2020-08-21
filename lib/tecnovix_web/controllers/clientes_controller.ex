@@ -4,6 +4,8 @@ defmodule TecnovixWeb.ClientesController do
   alias Tecnovix.ClientesModel
   alias Tecnovix.UsuariosClienteModel
   alias Tecnovix.AtendPrefClienteModel
+  alias Tecnovix.UsuariosClienteSchema
+  alias Tecnovix.ClientesSchema
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -75,5 +77,16 @@ defmodule TecnovixWeb.ClientesController do
 
   def current_user(conn, _params) do
     {:ok, user} = conn.private.auth
+
+    case user do
+      %UsuariosClienteSchema{} ->
+        conn
+        |> put_view(TecnovixWeb.UsuariosClienteView)
+        |> render("show.json", %{item: user})
+      %ClientesSchema{} ->
+        conn
+        |> put_view(TecnovixWeb.ClientesView)
+        |> render("show.json", %{item: user})
+    end
   end
 end
