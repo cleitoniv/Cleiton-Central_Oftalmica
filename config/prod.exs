@@ -14,6 +14,8 @@ config :tecnovix, TecnovixWeb.Endpoint,
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :ssl, protocol_version: :"tlsv1.2"
+
 # Do not print debug messages in production
 config :logger, level: :info
 
@@ -64,6 +66,8 @@ config :tecnovix,
 
 config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
 
+config :tecnovix, :protheus_username, "TECNOVIX"
+config :tecnovix, :protheus_password, "TecnoVix200505"
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
 import_config "prod.secret.exs"

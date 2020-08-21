@@ -1,25 +1,24 @@
 defmodule Tecnovix.ItensPreDevolucaoModel do
   use Tecnovix.DAO, schema: Tecnovix.ItensPreDevolucaoSchema
   alias Tecnovix.Repo
-  alias Tecnovix.ItensPreDevolucaoSchema, as: ItensSchema
-  alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(params["data"], %{}, fn itens, _acc ->
-      with nil <-
-             Repo.get_by(ItensSchema,
-               filial: itens["filial"],
-               code_pre_dev: itens["cod_pre_dev"],
-               filial_orig: itens["filial_orig"],
-               produto: itens["produto"],
-               quant: itens["quant"]
-             ) do
-        create(itens)
-      else
-        changeset ->
-          __MODULE__.update(changeset, itens)
-      end
-    end)
+    {:ok,
+     Enum.reduce(data, %{}, fn itens, _acc ->
+       with nil <-
+              Repo.get_by(ItensSchema,
+                filial: itens["filial"],
+                code_pre_dev: itens["cod_pre_dev"],
+                filial_orig: itens["filial_orig"],
+                produto: itens["produto"],
+                quant: itens["quant"]
+              ) do
+         create(itens)
+       else
+         changeset ->
+           __MODULE__.update(changeset, itens)
+       end
+     end)}
   end
 
   def insert_or_update(

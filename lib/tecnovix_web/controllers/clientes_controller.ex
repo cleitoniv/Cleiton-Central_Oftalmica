@@ -8,7 +8,7 @@ defmodule TecnovixWeb.ClientesController do
   action_fallback Tecnovix.Resources.Fallback
 
   def insert_or_update(conn, params) do
-    with cliente <- ClientesModel.insert_or_update(params) do
+    with {:ok, cliente} <- ClientesModel.insert_or_update(params) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{sucess: true}))
@@ -20,6 +20,7 @@ defmodule TecnovixWeb.ClientesController do
     params = Map.put(params, "email", jwt.fields["email"])
     params = Map.put(params, "uid", jwt.fields["user_id"])
     __MODULE__.create(conn, %{"param" => params})
+    |> IO.inspect
   end
 
   def run(conn, _params) do

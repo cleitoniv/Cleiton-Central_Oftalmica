@@ -4,6 +4,17 @@ defmodule TecnovixWeb.AtendPrefClienteController do
   alias Tecnovix.AtendPrefClienteModel
   alias Tecnovix.LogsClienteModel
 
+  action_fallback Tecnovix.Resources.Fallback
+
+  def get_by_cod_cliente(conn, %{"cod_cliente" => cod_cliente}) do
+    with {:ok, atend_pref} <- AtendPrefClienteModel.get_by(cod_cliente: cod_cliente) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("show.json", %{item: atend_pref})
+    end
+  end
+
   def insert_or_update(conn, params) do
     with {:ok, _atend_pref} <- AtendPrefClienteModel.insert_or_update(params) do
       conn
@@ -11,6 +22,9 @@ defmodule TecnovixWeb.AtendPrefClienteController do
       |> send_resp(200, Jason.encode!(%{sucess: true}))
     end
   end
+
+  # SOMENTE O REPRESENTANTE PODERAR ALTERAR O ATENDIMENTO PREFERENCIAL
+  # USUARIO CLIENTE E O CLIENTE SÓ PODERAR VER
 
   def atend_pref(conn, %{"param" => params}) do
     {:ok, cliente} = conn.private.auth

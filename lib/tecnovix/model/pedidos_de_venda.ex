@@ -2,21 +2,22 @@ defmodule Tecnovix.PedidosDeVendaModel do
   use Tecnovix.DAO, schema: Tecnovix.PedidosDeVendaSchema
   alias Tecnovix.Repo
   alias Tecnovix.PedidosDeVendaSchema
-  alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(params["data"], %{}, fn pedidos, _acc ->
-      with nil <-
-             Repo.get_by(PedidosDeVendaSchema,
-               filial: pedidos["filial"],
-               numero: pedidos["numero"]
-             ) do
-        create(pedidos)
-      else
-        changeset ->
-          __MODULE__.update(changeset, pedidos)
-      end
-    end)
+    {:ok,
+     Enum.reduce(params["data"], %{}, fn pedidos, _acc ->
+       with nil <-
+              Repo.get_by(PedidosDeVendaSchema,
+                filial: pedidos["filial"],
+                numero: pedidos["numero"]
+              ) do
+         create(pedidos)
+       else
+         changeset ->
+           Repo.preload(changeset, :items)
+           |> __MODULE__.update(pedidos)
+       end
+     end)}
   end
 
   def insert_or_update(%{"filial" => filial, "numero" => numero} = params) do
@@ -28,7 +29,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def insert_or_update(_params) do
+  def insert_or_update(params) do
+    IO.inspect(params)
     {:error, :invalid_parameter}
   end
 end

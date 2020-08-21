@@ -2,25 +2,25 @@ defmodule Tecnovix.ItensDoContratoDeParceriaModel do
   use Tecnovix.DAO, schema: Tecnovix.ItensDoContratoParceriaSchema
   alias Tecnovix.Repo
   alias Tecnovix.ItensDoContratoParceriaSchema, as: ItensSchema
-  alias Ecto.Multi
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(params["data"], %{}, fn itens, _acc ->
-      with nil <-
-             Repo.get_by(ItensSchema,
-               filial: itens["filial"],
-               contrato_n: itens["contrato_n"],
-               item: itens["item"],
-               produto: itens["produto"],
-               cliente: itens["cliente"],
-               loja: itens["loja"]
-             ) do
-        create(itens)
-      else
-        changeset ->
-          __MODULE__.update(changeset, itens)
-      end
-    end)
+    {:ok,
+     Enum.reduce(data, %{}, fn itens, _acc ->
+       with nil <-
+              Repo.get_by(ItensSchema,
+                filial: itens["filial"],
+                contrato_n: itens["contrato_n"],
+                item: itens["item"],
+                produto: itens["produto"],
+                cliente: itens["cliente"],
+                loja: itens["loja"]
+              ) do
+         create(itens)
+       else
+         changeset ->
+           __MODULE__.update(changeset, itens)
+       end
+     end)}
   end
 
   def insert_or_update(

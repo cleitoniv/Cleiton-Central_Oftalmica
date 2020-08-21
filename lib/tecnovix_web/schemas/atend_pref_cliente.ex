@@ -3,7 +3,6 @@ defmodule Tecnovix.AtendPrefClienteSchema do
   import Ecto.Changeset
 
   schema "atend_pref_cliente" do
-    field :cliente_id, :integer
     field :cod_cliente, :string
     field :loja_cliente, :string
     field :seg_manha, :integer, default: 0
@@ -19,6 +18,7 @@ defmodule Tecnovix.AtendPrefClienteSchema do
     field :sab_manha, :integer, default: 0
     field :sab_tarde, :integer, default: 0
     field :observacoes, :string
+    belongs_to :cliente, Tecnovix.ClientesSchema
 
     timestamps()
   end

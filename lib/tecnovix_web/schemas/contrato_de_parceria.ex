@@ -11,6 +11,10 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
     field :cliente, :string
     field :loja, :string
 
+    has_many :items, Tecnovix.ItensDoContratoParceriaSchema,
+      foreign_key: :contrato_de_parceria_id,
+      on_replace: :delete
+
     timestamps()
   end
 
@@ -18,5 +22,6 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
     struct
     |> cast(params, [:cliente_id, :filial, :contrato_n, :docto_orig, :emissao, :cliente, :loja])
     |> validate_required([:cliente_id, :filial, :contrato_n])
+    |> cast_assoc(:items)
   end
 end

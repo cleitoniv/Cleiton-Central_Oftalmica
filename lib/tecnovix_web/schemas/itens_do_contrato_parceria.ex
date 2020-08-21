@@ -3,7 +3,6 @@ defmodule Tecnovix.ItensDoContratoParceriaSchema do
   import Ecto.Changeset
 
   schema "itens_do_contrato_parceria" do
-    field :contrato_de_parceria_id, :integer
     field :descricao_generica_do_produto_id, :integer
     field :filial, :string
     field :contrato_n, :string
@@ -14,6 +13,7 @@ defmodule Tecnovix.ItensDoContratoParceriaSchema do
     field :total, :decimal
     field :cliente, :string
     field :loja, :string
+    belongs_to :contrato_de_parceria, Tecnovix.ContratoDeParceriaSchema
 
     timestamps()
   end

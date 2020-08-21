@@ -18,8 +18,6 @@ defmodule Tecnovix.Repo.Migrations.Vendedores do
       timestamps()
     end
 
-    create unique_index(:vendedores, :uid)
-    create unique_index(:vendedores, :codigo)
-    create unique_index(:vendedores, :cnpj_cpf)
+    create unique_index(:vendedores, [:uid, :codigo, :cnpj_cpf], name: :vendedores_constraint)
   end
 end

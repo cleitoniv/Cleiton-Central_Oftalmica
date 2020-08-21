@@ -1,19 +1,24 @@
 defmodule Tecnovix.ClientesModel do
   use Tecnovix.DAO, schema: Tecnovix.ClientesSchema
   alias Tecnovix.Repo
-  alias Ecto.Multi
   alias Tecnovix.ClientesSchema
   import Ecto.Changeset
+  import Ecto.Query
+
+  def ystapp_filter(params) do
+    dynamic([c], c.sit_app == ^params["ystapp"])
+  end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(params["data"], %{}, fn cliente, _acc ->
-      with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
-        create(cliente)
-      else
-        changeset ->
-          __MODULE__.update(changeset, cliente)
-      end
-    end)
+    {:ok,
+     Enum.reduce(params["data"], %{}, fn cliente, _acc ->
+       with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
+         create(cliente)
+       else
+         changeset ->
+           __MODULE__.update(changeset, cliente)
+       end
+     end)}
   end
 
   def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do

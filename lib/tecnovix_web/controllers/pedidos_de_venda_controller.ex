@@ -3,6 +3,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   use Tecnovix.Resource.Routes, model: Tecnovix.PedidosDeVendaModel
   alias Tecnovix.PedidosDeVendaModel
 
+  action_fallback Tecnovix.Resources.Fallback
+
   def insert_or_update(conn, params) do
     with {:ok, _pedido} <- PedidosDeVendaModel.insert_or_update(params) do
       conn

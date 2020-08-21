@@ -75,6 +75,8 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
+config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
+
 config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 
 config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"
@@ -86,6 +88,9 @@ config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
 config :tecnovix,
        :sync_users_salt,
        "B9cwPTrRRrk/W+4psbuf2AI7Z6G/ncMDdunFXp52LqpwgiBTVUCYyBbjbre90S2v"
+
+config :tecnovix, :protheus_username, "TECNOVIX"
+config :tecnovix, :protheus_password, "TecnoVix200505"
 
 config :tecnovix, Tecnovix.Mailer,
   adapter: Bamboo.LocalAdapter,

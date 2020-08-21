@@ -3,6 +3,8 @@ defmodule TecnovixWeb.SyncUsersController do
   use Tecnovix.Resource.Routes, model: Tecnovix.SyncUsersModel
   alias Tecnovix.SyncUsersModel
 
+  action_fallback Tecnovix.Resources.Fallback
+
   @salt Application.fetch_env!(:tecnovix, :sync_users_salt)
   @sync_users_salt Application.fetch_env!(:tecnovix, :sync_users_salt)
 

@@ -2,6 +2,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
   use TecnovixWeb.ConnCase
   alias Tecnovix.TestHelp
   alias TecnovixWeb.Support.Generator
+  alias Tecnovix.Repo
 
   test "insert or update of the table CLIENTES" do
     %{"access_token" => token} = Generator.sync_user("thiagoboeker", "123456")
@@ -17,6 +18,8 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/clientes", multi_param)
     |> json_response(200)
+
+    IO.inspect(Tecnovix.ClientesSchema |> Repo.all())
   end
 
   test "insert or update of the table ATEND_PREF_CLIENTES" do
@@ -33,6 +36,8 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/atend_pref_cliente", multi_param)
     |> json_response(200)
+
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.AtendPrefClienteSchema))
   end
 
   test "insert or update of the table CONTAS_A_RECEBER" do
@@ -176,6 +181,50 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> recycle()
     |> Generator.put_auth(token)
     |> post("/api/sync/vendedores", multi_param)
+    |> json_response(200)
+  end
+
+  test "cast assoc pedidos de venda e pre devolucao" do
+    %{"access_token" => token} = Generator.sync_user("thiagoboeker", "123456")
+
+    single_pedido = TestHelp.single_json("single_pedidos_and_items.json")
+    single_devolucao = TestHelp.single_json("single_devolucao_and_items.json")
+    single_contrato = TestHelp.single_json("single_contrato_and_items.json")
+    multi_pedido = TestHelp.multi_json("multi_pedidos_and_items.json")
+    multi_pedido = %{"data" => multi_pedido}
+    multi_devolucao = TestHelp.multi_json("multi_devolucao_and_items.json")
+    multi_devolucao = %{"data" => multi_devolucao}
+    multi_contrato = TestHelp.multi_json("multi_contrato_and_items.json")
+    multi_contrato = %{"data" => multi_contrato}
+
+    build_conn()
+    |> Generator.put_auth(token)
+    |> post("/api/sync/pedidos_de_venda", single_pedido)
+    |> json_response(200)
+
+    build_conn()
+    |> Generator.put_auth(token)
+    |> post("/api/sync/pedidos_de_venda", multi_pedido)
+    |> json_response(200)
+
+    build_conn()
+    |> Generator.put_auth(token)
+    |> post("/api/sync/pre_devolucao", single_devolucao)
+    |> json_response(200)
+
+    build_conn()
+    |> Generator.put_auth(token)
+    |> post("/api/sync/pre_devolucao", multi_devolucao)
+    |> json_response(200)
+
+    build_conn()
+    |> Generator.put_auth(token)
+    |> post("/api/sync/contrato_de_parceria", single_contrato)
+    |> json_response(200)
+
+    build_conn()
+    |> Generator.put_auth(token)
+    |> post("/api/sync/contrato_de_parceria", multi_contrato)
     |> json_response(200)
   end
 end

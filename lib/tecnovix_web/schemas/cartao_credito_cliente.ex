@@ -3,15 +3,15 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
   import Ecto.Changeset
 
   schema "cartao_credito_cliente" do
-    field :cliente_id, :integer
     field :nome_titular, :string
     field :cpf_titular, :string
     field :telefone_titular, :string
     field :data_nascimento_titular, :date
     field :primeiros_6_digitos, :string
     field :ultimos_4_digitos, :string
-    field :mes_validade, :integer
-    field :ano_validade, :integer
+    field :mes_validade, :string
+    field :cartao_number, :string
+    field :ano_validade, :string
     field :bandeira, :string
     field :status, :integer
     field :wirecard_cartao_credito_id, :string
@@ -20,9 +20,10 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
     field :logradouro_endereco_cobranca, :string
     field :numero_endereco_cobranca, :string
     field :complemento_endereco_cobranca, :string
-    field :bairro_enderco_cobranca, :string
+    field :bairro_endereco_cobranca, :string
     field :cidade_endereco_cobranca, :string
     field :estado_endereco_cobranca, :string
+    belongs_to :cliente, Tecnovix.ClientesSchema
 
     timestamps()
   end
@@ -30,7 +31,7 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
-      :client_id,
+      :cliente_id,
       :nome_titular,
       :cpf_titular,
       :telefone_titular,
@@ -49,10 +50,11 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
       :complemento_endereco_cobranca,
       :bairro_endereco_cobranca,
       :cidade_endereco_cobranca,
-      :estado_endereco_cobranca
+      :estado_endereco_cobranca,
+      :cartao_number
     ])
     |> validate_required([
-      :client_id,
+      :cliente_id,
       :nome_titular,
       :cpf_titular,
       :primeiros_6_digitos,
