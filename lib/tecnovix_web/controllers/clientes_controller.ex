@@ -16,6 +16,15 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
+  def first_acess(conn, %{"param" => params}) do
+    with {:ok, cliente} <- ClientesModel.create_first_acess(params) do
+      conn
+      |> put_status(201)
+      |> put_resp_content_type("application/json")
+      |> render("clientes.json", %{item: cliente})
+    end
+  end
+
   def create_user(conn, %{"param" => params}) do
     {:ok, jwt} = conn.private.auth
     params = Map.put(params, "email", jwt.fields["email"])
@@ -62,5 +71,9 @@ defmodule TecnovixWeb.ClientesController do
       _ ->
         {:error, :invalid_parameter}
     end
+  end
+
+  def current_user(conn, _params) do
+    {:ok, user} = conn.private.auth
   end
 end

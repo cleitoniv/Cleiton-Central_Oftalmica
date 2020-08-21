@@ -9,6 +9,12 @@ defmodule Tecnovix.ClientesModel do
     dynamic([c], c.sit_app == ^params["ystapp"])
   end
 
+  def create_first_acess(params) do
+    %ClientesSchema{}
+    |> ClientesSchema.first_acess(params)
+    |> Repo.insert()
+  end
+
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(params["data"], fn cliente ->

@@ -39,7 +39,7 @@ defmodule TecnovixWeb.Support.Generator do
       "bairro" => "Bela Vista",
       "cep" => "29027445",
       "cdmunicipio" => "teste",
-      "municipio" => "Vitoria",
+      "municipio" => "Serra",
       "crm_medico" => "teste",
       "cod_cliente" => "nil",
       "loja_cliente" => "12",

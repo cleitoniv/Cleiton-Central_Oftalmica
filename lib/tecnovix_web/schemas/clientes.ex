@@ -71,6 +71,40 @@ defmodule Tecnovix.ClientesSchema do
     |> validations_fisic_jurid(params)
   end
 
+  def first_acess(changeset, params \\ %{}) do
+    changeset
+    |> cast(params, [
+      :uid,
+      :codigo,
+      :loja,
+      :fisica_jurid,
+      :cnpj_cpf,
+      :data_nascimento,
+      :nome,
+      :nome_empresarial,
+      :email,
+      :endereco,
+      :numero,
+      :complemento,
+      :bairro,
+      :cep,
+      :cdmunicipio,
+      :municipio,
+      :ddd,
+      :telefone,
+      :bloqueado,
+      :sit_app,
+      :cod_cnae,
+      :ramo,
+      :vendedor,
+      :crm_medico,
+      :dia_remessa,
+      :wirecard_cliente_id,
+      :fcm_token
+    ])
+    |> validate_required([:nome, :email, :telefone])
+  end
+
   def validate_ramo_fisica(changeset, params \\ %{}) do
     case params["ramo"] do
       "2" -> validate_required(changeset, :crm_medico)

@@ -21,11 +21,7 @@ defmodule Tecnovix.Test.Wirecard do
     {:ok, items} = TestHelp.items("items.json")
     {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
 
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente/create_order", %{"items" => items})
-    |> json_response(200)
-    |> IO.inspect()
+    {:ok, order} = Tecnovix.PedidosDeVendaModel.order(items, cliente)
   end
 
   test "Criando a order do wirecard com o Usuario Cliente" do
@@ -74,20 +70,32 @@ defmodule Tecnovix.Test.Wirecard do
 
     {:ok, items} = TestHelp.items("items.json")
 
-    order =
+    {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
+
+    {:ok, order} = Tecnovix.PedidosDeVendaModel.order(items, cliente)
+
+    {:ok, payment} = Tecnovix.PedidosDeVendaModel.payment(cartao.id, order)
+    payment = Jason.decode!(payment.body)
+  end
+
+  test "pedidos" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    paciente = %{"paciente" => "Victor"}
+
+    cliente =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/create_order", %{"items" => items})
-      |> json_response(200)
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
       |> Map.get("data")
+
+    {:ok, items} = TestHelp.items("items.json")
     {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente/create_payment", %{
-      "cartao" => cartao.id,
-      "order_id" => order["id"]
-    })
+    |> post("/api/cliente/pedidos", %{"items" => items, "paciente" => paciente, "id_cartao" => cartao.id})
     |> json_response(200)
   end
 end
