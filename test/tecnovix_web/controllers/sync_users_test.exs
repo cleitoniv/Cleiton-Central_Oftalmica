@@ -51,5 +51,6 @@ defmodule Tecnovix.SyncUsers do
 
   test "Central Endpoint Prod" do
     ProtheusProd.new_token(%{"username" => "TECNOVIX", "password" => "TecnoVix200505"})
+    |> IO.inspect
   end
 end

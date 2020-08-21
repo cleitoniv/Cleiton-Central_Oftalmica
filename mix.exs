@@ -46,12 +46,13 @@ defmodule Tecnovix.MixProject do
       {:postgrex, "~> 0.14"},
       {:scrivener_ecto, "~> 2.0"},
       {:dataloader, "~> 1.0"},
-      {:httpoison, "~> 1.5"},
+      {:httpoison, "~> 1.7"},
       {:jose, "~> 1.9"},
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 2.0"},
       {:bamboo, "~> 1.5"},
-      {:cors_plug, "~> 1.5"}
+      {:cors_plug, "~> 1.5"},
+      {:tesla, "~> 1.3.0"}
     ]
   end
 

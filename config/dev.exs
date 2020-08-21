@@ -81,6 +81,7 @@ config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"
 config :tecnovix, :salt, "SALT"
 config :tecnovix, :firebase_api_key_client, "AIzaSyB48TsW9wZvwqfclaygSlW83WXNukqR45o"
 config :tecnovix, :firebase_api_key_vendor, "AIzaSyAw-mBe2kkFmslL0ryrgYY0_9jIbKWWkJQ"
+config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
 
 config :tecnovix,
        :sync_users_salt,

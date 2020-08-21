@@ -90,7 +90,6 @@ defmodule Tecnovix.ClientesSchema do
           :numero,
           :bairro,
           :cep,
-          :cdmunicipio,
           :municipio,
           :crm_medico
         ])
@@ -115,7 +114,6 @@ defmodule Tecnovix.ClientesSchema do
           :numero,
           :bairro,
           :cep,
-          :cdmunicipio,
           :municipio,
           :cod_cnae
         ])
