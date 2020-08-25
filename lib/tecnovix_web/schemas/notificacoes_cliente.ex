@@ -8,7 +8,7 @@ defmodule Tecnovix.NotificacoesClienteSchema do
     field :titulo, :string
     field :descricao, :string
     field :enviado, :integer
-    field :lido, :integer
+    field :lido, :integer, default: 0
     field :tipo_ref, :string
     field :tipo_ref_id, :integer
 

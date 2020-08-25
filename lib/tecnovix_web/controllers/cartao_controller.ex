@@ -5,5 +5,4 @@ defmodule TecnovixWeb.CartaoController do
   alias Tecnovix.Resource.Wirecard.Actions, as: Wirecard
 
   action_fallback Tecnovix.Resources.Fallback
-
 end

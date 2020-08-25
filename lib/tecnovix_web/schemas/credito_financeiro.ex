@@ -8,7 +8,7 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
     field :desconto, :integer
     field :tipo_pagamento, :string
     field :wirecard_pedido_id, :string
-    field :wirecard_pagemento_id, :string
+    field :wirecard_pagamento_id, :string
     field :wirecard_reembolso_id, :string
 
     timestamps()
@@ -22,7 +22,7 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
       :desconto,
       :tipo_pagamento,
       :wirecard_pedido_id,
-      :wirecard_pagemento_id,
+      :wirecard_pagamento_id,
       :wirecard_reembolso_id
     ])
     |> validate_required([:cliente_id])

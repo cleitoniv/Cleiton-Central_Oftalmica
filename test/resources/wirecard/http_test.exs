@@ -21,7 +21,6 @@ defmodule Tecnovix.Resource.Wirecard.HttpTest do
     {:ok, create_order} = TestHelper.create_order(cliente)
     order = Jason.decode!(create_order.body)
     {:ok, order} = Actions.get(order["id"], :orders)
-    IO.inspect Jason.decode!(order.body)["items"]
     assert order.status_code == 200
     assert create_order.status_code == 201
   end

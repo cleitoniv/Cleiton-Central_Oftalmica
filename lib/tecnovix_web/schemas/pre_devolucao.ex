@@ -7,10 +7,10 @@ defmodule Tecnovix.PreDevolucaoSchema do
     field :filial, :string
     field :cod_pre_dev, :string
     field :tipo_pre_dev, :string
-    field :inclusao, :date
+    field :inclusao, :date, autogenerate: {Date, :utc_today, []}
     field :cliente, :string
     field :loja, :string
-    field :status, :string
+    field :status, :string, default: "0"
 
     has_many :items, Tecnovix.ItensPreDevolucaoSchema,
       foreign_key: :pre_devolucao_id,

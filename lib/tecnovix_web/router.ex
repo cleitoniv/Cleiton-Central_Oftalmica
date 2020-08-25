@@ -84,10 +84,15 @@ defmodule TecnovixWeb.Router do
       pipe_through :cliente
       get "/current_user", TecnovixWeb.ClientesController, :current_user
       get "/", TecnovixWeb.ClientesController, :show
-      post "/logs", TecnovixWeb.LogsClienteController, :create_logs
-      get "/message", TecnovixWeb.ClientesController, :run
       post "/cliente_user", TecnovixWeb.UsuariosClienteController, :create_user
       post "/pedidos", TecnovixWeb.PedidosDeVendaController, :create
+      post "/pedido/credito_financeiro", TecnovixWeb.CreditoFinanceiroController, :create
+      get "/produtos", TecnovixWeb.ClientesController, :products
+      get "/offers", TecnovixWeb.ClientesController, :offers
+      get "/products_credits", TecnovixWeb.ClientesController, :products_credits
+      get "/orders", TecnovixWeb.ClientesController, :orders
+      get "/cart", TecnovixWeb.ClientesController, :cart
+      post "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :create
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

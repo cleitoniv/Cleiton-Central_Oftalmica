@@ -14,6 +14,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :vendedor_1, :string
     field :status_ped, :integer
     belongs_to :client, Tecnovix.ClientesSchema
+
     has_many :items, ItensDosPedidosDeVendaSchema,
       foreign_key: :pedido_de_venda_id,
       on_replace: :delete

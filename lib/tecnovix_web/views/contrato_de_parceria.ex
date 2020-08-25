@@ -15,4 +15,10 @@ defmodule TecnovixWeb.ContratoDeParceriaView do
   end
 
   multi_parser("contrato.json", [:contrato_n, :loja])
+
+  def render("contrato.json", %{item: item}) do
+    %{
+      id: item.id
+    }
+  end
 end

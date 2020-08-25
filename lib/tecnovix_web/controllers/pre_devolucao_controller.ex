@@ -13,4 +13,18 @@ defmodule TecnovixWeb.PreDevolucaoController do
       |> render("devolucao.json", %{item: devolucao})
     end
   end
+
+  def create(conn, %{"param" => params}) do
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, devolucao} <- PreDevolucaoModel.create(cliente, params) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("devolucao.json", %{item: devolucao})
+    else
+      v -> IO.inspect v
+        {:error, :not_created}
+    end
+  end
 end

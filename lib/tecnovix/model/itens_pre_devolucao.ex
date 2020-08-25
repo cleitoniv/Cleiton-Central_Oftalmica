@@ -4,7 +4,7 @@ defmodule Tecnovix.ItensPreDevolucaoModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
-     Enum.map(data, %{}, fn itens ->
+     Enum.map(params["data"], fn itens ->
        with nil <-
               Repo.get_by(ItensSchema,
                 filial: itens["filial"],
