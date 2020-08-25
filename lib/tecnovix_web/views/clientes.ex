@@ -183,5 +183,12 @@ defmodule TecnovixWeb.ClientesView do
     }
   end
 
+  def render("current_user.json", %{item: item, credits: credits, notifications: notifications}) do
+    __MODULE__.build(%{item: item})
+    |> Map.put(:points, credits.points)
+    |> Map.put(:money, credits.money)
+    |> Map.put(:notifications, notifications)
+  end
+
   multi_parser("clientes.json", [:loja, :codigo, :cnpj_cpf])
 end

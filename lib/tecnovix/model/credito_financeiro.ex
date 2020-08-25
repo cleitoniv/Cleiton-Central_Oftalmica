@@ -1,22 +1,95 @@
-defmodule Tecnovix.CartaoDeCreditoModel do
-  use Tecnovix.DAO, schema: Tecnovix.CartaoCreditoClienteSchema
+defmodule Tecnovix.CreditoFinanceiroModel do
+  use Tecnovix.DAO, schema: Tecnovix.CreditoFinanceiroSchema
   alias Tecnovix.Repo
+  alias Tecnovix.CreditoFinanceiroModel
+  alias Tecnovix.Resource.Wirecard.Actions, as: Wirecard
   alias Tecnovix.ClientesSchema
-  alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
-  alias Ecto.Multi
-  import Ecto.Query
 
-  def get_cc(%{"cliente_id" => cliente_id}) do
-    CartaoSchema
-    |> where([c], c.cliente_id == ^cliente_id)
+  def insert(params, order, payment, cliente_id) do
+    case __MODULE__.credito_params(params, order, payment, cliente_id) do
+      {:ok, credito_params} -> __MODULE__.create(credito_params)
+      _ -> {:error, :payment_credit_fail}
+    end
   end
 
-  def create_cc(params = %{"status" => 1}) do
-    Multi.new()
-    |> Multi.update_all(Ecto.UUID.autogenerate(), get_cc(params), set: [status: 0])
-    |> Multi.insert(Ecto.UUID.autogenerate(), CartaoSchema.changeset(%CartaoSchema{}, params))
-    |> Repo.transaction()
+  def credito_params(params, order, payment, cliente_id) do
+    order_body = Jason.decode!(order.body)
+    payment_body = Jason.decode!(payment.body)
+
+    params = %{
+      "cliente_id" => cliente_id,
+      "valor" => payment_body["amount"]["total"],
+      "desconto" => "",
+      "tipo_pagamento" => payment_body["fundingInstrument"]["method"],
+      "wirecard_pedido_id" => order_body["id"],
+      "wirecard_pagamento_id" => payment_body["id"],
+      "wirecard_reembolso_id" => ""
+    }
+
+    {:ok, params}
+  end
+
+  def order(params, cliente) do
+    order =
+      cliente
+      |> __MODULE__.order_params(params)
+      |> CreditoFinanceiroModel.wirecard_order()
+      |> Wirecard.create_order()
+
+    case order do
+      {:ok, %{status_code: 201}} -> order
+      _ -> {:error, :order_not_created}
+    end
+  end
+
+  def wirecard_order(params) do
+    {:ok,
+     %{
+       "ownId" => params["ownId"],
+       "amount" => %{
+         "currency" => "BRL",
+         "subtotals" => %{
+           "shipping" => 1000
+         }
+       },
+       "items" => params["items"],
+       "customer" => %{
+         "ownId" => params["customers"]["ownId"],
+         "fullname" => params["customers"]["fullname"],
+         "email" => params["customers"]["email"],
+         "birthDate" => params["customers"]["birthDate"],
+         "taxDocument" => params["customers"]["taxDocument"],
+         "phone" => params["customers"]["phone"],
+         "shippingAddress" => params["customers"]["shippingAddress"]
+       }
+     }}
+  end
+
+  def payment(id_cartao, order) do
+    order = Jason.decode!(order.body)
+    order_id = order["id"]
+
+    payment =
+      id_cartao
+      |> CreditoFinanceiroModel.get_cartao_cliente()
+      |> CreditoFinanceiroModel.payment_params()
+      |> CreditoFinanceiroModel.wirecard_payment()
+      |> Wirecard.create_payment(order_id)
+
+    case payment do
+      {:ok, %{status_code: 201}} -> payment
+      _ -> {:error, :payment_not_created}
+    end
+  end
+
+  def wirecard_payment(params) do
+    {:ok,
+     %{
+       "installmentCount" => params["installmentCount"],
+       "statementDescriptor" => params["statementDescriptor"],
+       "fundingInstrument" => params["fundingInstrument"]
+     }}
   end
 
   def order_params(cliente = %ClientesSchema{}, items) do
@@ -61,12 +134,6 @@ defmodule Tecnovix.CartaoDeCreditoModel do
         }
       }
     }
-  end
-
-  def order_params(usuario_cliente = %UsuariosClienteSchema{}, items) do
-    usuario_cliente = Repo.preload(usuario_cliente, :cliente)
-
-    __MODULE__.order_params(usuario_cliente.cliente, items)
   end
 
   def payment_params({:ok, cartao = %CartaoSchema{}}) do
@@ -114,6 +181,13 @@ defmodule Tecnovix.CartaoDeCreditoModel do
 
       cartao_cliente ->
         {:ok, cartao_cliente}
+    end
+  end
+
+  def get_cliente_by_id(id) do
+    case Repo.get_by(ClientesSchema, id: id) do
+      nil -> :error
+      cliente -> {:ok, cliente}
     end
   end
 end

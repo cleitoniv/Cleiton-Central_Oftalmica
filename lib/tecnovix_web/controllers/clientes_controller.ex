@@ -6,6 +6,7 @@ defmodule TecnovixWeb.ClientesController do
   alias Tecnovix.AtendPrefClienteModel
   alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.ClientesSchema
+  alias Tecnovix.App.Screens
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -84,10 +85,80 @@ defmodule TecnovixWeb.ClientesController do
         conn
         |> put_view(TecnovixWeb.UsuariosClienteView)
         |> render("show.json", %{item: user})
+
       %ClientesSchema{} ->
+        stub = Screens.stub()
+
+        credits_info = stub.get_credits(user)
+        notifications = stub.get_notifications_open(user)
+
         conn
         |> put_view(TecnovixWeb.ClientesView)
-        |> render("show.json", %{item: user})
+        |> render("current_user.json", %{
+          item: user,
+          credits: credits_info,
+          notifications: notifications
+        })
+    end
+  end
+
+  def products(conn, %{"filtro" => filtro}) do
+    stub = Screens.stub()
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, product} <- stub.get_product_grid(cliente, filtro) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: product}))
+    end
+  end
+
+  def offers(conn, _params) do
+    stub = Screens.stub()
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, offers} <- stub.get_offers(cliente) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: offers}))
+    end
+  end
+
+  def products_credits(conn, _params) do
+    stub = Screens.stub()
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, products} <- stub.get_products_credits(cliente) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: products}))
+    end
+  end
+
+  def orders(conn, %{"filtro" => filtro}) do
+    stub = Screens.stub()
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, orders} <- stub.get_order(cliente, filtro) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: orders}))
+    end
+  end
+
+  def cart(conn, _params) do
+    stub = Screens.stub()
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, cart} <- stub.get_products_cart(cliente) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: cart}))
     end
   end
 end

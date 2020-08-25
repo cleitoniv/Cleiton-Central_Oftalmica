@@ -1,6 +1,7 @@
 defmodule TecnovixWeb.UsersTest do
   use TecnovixWeb.ConnCase, async: false
   alias TecnovixWeb.Support.Generator
+  alias Tecnovix.TestHelp
   use Bamboo.Test
 
   test "user" do
@@ -24,18 +25,6 @@ defmodule TecnovixWeb.UsersTest do
 
     # Motrando a Logs
     Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)
-
-    # user_client_firebase = Generator.create_user_firebase(user_client["email"])
-
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> get("/api/cliente/message")
-    |> json_response(200)
-
-    # build_conn()
-    # |> Generator.put_auth(user_client_firebase["idToken"])
-    # |> get("/api/cliente/message")
-    # |> json_response(200)
   end
 
   test "cadastro cliente" do
@@ -211,5 +200,25 @@ defmodule TecnovixWeb.UsersTest do
     |> recycle()
     |> get("/api/cliente")
     |> json_response(200)
+  end
+
+  test "Criando uma Pre Devoluçao pelo cliente" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    contrato = TestHelp.single_json("single_contrato_de_parceria.json")
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+      single_param = TestHelp.single_json("single_devolucao_and_items0.json")
+
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/pre_devolucao", %{"param" => single_param})
+      |> json_response(200)
   end
 end

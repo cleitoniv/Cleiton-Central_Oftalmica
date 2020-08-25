@@ -2,6 +2,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.PedidosDeVendaModel
   alias Tecnovix.PedidosDeVendaModel
+  alias Tecnovix.ClientesSchema
+  alias Tecnovix.UsuariosClienteSchema
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -15,33 +17,47 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   def create(conn, %{"items" => items, "paciente" => paciente, "id_cartao" => id_cartao}) do
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} =
+      case conn.private.auth do
+        {:ok, %ClientesSchema{} = cliente} ->
+          {:ok, cliente}
+
+        {:ok, %UsuariosClienteSchema{} = usuario} ->
+          PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
+      end
+
     items_order = items_order(items)
 
     with {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, paciente, cliente, order),
          {:ok, payment} <- PedidosDeVendaModel.payment(id_cartao, order) do
-
-         conn
-         |> put_status(200)
-         |> put_resp_content_type("application/json")
-         |> send_resp(200, Jason.encode!(%{sucess: true}))
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{sucess: true, data: Jason.decode!(payment.body)}))
     else
       _ ->
-         {:error, :order_not_created}
+        {:error, :order_not_created}
     end
   end
 
   def items_order(items) do
-      Enum.map(items, fn order ->
-        %{
-          "product" => order["produto"],
-          "category" => "OTHER_CATEGORIES",
-          "quantity" => order["quantidade"],
-          "detail" => "Mais info...",
-          "price" => (String.to_float(order["prc_unitario"]) * 100) * String.to_integer(order["quantidade"])
-        }
-      end)
-      |> IO.inspect
+    Enum.map(items, fn order ->
+      %{
+        "product" => order["produto"],
+        "category" => "OTHER_CATEGORIES",
+        "quantity" => order["quantidade"],
+        "detail" => "Mais info...",
+        "price" =>
+          convert_price(
+            String.to_float(order["prc_unitario"]) * 100 * String.to_integer(order["quantidade"])
+          )
+      }
+    end)
+  end
+
+  def convert_price(price) do
+    price
+    |> Kernel.trunc()
   end
 end

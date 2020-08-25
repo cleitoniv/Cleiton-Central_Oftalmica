@@ -1,7 +1,7 @@
 defmodule TecnovixWeb.ErrorParserView do
   defmacro multi_parser(render, identifiers) do
     quote do
-      def render(unquote(render), %{item: item}) do
+      def render(unquote(render), %{item: item}) when is_list(item) do
         items =
           Enum.filter(
             item,

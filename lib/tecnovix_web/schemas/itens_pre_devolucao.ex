@@ -1,9 +1,10 @@
 defmodule Tecnovix.ItensPreDevolucaoSchema do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Tecnovix.DescricaoGenericaDoProdutoSchema
 
   schema "itens_pre_devolucao" do
-    field :descricao_generica_do_produto_id, :integer
+    belongs_to :descricao_generica_do_produto, DescricaoGenericaDoProdutoSchema
     field :sub_descricao_generica_do_produto_id, :integer
     field :filial, :string
     field :cod_pre_dev, :string
@@ -22,7 +23,6 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
     field :contrato, :string
     field :tipo, :string
     belongs_to :pre_devolucao, Tecnovix.PreDevolucaoSchema
-
     timestamps()
   end
 
