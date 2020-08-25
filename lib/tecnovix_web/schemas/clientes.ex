@@ -22,7 +22,7 @@ defmodule Tecnovix.ClientesSchema do
     field :ddd, :string
     field :telefone, :string
     field :bloqueado, :string
-    field :sit_app, :string, default: "N"
+    field :sit_app, :string, default: "E"
     field :cod_cnae, :string
     field :ramo, :string
     field :vendedor, :string
@@ -30,7 +30,6 @@ defmodule Tecnovix.ClientesSchema do
     field :dia_remessa, :string
     field :wirecard_cliente_id, :string
     field :fcm_token, :string
-    has_one :cliente_id, Tecnovix.AtendPrefClienteSchema, foreign_key: :cliente_id
 
     timestamps(type: :utc_datetime)
   end
@@ -72,6 +71,54 @@ defmodule Tecnovix.ClientesSchema do
     |> validations_fisic_jurid(params)
   end
 
+  def first_acess(changeset, params \\ %{}) do
+    changeset
+    |> cast(params, [
+      :uid,
+      :codigo,
+      :loja,
+      :fisica_jurid,
+      :cnpj_cpf,
+      :data_nascimento,
+      :nome,
+      :nome_empresarial,
+      :email,
+      :endereco,
+      :numero,
+      :complemento,
+      :bairro,
+      :cep,
+      :cdmunicipio,
+      :municipio,
+      :ddd,
+      :telefone,
+      :bloqueado,
+      :sit_app,
+      :cod_cnae,
+      :ramo,
+      :vendedor,
+      :crm_medico,
+      :dia_remessa,
+      :wirecard_cliente_id,
+      :fcm_token
+    ])
+    |> validate_required([:nome, :email, :telefone])
+  end
+
+  def validate_ramo_fisica(changeset, params \\ %{}) do
+    case params["ramo"] do
+      "2" -> validate_required(changeset, :crm_medico)
+      _ -> changeset
+    end
+  end
+
+  def validate_ramo_juridica(changeset, params \\ %{}) do
+    case params["ramo"] do
+      "2" -> validate_required(changeset, :cod_cnae)
+      _ -> changeset
+    end
+  end
+
   def validations_fisic_jurid(changeset, params \\ %{}) do
     case params["fisica_jurid"] do
       "F" ->
@@ -92,6 +139,7 @@ defmodule Tecnovix.ClientesSchema do
           :municipio,
           :crm_medico
         ])
+        |> validate_ramo_fisica(params)
         |> unique_constraint(:clientes_contraint)
 
       "J" ->
@@ -110,9 +158,9 @@ defmodule Tecnovix.ClientesSchema do
           :numero,
           :bairro,
           :cep,
-          :municipio,
-          :cod_cnae
+          :municipio
         ])
+        |> validate_ramo_juridica(params)
         |> unique_constraint(:clientes_contraint)
 
       _ ->

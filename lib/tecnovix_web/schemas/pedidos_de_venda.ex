@@ -4,7 +4,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
   alias Tecnovix.ItensDosPedidosDeVendaSchema
 
   schema "pedidos_de_venda" do
-    field :cliente_id, :integer
+    field :order_id, :string
     field :filial, :string
     field :numero, :string
     field :cliente, :string
@@ -13,7 +13,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :pd_correios, :string
     field :vendedor_1, :string
     field :status_ped, :integer
-
+    belongs_to :client, Tecnovix.ClientesSchema
     has_many :items, ItensDosPedidosDeVendaSchema,
       foreign_key: :pedido_de_venda_id,
       on_replace: :delete
@@ -24,7 +24,8 @@ defmodule Tecnovix.PedidosDeVendaSchema do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
-      :cliente_id,
+      :order_id,
+      :client_id,
       :filial,
       :numero,
       :cliente,
@@ -34,7 +35,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :vendedor_1,
       :status_ped
     ])
-    |> validate_required([:cliente_id, :filial])
+    |> validate_required([:client_id])
     |> cast_assoc(:items)
   end
 end

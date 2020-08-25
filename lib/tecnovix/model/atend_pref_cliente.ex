@@ -6,7 +6,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
-     Enum.reduce(params["data"], %{}, fn atend_pref, _acc ->
+     Enum.map(params["data"], fn atend_pref ->
        with nil <-
               Repo.get_by(AtendPrefClienteSchema,
                 cod_cliente: atend_pref["cod_cliente"],

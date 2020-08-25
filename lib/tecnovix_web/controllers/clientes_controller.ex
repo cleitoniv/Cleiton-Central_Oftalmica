@@ -4,14 +4,26 @@ defmodule TecnovixWeb.ClientesController do
   alias Tecnovix.ClientesModel
   alias Tecnovix.UsuariosClienteModel
   alias Tecnovix.AtendPrefClienteModel
+  alias Tecnovix.UsuariosClienteSchema
+  alias Tecnovix.ClientesSchema
 
   action_fallback Tecnovix.Resources.Fallback
 
   def insert_or_update(conn, params) do
     with {:ok, cliente} <- ClientesModel.insert_or_update(params) do
       conn
+      |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{sucess: true}))
+      |> render("clientes.json", %{item: cliente})
+    end
+  end
+
+  def first_acess(conn, %{"param" => params}) do
+    with {:ok, cliente} <- ClientesModel.create_first_acess(params) do
+      conn
+      |> put_status(201)
+      |> put_resp_content_type("application/json")
+      |> render("clientes.json", %{item: cliente})
     end
   end
 
@@ -61,6 +73,21 @@ defmodule TecnovixWeb.ClientesController do
 
       _ ->
         {:error, :invalid_parameter}
+    end
+  end
+
+  def current_user(conn, _params) do
+    {:ok, user} = conn.private.auth
+
+    case user do
+      %UsuariosClienteSchema{} ->
+        conn
+        |> put_view(TecnovixWeb.UsuariosClienteView)
+        |> render("show.json", %{item: user})
+      %ClientesSchema{} ->
+        conn
+        |> put_view(TecnovixWeb.ClientesView)
+        |> render("show.json", %{item: user})
     end
   end
 end

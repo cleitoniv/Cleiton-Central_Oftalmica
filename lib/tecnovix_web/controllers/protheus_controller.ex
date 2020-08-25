@@ -21,7 +21,4 @@ defmodule TecnovixWeb.ProtheusController do
         {:error, :protheus_not_found}
     end
   end
-
-  def get_products() do
-  end
 end

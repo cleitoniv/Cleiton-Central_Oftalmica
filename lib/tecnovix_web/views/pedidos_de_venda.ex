@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.PedidosDeVendaView do
   use Tecnovix.Resource.View, model: Tecnovix.PedidosDeVendaModel
+  import TecnovixWeb.ErrorParserView
 
   def build(%{item: item}) do
     %{
@@ -14,4 +15,6 @@ defmodule TecnovixWeb.PedidosDeVendaView do
       status_ped: item.status_ped
     }
   end
+
+  multi_parser("pedidos.json", [:filial, :cliente, :cliente_id])
 end

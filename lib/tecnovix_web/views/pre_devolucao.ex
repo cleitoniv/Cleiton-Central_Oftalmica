@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.PreDevolucaoView do
   use Tecnovix.Resource.View, model: Tecnovix.PreDevolucaoModel
+  import TecnovixWeb.ErrorParserView
 
   def build(%{item: item}) do
     %{
@@ -13,4 +14,6 @@ defmodule TecnovixWeb.PreDevolucaoView do
       status: item.status
     }
   end
+
+  multi_parser("devolucao.json", [:filial, :cliente_id])
 end

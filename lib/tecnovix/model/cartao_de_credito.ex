@@ -20,13 +20,14 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   end
 
   def order_params(cliente = %ClientesSchema{}, items) do
+
     fisica_jurid =
       case cliente.fisica_jurid do
         "F" -> "CPF"
         "J" -> "CNPJ"
       end
 
-    %{
+     %{
       "ownId" => cliente.codigo,
       "amount" => %{
         "currency" => "BRL",
@@ -50,7 +51,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
           "number" => String.slice(cliente.telefone, 4..13)
         },
         "shippingAddress" => %{
-          "city" => cliente.municipio,
+          "city" => "Serra",
           "complement" => cliente.complemento,
           "district" => cliente.bairro,
           "street" => cliente.endereco,
@@ -69,7 +70,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
     __MODULE__.order_params(usuario_cliente.cliente, items)
   end
 
-  def payment_params(cartao = %CartaoSchema{}) do
+  def payment_params({:ok, cartao = %CartaoSchema{}}) do
     %{
       "installmentCount" => 6,
       "statementDescriptor" => "central",

@@ -35,6 +35,7 @@ defmodule TecnovixWeb.Router do
   scope "/api" do
     pipe_through :api
 
+    post "/first_acess", TecnovixWeb.ClientesController, :first_acess
     post "/user_sync/login", TecnovixWeb.SyncUsersController, :login
 
     scope "/sync" do
@@ -81,12 +82,12 @@ defmodule TecnovixWeb.Router do
       post "/", TecnovixWeb.ClientesController, :create_user
       get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
       pipe_through :cliente
+      get "/current_user", TecnovixWeb.ClientesController, :current_user
       get "/", TecnovixWeb.ClientesController, :show
       post "/logs", TecnovixWeb.LogsClienteController, :create_logs
       get "/message", TecnovixWeb.ClientesController, :run
       post "/cliente_user", TecnovixWeb.UsuariosClienteController, :create_user
-      post "/create_order", TecnovixWeb.CartaoController, :create_order
-      post "/create_payment", TecnovixWeb.CartaoController, :create_payment
+      post "/pedidos", TecnovixWeb.PedidosDeVendaController, :create
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
