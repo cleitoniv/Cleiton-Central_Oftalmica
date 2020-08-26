@@ -136,8 +136,8 @@ defmodule Tecnovix.ClientesSchema do
           :numero,
           :bairro,
           :cep,
-          :cdmunicipio,
-          :municipio
+          :municipio,
+          :crm_medico
         ])
         |> validate_ramo_fisica(params)
         |> unique_constraint(:clientes_contraint)
@@ -158,7 +158,6 @@ defmodule Tecnovix.ClientesSchema do
           :numero,
           :bairro,
           :cep,
-          :cdmunicipio,
           :municipio
         ])
         |> validate_ramo_juridica(params)

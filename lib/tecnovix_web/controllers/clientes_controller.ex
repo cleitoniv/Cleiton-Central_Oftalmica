@@ -33,6 +33,7 @@ defmodule TecnovixWeb.ClientesController do
     params = Map.put(params, "email", jwt.fields["email"])
     params = Map.put(params, "uid", jwt.fields["user_id"])
     __MODULE__.create(conn, %{"param" => params})
+    |> IO.inspect
   end
 
   def run(conn, _params) do
@@ -102,10 +103,19 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def products(conn, %{"filtro" => filtro}) do
+    filtro =
+      case filtro do
+        "Todos" -> "all"
+        "Miopía" -> "miopia"
+        "Hipermetropia" -> "hipermetropia"
+      end
+
     stub = Screens.stub()
+
     {:ok, cliente} = conn.private.auth
 
     with {:ok, product} <- stub.get_product_grid(cliente, filtro) do
+      IO.inspect product
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

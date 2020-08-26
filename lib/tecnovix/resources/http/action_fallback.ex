@@ -1,6 +1,13 @@
 defmodule Tecnovix.Resources.Fallback do
   use TecnovixWeb, :controller
 
+  def call(conn, {:error, :expired}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(401, Jason.encode!(%{"success" => false, "data" => "Token expirado."}))
+    |> halt()
+  end
+
   def call(conn, {:error, :cliente_desativado}) do
     conn
     |> put_resp_content_type("application/json")
