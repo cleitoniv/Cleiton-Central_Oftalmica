@@ -114,7 +114,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def pedido_params(items, paciente, cliente, order) do
     {:ok,
      %{
-       "client_id" => cliente.id,
+       "cliente_id" => cliente.id,
        "order_id" => Jason.decode!(order.body)["order"]["id"],
        "filial" => "",
        "numero" => "",

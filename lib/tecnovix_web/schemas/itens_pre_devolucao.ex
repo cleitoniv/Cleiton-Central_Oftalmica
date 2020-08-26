@@ -4,7 +4,7 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
   alias Tecnovix.DescricaoGenericaDoProdutoSchema
 
   schema "itens_pre_devolucao" do
-    belongs_to :descricao_generica_do_produto, DescricaoGenericaDoProdutoSchema
+    field :descricao_generica_do_produto_id, :integer
     field :sub_descricao_generica_do_produto_id, :integer
     field :filial, :string
     field :cod_pre_dev, :string

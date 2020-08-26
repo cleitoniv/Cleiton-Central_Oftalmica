@@ -3,7 +3,7 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
   import Ecto.Changeset
 
   schema "credito_financeiro" do
-    field :cliente_id, :integer
+    belongs_to :cliente, Tecnovix.ClientesSchema
     field :valor, :decimal
     field :desconto, :integer
     field :tipo_pagamento, :string

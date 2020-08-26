@@ -7,7 +7,8 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
 
   def insert_or_update(conn, params) do
     with {:ok, contrato} <- ContratoDeParceriaModel.insert_or_update(params) do
-      IO.inspect contrato
+      IO.inspect(contrato)
+
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

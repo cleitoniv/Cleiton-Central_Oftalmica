@@ -214,11 +214,12 @@ defmodule TecnovixWeb.UsersTest do
       |> json_response(201)
       |> Map.get("data")
 
-      single_param = TestHelp.single_json("single_devolucao_and_items0.json")
+    single_param = TestHelp.single_json("single_devolucao_and_items0.json")
 
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/pre_devolucao", %{"param" => single_param})
-      |> json_response(200)
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente/pre_devolucao", %{"param" => single_param})
+    |> json_response(200)
+    |> IO.inspect()
   end
 end

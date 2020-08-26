@@ -16,4 +16,8 @@ defmodule TecnovixWeb.PreDevolucaoView do
   end
 
   multi_parser("devolucao.json", [:filial, :cliente_id])
+
+  def render("devolucao.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
+  end
 end

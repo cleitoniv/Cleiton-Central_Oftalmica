@@ -34,16 +34,15 @@ defmodule Tecnovix.PreDevolucaoModel do
     {:error, :invalid_parameter}
   end
 
-  #PRECISA TESTAR A DEVOLUCAO DE TROCA
+  # PRECISA TESTAR A DEVOLUCAO DE TROCA
   def create(cliente, params) do
-    devolucao=
-    cliente
-    |> pre_devolucao(params)
-    |> itens_pre_devolucao(cliente)
+    devolucao =
+      cliente
+      |> pre_devolucao(params)
+      |> itens_pre_devolucao(cliente)
 
     %PreDevolucaoSchema{}
     |> PreDevolucaoSchema.changeset(devolucao)
-    |> IO.inspect
     |> Repo.insert()
   end
 
@@ -57,7 +56,6 @@ defmodule Tecnovix.PreDevolucaoModel do
   end
 
   def itens_pre_devolucao(params, cliente) do
-
     params
     |> Map.put("filial", params["filial"])
     |> Map.put("cod_pre_dev", params["cod_pre_dev"])

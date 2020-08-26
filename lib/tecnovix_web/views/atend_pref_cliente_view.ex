@@ -23,4 +23,8 @@ defmodule TecnovixWeb.AtendPrefClienteView do
   end
 
   multi_parser("atends.json", [:cliente_id, :cod_cliente, :loja_cliente])
+
+  def render("atends.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
+  end
 end

@@ -6,6 +6,7 @@ defmodule Tecnovix.App.Screens do
   @callback get_products_credits(cliente :: term) :: {:ok, term}
   @callback get_order(cliente :: term, filtro :: term) :: {:ok, term}
   @callback get_products_cart(cliente :: term) :: {:ok, term}
+  @callback get_info_products(cliente :: term) :: {:ok, term}
 
   def stub() do
     case Mix.env() do

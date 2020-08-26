@@ -160,4 +160,16 @@ defmodule TecnovixWeb.ClientesController do
       |> send_resp(200, Jason.encode!(%{success: true, data: cart}))
     end
   end
+
+  def info_products(conn, _params) do
+    stub = Screens.stub()
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, info} <- stub.get_info_products(cliente) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: info}))
+    end
+  end
 end

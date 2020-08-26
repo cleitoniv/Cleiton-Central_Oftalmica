@@ -3,7 +3,7 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
   import Ecto.Changeset
 
   schema "contrato_de_parceria" do
-    field :cliente_id, :integer
+    belongs_to :client, Tecnovix.ClientesSchema
     field :filial, :string
     field :contrato_n, :string
     field :docto_orig, :string
@@ -20,8 +20,8 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:cliente_id, :filial, :contrato_n, :docto_orig, :emissao, :cliente, :loja])
-    |> validate_required([:cliente_id, :filial, :contrato_n])
+    |> cast(params, [:client_id, :filial, :contrato_n, :docto_orig, :emissao, :cliente, :loja])
+    |> validate_required([:client_id, :filial, :contrato_n])
     |> cast_assoc(:items)
   end
 end

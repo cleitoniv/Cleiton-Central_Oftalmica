@@ -3,7 +3,6 @@ defmodule Tecnovix.ContasAReceberSchema do
   import Ecto.Changeset
 
   schema "contas_a_receber" do
-    field :cliente_id, :integer
     field :filial, :string
     field :no_titulo, :string
     field :tipo, :string
@@ -14,14 +13,14 @@ defmodule Tecnovix.ContasAReceberSchema do
     field :virtitulo, :decimal
     field :saldo, :decimal
     field :cod_barras, :string
-
+    belongs_to :client, Tecnovix.ClientesSchema
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
-      :cliente_id,
+      :client_id,
       :filial,
       :no_titulo,
       :tipo,
@@ -33,6 +32,6 @@ defmodule Tecnovix.ContasAReceberSchema do
       :saldo,
       :cod_barras
     ])
-    |> validate_required([:cliente_id, :filial])
+    |> validate_required([:client_id, :filial])
   end
 end

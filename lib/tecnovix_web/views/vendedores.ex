@@ -19,4 +19,8 @@ defmodule TecnovixWeb.VendedoresView do
   end
 
   multi_parser("vendedores.json", [:nome])
+
+  def render("vendedores.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
+  end
 end

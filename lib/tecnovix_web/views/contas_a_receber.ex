@@ -19,4 +19,8 @@ defmodule TecnovixWeb.ContasAReceberView do
   end
 
   multi_parser("contas.json", [:cliente, :loja])
+
+  def render("contas.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
+  end
 end

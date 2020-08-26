@@ -156,4 +156,40 @@ defmodule Tecnovix.App.ScreensTest do
 
     {:ok, cart}
   end
+
+  @impl true
+  def get_info_products(_cliente) do
+    info = [
+      %{
+        id: 0,
+        tests: 30,
+        credits: 0,
+        title: "Bioview Asférica Cx 6",
+        value: 15100,
+        image_url: "teste.com.br",
+        type: "miopia",
+        boxs: 2
+      },
+      %{
+        id: 1,
+        tests: 0,
+        credits: 0,
+        title: "Bioview Asférica Cx 6",
+        value: 15100,
+        image_url: "teste.com.br",
+        type: "miopia",
+        caixas: 0
+      },
+      %{
+        id: 4,
+        tests: 30,
+        credits: 500_000,
+        title: "Bioview Asférica Cx 6",
+        value: 15100,
+        image_url: "teste.com.br",
+        type: "miopia",
+        caixas: 0
+      }
+    ]
+  end
 end
