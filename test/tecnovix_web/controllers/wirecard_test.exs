@@ -6,11 +6,15 @@ defmodule Tecnovix.Test.Wirecard do
   alias TecnovixWeb.Auth.Firebase
   alias Tecnovix.TestHelper
   alias Tecnovix.Resource.Wirecard.Actions
+  alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // CLIENTE" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
     paciente = %{"paciente" => "Victor"}
+    params = TestHelp.single_json("single_descricao_generica_do_produto.json")
+    DescricaoModel.create(params)
+    |> IO.inspect
 
     cliente =
       build_conn()

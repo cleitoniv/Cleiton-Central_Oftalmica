@@ -94,7 +94,6 @@ defmodule TecnovixWeb.Auth.Firebase do
   private da `%Plug.Conn{}`.
   """
   def firebase_auth(conn = %Plug.Conn{}, _opts) do
-    IO.inspect conn
     with {:ok, token} <- get_token(conn),
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}) do
       put_private(conn, :auth, {:ok, jwt})
