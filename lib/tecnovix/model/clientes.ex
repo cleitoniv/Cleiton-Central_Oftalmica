@@ -48,6 +48,7 @@ defmodule Tecnovix.ClientesModel do
     |> formatting_cep()
     |> ClientesSchema.validations_fisic_jurid(params)
     |> Repo.insert()
+    |> IO.inspect()
   end
 
   def verify_sit_app(id) do

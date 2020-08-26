@@ -136,7 +136,6 @@ defmodule Tecnovix.ClientesSchema do
           :numero,
           :bairro,
           :cep,
-          :cdmunicipio,
           :municipio
         ])
         |> validate_ramo_fisica(params)
@@ -158,7 +157,6 @@ defmodule Tecnovix.ClientesSchema do
           :numero,
           :bairro,
           :cep,
-          :cdmunicipio,
           :municipio
         ])
         |> validate_ramo_juridica(params)
