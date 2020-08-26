@@ -1,6 +1,8 @@
 defmodule Tecnovix.App.ScreensTest do
   @behavior Tecnovix.App.Screens
 
+  @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
+
   @impl true
   def get_product_grid(_cliente, filtro) do
     produtos = [
@@ -10,7 +12,7 @@ defmodule Tecnovix.App.ScreensTest do
         credits: 0,
         title: "Biosoft Asférica Mensal",
         value: 15100,
-        image_url: "teste.com.br",
+        image_url: @product_url,
         type: "miopia"
       },
       %{
@@ -19,7 +21,7 @@ defmodule Tecnovix.App.ScreensTest do
         credits: 0,
         title: "Bioview Asférica A2",
         value: 15100,
-        image_url: "teste.com.br",
+        image_url: @product_url,
         type: "miopia"
       },
       %{
@@ -28,7 +30,7 @@ defmodule Tecnovix.App.ScreensTest do
         credits: 0,
         title: "Bioview Asférica A3",
         value: 15100,
-        image_url: "teste.com.br",
+        image_url: @product_url,
         type: "miopia"
       },
       %{
@@ -37,12 +39,16 @@ defmodule Tecnovix.App.ScreensTest do
         credits: 0,
         title: "Bioview Asférica A4",
         value: 15100,
-        image_url: "teste.com.br",
+        image_url: @product_url,
         type: "hipermetropia"
       }
     ]
 
-    data = Enum.filter(produtos, fn items -> items.type == filtro end)
+    data =
+      case filtro do
+        "all" -> produtos
+          _ -> Enum.filter(produtos, fn items -> items.type == filtro end)
+      end
 
     {:ok, data}
   end
@@ -50,8 +56,8 @@ defmodule Tecnovix.App.ScreensTest do
   @impl true
   def get_credits(_cliente) do
     %{
-      money: 5000,
-      points: 50
+      money: 5500,
+      points: 100
     }
   end
 
