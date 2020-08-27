@@ -7,6 +7,7 @@ defmodule Tecnovix.App.ProductModel do
     field :value, :integer
     field :image_url, :string
     field :type, :string
+    field :description, :string
     field :material, :string
     field :dk_t, :integer
     field :visint, :string
