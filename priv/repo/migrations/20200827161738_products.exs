@@ -7,6 +7,7 @@ defmodule Tecnovix.Repo.Migrations.Products do
       add :value, :integer
       add :image_url, :string
       add :type, :string
+      add :description, :string
       add :material, :string
       add :dk_t, :integer
       add :visint, :string

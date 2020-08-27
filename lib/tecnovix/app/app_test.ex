@@ -264,7 +264,8 @@ defmodule Tecnovix.App.ScreensTest do
     ]
 
     product = Enum.filter(product, fn product -> product.id == String.to_integer(id) end)
-
+    |> Enum.at(0)
+    
     {:ok, product}
   end
 
