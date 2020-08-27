@@ -113,7 +113,7 @@ defmodule Tecnovix.Test.App do
     product =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/product?id=1")
+      |> get("/api/cliente/product/1")
       |> json_response(200)
       |> IO.inspect
 
