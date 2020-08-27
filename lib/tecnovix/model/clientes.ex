@@ -16,8 +16,9 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def get_clientes_app(filtro) do
-    query = from c in ClientesSchema,
-            where: c.sit_app == ^filtro
+    query =
+      from c in ClientesSchema,
+        where: c.sit_app == ^filtro
 
     {:ok, Repo.all(query)}
   end

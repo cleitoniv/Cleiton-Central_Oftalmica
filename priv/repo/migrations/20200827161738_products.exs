@@ -10,7 +10,7 @@ defmodule Tecnovix.Repo.Migrations.Products do
       add :description, :string
       add :material, :string
       add :dk_t, :integer
-      add :visint, :string
+      add :visint, :boolean
       add :espessura, :string
       add :hidratacao, :string
       add :assepsia, :string

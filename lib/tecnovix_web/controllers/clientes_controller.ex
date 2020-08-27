@@ -78,7 +78,7 @@ defmodule TecnovixWeb.ClientesController do
       |> render("app_clientes.json", %{clientes: clientes})
     else
       _ ->
-      {:error, :invalid_parameter}
+        {:error, :invalid_parameter}
     end
   end
 

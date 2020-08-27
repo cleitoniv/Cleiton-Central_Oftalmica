@@ -85,7 +85,6 @@ defmodule Tecnovix.SyncUsers do
     |> Generator.put_auth(user_login["access_token"])
     |> get("/api/sync/clientes?filtro=N")
     |> json_response(200)
-    |> IO.inspect
-
+    |> IO.inspect()
   end
 end
