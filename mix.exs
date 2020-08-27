@@ -51,7 +51,8 @@ defmodule Tecnovix.MixProject do
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 2.0"},
       {:bamboo, "~> 1.5"},
-      {:cors_plug, "~> 1.5"}
+      {:cors_plug, "~> 1.5"},
+      {:tesla, "~> 1.3.0"}
     ]
   end
 

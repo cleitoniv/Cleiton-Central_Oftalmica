@@ -3,7 +3,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
   import Ecto.Changeset
 
   schema "itens_dos_pedidos_de_venda" do
-    field :descricao_generica_do_produto_id, :integer
+    belongs_to :descricao_generica_do_produto_id, Tecnovix.DescricaoGenericaDoProdutoSchema
     field :filial, :string
     field :nocontrato, :string
     field :produto, :string
