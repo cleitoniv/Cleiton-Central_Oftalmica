@@ -171,7 +171,6 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_info_product(_cliente, id) do
-
     product = [
       %{
         id: 0,
@@ -185,7 +184,7 @@ defmodule Tecnovix.App.ScreensTest do
         description: "Produzido com material hidrofilico...",
         material: "Hidrogel Methafilcon",
         dk_t: 21,
-        visint: "Sim",
+        visint: true,
         espessura: "0,09mm",
         hidratacao: "55%",
         assepsia: "Quimica",
@@ -207,7 +206,7 @@ defmodule Tecnovix.App.ScreensTest do
         description: "Produzido com material hidrofilico...",
         material: "Hidrogel Methafilcon",
         dk_t: 21,
-        visint: "Sim",
+        visint: true,
         espessura: "0,09mm",
         hidratacao: "55%",
         assepsia: "Quimica",
@@ -229,7 +228,7 @@ defmodule Tecnovix.App.ScreensTest do
         description: "Produzido com material hidrofilico...",
         material: "Hidrogel Methafilcon",
         dk_t: 21,
-        visint: "Sim",
+        visint: true,
         espessura: "0,09mm",
         hidratacao: "55%",
         assepsia: "Quimica",
@@ -251,7 +250,7 @@ defmodule Tecnovix.App.ScreensTest do
         description: "Produzido com material hidrofilico...",
         material: "Hidrogel Methafilcon",
         dk_t: 21,
-        visint: "Sim",
+        visint: true,
         espessura: "0,09mm",
         hidratacao: "55%",
         assepsia: "Quimica",
@@ -263,9 +262,10 @@ defmodule Tecnovix.App.ScreensTest do
       }
     ]
 
-    product = Enum.filter(product, fn product -> product.id == String.to_integer(id) end)
-    |> Enum.at(0)
-    
+    product =
+      Enum.filter(product, fn product -> product.id == String.to_integer(id) end)
+      |> Enum.at(0)
+
     {:ok, product}
   end
 
