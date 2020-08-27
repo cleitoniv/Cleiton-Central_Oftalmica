@@ -48,7 +48,7 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   def pre_devolucao(cliente, params) do
     params
-    |> Map.put("cliente_id", cliente.id)
+    |> Map.put("client_id", cliente.id)
     |> Map.put("filial", params["filial"])
     |> Map.put("cod_pre_dev", String.slice(Ecto.UUID.autogenerate(), 0..5))
     |> Map.put("loja", cliente.loja)

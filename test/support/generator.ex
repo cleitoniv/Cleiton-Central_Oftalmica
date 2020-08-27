@@ -43,7 +43,32 @@ defmodule TecnovixWeb.Support.Generator do
       "crm_medico" => "teste",
       "cod_cliente" => "nil",
       "loja_cliente" => "12",
-      "codigo" => "1231",
+      "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
+      "complemento" => "Casa"
+    }
+  end
+
+  def user_param_N() do
+    %{
+      "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
+      "fisica_jurid" => "F",
+      "cnpj_cpf" => String.slice(Ecto.UUID.autogenerate(), 1..12),
+      "sit_app" => "N",
+      "nome" => "Victor",
+      "ddd" => "27",
+      "telefone" => "5527996211804",
+      "data_nascimento" => "2020-07-07",
+      "ramo" => "1",
+      "endereco" => "Rua Benedito Barcelos",
+      "numero" => "111",
+      "bairro" => "Bela Vista",
+      "cep" => "29027445",
+      "cdmunicipio" => "teste",
+      "municipio" => "Serra",
+      "crm_medico" => "teste",
+      "cod_cliente" => "nil",
+      "loja_cliente" => "12",
+      "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
       "complemento" => "Casa"
     }
   end

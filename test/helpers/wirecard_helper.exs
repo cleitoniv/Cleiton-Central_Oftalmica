@@ -24,7 +24,7 @@ defmodule Tecnovix.TestHelper do
     order_params = TestHelper.parse_json("order.json")
     order_params = update_in(order_params["customer"]["id"], fn _ -> cliente["id"] end)
 
-    Actions.create_order(order_params)
+    Actions.create_order({:ok, order_params})
   end
 
   def create_credit_card(cliente_id) do
@@ -36,6 +36,6 @@ defmodule Tecnovix.TestHelper do
   def create_payment(order_id) do
     params = TestHelper.parse_json("payment.json")
 
-    Actions.create_payment(params, order_id)
+    Actions.create_payment({:ok, params}, order_id)
   end
 end

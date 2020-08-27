@@ -31,8 +31,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     with {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, paciente, cliente, order),
          {:ok, payment} <- PedidosDeVendaModel.payment(id_cartao, order) do
+      IO.inspect(pedido)
 
-           IO.inspect pedido
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

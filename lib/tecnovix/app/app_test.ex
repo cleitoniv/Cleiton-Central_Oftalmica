@@ -13,7 +13,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Biosoft Asférica Mensal",
         value: 15100,
         image_url: @product_url,
-        type: "miopia"
+        type: "miopia",
+        boxes: 0
       },
       %{
         id: 1,
@@ -22,7 +23,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A2",
         value: 15100,
         image_url: @product_url,
-        type: "miopia"
+        type: "miopia",
+        boxes: 0
       },
       %{
         id: 2,
@@ -31,7 +33,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A3",
         value: 15100,
         image_url: @product_url,
-        type: "miopia"
+        type: "miopia",
+        boxes: 0
       },
       %{
         id: 3,
@@ -40,14 +43,16 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A4",
         value: 15100,
         image_url: @product_url,
-        type: "hipermetropia"
+        type: "hipermetropia",
+        boxes: 0,
+        boxes: 0
       }
     ]
 
     data =
       case filtro do
         "all" -> produtos
-          _ -> Enum.filter(produtos, fn items -> items.type == filtro end)
+        _ -> Enum.filter(produtos, fn items -> items.type == filtro end)
       end
 
     {:ok, data}
@@ -98,7 +103,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A1",
         value: 0,
         image_url: "teste.com.br",
-        type: "miopia"
+        type: "miopia",
+        boxes: 0
       },
       %{
         id: 1,
@@ -107,7 +113,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A2",
         value: 0,
         image_url: "teste.com.br",
-        type: "miopia"
+        type: "miopia",
+        boxes: 0
       }
     ]
 
@@ -164,8 +171,9 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_info_products(_cliente) do
-    info = [
+  def get_info_product(_cliente, _id) do
+
+    product = [
       %{
         id: 0,
         tests: 30,
@@ -174,28 +182,29 @@ defmodule Tecnovix.App.ScreensTest do
         value: 15100,
         image_url: "teste.com.br",
         type: "miopia",
-        boxs: 2
-      },
-      %{
-        id: 1,
-        tests: 0,
-        credits: 0,
-        title: "Bioview Asférica Cx 6",
-        value: 15100,
-        image_url: "teste.com.br",
-        type: "miopia",
-        caixas: 0
-      },
-      %{
-        id: 4,
-        tests: 30,
-        credits: 500_000,
-        title: "Bioview Asférica Cx 6",
-        value: 15100,
-        image_url: "teste.com.br",
-        type: "miopia",
-        caixas: 0
+        boxes: 2,
+        description: "Produzido com material hidrofilico...",
+        material: "Hidrogel Methafilcon",
+        dk_t: 21,
+        visint: "Sim",
+        espessura: "0,09mm",
+        hidratacao: "55%",
+        assepsia: "Quimica",
+        descarte: "Mensal",
+        desenho: "Asférico",
+        diametro: "14.4",
+        curva_base: 21,
+        esferico: "+8.00 a -10.00"
       }
     ]
+
+    {:ok, product}
+  end
+
+  def get_product_by_id(id) do
+    case Tecnovix.Repo.get_by(Tecnovix.App.ProductModel, id: id) do
+      nil -> {:error, :not_found}
+      product -> {:ok, product}
+    end
   end
 end

@@ -66,14 +66,14 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/current_user")
       |> json_response(200)
 
-    assert current_user["money"] == 5000
-    assert current_user["points"] == 50
+    assert current_user["money"] == 5500
+    assert current_user["points"] == 100
     assert current_user["notifications"]["opens"] == 2
 
     product =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/produtos?filtro=miopia")
+      |> get("/api/cliente/produtos?filtro=Miopía")
       |> json_response(200)
 
     assert product["success"] == true
@@ -109,5 +109,14 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
 
     assert cart["success"] == true
+
+    product =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/product?id=1")
+      |> json_response(200)
+      |> IO.inspect
+
+    assert product["success"] == true
   end
 end

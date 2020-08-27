@@ -15,6 +15,13 @@ defmodule Tecnovix.ClientesModel do
     |> Repo.insert()
   end
 
+  def get_clientes_app(filtro) do
+    query = from c in ClientesSchema,
+            where: c.sit_app == ^filtro
+
+    {:ok, Repo.all(query)}
+  end
+
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(params["data"], fn cliente ->

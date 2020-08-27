@@ -3,7 +3,7 @@ defmodule Tecnovix.NotificacoesClienteSchema do
   import Ecto.Changeset
 
   schema "notificacoes_cliente" do
-    field :cliente_id, :integer
+    belongs_to :cliente, Tecnovix.ClientesSchema
     field :data, :utc_datetime
     field :titulo, :string
     field :descricao, :string

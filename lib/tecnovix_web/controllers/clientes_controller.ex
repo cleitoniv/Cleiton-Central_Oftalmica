@@ -35,12 +35,6 @@ defmodule TecnovixWeb.ClientesController do
     __MODULE__.create(conn, %{"param" => params})
   end
 
-  def run(conn, _params) do
-    conn
-    |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(%{success: true}))
-  end
-
   def show(conn, _params) do
     case conn.private.auth do
       {:ok, %Tecnovix.ClientesSchema{} = cliente} ->
@@ -73,6 +67,18 @@ defmodule TecnovixWeb.ClientesController do
 
       _ ->
         {:error, :invalid_parameter}
+    end
+  end
+
+  def get_clientes_app(conn, %{"filtro" => filtro}) do
+    with {:ok, clientes} <- ClientesModel.get_clientes_app(filtro) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("app_clientes.json", %{clientes: clientes})
+    else
+      _ ->
+      {:error, :invalid_parameter}
     end
   end
 
@@ -169,11 +175,11 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def info_products(conn, _params) do
+  def info_product(conn, %{"id" => id}) do
     stub = Screens.stub()
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, info} <- stub.get_info_products(cliente) do
+    with {:ok, info} <- stub.get_info_product(cliente, id) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

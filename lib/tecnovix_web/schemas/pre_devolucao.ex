@@ -3,7 +3,7 @@ defmodule Tecnovix.PreDevolucaoSchema do
   import Ecto.Changeset
 
   schema "pre_devolucao" do
-    field :cliente_id, :integer
+    belongs_to :client, Tecnovix.ClientesSchema
     field :filial, :string
     field :cod_pre_dev, :string
     field :tipo_pre_dev, :string
@@ -22,7 +22,7 @@ defmodule Tecnovix.PreDevolucaoSchema do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
-      :cliente_id,
+      :client_id,
       :filial,
       :cod_pre_dev,
       :tipo_pre_dev,
@@ -31,7 +31,7 @@ defmodule Tecnovix.PreDevolucaoSchema do
       :loja,
       :status
     ])
-    |> validate_required([:cliente_id, :filial, :cod_pre_dev, :tipo_pre_dev])
+    |> validate_required([:client_id, :filial, :cod_pre_dev, :tipo_pre_dev])
     |> cast_assoc(:items)
   end
 end

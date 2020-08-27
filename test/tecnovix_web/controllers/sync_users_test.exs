@@ -61,4 +61,31 @@ defmodule Tecnovix.SyncUsers do
 
     IO.inspect(cliente)
   end
+
+  test "O Protheus pegar os clientes do APP" do
+    Generator.sync_user("thiagoboeker", "123456")
+    user_param = Generator.user_param()
+    user_param_N = Generator.user_param_N()
+    user_firebase = Generator.user()
+
+    # criando o cliente
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente", %{"param" => user_param})
+    |> recycle()
+    |> post("/api/cliente", %{"param" => user_param_N})
+    |> json_response(201)
+
+    user_login =
+      build_conn()
+      |> post("/api/user_sync/login", %{"username" => "thiagoboeker", "password" => "123456"})
+      |> json_response(200)
+
+    build_conn()
+    |> Generator.put_auth(user_login["access_token"])
+    |> get("/api/sync/clientes?filtro=N")
+    |> json_response(200)
+    |> IO.inspect
+
+  end
 end
