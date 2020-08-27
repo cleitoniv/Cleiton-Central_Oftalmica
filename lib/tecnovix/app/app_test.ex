@@ -44,7 +44,6 @@ defmodule Tecnovix.App.ScreensTest do
         value: 15100,
         image_url: @product_url,
         type: "hipermetropia",
-        boxes: 0,
         boxes: 0
       }
     ]
@@ -171,18 +170,84 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_info_product(_cliente, _id) do
+  def get_info_product(_cliente, id) do
 
     product = [
       %{
         id: 0,
-        tests: 30,
+        tests: 0,
         credits: 0,
-        title: "Bioview Asférica Cx 6",
+        title: "Biosoft Asférica Mensal",
         value: 15100,
-        image_url: "teste.com.br",
+        image_url: @product_url,
         type: "miopia",
-        boxes: 2,
+        boxes: 0,
+        description: "Produzido com material hidrofilico...",
+        material: "Hidrogel Methafilcon",
+        dk_t: 21,
+        visint: "Sim",
+        espessura: "0,09mm",
+        hidratacao: "55%",
+        assepsia: "Quimica",
+        descarte: "Mensal",
+        desenho: "Asférico",
+        diametro: "14.4",
+        curva_base: 21,
+        esferico: "+8.00 a -10.00"
+      },
+      %{
+        id: 1,
+        tests: 0,
+        credits: 0,
+        title: "Bioview Asférica A2",
+        value: 15100,
+        image_url: @product_url,
+        type: "miopia",
+        boxes: 0,
+        description: "Produzido com material hidrofilico...",
+        material: "Hidrogel Methafilcon",
+        dk_t: 21,
+        visint: "Sim",
+        espessura: "0,09mm",
+        hidratacao: "55%",
+        assepsia: "Quimica",
+        descarte: "Mensal",
+        desenho: "Asférico",
+        diametro: "14.4",
+        curva_base: 21,
+        esferico: "+8.00 a -10.00"
+      },
+      %{
+        id: 2,
+        tests: 0,
+        credits: 0,
+        title: "Bioview Asférica A3",
+        value: 15100,
+        image_url: @product_url,
+        type: "miopia",
+        boxes: 0,
+        description: "Produzido com material hidrofilico...",
+        material: "Hidrogel Methafilcon",
+        dk_t: 21,
+        visint: "Sim",
+        espessura: "0,09mm",
+        hidratacao: "55%",
+        assepsia: "Quimica",
+        descarte: "Mensal",
+        desenho: "Asférico",
+        diametro: "14.4",
+        curva_base: 21,
+        esferico: "+8.00 a -10.00"
+      },
+      %{
+        id: 3,
+        tests: 0,
+        credits: 0,
+        title: "Bioview Asférica A4",
+        value: 15100,
+        image_url: @product_url,
+        type: "hipermetropia",
+        boxes: 0,
         description: "Produzido com material hidrofilico...",
         material: "Hidrogel Methafilcon",
         dk_t: 21,
@@ -197,6 +262,8 @@ defmodule Tecnovix.App.ScreensTest do
         esferico: "+8.00 a -10.00"
       }
     ]
+
+    product = Enum.filter(product, fn product -> product.id == String.to_integer(id) end)
 
     {:ok, product}
   end
