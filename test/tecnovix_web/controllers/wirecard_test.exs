@@ -13,8 +13,7 @@ defmodule Tecnovix.Test.Wirecard do
     user_param = Generator.user_param()
     paciente = %{"paciente" => "Victor"}
     params = TestHelp.single_json("single_descricao_generica_do_produto.json")
-    DescricaoModel.create(params)
-    |> IO.inspect
+    {:ok, descricao} = DescricaoModel.create(params)
 
     cliente =
       build_conn()
@@ -23,8 +22,11 @@ defmodule Tecnovix.Test.Wirecard do
       |> json_response(201)
       |> Map.get("data")
 
-    {:ok, items} = TestHelp.items("items.json")
     {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
+    {:ok, items} = TestHelp.items("items.json")
+
+    items =
+      Enum.map(items, fn x -> Map.put(x, "descricao_generica_do_produto_id", descricao.id) end)
 
     data =
       build_conn()
@@ -44,6 +46,8 @@ defmodule Tecnovix.Test.Wirecard do
     user_param = Generator.user_param()
     user_client_param = Generator.users_cliente()
     paciente = %{"paciente" => "Victor"}
+    params = TestHelp.single_json("single_descricao_generica_do_produto.json")
+    {:ok, descricao} = DescricaoModel.create(params)
 
     cliente =
       build_conn()
@@ -63,6 +67,9 @@ defmodule Tecnovix.Test.Wirecard do
     {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
     {:ok, usuarioAuth} = Firebase.sign_in(%{email: user_client["email"], password: "123456"})
     usuarioAuth = Jason.decode!(usuarioAuth.body)
+
+    items =
+      Enum.map(items, fn x -> Map.put(x, "descricao_generica_do_produto_id", descricao.id) end)
 
     data =
       build_conn()

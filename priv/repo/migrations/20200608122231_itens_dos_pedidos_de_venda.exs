@@ -4,7 +4,7 @@ defmodule Tecnovix.Repo.Migrations.ItensDosPedidosDeVenda do
   def change do
     create table(:itens_dos_pedidos_de_venda) do
       add :pedido_de_venda_id, :integer
-      add :descricao_generica_do_produto_id, :integer
+      add :descricao_generica_do_produto_id, references(:descricao_generica_do_produto)
       add :filial, :string, size: 6
       add :nocontrato, :string, size: 6
       add :produto, :string, size: 15

@@ -3,7 +3,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
   import Ecto.Changeset
 
   schema "itens_dos_pedidos_de_venda" do
-    belongs_to :descricao_generica_do_produto_id, Tecnovix.DescricaoGenericaDoProdutoSchema
+    belongs_to :descricao_generica_do_produto, Tecnovix.DescricaoGenericaDoProdutoSchema
     field :filial, :string
     field :nocontrato, :string
     field :produto, :string
@@ -52,6 +52,9 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :serie_nf,
       :num_pedido
     ])
+    |> foreign_key_constraint(:descricao_generica_do_produto_id,
+      name: :descricao_generica_do_produto_id
+    )
     |> validate_required([
       :pedido_de_venda_id,
       :descricao_generica_do_produto_id,

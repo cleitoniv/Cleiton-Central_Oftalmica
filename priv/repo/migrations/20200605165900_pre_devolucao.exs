@@ -3,7 +3,7 @@ defmodule Tecnovix.Repo.Migrations.PreDevolucao do
 
   def change do
     create table(:pre_devolucao) do
-      add :cliente_id, :integer
+      add :client_id, references(:clientes)
       add :filial, :string, size: 4
       add :cod_pre_dev, :string, size: 6
       add :tipo_pre_dev, :string, size: 1

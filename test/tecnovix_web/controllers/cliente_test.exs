@@ -42,19 +42,6 @@ defmodule TecnovixWeb.UsersTest do
     refute user_param["cnpj_cpf"] == user["cnpj_cpf"]
   end
 
-  test "logs cliente" do
-    logs_param = Generator.logs_param()
-    user_firebase = Generator.user()
-    user_param = Generator.user_param()
-
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente", %{"param" => user_param})
-    |> recycle()
-    |> post("/api/cliente/logs", %{"param" => logs_param})
-    |> json_response(200)
-  end
-
   test "update" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
@@ -152,23 +139,23 @@ defmodule TecnovixWeb.UsersTest do
 
     user_client_firebase = Generator.create_user_firebase(user_client["email"])
 
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/atend_pref_cliente", %{
-      "param" => %{"cliente_id" => user["id"], "cod_cliente" => "1234", "seg_tarde" => 1}
-    })
-    |> recycle()
-    |> post("/api/atend_pref_cliente", %{
-      "param" => %{"cliente_id" => user["id"], "cod_cliente" => "5678", "seg_tarde" => 1}
-    })
-    |> recycle()
-    |> Generator.put_auth(user_client_firebase["idToken"])
-    |> post("/api/atend_pref_cliente", %{
-      "param" => %{"cliente_id" => user_client["id"], "cod_cliente" => "1224", "sab_manha" => 1}
-    })
-    |> json_response(201)
-
-    Tecnovix.Repo.all(Tecnovix.AtendPrefClienteSchema)
+    # build_conn()
+    # |> Generator.put_auth(user_firebase["idToken"])
+    # |> post("/api/atend_pref_cliente", %{
+    #   "param" => %{"cliente_id" => user["id"], "cod_cliente" => "1234", "seg_tarde" => 1}
+    # })
+    # |> recycle()
+    # |> post("/api/atend_pref_cliente", %{
+    #   "param" => %{"cliente_id" => user["id"], "cod_cliente" => "5678", "seg_tarde" => 1}
+    # })
+    # |> recycle()
+    # |> Generator.put_auth(user_client_firebase["idToken"])
+    # |> post("/api/atend_pref_cliente", %{
+    #   "param" => %{"cliente_id" => user_client["id"], "cod_cliente" => "1224", "sab_manha" => 1}
+    # })
+    # |> json_response(201)
+    #
+    # Tecnovix.Repo.all(Tecnovix.AtendPrefClienteSchema)
   end
 
   test "show cliente/usuario and atendimento preferencial cliente" do
@@ -192,34 +179,33 @@ defmodule TecnovixWeb.UsersTest do
 
     user_client_firebase = Generator.create_user_firebase(user_client["email"])
 
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/atend_pref_cliente", %{
-      "param" => %{"cliente_id" => user["id"], "cod_cliente" => "4321", "seg_tarde" => 1}
-    })
-    |> recycle()
-    |> get("/api/cliente")
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(user_firebase["idToken"])
+    # |> post("/api/atend_pref_cliente", %{
+    #   "param" => %{"cliente_id" => user["id"], "cod_cliente" => "4321", "seg_tarde" => 1}
+    # })
+    # |> recycle()
+    # |> get("/api/cliente")
+    # |> json_response(200)
   end
 
-  test "Criando uma Pre Devoluçao pelo cliente" do
-    user_firebase = Generator.user()
-    user_param = Generator.user_param()
-    contrato = TestHelp.single_json("single_contrato_de_parceria.json")
-
-    cliente =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente", %{"param" => user_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    single_param = TestHelp.single_json("single_devolucao_and_items0.json")
-
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente/pre_devolucao", %{"param" => single_param})
-    |> json_response(200)
-    |> IO.inspect()
-  end
+  # test "Criando uma Pre Devoluçao pelo cliente" do
+  #   user_firebase = Generator.user()
+  #   user_param = Generator.user_param()
+  #   contrato = TestHelp.single_json("single_contrato_de_parceria.json")
+  #
+  #   cliente =
+  #     build_conn()
+  #     |> Generator.put_auth(user_firebase["idToken"])
+  #     |> post("/api/cliente", %{"param" => user_param})
+  #     |> json_response(201)
+  #     |> Map.get("data")
+  #
+  #   single_param = TestHelp.single_json("single_devolucao_and_items0.json")
+  #
+  #   build_conn()
+  #   |> Generator.put_auth(user_firebase["idToken"])
+  #   |> post("/api/cliente/pre_devolucao", %{"param" => single_param})
+  #   |> json_response(200)
+  # end
 end

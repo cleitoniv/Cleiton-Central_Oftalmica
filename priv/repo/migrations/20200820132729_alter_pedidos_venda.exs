@@ -4,7 +4,7 @@ defmodule Tecnovix.Repo.Migrations.AlterPedidosVenda do
   def change do
     alter table(:pedidos_de_venda) do
       remove :cliente_id
-      add :cliente_id, references(:clientes)
+      add :client_id, references(:clientes)
     end
   end
 end

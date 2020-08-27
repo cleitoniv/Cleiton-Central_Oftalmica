@@ -62,6 +62,7 @@ defmodule TecnovixWeb.Router do
       post "/pedidos_de_venda", TecnovixWeb.PedidosDeVendaController, :insert_or_update
       post "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :insert_or_update
       post "/vendedores", TecnovixWeb.VendedoresController, :insert_or_update
+      get "/clientes", TecnovixWeb.ClientesController, :get_clientes_app
     end
 
     scope "/atend_pref_cliente" do
@@ -92,6 +93,7 @@ defmodule TecnovixWeb.Router do
       get "/products_credits", TecnovixWeb.ClientesController, :products_credits
       get "/orders", TecnovixWeb.ClientesController, :orders
       get "/cart", TecnovixWeb.ClientesController, :cart
+      get "/product", TecnovixWeb.ClientesController, :info_product
       post "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :create
     end
 

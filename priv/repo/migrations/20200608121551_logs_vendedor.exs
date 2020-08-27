@@ -3,7 +3,7 @@ defmodule Tecnovix.Repo.Migrations.LogsVendedor do
 
   def change do
     create table(:logs_vendedor) do
-      add :vendedor_id, :integer
+      add :vendedor_id, references(:vendedores)
       add :data, :utc_datetime
       add :ip, :string, size: 45
       add :dispositivo, :string, size: 255

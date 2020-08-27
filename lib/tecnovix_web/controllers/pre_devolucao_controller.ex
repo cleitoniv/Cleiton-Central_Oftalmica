@@ -23,7 +23,8 @@ defmodule TecnovixWeb.PreDevolucaoController do
       |> put_resp_content_type("application/json")
       |> render("devolucao.json", %{item: devolucao})
     else
-      _ ->
+      v ->
+        IO.inspect(v)
         {:error, :not_created}
     end
   end
