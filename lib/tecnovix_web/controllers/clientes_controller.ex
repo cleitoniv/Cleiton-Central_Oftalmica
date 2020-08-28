@@ -201,6 +201,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def get_cards(conn, _params) do
     stub = Screens.stub()
+
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
