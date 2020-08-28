@@ -272,4 +272,27 @@ defmodule TecnovixWeb.UsersTest do
     |> get("/api/cliente/cards")
     |> json_response(200)
   end
+
+  test "Inserindo um cartão na conta cliente" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    params_card = Generator.cartao_cliente(cliente["id"])
+
+    card =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/card", %{"param" => params_card})
+      |> json_response(200)
+      |> IO.inspect
+
+    assert card["success"] == true
+  end
 end

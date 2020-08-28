@@ -97,6 +97,7 @@ defmodule TecnovixWeb.Router do
       get "/detail_order", TecnovixWeb.ClientesController, :detail_order
       get "/cards", TecnovixWeb.ClientesController, :get_cards
       post "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :create
+      post "/card", TecnovixWeb.CartaoCreditoClienteController, :create
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
