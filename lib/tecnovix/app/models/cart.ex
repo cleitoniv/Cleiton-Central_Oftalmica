@@ -3,7 +3,7 @@ defmodule Tecnovix.App.CartModel do
   import Ecto.Changeset
 
   embedded_schema do
-    field :rate, :integer
+    field :delivery_fee, :integer
     field :total, :integer
 
     embeds_many :products, Products do
@@ -16,8 +16,8 @@ defmodule Tecnovix.App.CartModel do
 
   def changeset(changeset, params \\ %{}) do
     changeset
-    |> cast(params, [:rate, :total])
+    |> cast(params, [:delivery_fee, :total])
     |> cast_embed(:products)
-    |> validate_required([:rate, :total, :products])
+    |> validate_required([:delivery_fee, :total, :products])
   end
 end

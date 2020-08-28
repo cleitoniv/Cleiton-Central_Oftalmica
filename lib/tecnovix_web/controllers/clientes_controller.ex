@@ -186,4 +186,16 @@ defmodule TecnovixWeb.ClientesController do
       |> send_resp(200, Jason.encode!(%{success: true, data: info}))
     end
   end
+
+  def detail_order(conn, _params) do
+    stub = Screens.stub()
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, detail} <- stub.get_detail_order(cliente) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: detail}))
+    end
+  end
 end

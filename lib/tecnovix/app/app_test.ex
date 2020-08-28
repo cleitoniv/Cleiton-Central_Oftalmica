@@ -161,7 +161,7 @@ defmodule Tecnovix.App.ScreensTest do
           quantity: 2,
           buy_type: "Avulso"
         },
-        rate: 10000,
+        delivery_fee: 10000,
         total: 40000
       }
     ]
@@ -274,5 +274,22 @@ defmodule Tecnovix.App.ScreensTest do
       nil -> {:error, :not_found}
       product -> {:ok, product}
     end
+  end
+
+  @impl true
+  def get_detail_order(_cliente) do
+    detail =
+    %{
+      paciente: "Marcos Barbosa Santos",
+      cliente: 205,
+      data_nascimento: "1992-08-20",
+      olhos: "Olho direito",
+      grau: "-1,00",
+      cilindro: "-1,25",
+      eixo: 50,
+      quantidade: 2
+    }
+
+    {:ok, detail}
   end
 end
