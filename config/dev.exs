@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :tecnovix, Tecnovix.Repo,
   username: "postgres",
-  password: "vitinho01",
+  password: "postgres",
   database: "tecnovix_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
@@ -82,12 +82,16 @@ config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 
 config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"
 config :tecnovix, :salt, "SALT"
-config :tecnovix, :firebase_api_key_client, "AIzaSyB48TsW9wZvwqfclaygSlW83WXNukqR45o"
+config :tecnovix, :firebase_api_key_client, "AIzaSyDz9lMXSUtxLxUHRdzl1G47VtlOpCa_ynM"
 config :tecnovix, :firebase_api_key_vendor, "AIzaSyAw-mBe2kkFmslL0ryrgYY0_9jIbKWWkJQ"
+config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
 
 config :tecnovix,
        :sync_users_salt,
        "B9cwPTrRRrk/W+4psbuf2AI7Z6G/ncMDdunFXp52LqpwgiBTVUCYyBbjbre90S2v"
+
+config :tecnovix, :protheus_username, "TECNOVIX"
+config :tecnovix, :protheus_password, "TecnoVix200505"
 
 config :tecnovix, Tecnovix.Mailer,
   adapter: Bamboo.LocalAdapter,

@@ -8,7 +8,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def create(conn, %{"param" => params}) do
     with {:ok, user} <- UsuariosClienteModel.create(params),
-          {:ok, %{status_code: 200}} <- Firebase.create_user(%{email: user.email, password: user.password}) do
+         {:ok, %{status_code: 200}} <-
+           Firebase.create_user(%{email: user.email, password: user.password}) do
       # verificando se o email foi enviado com sucesso
       case Email.send_email({user.nome, user.email}) do
         {_send, {:delivered_email, _email}} ->

@@ -34,5 +34,6 @@ defmodule Tecnovix.VendedoresSchema do
       :moip_acess_token
     ])
     |> validate_required([:codigo, :cnpj_cpf])
+    |> unique_constraint(:vendedores_constraint)
   end
 end

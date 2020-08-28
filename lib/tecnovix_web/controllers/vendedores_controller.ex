@@ -6,10 +6,11 @@ defmodule TecnovixWeb.VendedoresController do
   action_fallback Tecnovix.Resources.Fallback
 
   def insert_or_update(conn, params) do
-    with {:ok, _vendedor} <- VendedoresModel.insert_or_update(params) do
+    with {:ok, vendedor} <- VendedoresModel.insert_or_update(params) do
       conn
+      |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{sucess: true}))
+      |> render("vendedores.json", %{item: vendedor})
     end
   end
 end

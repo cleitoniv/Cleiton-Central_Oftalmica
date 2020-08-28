@@ -35,6 +35,7 @@ defmodule TecnovixWeb.Router do
   scope "/api" do
     pipe_through :api
 
+    post "/first_acess", TecnovixWeb.ClientesController, :first_acess
     post "/user_sync/login", TecnovixWeb.SyncUsersController, :login
 
     scope "/sync" do
@@ -61,6 +62,7 @@ defmodule TecnovixWeb.Router do
       post "/pedidos_de_venda", TecnovixWeb.PedidosDeVendaController, :insert_or_update
       post "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :insert_or_update
       post "/vendedores", TecnovixWeb.VendedoresController, :insert_or_update
+      get "/clientes", TecnovixWeb.ClientesController, :get_clientes_app
     end
 
     scope "/atend_pref_cliente" do
@@ -81,10 +83,19 @@ defmodule TecnovixWeb.Router do
       post "/", TecnovixWeb.ClientesController, :create_user
       get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
       pipe_through :cliente
+      get "/current_user", TecnovixWeb.ClientesController, :current_user
       get "/", TecnovixWeb.ClientesController, :show
-      post "/logs", TecnovixWeb.LogsClienteController, :create_logs
-      get "/message", TecnovixWeb.ClientesController, :run
       post "/cliente_user", TecnovixWeb.UsuariosClienteController, :create_user
+      post "/pedidos", TecnovixWeb.PedidosDeVendaController, :create
+      post "/pedido/credito_financeiro", TecnovixWeb.CreditoFinanceiroController, :create
+      get "/produtos", TecnovixWeb.ClientesController, :products
+      get "/offers", TecnovixWeb.ClientesController, :offers
+      get "/products_credits", TecnovixWeb.ClientesController, :products_credits
+      get "/orders", TecnovixWeb.ClientesController, :orders
+      get "/cart", TecnovixWeb.ClientesController, :cart
+      get "/product/:id", TecnovixWeb.ClientesController, :info_product
+      get "/detail_order", TecnovixWeb.ClientesController, :detail_order
+      post "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :create
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

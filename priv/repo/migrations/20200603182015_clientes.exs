@@ -33,9 +33,6 @@ defmodule Tecnovix.Repo.Migrations.Clientes do
       timestamps(type: :utc_datetime)
     end
 
-    create unique_index(:clientes, [:uid])
-    create unique_index(:clientes, [:codigo])
-    create unique_index(:clientes, [:email])
-    create unique_index(:clientes, [:cnpj_cpf])
+    create unique_index(:clientes, [:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint)
   end
 end

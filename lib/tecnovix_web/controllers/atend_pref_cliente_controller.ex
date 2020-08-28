@@ -16,15 +16,16 @@ defmodule TecnovixWeb.AtendPrefClienteController do
   end
 
   def insert_or_update(conn, params) do
-    with {:ok, _atend_pref} <- AtendPrefClienteModel.insert_or_update(params) do
+    with {:ok, atend_pref} <- AtendPrefClienteModel.insert_or_update(params) do
       conn
+      |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{sucess: true}))
+      |> render("atends.json", %{item: atend_pref})
     end
   end
 
-  #SOMENTE O REPRESENTANTE PODERAR ALTERAR O ATENDIMENTO PREFERENCIAL
-  #USUARIO CLIENTE E O CLIENTE SÓ PODERAR VER
+  # SOMENTE O REPRESENTANTE PODERAR ALTERAR O ATENDIMENTO PREFERENCIAL
+  # USUARIO CLIENTE E O CLIENTE SÓ PODERAR VER
 
   def atend_pref(conn, %{"param" => params}) do
     {:ok, cliente} = conn.private.auth

@@ -1,0 +1,55 @@
+{
+  "ownId": "id_pedido",
+  "amount": {
+    "currency": "BRL",
+    "subtotals": {
+      "shipping": 1000
+    }
+  },
+  "items": [
+    {
+      "product": "Descrição do pedido",
+      "category": "VIDEO_GAME_SOFTWARE",
+      "quantity": 1,
+      "detail": "Mais info...",
+      "price": 22000
+    }
+  ],
+  "customer": {
+      "ownId": "meu_id_customer",
+      "fullname": "João Silva",
+      "email": "joao@email.com",
+      "birthDate": "1990-10-22",
+      "taxDocument": {
+        "type": "CPF",
+        "number": "22288866644"
+      },
+      "phone": {
+        "countryCode": "55",
+        "areaCode": "11",
+        "number": "55552266"
+      },
+      "shippingAddress": {
+        "city": "São Paulo",
+        "complement": "10",
+        "district": "Itaim Bibi",
+        "street": "Avenida Faria Lima",
+        "streetNumber": "500",
+        "zipCode": "01234000",
+        "state": "SP",
+        "country": "BRA"
+      }
+  },
+  "receivers": [
+    {
+      "type": "SECONDARY",
+      "feePayor": false,
+      "moipAccount": {
+        "id": "MPA-E3C8493A06AE"
+      },
+      "amount": {
+        "fixed": 5000
+      }
+    }
+  ]
+}

@@ -3,8 +3,8 @@ defmodule Tecnovix.Repo.Migrations.CreditoFinanceiroTemCartaoCredito do
 
   def change do
     create table(:credito_financeiro_tem_cartao_credito) do
-      add :credito_financeiro_id, :integer
-      add :cartao_credito_id, :integer
+      add :credito_financeiro_id, references(:credito_financeiro)
+      add :cartao_credito_id, references(:cartao_credito_cliente)
 
       timestamps()
     end

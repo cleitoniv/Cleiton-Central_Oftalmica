@@ -4,20 +4,21 @@ defmodule Tecnovix.ItensDosPedidosDeVendaModel do
   alias Tecnovix.ItensDosPedidosDeVendaSchema, as: ItensSchema
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(data, %{}, fn itens, _acc ->
-      with nil <-
-             Repo.get_by(ItensSchema,
-               filial: itens["filial"],
-               num_pedido: itens["num_pedido"],
-               produto: itens["produto"],
-               quantidade: itens["quantidade"]
-             ) do
-        create(itens)
-      else
-        changeset ->
-          __MODULE__.update(changeset, itens)
-      end
-    end)
+    {:ok,
+     Enum.map(data, fn itens ->
+       with nil <-
+              Repo.get_by(ItensSchema,
+                filial: itens["filial"],
+                num_pedido: itens["num_pedido"],
+                produto: itens["produto"],
+                quantidade: itens["quantidade"]
+              ) do
+         create(itens)
+       else
+         changeset ->
+           __MODULE__.update(changeset, itens)
+       end
+     end)}
   end
 
   def insert_or_update(

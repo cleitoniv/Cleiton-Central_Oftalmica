@@ -4,7 +4,8 @@ defmodule Tecnovix.PedidosDeVendaSchema do
   alias Tecnovix.ItensDosPedidosDeVendaSchema
 
   schema "pedidos_de_venda" do
-    field :cliente_id, :integer
+    belongs_to :client, Tecnovix.ClientesSchema
+    field :order_id, :string
     field :filial, :string
     field :numero, :string
     field :cliente, :string
@@ -24,7 +25,8 @@ defmodule Tecnovix.PedidosDeVendaSchema do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
-      :cliente_id,
+      :order_id,
+      :client_id,
       :filial,
       :numero,
       :cliente,
@@ -34,7 +36,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :vendedor_1,
       :status_ped
     ])
-    |> validate_required([:cliente_id, :filial])
+    |> validate_required([:client_id])
     |> cast_assoc(:items)
   end
 end

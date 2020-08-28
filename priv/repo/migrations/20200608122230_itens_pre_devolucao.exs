@@ -4,7 +4,7 @@ defmodule Tecnovix.Repo.Migrations.ItensPreDevolucao do
   def change do
     create table(:itens_pre_devolucao) do
       add :pre_devolucao_id, :integer
-      add :descricao_generica_do_produto_id, :integer
+      add :descricao_generica_do_produto_id, references(:descricao_generica_do_produto)
       add :sub_descricao_generica_do_produto_id, :integer
       add :filial, :string, size: 4
       add :cod_pre_dev, :string, size: 6

@@ -3,12 +3,12 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
   import Ecto.Changeset
 
   schema "credito_financeiro" do
-    field :cliente_id, :integer
+    belongs_to :cliente, Tecnovix.ClientesSchema
     field :valor, :decimal
     field :desconto, :integer
     field :tipo_pagamento, :string
     field :wirecard_pedido_id, :string
-    field :wirecard_pagemento_id, :string
+    field :wirecard_pagamento_id, :string
     field :wirecard_reembolso_id, :string
 
     timestamps()
@@ -22,7 +22,7 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
       :desconto,
       :tipo_pagamento,
       :wirecard_pedido_id,
-      :wirecard_pagemento_id,
+      :wirecard_pagamento_id,
       :wirecard_reembolso_id
     ])
     |> validate_required([:cliente_id])

@@ -9,15 +9,30 @@ defmodule Tecnovix.ClientesModel do
     dynamic([c], c.sit_app == ^params["ystapp"])
   end
 
+  def create_first_acess(params) do
+    %ClientesSchema{}
+    |> ClientesSchema.first_acess(params)
+    |> Repo.insert()
+  end
+
+  def get_clientes_app(filtro) do
+    query =
+      from c in ClientesSchema,
+        where: c.sit_app == ^filtro
+
+    {:ok, Repo.all(query)}
+  end
+
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(params["data"], %{}, fn cliente, _acc ->
-      with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
-        create(cliente)
-      else
-        changeset ->
-          __MODULE__.update(changeset, cliente)
-      end
-    end)
+    {:ok,
+     Enum.map(params["data"], fn cliente ->
+       with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
+         create(cliente)
+       else
+         changeset ->
+           __MODULE__.update(changeset, cliente)
+       end
+     end)}
   end
 
   def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do

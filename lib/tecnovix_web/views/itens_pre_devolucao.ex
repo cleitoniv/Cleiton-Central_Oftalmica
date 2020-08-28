@@ -23,4 +23,8 @@ defmodule TecnovixWeb.ItensPreDevolucaoView do
       tipo: item.tipo
     }
   end
+
+  def render("itens_devolucao.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
+  end
 end

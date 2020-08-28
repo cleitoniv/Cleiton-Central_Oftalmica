@@ -9,8 +9,9 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
     field :data_nascimento_titular, :date
     field :primeiros_6_digitos, :string
     field :ultimos_4_digitos, :string
-    field :mes_validade, :integer
-    field :ano_validade, :integer
+    field :mes_validade, :string
+    field :cartao_number, :string
+    field :ano_validade, :string
     field :bandeira, :string
     field :status, :integer
     field :wirecard_cartao_credito_id, :string
@@ -49,7 +50,8 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
       :complemento_endereco_cobranca,
       :bairro_endereco_cobranca,
       :cidade_endereco_cobranca,
-      :estado_endereco_cobranca
+      :estado_endereco_cobranca,
+      :cartao_number
     ])
     |> validate_required([
       :cliente_id,

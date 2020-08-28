@@ -6,10 +6,13 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
   action_fallback Tecnovix.Resources.Fallback
 
   def insert_or_update(conn, params) do
-    with {:ok, _contrato} <- ContratoDeParceriaModel.insert_or_update(params) do
+    with {:ok, contrato} <- ContratoDeParceriaModel.insert_or_update(params) do
+      IO.inspect(contrato)
+
       conn
+      |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{sucess: true}))
+      |> render("contrato.json", %{item: contrato})
     end
   end
 end

@@ -3,21 +3,22 @@ defmodule Tecnovix.ItensPreDevolucaoModel do
   alias Tecnovix.Repo
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(data, %{}, fn itens, _acc ->
-      with nil <-
-             Repo.get_by(ItensSchema,
-               filial: itens["filial"],
-               code_pre_dev: itens["cod_pre_dev"],
-               filial_orig: itens["filial_orig"],
-               produto: itens["produto"],
-               quant: itens["quant"]
-             ) do
-        create(itens)
-      else
-        changeset ->
-          __MODULE__.update(changeset, itens)
-      end
-    end)
+    {:ok,
+     Enum.map(params["data"], fn itens ->
+       with nil <-
+              Repo.get_by(ItensSchema,
+                filial: itens["filial"],
+                code_pre_dev: itens["cod_pre_dev"],
+                filial_orig: itens["filial_orig"],
+                produto: itens["produto"],
+                quant: itens["quant"]
+              ) do
+         create(itens)
+       else
+         changeset ->
+           __MODULE__.update(changeset, itens)
+       end
+     end)}
   end
 
   def insert_or_update(
