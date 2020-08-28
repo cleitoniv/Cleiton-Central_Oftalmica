@@ -12,7 +12,9 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: card})
     else
-      _ -> {:error, :not_created}
+      v ->
+        IO.inspect v 
+        {:error, :not_created}
     end
   end
 end
