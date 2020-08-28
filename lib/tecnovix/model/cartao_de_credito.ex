@@ -107,6 +107,23 @@ defmodule Tecnovix.CartaoDeCreditoModel do
     }
   end
 
+  def detail_card(params, cliente) do
+    card =
+      params
+      |> Map.put("cliente_id", cliente.id)
+      |> Map.put("cpf_titular", cliente.cnpj_cpf)
+      |> Map.put("telefone_titular", cliente.telefone)
+      |> Map.put("data_nascimento_titular", cliente.data_nascimento)
+      |> Map.put("cep_endereco_cobranca", cliente.cep)
+      |> Map.put("logradouro_endereco_cobranca", cliente.endereco)
+      |> Map.put("numero_endereco_cobranca", cliente.numero)
+      |> Map.put("complemento_endereco_cobranca", cliente.complemento)
+      |> Map.put("bairro_endereco_cobranca", cliente.bairro)
+      |> Map.put("cidade_endereco_cobranca", cliente.municipio)
+
+    {:ok, card}
+  end
+
   def get_cartao_cliente(id) do
     case Repo.get_by(CartaoSchema, id: id) do
       nil ->
