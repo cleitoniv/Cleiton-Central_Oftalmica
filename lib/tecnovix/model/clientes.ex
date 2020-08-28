@@ -1,12 +1,22 @@
 defmodule Tecnovix.ClientesModel do
   use Tecnovix.DAO, schema: Tecnovix.ClientesSchema
+  alias Tecnovix.CartaoCreditoClienteSchema, as: Cartao
   alias Tecnovix.Repo
+  import Ecto.Query
   alias Tecnovix.ClientesSchema
   import Ecto.Changeset
   import Ecto.Query
 
   def ystapp_filter(params) do
     dynamic([c], c.sit_app == ^params["ystapp"])
+  end
+
+  def get_cards(cliente) do
+    query =
+      from c in Cartao,
+        where: c.cliente_id == ^cliente.id
+
+    Repo.all(query)
   end
 
   def create_first_acess(params) do
