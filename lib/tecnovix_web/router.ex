@@ -95,6 +95,7 @@ defmodule TecnovixWeb.Router do
       get "/cart", TecnovixWeb.ClientesController, :cart
       get "/product/:id", TecnovixWeb.ClientesController, :info_product
       get "/detail_order", TecnovixWeb.ClientesController, :detail_order
+      get "/cards", TecnovixWeb.ClientesController, :get_cards
       post "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :create
     end
 

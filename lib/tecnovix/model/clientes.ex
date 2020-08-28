@@ -15,6 +15,13 @@ defmodule Tecnovix.ClientesModel do
     |> Repo.insert()
   end
 
+  def get_cliente(id) do
+    case Repo.get_by(ClientesSchema, id: id) do
+      nil -> {:error, :not_found}
+      cliente -> {:ok, cliente}
+    end
+  end
+
   def get_clientes_app(filtro) do
     query =
       from c in ClientesSchema,

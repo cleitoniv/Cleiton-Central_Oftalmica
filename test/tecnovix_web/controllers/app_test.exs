@@ -118,13 +118,13 @@ defmodule Tecnovix.Test.App do
 
     assert product["success"] == true
 
-    detail_order=
+    detail_order =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/detail_order")
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
 
-      assert detail_order["success"] == true
+    assert detail_order["success"] == true
   end
 end

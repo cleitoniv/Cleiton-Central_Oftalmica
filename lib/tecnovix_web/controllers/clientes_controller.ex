@@ -198,4 +198,23 @@ defmodule TecnovixWeb.ClientesController do
       |> send_resp(200, Jason.encode!(%{success: true, data: detail}))
     end
   end
+
+  def get_cards(conn, _params) do
+    {:ok, cliente} =
+      case conn.private.auth do
+        {:ok, %ClientesSchema{} = cliente} ->
+          {:ok, cliente}
+
+        {:ok, %UsuariosClienteSchema{} = usuario} ->
+          ClientesModel.get_cliente(usuario.cliente_id)
+      end
+
+    with {:ok, cards} <- Screens.get_cards(cliente) do
+      conn
+      |> put_status(200)
+      |> put_view(TecnovixWeb.CartaoCreditoClienteView)
+      |> put_resp_content_type("application/json")
+      |> render("cards.json", %{item: cards})
+    end
+  end
 end

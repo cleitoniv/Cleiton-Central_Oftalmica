@@ -4,6 +4,8 @@ defmodule TecnovixWeb.UsersTest do
   alias Tecnovix.TestHelp
   use Bamboo.Test
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
+  alias Tecnovix.CartaoDeCreditoModel, as: CartaoModel
+  alias TecnovixWeb.Auth.Firebase
 
   test "user" do
     user_firebase = Generator.user()
@@ -208,14 +210,66 @@ defmodule TecnovixWeb.UsersTest do
     {:ok, items} = TestHelp.items("items.json")
 
     items =
-      Enum.map(single_param["items"], fn x -> Map.put(x, "descricao_generica_do_produto_id", descricao.id) end)
+      Enum.map(single_param["items"], fn x ->
+        Map.put(x, "descricao_generica_do_produto_id", descricao.id)
+      end)
 
-      map = Map.put(single_param, "items", items)
+    map = Map.put(single_param, "items", items)
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente/pre_devolucao", %{"param" => map})
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
+  end
+
+  test "Pegando os cartões do cliente" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> get("/api/cliente/cards")
+    |> json_response(200)
+  end
+
+  test "Pegando os cartões do cliente com o USUARIO CLIENTE" do
+    user_client_param = Generator.users_cliente()
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
+    {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
+
+    user_client =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    {:ok, usuarioAuth} = Firebase.sign_in(%{email: user_client["email"], password: "123456"})
+    usuarioAuth = Jason.decode!(usuarioAuth.body)
+
+    build_conn()
+    |> Generator.put_auth(usuarioAuth["idToken"])
+    |> get("/api/cliente/cards")
+    |> json_response(200)
   end
 end

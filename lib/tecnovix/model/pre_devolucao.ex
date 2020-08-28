@@ -45,7 +45,7 @@ defmodule Tecnovix.PreDevolucaoModel do
     |> Repo.insert()
   end
 
-  #Ajeitando o mapa da tabela PRE DEVOLUCAO
+  # Ajeitando o mapa da tabela PRE DEVOLUCAO
   def pre_devolucao(cliente, params) do
     params
     |> Map.put("client_id", cliente.id)
@@ -55,7 +55,7 @@ defmodule Tecnovix.PreDevolucaoModel do
     |> Map.put("cliente", cliente.codigo)
   end
 
-  #Ajeitando o mapa da tabela dos Itens
+  # Ajeitando o mapa da tabela dos Itens
   def itens_pre_devolucao(params) do
     params
     |> Map.put("filial", params["filial"])
@@ -64,13 +64,13 @@ defmodule Tecnovix.PreDevolucaoModel do
     |> old_product()
   end
 
-  #Incluindo no mapa de itens, campos e valores sobre o produto novo
+  # Incluindo no mapa de itens, campos e valores sobre o produto novo
   def new_product(params) do
     params
     |> Map.put("prod_subs", params["prod_subs"])
   end
 
-  #Incluindo no mapa de itens, campos e valores sobre o produto velho
+  # Incluindo no mapa de itens, campos e valores sobre o produto velho
   def old_product(params) do
     params
     |> Map.put("num_serie", params["num_serie"])

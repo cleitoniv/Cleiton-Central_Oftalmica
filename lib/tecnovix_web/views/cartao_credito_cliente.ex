@@ -11,7 +11,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteView do
       primeiros_6_digitos: item.primeiros_6_digitos,
       ultimos_4_digitos: item.ultimos_4_digitos,
       mes_validade: item.mes_validade,
-      ano_validade: item.ano_valdiade,
+      ano_validade: item.ano_validade,
       bandeira: item.bandeira,
       status: item.status,
       wirecard_cartao_credito_id: item.wirecard_cartao_credito_id,
@@ -23,5 +23,13 @@ defmodule TecnovixWeb.CartaoCreditoClienteView do
       cidade_endereco_cobranca: item.cidade_endereco_cobranca,
       estado_endereco_cobranca: item.estado_endereco_cobranca
     }
+  end
+
+  def render("card.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
+  end
+
+  def render("cards.json", %{item: item}) do
+    render_many(item, __MODULE__, "card.json", as: :item)
   end
 end

@@ -12,7 +12,10 @@ defmodule TecnovixWeb.PreDevolucaoView do
       cliente: item.cliente,
       loja: item.loja,
       status: item.status,
-      items: render_many(item.items, TecnovixWeb.ItensPreDevolucaoView, "itens_devolucao.json", as: :item)
+      items:
+        render_many(item.items, TecnovixWeb.ItensPreDevolucaoView, "itens_devolucao.json",
+          as: :item
+        )
     }
   end
 

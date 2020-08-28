@@ -278,8 +278,7 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_detail_order(_cliente) do
-    detail =
-    %{
+    detail = %{
       paciente: "Marcos Barbosa Santos",
       cliente: 205,
       data_nascimento: "1992-08-20",
