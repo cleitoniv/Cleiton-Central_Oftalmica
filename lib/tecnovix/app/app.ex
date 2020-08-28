@@ -9,18 +9,7 @@ defmodule Tecnovix.App.Screens do
   @callback get_info_product(cliente :: term, id :: term) :: {:ok, term}
   @callback get_product(cliente :: term, id :: term) :: {:ok, term}
   @callback get_detail_order(cliente :: term) :: {:ok, term}
-
-  alias Tecnovix.CartaoCreditoClienteSchema, as: Cartao
-  alias Tecnovix.Repo
-  import Ecto.Query
-
-  def get_cards(cliente) do
-    query =
-      from c in Cartao,
-        where: c.cliente_id == ^cliente.id
-
-    {:ok, Repo.all(query)}
-  end
+  @callback get_cards(cliente :: term) :: {:ok, term}
 
   def stub() do
     case Mix.env() do

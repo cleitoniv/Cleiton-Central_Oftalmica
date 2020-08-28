@@ -200,6 +200,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def get_cards(conn, _params) do
+    stub = Screens.stub()
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
@@ -209,7 +210,7 @@ defmodule TecnovixWeb.ClientesController do
           ClientesModel.get_cliente(usuario.cliente_id)
       end
 
-    with {:ok, cards} <- Screens.get_cards(cliente) do
+    with {:ok, cards} <- stub.get_cards(cliente) do
       conn
       |> put_status(200)
       |> put_view(TecnovixWeb.CartaoCreditoClienteView)

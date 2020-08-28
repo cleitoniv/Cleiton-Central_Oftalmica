@@ -1,6 +1,6 @@
 defmodule Tecnovix.App.ScreensTest do
   @behavior Tecnovix.App.Screens
-
+  alias Tecnovix.ClientesModel
   @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
 
   def get_cards(cliente) do
@@ -298,5 +298,13 @@ defmodule Tecnovix.App.ScreensTest do
     }
 
     {:ok, detail}
+  end
+
+  @impl true
+  def get_cards(cliente) do
+    case ClientesModel.get_cards(cliente) do
+      nil -> :not_found
+      cards -> {:ok, cards}
+    end
   end
 end
