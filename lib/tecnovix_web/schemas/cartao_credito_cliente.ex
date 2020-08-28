@@ -56,12 +56,9 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
     |> validate_required([
       :cliente_id,
       :nome_titular,
-      :cpf_titular,
-      :primeiros_6_digitos,
-      :ultimos_4_digitos,
+      :cartao_number,
       :mes_validade,
-      :ano_validade,
-      :status
+      :ano_validade
     ])
   end
 end

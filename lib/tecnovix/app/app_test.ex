@@ -3,14 +3,6 @@ defmodule Tecnovix.App.ScreensTest do
   alias Tecnovix.ClientesModel
   @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
 
-  def get_cards(cliente) do
-    query =
-      from c in Cartao,
-        where: c.cliente_id == ^cliente.id
-
-    {:ok, Repo.all(query)}
-  end
-
   @impl true
   def get_product_grid(_cliente, filtro) do
     produtos = [
@@ -303,7 +295,7 @@ defmodule Tecnovix.App.ScreensTest do
   @impl true
   def get_cards(cliente) do
     case ClientesModel.get_cards(cliente) do
-      nil -> :not_found
+      [] -> :not_found
       cards -> {:ok, cards}
     end
   end
