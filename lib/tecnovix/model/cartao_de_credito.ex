@@ -133,4 +133,14 @@ defmodule Tecnovix.CartaoDeCreditoModel do
         {:ok, cartao_cliente}
     end
   end
+
+  def cartao_principal(cliente, params) do
+    params =
+    case Repo.get_by(CartaoSchema, cliente_id: cliente.id) do
+      nil -> Map.put(params, "status", 1)
+      _ -> params
+    end
+
+    {:ok, params}
+  end
 end

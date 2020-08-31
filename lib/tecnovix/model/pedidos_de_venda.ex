@@ -158,4 +158,27 @@ defmodule Tecnovix.PedidosDeVendaModel do
       cliente -> {:ok, cliente}
     end
   end
+
+  def items_order(items) do
+    items =
+    Enum.map(items, fn order ->
+      %{
+        "product" => order["produto"],
+        "category" => "OTHER_CATEGORIES",
+        "quantity" => order["quantidade"],
+        "detail" => "Mais info...",
+        "price" =>
+          convert_price(
+            String.to_float(order["prc_unitario"]) * 100 * String.to_integer(order["quantidade"])
+          )
+      }
+    end)
+
+    {:ok, items}
+  end
+
+  def convert_price(price) do
+    price
+    |> Kernel.trunc()
+  end
 end

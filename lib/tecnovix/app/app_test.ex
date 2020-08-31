@@ -300,4 +300,16 @@ defmodule Tecnovix.App.ScreensTest do
       cards -> {:ok, cards}
     end
   end
+
+  @impl true
+  def get_payments(_cliente) do
+    %{
+      total: 400,
+      number: "**** **** **** 1234",
+      avista: "A vista (5% de desconto)",
+      x2: "2x(3% de desconto)",
+      x3: "3x(2% de desconto)",
+      x4: "4x"
+    }
+  end
 end
