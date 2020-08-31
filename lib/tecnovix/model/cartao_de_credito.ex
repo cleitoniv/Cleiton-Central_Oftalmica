@@ -136,15 +136,19 @@ defmodule Tecnovix.CartaoDeCreditoModel do
 
   def cartao_principal(params, cliente) do
     case get_cc(%{"cliente_id" => cliente.id}) do
-      [] -> Map.put(params, "status", 1)
+      [] ->
+        Map.put(params, "status", 1)
+
       query ->
-      Enum.map(query,
-      fn map ->
-        case map.status do
-          1 -> Repo.update(map, Map.put(map, "status", 0))
-          _ -> map
-        end
-      end)
+        Enum.map(
+          query,
+          fn map ->
+            case map.status do
+              1 -> Repo.update(map, Map.put(map, "status", 0))
+              _ -> map
+            end
+          end
+        )
     end
   end
 
