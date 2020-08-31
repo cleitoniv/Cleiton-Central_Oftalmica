@@ -11,6 +11,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
     with {:ok, params} <- CartaoModel.cartao_principal(params, cliente),
          {:ok, detail_card} <- CartaoModel.detail_card(params, cliente),
          {:ok, card} <- CartaoModel.create(detail_card) do
+           
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

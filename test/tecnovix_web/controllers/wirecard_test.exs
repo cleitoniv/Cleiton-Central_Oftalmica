@@ -51,6 +51,8 @@ defmodule Tecnovix.Test.Wirecard do
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao.id})
       |> json_response(200)
 
+      IO.inspect Tecnovix.Repo.all(Tecnovix.ItensDosPedidosDeVendaSchema)
+
     assert data["sucess"] == true
   end
 

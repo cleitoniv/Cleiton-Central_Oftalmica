@@ -115,7 +115,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     {:ok,
      %{
        "client_id" => cliente.id,
-       "order_id" => Jason.decode!(order.body)["order"]["id"],
+       "order_id" => Jason.decode!(order.body)["id"],
        "filial" => "",
        "numero" => "",
        "cliente" => cliente.codigo,
@@ -124,9 +124,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
        "vendedor_1" => "",
        "status_ped" => 0,
        "items" =>
-         Enum.reduce(items, [], fn item, acc ->
+         Enum.reduce(items, [], fn map, acc ->
            array =
-             Enum.map(item["items"], fn items ->
+             Enum.map(map["items"], fn items ->
                %{
                  "pedido_de_venda_id" => 1,
                  "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
@@ -136,9 +136,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
                  "quantidade" => items["quantidade"],
                  "prc_unitario" => items["prc_unitario"],
                  "olho" => items["olho"],
-                 "paciente" => items["nome"],
-                 "num_pac" => items["numero"],
-                 "dt_nas_pac" => items["data_nascimento"],
+                 "paciente" => map["paciente"]["nome"],
+                 "num_pac" => map["paciente"]["numero"],
+                 "dt_nas_pac" => map["paciente"]["data_nascimento"],
                  "virtotal" => items["virtotal"],
                  "esferico" => items["esferico"],
                  "cilindrico" => items["cilindrico"],
