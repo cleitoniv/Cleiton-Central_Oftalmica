@@ -175,21 +175,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
               "category" => "OTHER_CATEGORIES",
               "quantity" => order["quantidade"],
               "detail" => "Mais info...",
-              "price" =>
-                convert_price(
-                  String.to_float(order["prc_unitario"]) * 100 *
-                    String.to_integer(order["quantidade"])
-                )
+              "price" => order["prc_unitario"]
             }
           end)
         end
       )
 
     {:ok, order_items}
-  end
-
-  def convert_price(price) do
-    price
-    |> Kernel.trunc()
   end
 end

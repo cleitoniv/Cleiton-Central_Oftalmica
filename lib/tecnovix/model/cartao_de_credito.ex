@@ -135,12 +135,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   end
 
   def cartao_principal(params, cliente) do
-    # query = c in CartaoSchema,
-    #         where: c.cliente_id == ^cliente.id
-    #
-    # query = Repo.all(query)
-    #
-    # case query do
+    # case get_cc(%{"cliente_id" => cliente.id}) do
     #   [] -> Map.put(params, "status", 1)
     #   _ ->
     #   Enum.map(query,

@@ -7,8 +7,8 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :filial, :string
     field :nocontrato, :string
     field :produto, :string
-    field :quantidade, :decimal
-    field :prc_unitario, :decimal
+    field :quantidade, :integer
+    field :prc_unitario, :integer
     field :olho, :string
     field :paciente, :string
     field :num_pac, :string

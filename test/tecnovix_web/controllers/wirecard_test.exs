@@ -22,11 +22,11 @@ defmodule Tecnovix.Test.Wirecard do
       |> Map.get("data")
 
     {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
-    {:ok, items} = TestHelp.items("items.json")
+    {:ok, items_json} = TestHelp.items("items.json")
 
     items =
       Enum.flat_map(
-        items,
+        items_json,
         fn map ->
           Enum.map(
             map["items"],
@@ -39,7 +39,7 @@ defmodule Tecnovix.Test.Wirecard do
 
     items =
       Enum.map(
-        items,
+        items_json,
         fn map ->
           Map.put(map, "items", items)
         end
@@ -50,7 +50,6 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao.id})
       |> json_response(200)
-      |> IO.inspect()
 
     assert data["sucess"] == true
   end

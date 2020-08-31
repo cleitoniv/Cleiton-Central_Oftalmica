@@ -16,7 +16,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
+  def create(conn, %{"items" => items, "id_cartao" => id_cartao} = params) do
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
