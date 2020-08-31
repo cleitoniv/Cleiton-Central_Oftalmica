@@ -27,7 +27,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
       end
 
     %{
-      "ownId" => cliente.codigo,
+      "ownId" => Ecto.UUID.autogenerate(),
       "amount" => %{
         "currency" => "BRL",
         "subtotals" => %{
@@ -135,17 +135,17 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   end
 
   def cartao_principal(params, cliente) do
-    # case get_cc(%{"cliente_id" => cliente.id}) do
-    #   [] -> Map.put(params, "status", 1)
-    #   _ ->
-    #   Enum.map(query,
-    #   fn map ->
-    #     case map.status do
-    #       1 -> Repo.update(map, Map.put(map, "status", 0))
-    #       _ -> map
-    #     end
-    #   end)
-    # end
+    case get_cc(%{"cliente_id" => cliente.id}) do
+      [] -> Map.put(params, "status", 1)
+      query ->
+      Enum.map(query,
+      fn map ->
+        case map.status do
+          1 -> Repo.update(map, Map.put(map, "status", 0))
+          _ -> map
+        end
+      end)
+    end
   end
 
   def verify_status(struct) do
