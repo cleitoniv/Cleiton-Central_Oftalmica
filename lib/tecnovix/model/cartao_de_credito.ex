@@ -8,8 +8,10 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   import Ecto.Query
 
   def get_cc(%{"cliente_id" => cliente_id}) do
-    CartaoSchema
-    |> where([c], c.cliente_id == ^cliente_id)
+    query = from c in CartaoSchema,
+    where: c.cliente_id == ^cliente_id
+
+    Repo.all(query)
   end
 
   def create_cc(params = %{"status" => 1}) do
@@ -135,6 +137,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   end
 
   def cartao_principal(params, cliente) do
+    params =
     case get_cc(%{"cliente_id" => cliente.id}) do
       [] -> Map.put(params, "status", 1)
       query ->
@@ -146,6 +149,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
         end
       end)
     end
+    {:ok, params}
   end
 
   def verify_status(struct) do
@@ -153,7 +157,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
       struct,
       fn map ->
         case map.status do
-          1 -> Repo.update(struct, Map.put(struct, :status, 0))
+          1 -> Repo.update(map, Map.put(struct, :status, 0))
           _ -> struct
         end
       end
