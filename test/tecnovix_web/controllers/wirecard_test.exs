@@ -11,7 +11,6 @@ defmodule Tecnovix.Test.Wirecard do
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // CLIENTE" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
-    paciente = %{"paciente" => "Victor"}
     params = TestHelp.single_json("single_descricao_generica_do_produto.json")
     {:ok, descricao} = DescricaoModel.create(params)
 
@@ -26,17 +25,32 @@ defmodule Tecnovix.Test.Wirecard do
     {:ok, items} = TestHelp.items("items.json")
 
     items =
-      Enum.map(items, fn x -> Map.put(x, "descricao_generica_do_produto_id", descricao.id) end)
+      Enum.flat_map(
+        items,
+        fn map ->
+          Enum.map(
+            map["items"],
+            fn items ->
+              Map.put(items, "descricao_generica_do_produto_id", descricao.id)
+            end
+          )
+        end
+      )
+
+    items =
+      Enum.map(
+        items,
+        fn map ->
+          Map.put(map, "items", items)
+        end
+      )
 
     data =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/pedidos", %{
-        "items" => items,
-        "paciente" => paciente,
-        "id_cartao" => cartao.id
-      })
+      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao.id})
       |> json_response(200)
+      |> IO.inspect()
 
     assert data["sucess"] == true
   end

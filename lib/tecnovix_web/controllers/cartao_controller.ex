@@ -8,7 +8,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
   def create(conn, %{"param" => params}) do
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, params} <- CartaoModel.cartao_principal(cliente, params),
+    with {:ok, params} <- CartaoModel.cartao_principal(params, cliente),
          {:ok, detail_card} <- CartaoModel.detail_card(params, cliente),
          {:ok, card} <- CartaoModel.create(detail_card) do
       conn
@@ -16,7 +16,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: card})
     else
-      _ -> 
+      _ ->
         {:error, :card_not_created}
     end
   end

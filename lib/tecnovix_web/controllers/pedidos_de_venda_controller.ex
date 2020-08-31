@@ -16,7 +16,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def create(conn, %{"items" => items, "paciente" => paciente, "id_cartao" => id_cartao}) do
+  def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
@@ -28,8 +28,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, paciente, cliente, order),
-         {:ok, payment} <- PedidosDeVendaModel.payment(id_cartao, order) do
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order),
+         {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

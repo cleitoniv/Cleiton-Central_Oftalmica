@@ -134,13 +134,34 @@ defmodule Tecnovix.CartaoDeCreditoModel do
     end
   end
 
-  def cartao_principal(cliente, params) do
-    params =
-    case Repo.get_by(CartaoSchema, cliente_id: cliente.id) do
-      nil -> Map.put(params, "status", 1)
-      _ -> params
-    end
+  def cartao_principal(params, cliente) do
+    # query = c in CartaoSchema,
+    #         where: c.cliente_id == ^cliente.id
+    #
+    # query = Repo.all(query)
+    #
+    # case query do
+    #   [] -> Map.put(params, "status", 1)
+    #   _ ->
+    #   Enum.map(query,
+    #   fn map ->
+    #     case map.status do
+    #       1 -> Repo.update(map, Map.put(map, "status", 0))
+    #       _ -> map
+    #     end
+    #   end)
+    # end
+  end
 
-    {:ok, params}
+  def verify_status(struct) do
+    Enum.map(
+      struct,
+      fn map ->
+        case map.status do
+          1 -> Repo.update(struct, Map.put(struct, :status, 0))
+          _ -> struct
+        end
+      end
+    )
   end
 end

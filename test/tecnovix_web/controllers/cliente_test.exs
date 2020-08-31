@@ -294,7 +294,7 @@ defmodule TecnovixWeb.UsersTest do
       |> post("/api/cliente/card", %{"param" => params_card})
       |> json_response(200)
 
-      IO.inspect Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema)
+    # IO.inspect Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema)
 
     assert card["success"] == true
   end

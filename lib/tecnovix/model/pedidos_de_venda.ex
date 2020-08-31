@@ -50,12 +50,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def payment(id_cartao, order) do
+  def payment(%{"id_cartao" => cartao_id}, order) do
     order = Jason.decode!(order.body)
     order_id = order["id"]
 
     payment =
-      id_cartao
+      cartao_id
       |> CartaoModel.get_cartao_cliente()
       |> CartaoModel.payment_params()
       |> PedidosDeVendaModel.wirecard_payment()
@@ -99,8 +99,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
      }}
   end
 
-  def create_pedido(items, paciente, cliente, order) do
-    case pedido_params(items, paciente, cliente, order) do
+  def create_pedido(items, cliente, order) do
+    case pedido_params(items, cliente, order) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -111,7 +111,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pedido_params(items, paciente, cliente, order) do
+  def pedido_params(items, cliente, order) do
     {:ok,
      %{
        "client_id" => cliente.id,
@@ -124,30 +124,35 @@ defmodule Tecnovix.PedidosDeVendaModel do
        "vendedor_1" => "",
        "status_ped" => 0,
        "items" =>
-         Enum.map(items, fn items ->
-           %{
-             "pedido_de_venda_id" => 1,
-             "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
-             "filial" => items["filial"],
-             "nocontrato" => items["nocontrato"],
-             "produto" => items["produto"],
-             "quantidade" => items["quantidade"],
-             "prc_unitario" => items["prc_unitario"],
-             "olho" => items["olho"],
-             "paciente" => paciente["paciente"],
-             "num_pac" => items["num_pac"],
-             "dt_nas_pac" => items["dt_nas_pac"],
-             "virtotal" => items["virtotal"],
-             "esferico" => items["esferico"],
-             "cilindrico" => items["cilindrico"],
-             "eixo" => items["eixo"],
-             "cor" => items["cor"],
-             "adc_padrao" => items["adc_padrao"],
-             "adicao" => items["adicao"],
-             "nota_fiscal" => items["nota_fiscal"],
-             "serie_nf" => items["serie_nf"],
-             "num_pedido" => items["num_pedido"]
-           }
+         Enum.reduce(items, [], fn item, acc ->
+           array =
+             Enum.map(item["items"], fn items ->
+               %{
+                 "pedido_de_venda_id" => 1,
+                 "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
+                 "filial" => items["filial"],
+                 "nocontrato" => items["nocontrato"],
+                 "produto" => items["produto"],
+                 "quantidade" => items["quantidade"],
+                 "prc_unitario" => items["prc_unitario"],
+                 "olho" => items["olho"],
+                 "paciente" => items["nome"],
+                 "num_pac" => items["numero"],
+                 "dt_nas_pac" => items["data_nascimento"],
+                 "virtotal" => items["virtotal"],
+                 "esferico" => items["esferico"],
+                 "cilindrico" => items["cilindrico"],
+                 "eixo" => items["eixo"],
+                 "cor" => items["cor"],
+                 "adc_padrao" => items["adc_padrao"],
+                 "adicao" => items["adicao"],
+                 "nota_fiscal" => items["nota_fiscal"],
+                 "serie_nf" => items["serie_nf"],
+                 "num_pedido" => items["num_pedido"]
+               }
+             end)
+
+           array ++ acc
          end)
      }}
   end
@@ -160,21 +165,27 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def items_order(items) do
-    items =
-    Enum.map(items, fn order ->
-      %{
-        "product" => order["produto"],
-        "category" => "OTHER_CATEGORIES",
-        "quantity" => order["quantidade"],
-        "detail" => "Mais info...",
-        "price" =>
-          convert_price(
-            String.to_float(order["prc_unitario"]) * 100 * String.to_integer(order["quantidade"])
-          )
-      }
-    end)
+    order_items =
+      Enum.flat_map(
+        items,
+        fn item ->
+          Enum.map(item["items"], fn order ->
+            %{
+              "product" => order["produto"],
+              "category" => "OTHER_CATEGORIES",
+              "quantity" => order["quantidade"],
+              "detail" => "Mais info...",
+              "price" =>
+                convert_price(
+                  String.to_float(order["prc_unitario"]) * 100 *
+                    String.to_integer(order["quantidade"])
+                )
+            }
+          end)
+        end
+      )
 
-    {:ok, items}
+    {:ok, order_items}
   end
 
   def convert_price(price) do

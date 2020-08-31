@@ -11,7 +11,7 @@ defmodule Tecnovix.App.Screens do
   @callback get_detail_order(cliente :: term) :: {:ok, term}
   @callback get_cards(cliente :: term) :: {:ok, term}
   @callback get_payments(cliente :: term) :: {:ok, term}
-  
+
   def stub() do
     case Mix.env() do
       :prod -> Tecnovix.App.ScreensProd
