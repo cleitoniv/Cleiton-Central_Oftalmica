@@ -4,14 +4,15 @@ defmodule TecnovixWeb.PreDevolucaoView do
 
   def build(%{item: item}) do
     %{
-      cliente_id: item.cliente_id,
+      client_id: item.client_id,
       filial: item.filial,
       cod_pre_dev: item.cod_pre_dev,
       tipo_pre_dev: item.tipo_pre_dev,
       inclusao: item.inclusao,
       cliente: item.cliente,
       loja: item.loja,
-      status: item.status
+      status: item.status,
+      items: render_many(item.items, TecnovixWeb.ItensPreDevolucaoView, "itens_devolucao.json", as: :item)
     }
   end
 

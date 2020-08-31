@@ -34,18 +34,18 @@ defmodule Tecnovix.PreDevolucaoModel do
     {:error, :invalid_parameter}
   end
 
-  # PRECISA TESTAR A DEVOLUCAO DE TROCA
   def create(cliente, params) do
     devolucao =
       cliente
       |> pre_devolucao(params)
-      |> itens_pre_devolucao(cliente)
+      |> itens_pre_devolucao()
 
     %PreDevolucaoSchema{}
     |> PreDevolucaoSchema.changeset(devolucao)
     |> Repo.insert()
   end
 
+  #Ajeitando o mapa da tabela PRE DEVOLUCAO
   def pre_devolucao(cliente, params) do
     params
     |> Map.put("client_id", cliente.id)
@@ -55,10 +55,27 @@ defmodule Tecnovix.PreDevolucaoModel do
     |> Map.put("cliente", cliente.codigo)
   end
 
-  def itens_pre_devolucao(params, cliente) do
+  #Ajeitando o mapa da tabela dos Itens
+  def itens_pre_devolucao(params) do
     params
     |> Map.put("filial", params["filial"])
     |> Map.put("cod_pre_dev", params["cod_pre_dev"])
+    |> new_product()
+    |> old_product()
+  end
+
+  #Incluindo no mapa de itens, campos e valores sobre o produto novo
+  def new_product(params) do
+    params
+    |> Map.put("prod_subs", params["prod_subs"])
+  end
+
+  #Incluindo no mapa de itens, campos e valores sobre o produto velho
+  def old_product(params) do
+    params
+    |> Map.put("num_serie", params["num_serie"])
+    |> Map.put("quant", params["quant"])
+    |> Map.put("produto", params["produto"])
   end
 
   def get_contrato(cliente) do

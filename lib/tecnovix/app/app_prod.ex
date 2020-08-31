@@ -28,4 +28,8 @@ defmodule Tecnovix.App.ScreensProd do
   @impl true
   def get_info_products(_cliente) do
   end
+
+  @impl true
+  def get_detail_order(_cliente) do
+  end
 end
