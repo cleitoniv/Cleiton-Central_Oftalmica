@@ -27,11 +27,11 @@ defmodule TecnovixWeb.CartaoCreditoClienteView do
     }
   end
 
-  def render("card.json", %{item: item}) do
+  def render("cards.json", %{item: item}) do
     __MODULE__.build(%{item: item})
   end
 
-  def render("cards.json", %{item: item}) do
-    render_many(item, __MODULE__, "card.json", as: :item)
+  def render("cards.json", %{item: item}) when is_list(item) do
+    render_many(item, __MODULE__, "cards.json", as: :item)
   end
 end

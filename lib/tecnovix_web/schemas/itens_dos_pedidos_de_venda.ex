@@ -13,7 +13,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :paciente, :string
     field :num_pac, :string
     field :dt_nas_pac, :string
-    field :virtotal, :decimal
+    field :virtotal, :integer
     field :esferico, :decimal
     field :cilindrico, :decimal
     field :eixo, :integer

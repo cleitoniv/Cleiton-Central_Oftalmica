@@ -1,0 +1,40 @@
+[
+  {
+  "olho_diferentes": {
+    "direito": {
+      "esferico": 0.5,
+      "cilindrico": 5.5,
+      "eixo": 3
+    },
+    "esquerdo": {
+      "esferico": 2.5,
+      "cilindrico": 2.5,
+      "eixo": 5
+    }
+  },
+  "paciente": {
+    "nome": "Victor",
+    "numero": "132",
+    "data_nascimento": "1998-07-07"
+  },
+  "items": [
+    {
+      "filial": "teste",
+      "nocontrato": "teste",
+      "produto": "Lente",
+      "quantidade": 2,
+      "prc_unitario": 15100,
+      "paciente": "Gabriel",
+      "num_pac": "123654",
+      "dt_nas_pac": "12345678",
+      "virtotal": 1.5,
+      "cor": "teste",
+      "adc_padrao": "teste",
+      "adicao": 1.5,
+      "nota_fiscal": "123456789",
+      "serie_nf": "123",
+      "num_pedido": "123456"
+    }
+  ]
+  }
+]
