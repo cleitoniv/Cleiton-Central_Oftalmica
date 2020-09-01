@@ -212,6 +212,7 @@ defmodule TecnovixWeb.ClientesController do
       end
 
     with {:ok, cards} <- stub.get_cards(cliente) do
+      IO.inspect cards
       conn
       |> put_status(200)
       |> put_view(TecnovixWeb.CartaoCreditoClienteView)
