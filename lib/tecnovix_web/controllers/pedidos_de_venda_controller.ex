@@ -16,7 +16,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def create(conn, %{"items" => items, "paciente" => paciente, "id_cartao" => id_cartao}) do
+  def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
@@ -26,13 +26,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
-    items_order = items_order(items)
-
-    with {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, paciente, cliente, order),
-         {:ok, payment} <- PedidosDeVendaModel.payment(id_cartao, order) do
-      IO.inspect(pedido)
-
+    with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
+         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order),
+         {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
@@ -41,25 +38,5 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       _ ->
         {:error, :order_not_created}
     end
-  end
-
-  def items_order(items) do
-    Enum.map(items, fn order ->
-      %{
-        "product" => order["produto"],
-        "category" => "OTHER_CATEGORIES",
-        "quantity" => order["quantidade"],
-        "detail" => "Mais info...",
-        "price" =>
-          convert_price(
-            String.to_float(order["prc_unitario"]) * 100 * String.to_integer(order["quantidade"])
-          )
-      }
-    end)
-  end
-
-  def convert_price(price) do
-    price
-    |> Kernel.trunc()
   end
 end

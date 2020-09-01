@@ -11,7 +11,6 @@ defmodule Tecnovix.Test.Wirecard do
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // CLIENTE" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
-    paciente = %{"paciente" => "Victor"}
     params = TestHelp.single_json("single_descricao_generica_do_produto.json")
     {:ok, descricao} = DescricaoModel.create(params)
 
@@ -23,20 +22,36 @@ defmodule Tecnovix.Test.Wirecard do
       |> Map.get("data")
 
     {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
-    {:ok, items} = TestHelp.items("items.json")
+    {:ok, items_json} = TestHelp.items("items.json")
 
     items =
-      Enum.map(items, fn x -> Map.put(x, "descricao_generica_do_produto_id", descricao.id) end)
+      Enum.flat_map(
+        items_json,
+        fn map ->
+          Enum.map(
+            map["items"],
+            fn items ->
+              Map.put(items, "descricao_generica_do_produto_id", descricao.id)
+            end
+          )
+        end
+      )
+
+    items =
+      Enum.map(
+        items_json,
+        fn map ->
+          Map.put(map, "items", items)
+        end
+      )
 
     data =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/pedidos", %{
-        "items" => items,
-        "paciente" => paciente,
-        "id_cartao" => cartao.id
-      })
+      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao.id})
       |> json_response(200)
+
+      IO.inspect Tecnovix.Repo.all(Tecnovix.ItensDosPedidosDeVendaSchema)
 
     assert data["sucess"] == true
   end
@@ -144,5 +159,52 @@ defmodule Tecnovix.Test.Wirecard do
       |> json_response(200)
 
     assert data["success"] == true
+  end
+
+  test "Criando um pedido com Grau de Olhos Diferentes" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    params = TestHelp.single_json("single_descricao_generica_do_produto.json")
+    {:ok, descricao} = DescricaoModel.create(params)
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
+    {:ok, items_json} = TestHelp.items("olhos_diferentes.json")
+    items =
+      Enum.flat_map(
+        items_json,
+        fn map ->
+          Enum.map(
+            map["items"],
+            fn items ->
+              Map.put(items, "descricao_generica_do_produto_id", descricao.id)
+            end
+          )
+        end
+      )
+
+    items =
+      Enum.map(
+        items_json,
+        fn map ->
+          Map.put(map, "items", items)
+        end
+      )
+
+    data =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao.id})
+      |> json_response(200)
+
+      IO.inspect Tecnovix.Repo.all(Tecnovix.ItensDosPedidosDeVendaSchema)
+
+    assert data["sucess"] == true
   end
 end

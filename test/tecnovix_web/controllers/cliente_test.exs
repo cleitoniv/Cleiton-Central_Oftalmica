@@ -290,8 +290,11 @@ defmodule TecnovixWeb.UsersTest do
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/card", %{"param" => params_card})
+      |> recycle()
+      |> post("/api/cliente/card", %{"param" => params_card})
       |> json_response(200)
-      |> IO.inspect
+
+    # IO.inspect Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema)
 
     assert card["success"] == true
   end

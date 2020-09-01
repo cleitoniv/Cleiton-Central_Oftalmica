@@ -58,8 +58,7 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
       :nome_titular,
       :cpf_titular,
       :mes_validade,
-      :ano_validade,
-      :status
+      :ano_validade
     ])
   end
 end

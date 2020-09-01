@@ -86,7 +86,6 @@ defmodule TecnovixWeb.Support.Generator do
       "ano_validade" => "2022",
       "cartao_number" => "5555666677778884",
       "bandeira" => "Mastercard",
-      "status" => "1",
       "wirecard_cartao_credito_id" => "12",
       "wirecard_cartao_credito_hash" => "1232131231",
       "cep_endereco_cobranca" => "29027445",

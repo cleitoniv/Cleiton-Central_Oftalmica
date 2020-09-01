@@ -7,16 +7,16 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :filial, :string
     field :nocontrato, :string
     field :produto, :string
-    field :quantidade, :decimal
-    field :prc_unitario, :decimal
+    field :quantidade, :integer
+    field :prc_unitario, :integer
     field :olho, :string
     field :paciente, :string
     field :num_pac, :string
     field :dt_nas_pac, :string
-    field :virtotal, :decimal
+    field :virtotal, :integer
     field :esferico, :decimal
     field :cilindrico, :decimal
-    field :eixo, :integer
+    field :eixo, :decimal
     field :cor, :string
     field :adic_padrao, :string
     field :adicao, :decimal
@@ -52,12 +52,8 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :serie_nf,
       :num_pedido
     ])
-    |> foreign_key_constraint(:descricao_generica_do_produto_id,
-      name: :descricao_generica_do_produto_id
-    )
     |> validate_required([
       :pedido_de_venda_id,
-      :descricao_generica_do_produto_id,
       :produto,
       :quantidade
     ])
