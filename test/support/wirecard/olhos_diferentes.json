@@ -2,14 +2,14 @@
   {
   "olho_diferentes": {
     "direito": {
-      "esferico": 0.5,
-      "cilindrico": 5.5,
-      "eixo": 3
+      "degree": 0.5,
+      "cylinder": 5.5,
+      "axis": 3
     },
     "esquerdo": {
-      "esferico": 2.5,
-      "cilindrico": 2.5,
-      "eixo": 5
+      "degree": 2.5,
+      "cylinder": 2.5,
+      "axis": 5
     }
   },
   "paciente": {
