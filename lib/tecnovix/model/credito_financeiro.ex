@@ -13,7 +13,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
     end
   end
 
-  def credito_params(params, order, payment, cliente_id) do
+  def credito_params(_params, order, payment, cliente_id) do
     order_body = Jason.decode!(order.body)
     payment_body = Jason.decode!(payment.body)
 

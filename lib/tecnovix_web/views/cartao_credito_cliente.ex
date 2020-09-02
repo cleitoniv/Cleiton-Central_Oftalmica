@@ -23,8 +23,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteView do
       complemento_endereco_cobranca: item.complemento_endereco_cobranca,
       bairro_endereco_cobranca: item.bairro_endereco_cobranca,
       cidade_endereco_cobranca: item.cidade_endereco_cobranca,
-      estado_endereco_cobranca: item.estado_endereco_cobranca,
-      cartao_number: item.cartao_number
+      estado_endereco_cobranca: item.estado_endereco_cobranca
     }
   end
 
