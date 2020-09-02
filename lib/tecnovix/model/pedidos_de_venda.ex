@@ -401,14 +401,19 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
-    query =
-      from p in PedidosDeVendaSchema,
-        join: i in assoc(p, :items),
-        where: p.client_id == ^cliente_id and p.status_ped == ^filtro,
-        order_by: p.inserted_at,
-        preload: [items: i]
-
-    Repo.all(query)
+    PedidosDeVendaSchema
+    |> preload(:items)
+    |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
+    |> order_by([p], desc: p.inserted_at)
+    |> Repo.all()
+    # query =
+    #   from p in PedidosDeVendaSchema,
+    #     join: i in assoc(p, :items),
+    #     where: p.client_id == ^cliente_id and p.status_ped == ^filtro,
+    #     order_by: p.inserted_at,
+    #     preload: [items: i]
+    #
+    # Repo.all(query)
   end
 
   def create_credito_produto(items, cliente, %{"type" => type, "operation" => operation}) do
