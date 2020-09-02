@@ -8,6 +8,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   alias Tecnovix.ClientesSchema
   alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
+  import Ecto.Query
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
@@ -124,18 +125,26 @@ defmodule Tecnovix.PedidosDeVendaModel do
        "tipo_venda" => "",
        "pd_correios" => "",
        "vendedor_1" => "",
-       "status_ped" => 0,
+       "status_ped" => 1,
        "items" =>
          Enum.reduce(items, [], fn map, acc ->
            array =
              Enum.flat_map(map["items"], fn items ->
                cond do
-                 map["olho_direito"] != nil -> [olho_direito(items, map)]
-                 map["olho_esquerdo"] != nil -> [olho_esquerdo(items, map)]
-                 map["olho_ambos"] != nil -> [olho_direito(items,map), olho_esquerdo(items,map)]
-                 map["olho_diferentes"] != nil -> [olho_diferentes_D(items,map), olho_diferentes_E(items,map)]
+                 map["olho_direito"] != nil ->
+                   [olho_direito(items, map)]
+
+                 map["olho_esquerdo"] != nil ->
+                   [olho_esquerdo(items, map)]
+
+                 map["olho_ambos"] != nil ->
+                   [olho_direito(items, map), olho_esquerdo(items, map)]
+
+                 map["olho_diferentes"] != nil ->
+                   [olho_diferentes_D(items, map), olho_diferentes_E(items, map)]
                end
              end)
+
            array ++ acc
          end)
      }}
@@ -206,57 +215,57 @@ defmodule Tecnovix.PedidosDeVendaModel do
     }
   end
 
-   def olho_diferentes_D(items, map) do
-     %{
-       "pedido_de_venda_id" => 1,
-       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
-       "filial" => items["filial"],
-       "nocontrato" => items["nocontrato"],
-       "produto" => items["produto"],
-       "quantidade" => items["quantidade"],
-       "paciente" => map["paciente"]["nome"],
-       "num_pac" => map["paciente"]["numero"],
-       "dt_nas_pac" => map["paciente"]["data_nascimento"],
-       "prc_unitario" => items["prc_unitario"],
-       "olho" => "D",
-       "virtotal" => items["quantidade"] * items["prc_unitario"],
-       "esferico" => map["olho_diferentes"]["direito"]["degree"],
-       "cilindrico" => map["olho_diferentes"]["direito"]["cylinder"],
-       "eixo" => map["olho_diferentes"]["direito"]["axis"],
-       "cor" => items["cor"],
-       "adc_padrao" => items["adc_padrao"],
-       "adicao" => items["adicao"],
-       "nota_fiscal" => items["nota_fiscal"],
-       "serie_nf" => items["serie_nf"],
-       "num_pedido" => items["num_pedido"]
-     }
-   end
+  def olho_diferentes_D(items, map) do
+    %{
+      "pedido_de_venda_id" => 1,
+      "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
+      "filial" => items["filial"],
+      "nocontrato" => items["nocontrato"],
+      "produto" => items["produto"],
+      "quantidade" => items["quantidade"],
+      "paciente" => map["paciente"]["nome"],
+      "num_pac" => map["paciente"]["numero"],
+      "dt_nas_pac" => map["paciente"]["data_nascimento"],
+      "prc_unitario" => items["prc_unitario"],
+      "olho" => "D",
+      "virtotal" => items["quantidade"] * items["prc_unitario"],
+      "esferico" => map["olho_diferentes"]["direito"]["degree"],
+      "cilindrico" => map["olho_diferentes"]["direito"]["cylinder"],
+      "eixo" => map["olho_diferentes"]["direito"]["axis"],
+      "cor" => items["cor"],
+      "adc_padrao" => items["adc_padrao"],
+      "adicao" => items["adicao"],
+      "nota_fiscal" => items["nota_fiscal"],
+      "serie_nf" => items["serie_nf"],
+      "num_pedido" => items["num_pedido"]
+    }
+  end
 
-   def olho_diferentes_E(items, map) do
-     %{
-       "pedido_de_venda_id" => 1,
-       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
-       "filial" => items["filial"],
-       "nocontrato" => items["nocontrato"],
-       "produto" => items["produto"],
-       "quantidade" => items["quantidade"],
-       "paciente" => map["paciente"]["nome"],
-       "num_pac" => map["paciente"]["numero"],
-       "dt_nas_pac" => map["paciente"]["data_nascimento"],
-       "prc_unitario" => items["prc_unitario"],
-       "olho" => "E",
-       "virtotal" => items["quantidade"] * items["prc_unitario"],
-       "esferico" => map["olho_diferentes"]["esquerdo"]["degree"],
-       "cilindrico" => map["olho_diferentes"]["esquerdo"]["cylinder"],
-       "eixo" => map["olho_diferentes"]["esquerdo"]["axis"],
-       "cor" => items["cor"],
-       "adc_padrao" => items["adc_padrao"],
-       "adicao" => items["adicao"],
-       "nota_fiscal" => items["nota_fiscal"],
-       "serie_nf" => items["serie_nf"],
-       "num_pedido" => items["num_pedido"]
-     }
-   end
+  def olho_diferentes_E(items, map) do
+    %{
+      "pedido_de_venda_id" => 1,
+      "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
+      "filial" => items["filial"],
+      "nocontrato" => items["nocontrato"],
+      "produto" => items["produto"],
+      "quantidade" => items["quantidade"],
+      "paciente" => map["paciente"]["nome"],
+      "num_pac" => map["paciente"]["numero"],
+      "dt_nas_pac" => map["paciente"]["data_nascimento"],
+      "prc_unitario" => items["prc_unitario"],
+      "olho" => "E",
+      "virtotal" => items["quantidade"] * items["prc_unitario"],
+      "esferico" => map["olho_diferentes"]["esquerdo"]["degree"],
+      "cilindrico" => map["olho_diferentes"]["esquerdo"]["cylinder"],
+      "eixo" => map["olho_diferentes"]["esquerdo"]["axis"],
+      "cor" => items["cor"],
+      "adc_padrao" => items["adc_padrao"],
+      "adicao" => items["adicao"],
+      "nota_fiscal" => items["nota_fiscal"],
+      "serie_nf" => items["serie_nf"],
+      "num_pedido" => items["num_pedido"]
+    }
+  end
 
   def order_params(cliente = %ClientesSchema{}, items) do
     fisica_jurid =
@@ -381,5 +390,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
       cartao_cliente ->
         {:ok, cartao_cliente}
     end
+  end
+
+  def get_pedidos(cliente_id, filtro) do
+    query =
+      from p in PedidosDeVendaSchema,
+        join: i in assoc(p, :items),
+        where: p.client_id == ^cliente_id and p.status_ped == ^filtro,
+        order_by: p.inserted_at,
+        preload: [items: i]
+
+    Repo.all(query)
   end
 end

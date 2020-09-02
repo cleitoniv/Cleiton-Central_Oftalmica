@@ -27,7 +27,7 @@ defmodule TecnovixWeb.Support.Generator do
     %{
       "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
       "fisica_jurid" => "F",
-      "cnpj_cpf" => String.slice(Ecto.UUID.autogenerate(), 1..12),
+      "cnpj_cpf" => String.slice(Float.to_string(:rand.uniform()), 2..12),
       "sit_app" => "A",
       "nome" => "Victor",
       "ddd" => "27",

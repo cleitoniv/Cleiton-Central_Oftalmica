@@ -1,6 +1,7 @@
 defmodule Tecnovix.App.ScreensTest do
   @behavior Tecnovix.App.Screens
   alias Tecnovix.ClientesModel
+  alias Tecnovix.PedidosDeVendaModel
 
   @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
 
@@ -278,17 +279,34 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_detail_order(_cliente) do
-    detail = %{
-      paciente: "Marcos Barbosa Santos",
-      cliente: 205,
-      data_nascimento: "1992-08-20",
-      olhos: "Olho direito",
-      grau: "-1,00",
-      cilindro: "-1,25",
-      eixo: 50,
-      quantidade: 2
-    }
+  def get_detail_order(cliente, filtro) do
+    detail =
+      case PedidosDeVendaModel.get_pedidos(cliente.id, filtro) do
+        [] ->
+          {:error, :not_found}
+
+        pedidos ->
+          Enum.map(
+            pedidos,
+            fn map ->
+              Enum.map(
+                map.items,
+                fn items ->
+                  %{
+                    paciente: items.paciente,
+                    cliente: items.num_pac,
+                    data_nascimento: items.dt_nas_pac,
+                    olhos: items.olho,
+                    grau: items.esferico,
+                    cilindro: items.cilindrico,
+                    eixo: items.eixo,
+                    quantidade: items.quantidade
+                  }
+                end
+              )
+            end
+          )
+      end
 
     {:ok, detail}
   end

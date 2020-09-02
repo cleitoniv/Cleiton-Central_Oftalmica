@@ -2,6 +2,11 @@ defmodule Tecnovix.Test.App do
   use TecnovixWeb.ConnCase, async: false
   alias TecnovixWeb.Auth.Firebase
   alias TecnovixWeb.Support.Generator
+  alias Tecnovix.TestHelp
+  alias Tecnovix.CartaoDeCreditoModel, as: CartaoModel
+  alias Tecnovix.TestHelper
+  alias Tecnovix.Resource.Wirecard.Actions
+  alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
   describe "Tela de login e tela de cadastro inicial" do
     test "Cadastro efetuado com sucesso" do
@@ -53,12 +58,54 @@ defmodule Tecnovix.Test.App do
   test "Tela Home" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
+    params = TestHelp.single_json("single_descricao_generica_do_produto.json")
+    {:ok, descricao} = DescricaoModel.create(params)
+    {:ok, items_json} = TestHelp.items("olhos_diferentes.json")
 
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente", %{"param" => user_param})
-    |> json_response(201)
-    |> Map.get("data")
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    cartao = Generator.cartao_cliente(cliente["id"])
+
+    cartao =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/card", %{"param" => cartao})
+      |> json_response(200)
+      |> Map.get("data")
+
+    items =
+      Enum.flat_map(
+        items_json,
+        fn map ->
+          Enum.map(
+            map["items"],
+            fn items ->
+              Map.put(items, "descricao_generica_do_produto_id", descricao.id)
+            end
+          )
+        end
+      )
+
+    items =
+      Enum.map(
+        items_json,
+        fn map ->
+          Map.put(map, "items", items)
+        end
+      )
+
+    data =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
+      |> json_response(200)
+
+    assert data["sucess"] == true
 
     current_user =
       build_conn()
@@ -123,7 +170,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/detail_order")
       |> json_response(200)
-      |> IO.inspect()
 
     assert detail_order["success"] == true
   end

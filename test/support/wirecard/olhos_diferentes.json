@@ -4,12 +4,12 @@
     "direito": {
       "degree": 0.5,
       "cylinder": 5.5,
-      "axis": 3
+      "axis": 3.2
     },
     "esquerdo": {
       "degree": 2.5,
       "cylinder": 2.5,
-      "axis": 5
+      "axis": 5.2
     }
   },
   "paciente": {
