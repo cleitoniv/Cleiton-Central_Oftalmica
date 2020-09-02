@@ -289,22 +289,11 @@ defmodule Tecnovix.App.ScreensTest do
           Enum.map(
             pedidos,
             fn map ->
-              Enum.map(
-                map.items,
-                fn items ->
-                  %{
-                    paciente: items.paciente,
-                    cliente: items.num_pac,
-                    data_nascimento: items.dt_nas_pac,
-                    olhos: items.olho,
-                    grau: items.esferico,
-                    cilindro: items.cilindrico,
-                    eixo: items.eixo,
-                    quantidade: items.quantidade,
-                    valor: items.virtotal
-                  }
-                end
-              )
+              %{
+                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc  end),
+                data_inclusao: map.inserted_at,
+                num_pedido: map.id
+              }
             end
           )
       end
