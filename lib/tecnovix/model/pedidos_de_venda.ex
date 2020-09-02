@@ -409,6 +409,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         preload: [items: i]
 
     Repo.all(query)
+    |> IO.inspect
   end
 
   def create_credito_produto(items, cliente, %{"type" => type, "operation" => operation}) do
