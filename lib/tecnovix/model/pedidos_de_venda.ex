@@ -7,6 +7,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   alias Tecnovix.ClientesSchema
   alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
+  alias Tecnovix.App.ScreensTest
   import Ecto.Query
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
@@ -101,8 +102,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
      }}
   end
 
-  def create_pedido(items, cliente, order, type) do
-    case pedido_params(items, cliente, order, type) do
+  def create_pedido(items, cliente, order, %{"type" => type, "operation" => operation}) do
+    case pedido_params(items, cliente, order, %{"type" => type, "operation" => operation}) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -121,7 +122,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pedido_params(items, cliente, order, type) do
+  def pedido_params(items, cliente, order, %{"type" => type, "operation" => operation}) do
     {:ok,
      %{
        "client_id" => cliente.id,
@@ -132,7 +133,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
        "tipo_venda" => type,
        "pd_correios" => "",
        "vendedor_1" => "",
-       "status_ped" => 1,
+       "operation" => operation,
        "items" =>
          Enum.reduce(items, [], fn map, acc ->
            array =
@@ -410,8 +411,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
     Repo.all(query)
   end
 
-  def create_credito_produto(items, cliente, type) do
-    case pedido_params(items, cliente, "", type) do
+  def create_credito_produto(items, cliente, %{"type" => type, "operation" => operation}) do
+    case pedido_params(items, cliente, "", %{"type" => type, "operation" => operation}) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -420,5 +421,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
       _ ->
         {:error, :pedido_failed}
     end
+  end
+
+  def pagamento_com_produto(cliente, id) do
+    produto = ScreensTest.get_info_product(cliente, id)
   end
 end

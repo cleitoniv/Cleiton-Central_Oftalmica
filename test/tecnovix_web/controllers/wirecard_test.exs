@@ -58,8 +58,9 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
+      |> IO.inspect
 
-    assert data["sucess"] == true
+    assert data["success"] == true
   end
 
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // USUARIO_CLIENTE" do
@@ -104,8 +105,9 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(usuarioAuth["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
+      |> IO.inspect
 
-    assert data["sucess"] == true
+    assert data["success"] == true
   end
 
   test "Criando Pedido e Pagamento do pedido do Credito Financeiro // CLIENTE" do
@@ -233,15 +235,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-
-    # pedidos tela
-    detail_order =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/detail_order?filtro=1")
-      |> json_response(200)
-
-    assert detail_order["success"] == true
-    assert data["sucess"] == true
+      
+    assert data["success"] == true
   end
 end

@@ -182,7 +182,7 @@ defmodule Tecnovix.App.ScreensTest do
         value: 15100,
         image_url: @product_url,
         type: "miopia",
-        boxes: 0,
+        boxes: 2,
         description: "Produzido com material hidrofilico...",
         material: "Hidrogel Methafilcon",
         dk_t: 21,
@@ -300,7 +300,8 @@ defmodule Tecnovix.App.ScreensTest do
                     grau: items.esferico,
                     cilindro: items.cilindrico,
                     eixo: items.eixo,
-                    quantidade: items.quantidade
+                    quantidade: items.quantidade,
+                    valor: items.virtotal
                   }
                 end
               )
