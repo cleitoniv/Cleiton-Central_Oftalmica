@@ -187,11 +187,11 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def detail_order(conn, _params) do
+  def detail_order(conn, %{"filtro" => filtro}) do
     stub = Screens.stub()
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, detail} <- stub.get_detail_order(cliente) do
+    with {:ok, detail} <- stub.get_detail_order(cliente, filtro) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
@@ -212,7 +212,6 @@ defmodule TecnovixWeb.ClientesController do
       end
 
     with {:ok, cards} <- stub.get_cards(cliente) do
-      IO.inspect cards
       conn
       |> put_status(200)
       |> put_view(TecnovixWeb.CartaoCreditoClienteView)

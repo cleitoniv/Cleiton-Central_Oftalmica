@@ -31,7 +31,7 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :card_not_created}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(%{"status" => "Cartão não criado.!"}))
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Cartão não criado."}))
   end
 
   def call(conn, {:error, :order_not_created}) do

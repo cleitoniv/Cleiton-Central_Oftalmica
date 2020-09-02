@@ -13,7 +13,7 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
     field :cartao_number, :string
     field :ano_validade, :string
     field :bandeira, :string
-    field :status, :integer, default: 0
+    field :status, :integer, default: 1
     field :wirecard_cartao_credito_id, :string
     field :wirecard_cartao_credito_hash, :string
     field :cep_endereco_cobranca, :string
