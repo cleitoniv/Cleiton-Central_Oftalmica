@@ -280,24 +280,7 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_detail_order(cliente, filtro) do
-    detail =
-      case PedidosDeVendaModel.get_pedidos(cliente.id, filtro) do
-        [] ->
-          {:error, :not_found}
-
-        pedidos ->
-          Enum.map(
-            pedidos,
-            fn map ->
-              %{
-                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc  end),
-                data_inclusao: map.inserted_at,
-                num_pedido: map.id
-              }
-            end
-          )
-      end
-
+    detail = PedidosDeVendaModel.get_pedidos(cliente.id, filtro)
     {:ok, detail}
   end
 
