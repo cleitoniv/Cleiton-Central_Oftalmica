@@ -220,7 +220,6 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente/pre_devolucao", %{"param" => map})
     |> json_response(200)
-    |> IO.inspect()
   end
 
   test "Pegando os cartões do cliente" do
@@ -289,6 +288,10 @@ defmodule TecnovixWeb.UsersTest do
     card =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/card", %{"param" => params_card})
+      |> recycle()
+      |> post("/api/cliente/card", %{"param" => params_card})
+      |> recycle()
       |> post("/api/cliente/card", %{"param" => params_card})
       |> recycle()
       |> post("/api/cliente/card", %{"param" => params_card})
