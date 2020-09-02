@@ -1,6 +1,5 @@
 defmodule Tecnovix.PedidosDeVendaModel do
   use Tecnovix.DAO, schema: Tecnovix.PedidosDeVendaSchema
-  alias Tecnovix.CartaoDeCreditoModel, as: CartaoModel
   alias Tecnovix.Repo
   alias Tecnovix.PedidosDeVendaSchema
   alias Tecnovix.PedidosDeVendaModel
@@ -102,8 +101,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
      }}
   end
 
-  def create_pedido(items, cliente, order) do
-    case pedido_params(items, cliente, order) do
+  def create_pedido(items, cliente, order, type) do
+    case pedido_params(items, cliente, order, type) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -114,15 +113,23 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pedido_params(items, cliente, order) do
+  def verify_type(type, order) do
+    case type do
+      "A" -> Jason.decode!(order.body)["id"]
+      "C" -> nil
+      "T" -> nil
+    end
+  end
+
+  def pedido_params(items, cliente, order, type) do
     {:ok,
      %{
        "client_id" => cliente.id,
-       "order_id" => Jason.decode!(order.body)["id"],
+       "order_id" => verify_type(type, order),
        "filial" => "",
        "numero" => "",
        "cliente" => cliente.codigo,
-       "tipo_venda" => "",
+       "tipo_venda" => type,
        "pd_correios" => "",
        "vendedor_1" => "",
        "status_ped" => 1,
@@ -401,5 +408,17 @@ defmodule Tecnovix.PedidosDeVendaModel do
         preload: [items: i]
 
     Repo.all(query)
+  end
+
+  def create_credito_produto(items, cliente, type) do
+    case pedido_params(items, cliente, "", type) do
+      {:ok, pedido} ->
+        %PedidosDeVendaSchema{}
+        |> PedidosDeVendaSchema.changeset(pedido)
+        |> Repo.insert()
+
+      _ ->
+        {:error, :pedido_failed}
+    end
   end
 end
