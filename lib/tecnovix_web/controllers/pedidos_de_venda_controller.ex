@@ -28,13 +28,13 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
-         {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
-         {:ok, _pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order, "A") do
+         {:ok, _payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order, %{"type" => "A", "operation" => "Avulso"}) do
 
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{sucess: true, data: Jason.decode!(payment.body)}))
+      |> render("pedidos.json", %{item: pedido})
     else
       v ->
         IO.inspect(v)
@@ -52,7 +52,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
-      with {:ok, pedido} <- PedidosDeVendaModel.create_credito_produto(items, cliente, "C") do
+      with {:ok, pedido} <- PedidosDeVendaModel.create_credito_produto(items, cliente, %{"type" => "C", "operation" => "Remessa"}) do
 
       else
         _ ->

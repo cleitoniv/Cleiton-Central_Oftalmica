@@ -13,7 +13,8 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :tipo_venda_ret_id, :integer
     field :pd_correios, :string
     field :vendedor_1, :string
-    field :status_ped, :integer
+    field :status_ped, :integer, default: 0
+    field :operation, :string
 
     has_many :items, ItensDosPedidosDeVendaSchema,
       foreign_key: :pedido_de_venda_id,
@@ -34,7 +35,8 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :tipo_venda_ret_id,
       :pd_correios,
       :vendedor_1,
-      :status_ped
+      :status_ped,
+      :operation
     ])
     |> validate_required([:client_id])
     |> cast_assoc(:items)

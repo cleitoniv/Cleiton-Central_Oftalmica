@@ -26,4 +26,8 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       num_pedido: item.num_pedido
     }
   end
+
+  def render("itens_pedidos.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
+  end
 end

@@ -105,7 +105,7 @@ defmodule Tecnovix.Test.App do
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
 
-    assert data["sucess"] == true
+    assert data["success"] == true
 
     current_user =
       build_conn()
@@ -168,8 +168,9 @@ defmodule Tecnovix.Test.App do
     detail_order =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/detail_order")
+      |> get("/api/cliente/detail_order?filtro=0")
       |> json_response(200)
+      |> IO.inspect
 
     assert detail_order["success"] == true
   end
