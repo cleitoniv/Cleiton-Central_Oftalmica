@@ -4,6 +4,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   alias Tecnovix.PedidosDeVendaModel
   alias Tecnovix.ClientesSchema
   alias Tecnovix.UsuariosClienteSchema
+  alias Tecnovix.App.Screens
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -57,5 +58,20 @@ defmodule TecnovixWeb.PedidosDeVendaController do
         _ ->
           {:error, :order_not_created}
       end
+  end
+
+  def detail_order_id(conn, %{"pedido_id" => pedido_id}) do
+    stub = Screens.stub()
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, pedido} <- stub.get_pedido_id(pedido_id, cliente.id) do
+
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedidos.json", %{item: pedido})
+    else
+      _ -> {:error, :not_found}
+    end
   end
 end
