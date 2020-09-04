@@ -7,7 +7,7 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
     field :filial, :string
     field :contrato_n, :string
     field :docto_orig, :string
-    field :emissao, :date
+    field :emissao, :date, autogenerate: {Date, :utc_today, []}
     field :cliente, :string
     field :loja, :string
 

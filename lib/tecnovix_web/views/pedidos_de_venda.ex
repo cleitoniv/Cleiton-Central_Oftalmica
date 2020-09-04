@@ -5,6 +5,7 @@ defmodule TecnovixWeb.PedidosDeVendaView do
   def build(%{item: item}) do
     %{
       data: %{
+        id: item.id,
         client_id: item.client_id,
         filial: item.filial,
         numero: item.numero,

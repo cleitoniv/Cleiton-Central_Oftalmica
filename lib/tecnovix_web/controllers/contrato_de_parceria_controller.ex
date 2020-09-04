@@ -13,4 +13,15 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
       |> render("contrato.json", %{item: contrato})
     end
   end
+
+  def create(conn, %{"items" => items}) do
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, items_order} <- ContratoDeParceriaModel.items_order(items),
+         {:ok, order} <- ContratoDeParceriaModel.order(cliente, items_order) do
+
+    else
+      _ -> {:error, :order_not_created}
+    end
+  end
 end

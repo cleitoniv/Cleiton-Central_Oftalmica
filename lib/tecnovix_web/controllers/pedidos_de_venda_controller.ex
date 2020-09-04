@@ -60,16 +60,16 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       end
   end
 
-  def detail_order_id(conn, %{"pedido_id" => pedido_id}) do
+  def detail_order_id(conn, %{"id" => pedido_id}) do
     stub = Screens.stub()
     {:ok, cliente} = conn.private.auth
 
     with {:ok, pedido} <- stub.get_pedido_id(pedido_id, cliente.id) do
-
+      
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> render("pedidos.json", %{item: pedido})
+      |> send_resp(200, Jason.encode!(%{success: true, data: pedido}))
     else
       _ -> {:error, :not_found}
     end

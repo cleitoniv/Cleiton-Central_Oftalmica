@@ -128,7 +128,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
        "client_id" => cliente.id,
        "order_id" => verify_type(type, order),
        "filial" => "",
-       "numero" => "",
+       "numero" => String.slice(Ecto.UUID.autogenerate(), 1..6),
        "cliente" => cliente.codigo,
        "tipo_venda" => type,
        "pd_correios" => "",
@@ -425,8 +425,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedido_id(pedido_id, cliente_id) do
-    PedidosDeVendaSchema
-    |> where([p], p.id == ^pedido_id and p.client_id == ^cliente_id)
-    |> Repo.all()
+    pedido_id = String.to_integer(pedido_id)
+
+    case Repo.get(PedidosDeVendaSchema, pedido_id) do
+      nil -> {:error, :not_found}
+      pedido ->
+        pedido = Repo.preload(pedido, :items)
+        {:ok, pedido}
+    end
   end
 end

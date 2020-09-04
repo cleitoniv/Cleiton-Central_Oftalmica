@@ -315,22 +315,30 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   def get_pedido_id(cliente_id, pedido_id) do
-    with {:ok, pedidos} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
-      Enum.map(pedidos,
-      fn pedido ->
-        Enum.flat_map(pedido,
-        fn item ->
-          %{
-            paciente: item.paciente,
-            num_pedido: item.num_pedido,
-            data_pedido: pedido.inserted_at,
-            data_nascimento: item.dt_nas_pc,
-            nome_produto: item.produto,
-            valor_produto: item.prc_unitario,
-            valor_total: item.virtotal
-          }
-        end)
-      end)
-    end
+    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
+      pedido =
+        %{
+          data_pedido: pedido.inserted_at,
+          num_pedido: pedido.numero,
+          type: pedido.tipo_venda,
+          items:  Enum.map(pedido.items,
+          fn item ->
+            %{
+              paciente: item.paciente,
+              data_nascimento: item.dt_nas_pac,
+              nome_produto: item.produto,
+              valor_produto: item.prc_unitario,
+              quantidade: item.quantidade,
+              valor_total: item.virtotal,
+              olho: item.olho,
+              esferico: item.esferico,
+              eixo: item.eixo,
+              cilindro: item.cilindrico,
+            }
+          end)
+        }
+
+      {:ok, pedido}
+      end
   end
 end
