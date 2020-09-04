@@ -187,7 +187,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => items["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
-      "num_pedido" => items["num_pedido"]
+      "num_pedido" => items["num_pedido"],
+      "url_image" => items["url_image"]
     }
   end
 
@@ -219,7 +220,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => items["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
-      "num_pedido" => items["num_pedido"]
+      "num_pedido" => items["num_pedido"],
+      "url_image" => items["url_image"]
     }
   end
 
@@ -245,7 +247,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => items["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
-      "num_pedido" => items["num_pedido"]
+      "num_pedido" => items["num_pedido"],
+      "url_image" => items["url_image"]
     }
   end
 
@@ -271,7 +274,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => items["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
-      "num_pedido" => items["num_pedido"]
+      "num_pedido" => items["num_pedido"],
+      "url_image" => items["url_image"]
     }
   end
 

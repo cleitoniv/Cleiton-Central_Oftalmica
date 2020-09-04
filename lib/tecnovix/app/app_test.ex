@@ -318,7 +318,7 @@ defmodule Tecnovix.App.ScreensTest do
     with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
       pedido =
         %{
-          data_pedido: pedido.inserted_at,
+          data_inclusao: pedido.inserted_at,
           num_pedido: pedido.numero,
           type: pedido.tipo_venda,
           items:  Enum.map(pedido.items,
@@ -334,6 +334,7 @@ defmodule Tecnovix.App.ScreensTest do
               esferico: item.esferico,
               eixo: item.eixo,
               cilindro: item.cilindrico,
+              url_image: item.url_image
             }
           end)
         }

@@ -10,6 +10,7 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
     field :emissao, :date, autogenerate: {Date, :utc_today, []}
     field :cliente, :string
     field :loja, :string
+    field :order_id, :string
 
     has_many :items, Tecnovix.ItensDoContratoParceriaSchema,
       foreign_key: :contrato_de_parceria_id,
@@ -18,10 +19,11 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
     timestamps()
   end
 
+  #RETIREI A VALIDACAO REQUIRIDA DOS CAMPOS: contrato_n e filial
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:client_id, :filial, :contrato_n, :docto_orig, :emissao, :cliente, :loja])
-    |> validate_required([:client_id, :filial, :contrato_n])
+    |> cast(params, [:client_id, :filial, :contrato_n, :docto_orig, :emissao, :cliente, :loja, :order_id])
+    |> validate_required([:client_id])
     |> cast_assoc(:items)
   end
 end

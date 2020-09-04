@@ -235,7 +235,37 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-      
+
     assert data["success"] == true
+  end
+
+  test "Comprando produto no Contrato de Parceria" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    params = TestHelp.single_json("single_descricao_generica_do_produto.json")
+    {:ok, descricao} = DescricaoModel.create(params)
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    cartao = Generator.cartao_cliente(cliente["id"])
+
+    cartao =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/card", %{"param" => cartao})
+      |> json_response(200)
+      |> Map.get("data")
+
+    {:ok, items} = TestHelp.items("items_contrato.json")
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente/contrato_parceria", %{"items" => items, "id_cartao" => cartao["id"]})
+    |> json_response(200)
   end
 end

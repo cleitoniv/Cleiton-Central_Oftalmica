@@ -23,6 +23,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :nota_fiscal, :string
     field :serie_nf, :string
     field :num_pedido, :string
+    field :url_image, :string
     belongs_to :pedido_de_venda, Tecnovix.PedidosDeVendaSchema
     timestamps()
   end
@@ -50,7 +51,8 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :adicao,
       :nota_fiscal,
       :serie_nf,
-      :num_pedido
+      :num_pedido,
+      :url_image
     ])
     |> validate_required([
       :pedido_de_venda_id,

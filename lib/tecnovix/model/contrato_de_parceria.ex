@@ -129,8 +129,15 @@ defmodule Tecnovix.ContratoDeParceriaModel do
     {:ok, order_items}
   end
 
-  def create_contrato(cliente, items) do
+  def create_contrato(cliente, items, order) do
+    cliente
+    |> organize_contrato(items, order)
+    |> __MODULE__.create()
+  end
+
+  def organize_contrato(cliente, items, order) do
     %{
+      "order_id" => Jason.decode(order.body)["id"],
       "client_id" => cliente.id,
       "filial" => "",
       "contrato_n" => "",
@@ -152,5 +159,22 @@ defmodule Tecnovix.ContratoDeParceriaModel do
         }
       ]
     }
+  end
+
+  def payment(cartao_id, order) do
+    order = Jason.decode!(order.body)
+    order_id = order["id"]
+
+    payment =
+      cartao_id
+      |> PedidosDeVendaModel.get_cartao_cliente()
+      |> PedidosDeVendaModel.payment_params()
+      |> PedidosDeVendaModel.wirecard_payment()
+      |> Wirecard.create_payment(order_id)
+
+    case payment do
+      {:ok, %{status_code: 201}} -> payment
+      _ -> {:error, :payment_not_created}
+    end
   end
 end

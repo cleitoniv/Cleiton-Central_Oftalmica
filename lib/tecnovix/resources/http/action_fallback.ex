@@ -95,4 +95,14 @@ defmodule Tecnovix.Resources.Fallback do
     )
     |> halt()
   end
+
+  def call(conn, {:error, :cartao_not_found}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "Cartão não encontrado."})
+    )
+    |> halt()
+  end
 end
