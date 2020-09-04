@@ -103,6 +103,10 @@ defmodule Tecnovix.Test.App do
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
+      |> recycle()
+      |> post("/api/cliente/pedidos", %{"items" => Enum.map(items, fn map -> Map.put(map, "status_ped", 1) end), "id_cartao" => cartao["id"]})
+      |> recycle()
+      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
 
     assert data["success"] == true
