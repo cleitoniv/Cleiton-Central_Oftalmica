@@ -4,6 +4,7 @@ defmodule Tecnovix.ContratoDeParceriaModel do
   alias Tecnovix.ContratoDeParceriaSchema
   alias Tecnovix.Resource.Wirecard.Actions, as: Wirecard
   alias Tecnovix.ClientesSchema
+  alias Tecnovix.PedidosDeVendaModel
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
@@ -111,20 +112,15 @@ defmodule Tecnovix.ContratoDeParceriaModel do
 
   def items_order(items) do
     order_items =
-      Enum.flat_map(
-        items,
-        fn item ->
-          Enum.map(item["items"], fn order ->
-            %{
-              "product" => order["produto"],
-              "category" => "OTHER_CATEGORIES",
-              "quantity" => order["quantidade"],
-              "detail" => "Mais info...",
-              "price" => order["prc_unitario"]
-            }
-          end)
-        end
-      )
+      Enum.map(items["items"], fn order ->
+        %{
+          "product" => order["produto"],
+          "category" => "OTHER_CATEGORIES",
+          "quantity" => order["quantidade"],
+          "detail" => "Mais info...",
+          "price" => order["preco_venda"]
+        }
+      end)
 
     {:ok, order_items}
   end
@@ -136,8 +132,10 @@ defmodule Tecnovix.ContratoDeParceriaModel do
   end
 
   def organize_contrato(cliente, items, order) do
+    {:ok, order} = Jason.decode(order.body)
+
     %{
-      "order_id" => Jason.decode(order.body)["id"],
+      "order_id" => order["id"],
       "client_id" => cliente.id,
       "filial" => "",
       "contrato_n" => "",

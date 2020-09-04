@@ -8,9 +8,9 @@ defmodule Tecnovix.ItensDoContratoParceriaSchema do
     field :contrato_n, :string
     field :item, :string
     field :produto, :string
-    field :quantidade, :decimal
-    field :preco_venda, :decimal
-    field :total, :decimal
+    field :quantidade, :integer
+    field :preco_venda, :integer
+    field :total, :integer
     field :cliente, :string
     field :loja, :string
     belongs_to :contrato_de_parceria, Tecnovix.ContratoDeParceriaSchema

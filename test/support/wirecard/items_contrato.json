@@ -10,9 +10,10 @@
       "filial": "1234",
       "contrato_n": "123456",
       "item": "12",
+      "quantidade": 2,
       "produto": "Lente",
-      "preco_venda": "1.5",
-      "total": "1.5"
+      "preco_venda": 14000,
+      "total": 20000
     }
   ]
 }

@@ -334,7 +334,9 @@ defmodule Tecnovix.App.ScreensTest do
               esferico: item.esferico,
               eixo: item.eixo,
               cilindro: item.cilindrico,
-              url_image: item.url_image
+              url_image: item.url_image,
+              duracao: "1 ano",
+              previsao_entrega: "2020-10-27"
             }
           end)
         }
