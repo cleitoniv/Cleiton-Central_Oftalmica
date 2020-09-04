@@ -104,7 +104,10 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> recycle()
-      |> post("/api/cliente/pedidos", %{"items" => Enum.map(items, fn map -> Map.put(map, "status_ped", 1) end), "id_cartao" => cartao["id"]})
+      |> post("/api/cliente/pedidos", %{
+        "items" => Enum.map(items, fn map -> Map.put(map, "status_ped", 1) end),
+        "id_cartao" => cartao["id"]
+      })
       |> recycle()
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
@@ -176,11 +179,11 @@ defmodule Tecnovix.Test.App do
 
     assert detail_order["success"] == true
 
-    pedido_por_id=
+    pedido_por_id =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/pedido/#{pedido["id"]}")
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
   end
 end

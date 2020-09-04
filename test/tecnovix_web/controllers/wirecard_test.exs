@@ -58,7 +58,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
 
     assert data["success"] == true
   end
@@ -105,7 +105,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(usuarioAuth["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
 
     assert data["success"] == true
   end
@@ -261,11 +261,25 @@ defmodule Tecnovix.Test.Wirecard do
       |> json_response(200)
       |> Map.get("data")
 
-    {:ok, items} = TestHelp.items("items_contrato.json")
+    {:ok, items_json} = TestHelp.items("items_contrato.json")
+
+    items =
+      Enum.map(
+        items_json["items"],
+        fn item ->
+          Map.put(item, "descricao_generica_do_produto_id", descricao.id)
+        end
+      )
+
+    items = Map.put(items_json, "items", items)
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente/contrato_parceria", %{"items" => items, "id_cartao" => cartao["id"]})
+    |> post("/api/cliente/contrato_parceria", %{
+      "items" => items,
+      "id_cartao" => cartao["id"]
+    })
     |> json_response(200)
+    |> IO.inspect()
   end
 end

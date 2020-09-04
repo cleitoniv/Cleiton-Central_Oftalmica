@@ -16,9 +16,10 @@ defmodule TecnovixWeb.PedidosDeVendaView do
         vendedor_1: item.vendedor_1,
         status_ped: item.status_ped,
         operation: item.operation,
-        items: render_many(item.items, TecnovixWeb.ItensDosPedidosDeVendaView, "itens_pedidos.json",
-          as: :item
-        )
+        items:
+          render_many(item.items, TecnovixWeb.ItensDosPedidosDeVendaView, "itens_pedidos.json",
+            as: :item
+          )
       },
       success: true
     }

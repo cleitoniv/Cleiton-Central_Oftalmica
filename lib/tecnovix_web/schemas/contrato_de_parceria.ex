@@ -19,10 +19,19 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
     timestamps()
   end
 
-  #RETIREI A VALIDACAO REQUIRIDA DOS CAMPOS: contrato_n e filial
+  # RETIREI A VALIDACAO REQUIRIDA DOS CAMPOS: contrato_n e filial
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:client_id, :filial, :contrato_n, :docto_orig, :emissao, :cliente, :loja, :order_id])
+    |> cast(params, [
+      :client_id,
+      :filial,
+      :contrato_n,
+      :docto_orig,
+      :emissao,
+      :cliente,
+      :loja,
+      :order_id
+    ])
     |> validate_required([:client_id])
     |> cast_assoc(:items)
   end

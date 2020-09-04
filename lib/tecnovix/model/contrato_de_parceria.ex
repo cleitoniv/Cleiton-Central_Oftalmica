@@ -142,20 +142,25 @@ defmodule Tecnovix.ContratoDeParceriaModel do
       "docto_orig" => "",
       "cliente" => cliente.codigo,
       "loja" => cliente.loja,
-      "items" => [
-        %{
-          "descricao_generica_do_produto" => items["descricao_generica_do_produto"],
-          "filial" => items["filial"],
-          "contrato_n" => items["contrato_n"],
-          "item" => items["item"],
-          "produto" => items["produto"],
-          "quantidade" => items["quantidade"],
-          "preco_venda" => items["preco_venda"],
-          "total" => items["preco_venda"] * items["quantidade"],
-          "cliente" => cliente.codigo,
-          "loja" => cliente.loja
-        }
-      ]
+      "items" =>
+        Enum.map(
+          items["items"],
+          fn item ->
+            %{
+              "contrato_de_parceria_id" => 1,
+              "descricao_generica_do_produto_id" => item["descricao_generica_do_produto_id"],
+              "filial" => item["filial"],
+              "contrato_n" => item["contrato_n"],
+              "item" => item["item"],
+              "produto" => item["produto"],
+              "quantidade" => item["quantidade"],
+              "preco_venda" => item["preco_venda"],
+              "total" => item["preco_venda"] * item["quantidade"],
+              "cliente" => cliente.codigo,
+              "loja" => cliente.loja
+            }
+          end
+        )
     }
   end
 

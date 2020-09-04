@@ -5,9 +5,10 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   import Ecto.Query
 
   def get_cc(%{"cliente_id" => cliente_id}) do
-    query = from c in CartaoSchema,
-    where: c.cliente_id == ^cliente_id and c.status == 1,
-    update: [inc: [status: -1]]
+    query =
+      from c in CartaoSchema,
+        where: c.cliente_id == ^cliente_id and c.status == 1,
+        update: [inc: [status: -1]]
 
     {:ok, Repo.update_all(query, [])}
   end
@@ -62,8 +63,9 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   end
 
   def get_cards(cliente_id) do
-    query = from c in CartaoSchema,
-            where: c.cliente_id == ^cliente_id
+    query =
+      from c in CartaoSchema,
+        where: c.cliente_id == ^cliente_id
 
     Repo.all(query)
   end
