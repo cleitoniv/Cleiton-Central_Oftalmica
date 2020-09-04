@@ -128,7 +128,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
        "client_id" => cliente.id,
        "order_id" => verify_type(type, order),
        "filial" => "",
-       "numero" => "",
+       "numero" => String.slice(Ecto.UUID.autogenerate(), 1..6),
        "cliente" => cliente.codigo,
        "tipo_venda" => type,
        "pd_correios" => "",
@@ -187,7 +187,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => items["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
-      "num_pedido" => items["num_pedido"]
+      "num_pedido" => items["num_pedido"],
+      "url_image" => items["url_image"]
     }
   end
 
@@ -219,7 +220,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => items["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
-      "num_pedido" => items["num_pedido"]
+      "num_pedido" => items["num_pedido"],
+      "url_image" => items["url_image"]
     }
   end
 
@@ -245,7 +247,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => items["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
-      "num_pedido" => items["num_pedido"]
+      "num_pedido" => items["num_pedido"],
+      "url_image" => items["url_image"]
     }
   end
 
@@ -271,7 +274,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => items["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
-      "num_pedido" => items["num_pedido"]
+      "num_pedido" => items["num_pedido"],
+      "url_image" => items["url_image"]
     }
   end
 
@@ -406,14 +410,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
     |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
     |> order_by([p], desc: p.inserted_at)
     |> Repo.all()
-    # query =
-    #   from p in PedidosDeVendaSchema,
-    #     join: i in assoc(p, :items),
-    #     where: p.client_id == ^cliente_id and p.status_ped == ^filtro,
-    #     order_by: p.inserted_at,
-    #     preload: [items: i]
-    #
-    # Repo.all(query)
   end
 
   def create_credito_produto(items, cliente, %{"type" => type, "operation" => operation}) do
@@ -430,5 +426,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def pagamento_com_produto(cliente, id) do
     produto = ScreensTest.get_info_product(cliente, id)
+  end
+
+  def get_pedido_id(pedido_id, cliente_id) do
+    pedido_id = String.to_integer(pedido_id)
+
+    case Repo.get(PedidosDeVendaSchema, pedido_id) do
+      nil -> {:error, :not_found}
+      pedido ->
+        pedido = Repo.preload(pedido, :items)
+        {:ok, pedido}
+    end
   end
 end
