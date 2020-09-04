@@ -343,7 +343,7 @@ defmodule Tecnovix.App.ScreensTest do
               }
             end
           )
-      }
+        }
 
       {:ok, pedido}
     end
