@@ -344,6 +344,7 @@ defmodule Tecnovix.App.ScreensTest do
         valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         frete: pedido.frete,
         valor_total: pedido.frete + Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
+        previsao_entrega: pedido.previsao_entrega,
         items:
           Enum.map(
             pedido.items,
@@ -361,8 +362,7 @@ defmodule Tecnovix.App.ScreensTest do
                 eixo: item.eixo,
                 cilindro: item.cilindrico,
                 url_image: item.url_image,
-                duracao: "1 ano",
-                previsao_entrega: "2020-10-27"
+                duracao: "1 ano"
               }
             end
           )
