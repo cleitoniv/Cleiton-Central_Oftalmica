@@ -190,4 +190,24 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       cliente -> {:ok, cliente}
     end
   end
+
+  def items_order(items) do
+    Enum.map(
+      items,
+      fn order ->
+        %{
+          "product" => "Credito",
+          "category" => "OTHER_CATEGORIES",
+          "quantity" => 1,
+          "detail" => "Compra de credito financeiro.",
+          "price" => convert_price(order["valor"], 1)
+        }
+      end
+    )
+  end
+
+  def convert_price(prc_unitario, quantidade) do
+    (prc_unitario * 100 * quantidade)
+    |> Kernel.trunc()
+  end
 end

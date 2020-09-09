@@ -176,7 +176,8 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/detail_order?filtro=0")
       |> json_response(200)
-
+      |> IO.inspect
+      
     assert detail_order["success"] == true
 
     pedido_por_id =
@@ -184,6 +185,5 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/pedido/#{pedido["id"]}")
       |> json_response(200)
-      |> IO.inspect()
   end
 end

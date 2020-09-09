@@ -8,7 +8,7 @@ defmodule Tecnovix.LogsClienteSchema do
     belongs_to :cliente, ClientesSchema
     field :uid, :string, autogenerate: {Ecto.UUID, :autogenerate, []}
     belongs_to :usuario_cliente, UsuariosClienteSchema
-    field :data, :utc_datetime
+    field :data, :utc_datetime, autogenerate: {DateTime, :utc_now, []}
     field :ip, :string
     field :dispositivo, :string
     field :acao_realizada, :string

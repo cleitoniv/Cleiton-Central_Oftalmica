@@ -424,6 +424,18 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
+  def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
+    case pedido_params(items, cliente, "", %{"type" => type, "operation" => operation}) do
+      {:ok, pedido} ->
+        %PedidosDeVendaSchema{}
+        |> PedidosDeVendaSchema.changeset(pedido)
+        |> Repo.insert()
+
+        _ ->
+        {:error, :pedido_failed}
+    end
+  end
+
   def get_pedido_id(pedido_id, cliente_id) do
     pedido_id = String.to_integer(pedido_id)
 
