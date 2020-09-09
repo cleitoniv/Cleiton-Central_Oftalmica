@@ -12,7 +12,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :olho, :string
     field :paciente, :string
     field :num_pac, :string
-    field :dt_nas_pac, :string
+    field :dt_nas_pac, :date
     field :virtotal, :integer
     field :esferico, :decimal
     field :cilindrico, :decimal
