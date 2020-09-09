@@ -424,15 +424,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pagamento_com_produto(cliente, id) do
-    produto = ScreensTest.get_info_product(cliente, id)
-  end
-
   def get_pedido_id(pedido_id, cliente_id) do
     pedido_id = String.to_integer(pedido_id)
 
     case Repo.get(PedidosDeVendaSchema, pedido_id) do
-      nil -> {:error, :not_found}
+      nil ->
+        {:error, :not_found}
+
       pedido ->
         pedido = Repo.preload(pedido, :items)
         {:ok, pedido}

@@ -13,12 +13,19 @@ defmodule Tecnovix.NotificacoesClienteModel do
   end
 
   def aguardando_pagamento_boleto(cliente_id, pedido_id) do
-    query = from p in PedidosDeVendaSchema,
-            where: p.id == ^pedido_id and p.status == 0 and p.client_id == ^cliente_id
+    query =
+      from p in PedidosDeVendaSchema,
+        where: p.id == ^pedido_id and p.status == 0 and p.client_id == ^cliente_id
 
     case Repo.all(query) do
-      [] -> {:error, :not_found}
-      pedido -> %{"pedido" => pedido, "mensagem" => "Estamos aguardando o pagamento do boleto referente ao pedido."}
+      [] ->
+        {:error, :not_found}
+
+      pedido ->
+        %{
+          "pedido" => pedido,
+          "mensagem" => "Estamos aguardando o pagamento do boleto referente ao pedido."
+        }
     end
   end
 end

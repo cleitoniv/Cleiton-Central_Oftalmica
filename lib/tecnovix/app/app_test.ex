@@ -326,6 +326,7 @@ defmodule Tecnovix.App.ScreensTest do
             pedido.items,
             fn item ->
               %{
+                num_pac: item.num_pac,
                 paciente: item.paciente,
                 data_nascimento: item.dt_nas_pac,
                 nome_produto: item.produto,
