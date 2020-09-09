@@ -5,7 +5,7 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
   alias Tecnovix.ClientesSchema
   alias Tecnovix.UsuariosClienteSchema
 
-  def create(conn, %{"param" => params, "id_cartao" => id_cartao}) do
+  def create(conn, %{"items" => params, "id_cartao" => id_cartao}) do
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->

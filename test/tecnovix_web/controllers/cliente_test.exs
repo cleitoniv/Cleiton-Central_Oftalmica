@@ -42,7 +42,7 @@ defmodule TecnovixWeb.UsersTest do
       |> Map.get("data")
 
     # test de da formatacao do cpf_cnpj
-    refute user_param["cnpj_cpf"] == user["cnpj_cpf"]
+    assert user_param["cnpj_cpf"] == user["cnpj_cpf"]
   end
 
   test "update" do

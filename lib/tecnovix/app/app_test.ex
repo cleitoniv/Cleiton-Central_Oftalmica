@@ -341,6 +341,9 @@ defmodule Tecnovix.App.ScreensTest do
         data_inclusao: pedido.inserted_at,
         num_pedido: pedido.numero,
         type: pedido.tipo_venda,
+        valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
+        frete: pedido.frete,
+        valor_total: pedido.frete + Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         items:
           Enum.map(
             pedido.items,

@@ -192,22 +192,23 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   end
 
   def items_order(items) do
-    Enum.map(
+    order =
+    Enum.flat_map(
       items,
       fn order ->
-        %{
-          "product" => "Credito",
-          "category" => "OTHER_CATEGORIES",
-          "quantity" => 1,
-          "detail" => "Compra de credito financeiro.",
-          "price" => convert_price(order["valor"], 1)
-        }
+        Enum.map(order["items"],
+         fn map ->
+           %{
+             "product" => "Credito",
+             "category" => "OTHER_CATEGORIES",
+             "quantity" => 1,
+             "detail" => "Compra de credito financeiro.",
+             "price" => map["prc_unitario"]
+           }
+         end)
       end
     )
-  end
 
-  def convert_price(prc_unitario, quantidade) do
-    (prc_unitario * 100 * quantidade)
-    |> Kernel.trunc()
+    {:ok, order}
   end
 end

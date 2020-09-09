@@ -15,6 +15,8 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :vendedor_1, :string
     field :status_ped, :integer, default: 0
     field :operation, :string
+    field :previsao_entrega, :string
+    field :frete, :integer, default: 0
 
     has_many :items, ItensDosPedidosDeVendaSchema,
       foreign_key: :pedido_de_venda_id,
@@ -26,6 +28,8 @@ defmodule Tecnovix.PedidosDeVendaSchema do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :previsao_entrega,
+      :frete,
       :order_id,
       :client_id,
       :filial,
