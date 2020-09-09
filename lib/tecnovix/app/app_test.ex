@@ -343,7 +343,8 @@ defmodule Tecnovix.App.ScreensTest do
         type: pedido.tipo_venda,
         valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         frete: pedido.frete,
-        valor_total: pedido.frete + Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
+        valor_total:
+          pedido.frete + Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         previsao_entrega: pedido.previsao_entrega,
         items:
           Enum.map(
@@ -361,7 +362,7 @@ defmodule Tecnovix.App.ScreensTest do
                 esferico: item.esferico,
                 eixo: item.eixo,
                 cilindro: item.cilindrico,
-                url_image: item.url_image,
+                url_image: @product_url,
                 duracao: "1 ano"
               }
             end
