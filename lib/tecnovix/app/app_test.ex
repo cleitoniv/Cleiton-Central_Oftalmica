@@ -2,6 +2,7 @@ defmodule Tecnovix.App.ScreensTest do
   @behavior Tecnovix.App.Screens
   alias Tecnovix.ClientesModel
   alias Tecnovix.PedidosDeVendaModel
+  alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
 
   @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
 
@@ -76,20 +77,19 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_offers(_cliente) do
-    offers = [
+    {:ok, offers} =
+    case OpcoesCreditoModel.get_offers() do
+      [] -> {:ok, []}
+      offers -> {:ok, offers}
+    end
+
+    offers = Enum.map(offers,
+    fn map ->
       %{
-        value: 2500,
-        installmentCount: 1
-      },
-      %{
-        value: 5000,
-        installmentCount: 3
-      },
-      %{
-        value: 10000,
-        installmentCount: 5
+        value: map.valor,
+        installcoument: map.prestacoes
       }
-    ]
+    end)
 
     {:ok, offers}
   end
@@ -298,7 +298,7 @@ defmodule Tecnovix.App.ScreensTest do
   @impl true
   def get_cards(cliente) do
     case ClientesModel.get_cards(cliente) do
-      [] -> :not_found
+      [] -> []
       cards -> {:ok, cards}
     end
   end
@@ -361,7 +361,8 @@ defmodule Tecnovix.App.ScreensTest do
                 esferico: item.esferico,
                 eixo: item.eixo,
                 cilindro: item.cilindrico,
-                url_image: item.url_image,
+                url_image: @product_url,
+                codigo_item: item.codigo_item,
                 duracao: "1 ano"
               }
             end
