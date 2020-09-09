@@ -3,15 +3,16 @@ defmodule Tecnovix.OpcoesCompraCreditoFinanceiroSchema do
   import Ecto.Changeset
 
   schema "opcoes_compra_credito_financeiro" do
-    field :valor, :decimal
+    field :valor, :integer
     field :desconto, :integer
+    field :prestacoes, :integer
 
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:valor, :desconto])
-    |> validate_required([:valor])
+    |> cast(params, [:valor, :desconto, :prestacoes])
+    |> validate_required([:valor, :prestacoes])
   end
 end

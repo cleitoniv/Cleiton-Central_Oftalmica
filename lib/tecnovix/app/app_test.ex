@@ -2,6 +2,7 @@ defmodule Tecnovix.App.ScreensTest do
   @behavior Tecnovix.App.Screens
   alias Tecnovix.ClientesModel
   alias Tecnovix.PedidosDeVendaModel
+  alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
 
   @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
 
@@ -76,20 +77,22 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_offers(_cliente) do
-    offers = [
-      %{
-        value: 2500,
-        installmentCount: 1
-      },
-      %{
-        value: 5000,
-        installmentCount: 3
-      },
-      %{
-        value: 10000,
-        installmentCount: 5
-      }
-    ]
+    {:ok, offers} =
+      case OpcoesCreditoModel.get_offers() do
+        [] -> {:ok, []}
+        offers -> {:ok, offers}
+      end
+
+    offers =
+      Enum.map(
+        offers,
+        fn map ->
+          %{
+            value: map.valor,
+            installcoument: map.prestacoes
+          }
+        end
+      )
 
     {:ok, offers}
   end
@@ -298,7 +301,7 @@ defmodule Tecnovix.App.ScreensTest do
   @impl true
   def get_cards(cliente) do
     case ClientesModel.get_cards(cliente) do
-      [] -> :not_found
+      [] -> []
       cards -> {:ok, cards}
     end
   end
@@ -333,6 +336,46 @@ defmodule Tecnovix.App.ScreensTest do
         end
       end)
     end)
+    |> Enum.map(fn paciente ->
+      group_by =
+        Enum.group_by(paciente.items, fn item -> item.codigo_item end)
+        |> Enum.map(fn {codigo, codigo_items} ->
+          Enum.reduce(codigo_items, %{}, fn codigo_item, acc ->
+            p_olho = parse_olho(codigo_item)
+
+            map =
+              Map.put(acc, :valor_produto, codigo_item.valor_produto)
+              |> Map.put(:quantidade, codigo_item.quantidade)
+              |> Map.put(:valor_total, codigo_item.valor_total)
+              |> Map.put(:olho, codigo_item.olho)
+              |> Map.put(:url_image, @product_url)
+              |> Map.put(:codigo_item, codigo_item.codigo_item)
+              |> Map.put(:duracao, "1 Ano")
+
+            Map.merge(map, p_olho)
+          end)
+        end)
+
+      Map.put(paciente, :items, group_by)
+    end)
+  end
+
+  defp parse_olho(item) do
+    case item.olho do
+      "D" ->
+        %{
+          esferico_d: item.esferico,
+          eixo_d: item.eixo,
+          cilindro_d: item.cilindro
+        }
+
+      "E" ->
+        %{
+          esferico_e: item.esferico,
+          eixo_e: item.eixo,
+          cilindro_e: item.cilindro
+        }
+    end
   end
 
   def get_pedido_id(cliente_id, pedido_id) do
@@ -363,6 +406,7 @@ defmodule Tecnovix.App.ScreensTest do
                 eixo: item.eixo,
                 cilindro: item.cilindrico,
                 url_image: @product_url,
+                codigo_item: item.codigo_item,
                 duracao: "1 ano"
               }
             end

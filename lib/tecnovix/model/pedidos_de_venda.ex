@@ -146,16 +146,22 @@ defmodule Tecnovix.PedidosDeVendaModel do
                    [olho_esquerdo(items, map)]
 
                  map["olho_ambos"] != nil ->
-                   [olho_direito(items, map), olho_esquerdo(items, map)]
+                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
+                   [olho_direito(input_codigo(items, codigo), map), olho_esquerdo(input_codigo(items, codigo), map)]
 
                  map["olho_diferentes"] != nil ->
-                   [olho_diferentes_D(items, map), olho_diferentes_E(items, map)]
+                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
+                   [olho_diferentes_D(input_codigo(items, codigo), map), olho_diferentes_E(input_codigo(items, codigo), map)]
                end
              end)
 
            array ++ acc
          end)
      }}
+  end
+
+  def input_codigo(map, codigo) do
+    Map.put(map, "codigo_item", codigo)
   end
 
   def olho_direito(items, map) do
@@ -188,7 +194,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
       "num_pedido" => items["num_pedido"],
-      "url_image" => items["url_image"]
+      "url_image" => items["url_image"],
+      "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10)
     }
   end
 
@@ -221,7 +228,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
       "num_pedido" => items["num_pedido"],
-      "url_image" => items["url_image"]
+      "url_image" => items["url_image"],
+      "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10)
     }
   end
 
@@ -248,7 +256,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
       "num_pedido" => items["num_pedido"],
-      "url_image" => items["url_image"]
+      "url_image" => items["url_image"],
+      "codigo_item" => items["codigo_item"]
     }
   end
 
@@ -275,7 +284,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
       "num_pedido" => items["num_pedido"],
-      "url_image" => items["url_image"]
+      "url_image" => items["url_image"],
+      "codigo_item" => items["codigo_item"]
     }
   end
 
