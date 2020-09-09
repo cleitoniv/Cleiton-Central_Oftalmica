@@ -178,7 +178,7 @@ defmodule Tecnovix.Test.Wirecard do
       build_conn()
       |> Generator.put_auth(usuarioAuth["idToken"])
       |> post("/api/cliente/pedido/credito_financeiro", %{
-        "param" => items,
+        "items" => items,
         "id_cartao" => cartao["id"]
       })
       |> json_response(200)

@@ -105,4 +105,14 @@ defmodule Tecnovix.Resources.Fallback do
     )
     |> halt()
   end
+
+  def call(conn, {:error, :pedido_failed}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "Falha na criação do pedido."})
+    )
+    |> halt()
+  end
 end
