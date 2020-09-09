@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :tecnovix, Tecnovix.Repo,
   username: "postgres",
-  password: "q1w2e3",
+  password: "postgres",
   database: "tecnovix_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
