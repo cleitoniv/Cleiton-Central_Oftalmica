@@ -315,6 +315,26 @@ defmodule Tecnovix.App.ScreensTest do
     }
   end
 
+  defp parse_items(items) do
+    Enum.map(items, fn item ->
+      %{
+        num_pac: item.num_pac,
+        paciente: item.paciente,
+        data_nascimento: item.data_nascimento,
+        items: []
+      }
+    end)
+    |> Enum.uniq_by(fn item -> item.num_pac end)
+    |> Enum.map(fn paciente ->
+        Enum.reduce(items, paciente, fn item, acc ->
+          case item.num_pac == paciente.num_pac do
+            true -> Map.put(acc, :items, acc.items ++ [item])
+            false -> acc
+          end
+        end)
+    end)
+  end
+
   def get_pedido_id(cliente_id, pedido_id) do
     with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
       pedido = %{
@@ -343,7 +363,8 @@ defmodule Tecnovix.App.ScreensTest do
               }
             end
           )
-      }
+          |> parse_items()
+        }
 
       {:ok, pedido}
     end
