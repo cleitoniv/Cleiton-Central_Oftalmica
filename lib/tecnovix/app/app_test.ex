@@ -326,12 +326,12 @@ defmodule Tecnovix.App.ScreensTest do
     end)
     |> Enum.uniq_by(fn item -> item.num_pac end)
     |> Enum.map(fn paciente ->
-        Enum.reduce(items, paciente, fn item, acc ->
-          case item.num_pac == paciente.num_pac do
-            true -> Map.put(acc, :items, acc.items ++ [item])
-            false -> acc
-          end
-        end)
+      Enum.reduce(items, paciente, fn item, acc ->
+        case item.num_pac == paciente.num_pac do
+          true -> Map.put(acc, :items, acc.items ++ [item])
+          false -> acc
+        end
+      end)
     end)
   end
 
@@ -364,7 +364,7 @@ defmodule Tecnovix.App.ScreensTest do
             end
           )
           |> parse_items()
-        }
+      }
 
       {:ok, pedido}
     end
