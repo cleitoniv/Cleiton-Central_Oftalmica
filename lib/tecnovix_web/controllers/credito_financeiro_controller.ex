@@ -17,7 +17,7 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
 
     with {:ok, items_order} <- CreditoFinanceiroModel.items_order(params),
          {:ok, order} <- CreditoFinanceiroModel.order(items_order, cliente),
-         {:ok, payment} <- CreditoFinanceiroModel.payment(id_cartao, order),
+         {:ok, payment} <- CreditoFinanceiroModel.payment(id_cartao, order, params),
          {:ok, credito} <- CreditoFinanceiroModel.insert(params, order, payment, cliente.id) do
       conn
       |> put_status(200)
