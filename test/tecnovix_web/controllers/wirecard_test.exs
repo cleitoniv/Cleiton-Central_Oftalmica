@@ -182,6 +182,7 @@ defmodule Tecnovix.Test.Wirecard do
         "id_cartao" => cartao["id"]
       })
       |> json_response(200)
+      |> IO.inspect()
 
     assert data["success"] == true
   end

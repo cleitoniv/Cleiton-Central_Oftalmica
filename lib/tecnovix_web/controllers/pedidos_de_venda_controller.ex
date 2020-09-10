@@ -60,10 +60,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              "type" => "C",
              "operation" => "Remessa"
            }) do
-          conn
-          |> put_status(200)
-          |> put_resp_content_type("application/json")
-          |> render("pedidos.json", %{item: pedido})
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedidos.json", %{item: pedido})
     else
       _ ->
         {:error, :order_not_created}
@@ -72,23 +72,26 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   def credito_financeiro(conn, %{"items" => items}) do
     {:ok, cliente} =
-        case conn.private.auth do
-          {:ok, %ClientesSchema{} = cliente} ->
-            {:ok, cliente}
+      case conn.private.auth do
+        {:ok, %ClientesSchema{} = cliente} ->
+          {:ok, cliente}
 
-            {:ok, %UsuariosClienteSchema{} = usuario} ->
-              PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
-        end
+        {:ok, %UsuariosClienteSchema{} = usuario} ->
+          PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
+      end
 
-        with {:ok, pedido} <- PedidosDeVendaModel.create_credito_financeiro(items, cliente, %{"type" => "A", "operation" => "Remessa"}) do
-            conn
-            |> put_status(200)
-            |> put_resp_content_type("application/json")
-            |> render("pedidos.json", %{item: pedido})
-        else
-          _ -> {:error, :order_not_created}
-        end
-
+    with {:ok, pedido} <-
+           PedidosDeVendaModel.create_credito_financeiro(items, cliente, %{
+             "type" => "A",
+             "operation" => "Remessa"
+           }) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedidos.json", %{item: pedido})
+    else
+      _ -> {:error, :order_not_created}
+    end
   end
 
   def detail_order_id(conn, %{"id" => pedido_id}) do

@@ -147,11 +147,19 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
                  map["olho_ambos"] != nil ->
                    codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
-                   [olho_direito(input_codigo(items, codigo), map), olho_esquerdo(input_codigo(items, codigo), map)]
+
+                   [
+                     olho_direito(input_codigo(items, codigo), map),
+                     olho_esquerdo(input_codigo(items, codigo), map)
+                   ]
 
                  map["olho_diferentes"] != nil ->
                    codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
-                   [olho_diferentes_D(input_codigo(items, codigo), map), olho_diferentes_E(input_codigo(items, codigo), map)]
+
+                   [
+                     olho_diferentes_D(input_codigo(items, codigo), map),
+                     olho_diferentes_E(input_codigo(items, codigo), map)
+                   ]
                end
              end)
 
@@ -441,7 +449,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         |> PedidosDeVendaSchema.changeset(pedido)
         |> Repo.insert()
 
-        _ ->
+      _ ->
         {:error, :pedido_failed}
     end
   end
