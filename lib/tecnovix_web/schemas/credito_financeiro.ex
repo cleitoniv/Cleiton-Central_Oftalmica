@@ -4,7 +4,7 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
 
   schema "credito_financeiro" do
     belongs_to :cliente, Tecnovix.ClientesSchema
-    field :valor, :decimal
+    field :valor, :integer
     field :desconto, :integer
     field :tipo_pagamento, :string
     field :wirecard_pedido_id, :string

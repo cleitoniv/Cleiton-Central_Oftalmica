@@ -5,6 +5,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   alias Tecnovix.ClientesSchema
   alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.App.Screens
+  alias Tecnovix.Services.Order
 
   action_fallback Tecnovix.Resources.Fallback
 
