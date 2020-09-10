@@ -61,9 +61,24 @@ defmodule Tecnovix.Test.App do
     params = TestHelp.single_json("single_descricao_generica_do_produto.json")
     {:ok, descricao} = DescricaoModel.create(params)
     {:ok, items_json} = TestHelp.items("olhos_diferentes.json")
-    Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{"valor" => 2500, "desconto" => 10, "prestacoes" => 1})
-    Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{"valor" => 5000, "desconto" => 10, "prestacoes" => 2})
-    Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{"valor" => 10000, "desconto" => 10, "prestacoes" => 3})
+
+    Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{
+      "valor" => 2500,
+      "desconto" => 10,
+      "prestacoes" => 1
+    })
+
+    Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{
+      "valor" => 5000,
+      "desconto" => 10,
+      "prestacoes" => 2
+    })
+
+    Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{
+      "valor" => 10000,
+      "desconto" => 10,
+      "prestacoes" => 3
+    })
 
     cliente =
       build_conn()
@@ -187,6 +202,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/pedido/#{pedido["id"]}")
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
   end
 end

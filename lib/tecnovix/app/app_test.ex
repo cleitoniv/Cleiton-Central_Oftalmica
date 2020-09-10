@@ -89,7 +89,7 @@ defmodule Tecnovix.App.ScreensTest do
         fn map ->
           %{
             value: map.valor,
-            installcoument: map.prestacoes
+            installmentCount: map.prestacoes
           }
         end
       )

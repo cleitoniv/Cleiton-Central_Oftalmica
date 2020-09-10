@@ -10,7 +10,6 @@ defmodule TecnovixWeb.ContratoDeParceriaView do
       docto_orig: item.docto_orig,
       emissao: item.emissao,
       cliente: item.cliente,
-
       order_id: item.order_id,
       loja: item.loja,
       items:

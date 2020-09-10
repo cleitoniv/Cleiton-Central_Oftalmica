@@ -7,20 +7,20 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
 
   def insert(params, order, payment, cliente_id) do
-    case __MODULE__.credito_params(params, order, payment, cliente_id) do
-      {:ok, credito_params} -> __MODULE__.create(credito_params)
+    case credito_params(params, order, payment, cliente_id) do
+      {:ok, credito_params} -> create(credito_params)
       _ -> {:error, :payment_credit_fail}
     end
   end
 
-  def credito_params(_params, order, payment, cliente_id) do
+  def credito_params(params, order, payment, cliente_id) do
     order_body = Jason.decode!(order.body)
     payment_body = Jason.decode!(payment.body)
 
     params = %{
       "cliente_id" => cliente_id,
-      "valor" => payment_body["amount"]["total"],
-      "desconto" => "",
+      "valor" => Enum.reduce(params, 0, fn map, acc -> map["valor"] + acc end),
+      "desconto" => Enum.reduce(params, 0, fn map, acc -> map["desconto"] + acc end),
       "tipo_pagamento" => payment_body["fundingInstrument"]["method"],
       "wirecard_pedido_id" => order_body["id"],
       "wirecard_pagamento_id" => payment_body["id"],
@@ -193,21 +193,15 @@ defmodule Tecnovix.CreditoFinanceiroModel do
 
   def items_order(items) do
     order =
-    Enum.flat_map(
-      items,
-      fn order ->
-        Enum.map(order["items"],
-         fn map ->
-           %{
-             "product" => "Credito",
-             "category" => "OTHER_CATEGORIES",
-             "quantity" => 1,
-             "detail" => "Compra de credito financeiro.",
-             "price" => map["prc_unitario"]
-           }
-         end)
-      end
-    )
+      Enum.map(items, fn map ->
+        %{
+          "product" => "Credito",
+          "category" => "OTHER_CATEGORIES",
+          "quantity" => 1,
+          "detail" => "Compra de credito financeiro.",
+          "price" => map["valor"]
+        }
+      end)
 
     {:ok, order}
   end
