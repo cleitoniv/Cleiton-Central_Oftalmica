@@ -58,7 +58,6 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-      |> IO.inspect()
 
     assert data["success"] == true
   end

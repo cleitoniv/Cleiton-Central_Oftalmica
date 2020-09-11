@@ -19,8 +19,9 @@ defmodule Tecnovix.CreditoFinanceiroModel do
 
     params = %{
       "cliente_id" => cliente_id,
-      "valor" => Enum.reduce(params, 0, fn map, acc -> map["valor"] + acc end),
-      "desconto" => Enum.reduce(params, 0, fn map, acc -> map["desconto"] + acc end),
+      "valor" => Enum.reduce(params, 0, fn map, _acc -> map["valor"] end),
+      "desconto" => Enum.reduce(params, 0, fn map, _acc -> map["desconto"] end),
+      "prestacoes" => Enum.reduce(params, 0, fn map, _acc -> map["prestacoes"] end),
       "tipo_pagamento" => payment_body["fundingInstrument"]["method"],
       "wirecard_pedido_id" => order_body["id"],
       "wirecard_pagamento_id" => payment_body["id"],
@@ -66,16 +67,17 @@ defmodule Tecnovix.CreditoFinanceiroModel do
      }}
   end
 
-  def payment(id_cartao, order) do
+  def payment(id_cartao, order, params) do
     order = Jason.decode!(order.body)
     order_id = order["id"]
 
     payment =
       id_cartao
       |> CreditoFinanceiroModel.get_cartao_cliente()
-      |> CreditoFinanceiroModel.payment_params()
+      |> CreditoFinanceiroModel.payment_params(params)
       |> CreditoFinanceiroModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
+      |> IO.inspect
 
     case payment do
       {:ok, %{status_code: 201}} -> payment
@@ -136,9 +138,9 @@ defmodule Tecnovix.CreditoFinanceiroModel do
     }
   end
 
-  def payment_params({:ok, cartao = %CartaoSchema{}}) do
+  def payment_params({:ok, cartao = %CartaoSchema{}}, params) do
     %{
-      "installmentCount" => 6,
+      "installmentCount" => Enum.reduce(params, 0, fn map, _acc -> map["prestacoes"] end),
       "statementDescriptor" => "central",
       "fundingInstrument" => %{
         "method" => "CREDIT_CARD",

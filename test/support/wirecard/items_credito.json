@@ -1,7 +1,7 @@
 [
   {
-  "cliente_id": 1,
   "valor": 2500,
-  "desconto": 10
+  "desconto": 10,
+  "prestacoes": 5
   }
 ]
