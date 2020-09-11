@@ -17,7 +17,7 @@ defmodule Tecnovix.App.ScreensTest do
         value: 15100,
         image_url: @product_url,
         type: "miopia",
-        boxes: 0
+        boxes: 200
       },
       %{
         id: 1,
@@ -27,7 +27,7 @@ defmodule Tecnovix.App.ScreensTest do
         value: 15100,
         image_url: @product_url,
         type: "miopia",
-        boxes: 0
+        boxes: 321
       },
       %{
         id: 2,
@@ -37,7 +37,7 @@ defmodule Tecnovix.App.ScreensTest do
         value: 15100,
         image_url: @product_url,
         type: "miopia",
-        boxes: 0
+        boxes: 29
       },
       %{
         id: 3,
