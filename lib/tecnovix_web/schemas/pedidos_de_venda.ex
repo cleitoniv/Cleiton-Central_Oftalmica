@@ -9,7 +9,6 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :filial, :string
     field :numero, :string
     field :cliente, :string
-    field :tipo_venda, :string
     field :tipo_venda_ret_id, :integer
     field :pd_correios, :string
     field :vendedor_1, :string
@@ -17,6 +16,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :operation, :string
     field :previsao_entrega, :string
     field :frete, :integer, default: 0
+    has_one :contrato_de_parceria, Tecnovix.ContratoDeParceriaSchema
 
     has_many :items, ItensDosPedidosDeVendaSchema,
       foreign_key: :pedido_de_venda_id,
@@ -35,7 +35,6 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :filial,
       :numero,
       :cliente,
-      :tipo_venda,
       :tipo_venda_ret_id,
       :pd_correios,
       :vendedor_1,
@@ -44,5 +43,6 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     ])
     |> validate_required([:client_id])
     |> cast_assoc(:items)
+    |> cast_assoc(:contrato_de_parceria)
   end
 end

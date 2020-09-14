@@ -18,6 +18,7 @@ defmodule Tecnovix.ItensDoContratoParceriaSchema do
     timestamps()
   end
 
+  # retirei o campo filial
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
@@ -33,6 +34,6 @@ defmodule Tecnovix.ItensDoContratoParceriaSchema do
       :cliente,
       :loja
     ])
-    |> validate_required([:contrato_de_parceria_id, :descricao_generica_do_produto_id, :filial])
+    |> validate_required([:contrato_de_parceria_id, :descricao_generica_do_produto_id])
   end
 end
