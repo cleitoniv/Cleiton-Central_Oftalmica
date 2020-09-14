@@ -7,6 +7,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       descricao_generica_do_produto_id: item.descricao_generica_do_produto_id,
       filial: item.filial,
       nocontrato: item.nocontrato,
+      codigo: item.codigo,
       produto: item.produto,
       quantidade: item.quantidade,
       prc_unitario: item.prc_unitario,

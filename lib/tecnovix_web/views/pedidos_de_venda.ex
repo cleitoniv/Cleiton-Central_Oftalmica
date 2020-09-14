@@ -7,6 +7,7 @@ defmodule TecnovixWeb.PedidosDeVendaView do
       data: %{
         id: item.id,
         client_id: item.client_id,
+        order_id: item.order_id,
         filial: item.filial,
         numero: item.numero,
         cliente: item.cliente,

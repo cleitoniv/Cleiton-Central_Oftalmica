@@ -19,6 +19,7 @@
   },
   "items": [
     {
+      "type": "A",
       "url_image": "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417",
       "filial": "teste",
       "nocontrato": "teste",
@@ -28,6 +29,25 @@
       "paciente": "Gabriel",
       "num_pac": "123654",
       "dt_nas_pac": "12345678",
+      "virtotal": 1.5,
+      "cor": "teste",
+      "adc_padrao": "teste",
+      "adicao": 1.5,
+      "nota_fiscal": "123456789",
+      "serie_nf": "123",
+      "num_pedido": "123456"
+    },
+    {
+      "type": "C",
+      "url_image": "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417",
+      "filial": "teste",
+      "nocontrato": "teste",
+      "produto": "Lente",
+      "quantidade": 2,
+      "prc_unitario": 15100,
+      "paciente": "Victor",
+      "num_pac": "231312",
+      "dt_nas_pac": "321312",
       "virtotal": 1.5,
       "cor": "teste",
       "adc_padrao": "teste",
