@@ -19,7 +19,6 @@
       "produto": "Lente",
       "quantidade": 2,
       "prc_unitario": 15100,
-      "olho": "E",
       "paciente": "Gabriel",
       "num_pac": "123654",
       "dt_nas_pac": "12345678",
@@ -33,6 +32,17 @@
       "nota_fiscal": "123456789",
       "serie_nf": "123",
       "num_pedido": "123456"
+      }
+    ]
+  },
+  {
+    "type": "C",
+    "items": [
+      {
+        "quantidade": 2,
+        "prc_unitario": 14000,
+        "produto": "Bioview Torica",
+        "codigo": "12313131"
       }
     ]
   }

@@ -11,6 +11,7 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
     field :cliente, :string
     field :loja, :string
     field :order_id, :string
+    belongs_to :pedido, Tecnovix.PedidosDeVendaSchema, foreign_key: :pedido_id
 
     has_many :items, Tecnovix.ItensDoContratoParceriaSchema,
       foreign_key: :contrato_de_parceria_id,
@@ -30,7 +31,8 @@ defmodule Tecnovix.ContratoDeParceriaSchema do
       :emissao,
       :cliente,
       :loja,
-      :order_id
+      :order_id,
+      :pedido_id
     ])
     |> validate_required([:client_id])
     |> cast_assoc(:items)

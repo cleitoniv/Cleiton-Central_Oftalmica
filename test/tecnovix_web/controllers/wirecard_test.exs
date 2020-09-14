@@ -44,12 +44,29 @@ defmodule Tecnovix.Test.Wirecard do
           )
         end
       )
+      |> IO.inspect()
 
     items =
       Enum.map(
         items_json,
         fn map ->
-          Map.put(map, "items", items)
+          case map["type"] do
+            "A" ->
+              item =
+                Enum.filter(items, fn item ->
+                  item["codigo"] == "123132213123"
+                end)
+
+              Map.put(map, "items", item)
+
+            "C" ->
+              item =
+                Enum.filter(items, fn item ->
+                  item["codigo"] == "12313131"
+                end)
+
+              Map.put(map, "items", item)
+          end
         end
       )
 
@@ -58,7 +75,10 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-      |> IO.inspect()
+
+    Tecnovix.Repo.all(Tecnovix.PedidosDeVendaSchema)
+    |> Tecnovix.Repo.preload(:items)
+    |> IO.inspect()
 
     assert data["success"] == true
   end
@@ -276,7 +296,7 @@ defmodule Tecnovix.Test.Wirecard do
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente/contrato_parceria", %{
+    |> post("/api/cliente/contrato_de_parceria", %{
       "items" => items,
       "id_cartao" => cartao["id"]
     })

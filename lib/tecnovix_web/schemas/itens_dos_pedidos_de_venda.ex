@@ -9,6 +9,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :produto, :string
     field :quantidade, :integer
     field :prc_unitario, :integer
+    field :tipo_venda, :string
     field :olho, :string
     field :paciente, :string
     field :num_pac, :string
@@ -38,6 +39,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :filial,
       :codigo,
       :nocontrato,
+      :tipo_venda,
       :codigo_item,
       :produto,
       :quantidade,

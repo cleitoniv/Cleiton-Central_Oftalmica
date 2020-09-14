@@ -29,12 +29,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
-    multi = Multi.new()
-
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
-         {:ok, _pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order, multi) do
+         {:ok, _pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) do
       # payment = Jason.decode!(payment.body)
       # url = "https://sandbox.moip.com.br/simulador/authorize?payment_id=#{payment["id"]}&amount=#{31200}"
       # HTTPoison.get(url)
@@ -46,7 +44,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
     else
-      _ ->
+      v ->
+        IO.inspect(v)
         {:error, :order_not_created}
     end
   end

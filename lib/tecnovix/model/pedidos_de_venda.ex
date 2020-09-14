@@ -103,22 +103,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
      }}
   end
 
-  def create_pedido(items, cliente, order, multi) do
-    Enum.group_by(items, fn map -> map["type"] end)
-    |> Enum.reduce(multi, fn {type, items}, acc ->
-      case pedido_params(items, cliente, order, type) do
-        {:ok, pedido} ->
-          Multi.insert(
-            acc,
-            Ecto.UUID.autogenerate(),
-            PedidosDeVendaSchema.changeset(%PedidosDeVendaSchema{}, pedido)
-          )
+  def create_pedido(items, cliente, order) do
+    case pedido_params(items, cliente, order) do
+      {:ok, pedido} ->
+        %PedidosDeVendaSchema{}
+        |> PedidosDeVendaSchema.changeset(pedido)
+        |> Repo.insert()
 
-        _ ->
-          multi
-      end
-    end)
-    |> Repo.transaction()
+      _ ->
+        {:error, :pedido_failed}
+    end
   end
 
   defp verify_type(type, order) do
@@ -129,41 +123,25 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pedido_params(items, cliente, order, "C") do
-    operation = "Remessa"
-
-    pedido = %{
-      "client_id" => cliente.id,
-      "order_id" => verify_type("C", order),
-      "filial" => "",
-      "numero" => String.slice(Ecto.UUID.autogenerate(), 1..6),
-      "cliente" => cliente.codigo,
+  def credito_items(items, map) do
+    %{
       "tipo_venda" => "C",
-      "pd_correios" => "",
-      "vendedor_1" => "",
-      "operation" => operation,
-      "items" =>
-        Enum.map(items, fn item ->
-          %{
-            "contrato_de_parceria_id" => 1,
-            "descricao_generica_do_produto_id" => item["descricao_generica_do_produto_id"],
-            "filial" => item["filial"],
-            "contrato_n" => item["contrato_n"],
-            "item" => item["item"],
-            "produto" => item["produto"],
-            "quantidade" => item["quantidade"],
-            "preco_venda" => item["preco_venda"],
-            "total" => item["preco_venda"] * item["quantidade"],
-            "cliente" => cliente.codigo,
-            "loja" => cliente.loja
-          }
-        end)
+      "pedido_de_venda_id" => 1,
+      "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
+      "codigo" => items["codigo"],
+      "produto" => items["produto"],
+      "quantidade" => items["quantidade"],
+      "prc_unitario" => items["prc_unitario"],
+      "virtotal" => items["quantidade"] * items["prc_unitario"],
+      "nota_fiscal" => items["nota_fiscal"],
+      "serie_nf" => items["serie_nf"],
+      "num_pedido" => items["num_pedido"],
+      "url_image" => items["url_image"],
+      "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10)
     }
-
-    {:ok, pedido}
   end
 
-  def pedido_params(items, cliente, order, "A") do
+  def pedido_params(items, cliente, order) do
     operation = "Avulso"
 
     pedido = %{
@@ -172,7 +150,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "filial" => "",
       "numero" => String.slice(Ecto.UUID.autogenerate(), 1..6),
       "cliente" => cliente.codigo,
-      "tipo_venda" => "A",
       "pd_correios" => "",
       "vendedor_1" => "",
       "operation" => operation,
@@ -202,6 +179,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
                     olho_diferentes_D(input_codigo(items, codigo), map),
                     olho_diferentes_E(input_codigo(items, codigo), map)
                   ]
+
+                map["type"] == "C" ->
+                  [credito_items(items, map)]
               end
             end)
 
@@ -225,6 +205,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       end
 
     %{
+      "tipo_venda" => map["type"],
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
@@ -260,6 +241,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       end
 
     %{
+      "tipo_venda" => map["type"],
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
@@ -289,6 +271,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def olho_diferentes_D(items, map) do
     %{
+      "tipo_venda" => map["type"],
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
@@ -318,6 +301,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def olho_diferentes_E(items, map) do
     %{
+      "tipo_venda" => map["type"],
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
@@ -479,7 +463,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
-    case pedido_params(items, cliente, "", "C") do
+    case pedido_params(items, cliente, "") do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
