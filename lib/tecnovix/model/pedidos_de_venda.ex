@@ -8,6 +8,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
   alias Tecnovix.App.ScreensTest
+  alias Ecto.Multi
   import Ecto.Query
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
@@ -102,16 +103,22 @@ defmodule Tecnovix.PedidosDeVendaModel do
      }}
   end
 
-  def create_pedido(items, cliente, order) do
-    case pedido_params(items, cliente, order) do
-      {:ok, pedido} ->
-        %PedidosDeVendaSchema{}
-        |> PedidosDeVendaSchema.changeset(pedido)
-        |> Repo.insert()
+  def create_pedido(items, cliente, order, multi) do
+    Enum.group_by(items, fn map -> map["type"] end)
+    |> Enum.reduce(multi, fn {type, items}, acc ->
+      case pedido_params(items, cliente, order, type) do
+        {:ok, pedido} ->
+          Multi.insert(
+            acc,
+            Ecto.UUID.autogenerate(),
+            PedidosDeVendaSchema.changeset(%PedidosDeVendaSchema{}, pedido)
+          )
 
-      _ ->
-        {:error, :pedido_failed}
-    end
+        _ ->
+          multi
+      end
+    end)
+    |> Repo.transaction()
   end
 
   defp verify_type(type, order) do
@@ -122,22 +129,50 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pedido_params(items, cliente, order) do
-    type = Enum.reduce(items, 0, fn map, _acc -> map["type"] end)
-
-    operation =
-      case type do
-        "A" -> "Avulso"
-        "C" -> "Remessa"
-      end
+  def pedido_params(items, cliente, order, "C") do
+    operation = "Remessa"
 
     pedido = %{
       "client_id" => cliente.id,
-      "order_id" => verify_type(type, order),
+      "order_id" => verify_type("C", order),
       "filial" => "",
       "numero" => String.slice(Ecto.UUID.autogenerate(), 1..6),
       "cliente" => cliente.codigo,
-      "tipo_venda" => type,
+      "tipo_venda" => "C",
+      "pd_correios" => "",
+      "vendedor_1" => "",
+      "operation" => operation,
+      "items" =>
+        Enum.map(items, fn item ->
+          %{
+            "contrato_de_parceria_id" => 1,
+            "descricao_generica_do_produto_id" => item["descricao_generica_do_produto_id"],
+            "filial" => item["filial"],
+            "contrato_n" => item["contrato_n"],
+            "item" => item["item"],
+            "produto" => item["produto"],
+            "quantidade" => item["quantidade"],
+            "preco_venda" => item["preco_venda"],
+            "total" => item["preco_venda"] * item["quantidade"],
+            "cliente" => cliente.codigo,
+            "loja" => cliente.loja
+          }
+        end)
+    }
+
+    {:ok, pedido}
+  end
+
+  def pedido_params(items, cliente, order, "A") do
+    operation = "Avulso"
+
+    pedido = %{
+      "client_id" => cliente.id,
+      "order_id" => verify_type("A", order),
+      "filial" => "",
+      "numero" => String.slice(Ecto.UUID.autogenerate(), 1..6),
+      "cliente" => cliente.codigo,
+      "tipo_venda" => "A",
       "pd_correios" => "",
       "vendedor_1" => "",
       "operation" => operation,
@@ -444,7 +479,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
-    case pedido_params(items, cliente, "") do
+    case pedido_params(items, cliente, "", "C") do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
