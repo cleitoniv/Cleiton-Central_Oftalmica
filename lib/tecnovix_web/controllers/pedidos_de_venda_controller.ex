@@ -6,6 +6,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.App.Screens
   alias Tecnovix.Services.Order
+  alias Ecto.Multi
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -28,10 +29,12 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
+    multi = Multi.new()
+
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) do
+         {:ok, _pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order, multi) do
       # payment = Jason.decode!(payment.body)
       # url = "https://sandbox.moip.com.br/simulador/authorize?payment_id=#{payment["id"]}&amount=#{31200}"
       # HTTPoison.get(url)
@@ -41,9 +44,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> render("pedidos.json", %{item: pedido})
+      |> send_resp(200, Jason.encode!(%{success: true}))
     else
-      _ -> {:error, :order_not_created}
+      _ ->
+        {:error, :order_not_created}
     end
   end
 
