@@ -102,8 +102,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
      }}
   end
 
-  def create_pedido(items, cliente, order, %{"type" => type, "operation" => operation}) do
-    case pedido_params(items, cliente, order, %{"type" => type, "operation" => operation}) do
+  def create_pedido(items, cliente, order) do
+    case pedido_params(items, cliente, order) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -114,7 +114,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def verify_type(type, order) do
+  defp verify_type(type, order) do
     case type do
       "A" -> Jason.decode!(order.body)["id"]
       "C" -> nil
@@ -122,50 +122,59 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pedido_params(items, cliente, order, %{"type" => type, "operation" => operation}) do
-    {:ok,
-     %{
-       "client_id" => cliente.id,
-       "order_id" => verify_type(type, order),
-       "filial" => "",
-       "numero" => String.slice(Ecto.UUID.autogenerate(), 1..6),
-       "cliente" => cliente.codigo,
-       "tipo_venda" => type,
-       "pd_correios" => "",
-       "vendedor_1" => "",
-       "operation" => operation,
-       "items" =>
-         Enum.reduce(items, [], fn map, acc ->
-           array =
-             Enum.flat_map(map["items"], fn items ->
-               cond do
-                 map["olho_direito"] != nil ->
-                   [olho_direito(items, map)]
+  def pedido_params(items, cliente, order) do
+    type = Enum.reduce(items, 0, fn map, _acc -> map["type"] end)
 
-                 map["olho_esquerdo"] != nil ->
-                   [olho_esquerdo(items, map)]
+    operation =
+      case type do
+        "A" -> "Avulso"
+        "C" -> "Remessa"
+      end
 
-                 map["olho_ambos"] != nil ->
-                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
+    pedido = %{
+      "client_id" => cliente.id,
+      "order_id" => verify_type(type, order),
+      "filial" => "",
+      "numero" => String.slice(Ecto.UUID.autogenerate(), 1..6),
+      "cliente" => cliente.codigo,
+      "tipo_venda" => type,
+      "pd_correios" => "",
+      "vendedor_1" => "",
+      "operation" => operation,
+      "items" =>
+        Enum.reduce(items, [], fn map, acc ->
+          array =
+            Enum.flat_map(map["items"], fn items ->
+              cond do
+                map["olho_direito"] != nil ->
+                  [olho_direito(items, map)]
 
-                   [
-                     olho_direito(input_codigo(items, codigo), map),
-                     olho_esquerdo(input_codigo(items, codigo), map)
-                   ]
+                map["olho_esquerdo"] != nil ->
+                  [olho_esquerdo(items, map)]
 
-                 map["olho_diferentes"] != nil ->
-                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
+                map["olho_ambos"] != nil ->
+                  codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
 
-                   [
-                     olho_diferentes_D(input_codigo(items, codigo), map),
-                     olho_diferentes_E(input_codigo(items, codigo), map)
-                   ]
-               end
-             end)
+                  [
+                    olho_direito(input_codigo(items, codigo), map),
+                    olho_esquerdo(input_codigo(items, codigo), map)
+                  ]
 
-           array ++ acc
-         end)
-     }}
+                map["olho_diferentes"] != nil ->
+                  codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
+
+                  [
+                    olho_diferentes_D(input_codigo(items, codigo), map),
+                    olho_diferentes_E(input_codigo(items, codigo), map)
+                  ]
+              end
+            end)
+
+          array ++ acc
+        end)
+    }
+
+    {:ok, pedido}
   end
 
   def input_codigo(map, codigo) do
@@ -184,6 +193,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
+      "codigo" => items["codigo"],
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
@@ -219,6 +229,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
       "nocontrato" => items["nocontrato"],
+      "codigo" => items["codigo"],
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "paciente" => map["paciente"]["nome"],
@@ -247,6 +258,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
       "nocontrato" => items["nocontrato"],
+      "codigo" => items["codigo"],
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "paciente" => map["paciente"]["nome"],
@@ -274,6 +286,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
+      "codigo" => items["codigo"],
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
@@ -430,20 +443,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
     |> Repo.all()
   end
 
-  def create_credito_produto(items, cliente, %{"type" => type, "operation" => operation}) do
-    case pedido_params(items, cliente, "", %{"type" => type, "operation" => operation}) do
-      {:ok, pedido} ->
-        %PedidosDeVendaSchema{}
-        |> PedidosDeVendaSchema.changeset(pedido)
-        |> Repo.insert()
-
-      _ ->
-        {:error, :pedido_failed}
-    end
-  end
-
   def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
-    case pedido_params(items, cliente, "", %{"type" => type, "operation" => operation}) do
+    case pedido_params(items, cliente, "") do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)

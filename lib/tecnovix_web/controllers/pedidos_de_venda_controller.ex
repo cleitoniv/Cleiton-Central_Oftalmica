@@ -30,45 +30,20 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
-         {:ok, _payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
-         {:ok, pedido} <-
-           PedidosDeVendaModel.create_pedido(items, cliente, order, %{
-             "type" => "A",
-             "operation" => "Avulso"
-           }) do
+         {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) do
+      # payment = Jason.decode!(payment.body)
+      # url = "https://sandbox.moip.com.br/simulador/authorize?payment_id=#{payment["id"]}&amount=#{31200}"
+      # HTTPoison.get(url)
+      # {:ok, order} = Tecnovix.Resource.Wirecard.Actions.get(payment["id"], :payments)
+      # Jason.decode!(order.body) |> IO.inspect
+
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("pedidos.json", %{item: pedido})
     else
-      v ->
-        IO.inspect(v)
-        {:error, :order_not_created}
-    end
-  end
-
-  def credito_produto(conn, %{"items" => items}) do
-    {:ok, cliente} =
-      case conn.private.auth do
-        {:ok, %ClientesSchema{} = cliente} ->
-          {:ok, cliente}
-
-        {:ok, %UsuariosClienteSchema{} = usuario} ->
-          PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
-      end
-
-    with {:ok, pedido} <-
-           PedidosDeVendaModel.create_credito_produto(items, cliente, %{
-             "type" => "C",
-             "operation" => "Remessa"
-           }) do
-      conn
-      |> put_status(200)
-      |> put_resp_content_type("application/json")
-      |> render("pedidos.json", %{item: pedido})
-    else
-      _ ->
-        {:error, :order_not_created}
+      _ -> {:error, :order_not_created}
     end
   end
 

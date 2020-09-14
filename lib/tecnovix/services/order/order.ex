@@ -8,16 +8,18 @@ defmodule Tecnovix.Services.Order do
 
   def verify_pedidos(pedidos) do
     verify =
-    Enum.map(pedidos, fn map ->
-      order_encode = Wirecard.get(map.order_id, :orders)
-      order = Jason.decode!(order_encode.body)
+      Enum.map(pedidos, fn map ->
+        {:ok, order_encode} = Wirecard.get(map.order_id, :orders)
+        order = Jason.decode!(order_encode.body)
 
-      case order["status"] do
-        "PAID" ->
-          PedidosDeVendaModel.update(map, Map.put(map, :status, 1))
-          _ -> {:error, map}
-      end
-    end)
+        case order["status"] do
+          "PAID" ->
+            PedidosDeVendaModel.update(map, Map.put(map, :status, 1))
+
+          _ ->
+            []
+        end
+      end)
 
     {:ok, verify}
   end
@@ -33,17 +35,25 @@ defmodule Tecnovix.Services.Order do
       |> Repo.all()
       |> verify_pedidos()
 
-      with {:ok, state} = resp <- pedidos do
-        Process.send_after(self(), {:ok, state}, 60000)
-        resp
-      else
-        {:error, reason} ->
-          {:stop, reason}
-      end
+    with {:ok, state} = resp <- pedidos do
+      Process.send_after(self(), {:ok, state}, 5000)
+      resp
+    else
+      {:error, reason} ->
+        {:stop, reason}
+    end
   end
 
   def handle_info({:ok, msg}, state) do
-    Process.send_after(self(), {:ok, state}, 60000)
+    Process.send_after(self(), {:ok, state}, 5000)
     {:noreply, msg}
+  end
+
+  def handle_call(:get, _from, state) do
+    {:reply, {:ok, state}, state}
+  end
+
+  def get_msg() do
+    GenServer.call(:order, :get)
   end
 end
