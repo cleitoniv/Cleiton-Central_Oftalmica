@@ -475,4 +475,14 @@ defmodule Tecnovix.App.ScreensTest do
       {:ok, pedido}
     end
   end
+
+  def get_mypoints(_cliente) do
+    pedido_points = [
+      %{
+        saldo: 50,
+        inclusao: "2020/08/15",
+        valor: ""
+      }
+    ]
+  end
 end

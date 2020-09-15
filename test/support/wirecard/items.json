@@ -10,6 +10,7 @@
       "numero": "132",
       "data_nascimento": "1998-07-07"
   },
+    "operation": "Avulso",
     "type": "A",
     "items": [
       {
@@ -36,6 +37,7 @@
     ]
   },
   {
+    "operation": "Remessa",
     "type": "C",
     "items": [
       {
