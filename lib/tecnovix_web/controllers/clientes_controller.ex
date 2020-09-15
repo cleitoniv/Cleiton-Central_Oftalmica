@@ -258,4 +258,17 @@ defmodule TecnovixWeb.ClientesController do
       |> send_resp(200, Jason.encode!(%{success: true, data: notifications}))
     end
   end
+
+  def get_product_serie(conn, %{"num_serie" => num_serie}) do
+    stub = Screens.stub()
+
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, product} <- stub.get_product_serie(cliente, num_serie) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: product}))
+    end
+  end
 end
