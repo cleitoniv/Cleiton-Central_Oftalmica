@@ -44,9 +44,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
     else
-      v ->
-        IO.inspect(v)
-        {:error, :order_not_created}
+      _ -> {:error, :order_not_created}
     end
   end
 

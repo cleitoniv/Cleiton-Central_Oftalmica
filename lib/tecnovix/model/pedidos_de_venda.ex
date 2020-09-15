@@ -148,7 +148,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "client_id" => cliente.id,
       "order_id" => verify_type("A", order),
       "filial" => "",
-      "numero" => String.slice(Ecto.UUID.autogenerate(), 1..6),
+      "numero" => "",
       "cliente" => cliente.codigo,
       "pd_correios" => "",
       "vendedor_1" => "",

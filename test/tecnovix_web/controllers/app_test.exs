@@ -60,7 +60,7 @@ defmodule Tecnovix.Test.App do
     user_param = Generator.user_param()
     params = TestHelp.single_json("single_descricao_generica_do_produto.json")
     {:ok, descricao} = DescricaoModel.create(params)
-    {:ok, items_json} = TestHelp.items("olhos_diferentes.json")
+    {:ok, items_json} = TestHelp.items("items.json")
 
     Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{
       "valor" => 2500,
@@ -109,13 +109,29 @@ defmodule Tecnovix.Test.App do
         end
       )
 
-    items =
-      Enum.map(
-        items_json,
-        fn map ->
-          Map.put(map, "items", items)
-        end
-      )
+      items =
+        Enum.map(
+          items_json,
+          fn map ->
+            case map["type"] do
+              "A" ->
+                item =
+                  Enum.filter(items, fn item ->
+                    item["codigo"] == "123132213123"
+                  end)
+
+                Map.put(map, "items", item)
+
+              "C" ->
+                item =
+                  Enum.filter(items, fn item ->
+                    item["codigo"] == "12313131"
+                  end)
+
+                Map.put(map, "items", item)
+            end
+          end
+        )
 
     pedido =
       build_conn()
@@ -129,7 +145,6 @@ defmodule Tecnovix.Test.App do
       |> recycle()
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-      |> Map.get("data")
 
     current_user =
       build_conn()
@@ -214,6 +229,5 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/points")
       |> json_response(200)
-      |> IO.inspect
   end
 end
