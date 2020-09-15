@@ -549,9 +549,9 @@ defmodule Tecnovix.App.ScreensTest do
 
       _ ->
           %{
-            esferico_e: "-",
-            eixo_e: "-",
-            cilindro_e: "-"
+            esferico_e: nil,
+            eixo_e: nil,
+            cilindro_e: nil
           }
     end
   end
