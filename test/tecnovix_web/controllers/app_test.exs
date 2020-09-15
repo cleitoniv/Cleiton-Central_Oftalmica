@@ -154,7 +154,7 @@ defmodule Tecnovix.Test.App do
 
     assert current_user["money"] == 5500
     assert current_user["points"] == 100
-    assert current_user["notifications"]["opens"] == 2
+    # assert current_user["notifications"]["opens"] == 2
 
     product =
       build_conn()
@@ -224,10 +224,24 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/payments?filtro=1")
       |> json_response(200)
 
+      assert payments["success"] == true
+
     points =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/points")
       |> json_response(200)
+
+      assert points["success"] == true
+
+    notifications =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/notifications")
+      |> json_response(200)
+      |> IO.inspect
+
+      assert notifications["success"] == true
+
   end
 end

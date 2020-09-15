@@ -1,7 +1,7 @@
 defmodule Tecnovix.App.Screens do
   @callback get_product_grid(cliente :: term, filtro :: term) :: {:ok, term}
   @callback get_credits(cliente :: term) :: {:ok, term}
-  @callback get_notifications_open(cliente :: term) :: {:ok, term}
+  @callback get_notifications(cliente :: term) :: {:ok, term}
   @callback get_offers(cliente :: term) :: {:ok, term}
   @callback get_products_credits(cliente :: term) :: {:ok, term}
   @callback get_order(cliente :: term, filtro :: term) :: {:ok, term}
