@@ -81,7 +81,7 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_notifications_open(_cliente) do
+  def get_notifications(_cliente) do
     notifications = %{
       opens: 2,
       notifications: [
@@ -173,6 +173,8 @@ defmodule Tecnovix.App.ScreensTest do
         }
       ]
     }
+
+    {:ok, notifications}
   end
 
   @impl true
@@ -561,6 +563,8 @@ defmodule Tecnovix.App.ScreensTest do
             pedido.items,
             fn item ->
               %{
+                type: item.tipo_venda,
+                operation: item.operation,
                 num_pac: item.num_pac,
                 paciente: item.paciente,
                 data_nascimento: item.dt_nas_pac,

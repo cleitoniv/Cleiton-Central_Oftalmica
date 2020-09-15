@@ -102,6 +102,7 @@ defmodule TecnovixWeb.Router do
       post "/contrato_de_parceria", TecnovixWeb.ContratoDeParceriaController, :create
       get "/payments", TecnovixWeb.ClientesController, :get_payments
       get "/points", TecnovixWeb.ClientesController, :get_mypoints
+      get "/notifications", TecnovixWeb.ClientesController, :get_notifications
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

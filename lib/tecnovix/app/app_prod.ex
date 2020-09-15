@@ -10,7 +10,7 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
-  def get_notifications_open(_cliente) do
+  def get_notifications(_cliente) do
   end
 
   @impl true

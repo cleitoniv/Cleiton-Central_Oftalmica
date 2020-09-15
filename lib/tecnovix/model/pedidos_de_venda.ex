@@ -143,7 +143,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def pedido_params(items, cliente, order) do
-
     pedido = %{
       "client_id" => cliente.id,
       "order_id" => verify_type("A", order),

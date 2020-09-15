@@ -95,7 +95,7 @@ defmodule TecnovixWeb.ClientesController do
         stub = Screens.stub()
 
         credits_info = stub.get_credits(user)
-        notifications = stub.get_notifications_open(user)
+        {:ok, notifications} = stub.get_notifications(user)
 
         conn
         |> put_view(TecnovixWeb.ClientesView)
@@ -243,6 +243,19 @@ defmodule TecnovixWeb.ClientesController do
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: pedidos_points}))
+    end
+  end
+
+  def get_notifications(conn, _params) do
+    stub = Screens.stub()
+
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, notifications} <- stub.get_notifications(cliente) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: notifications}))
     end
   end
 end
