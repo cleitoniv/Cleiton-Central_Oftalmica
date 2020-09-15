@@ -126,6 +126,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def credito_items(items, map) do
     %{
       "tipo_venda" => "C",
+      "operation" => "Remessa",
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "codigo" => items["codigo"],
@@ -142,7 +143,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def pedido_params(items, cliente, order) do
-    operation = "Avulso"
 
     pedido = %{
       "client_id" => cliente.id,
@@ -152,7 +152,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "cliente" => cliente.codigo,
       "pd_correios" => "",
       "vendedor_1" => "",
-      "operation" => operation,
       "items" =>
         Enum.reduce(items, [], fn map, acc ->
           array =
@@ -209,6 +208,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
+      "operation" => "Avulso",
       "codigo" => items["codigo"],
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],
@@ -245,6 +245,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
+      "operation" => "Avulso",
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
       "produto" => items["produto"],
@@ -275,6 +276,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
+      "operation" => "Avulso",
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
       "produto" => items["produto"],
@@ -305,6 +307,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
+      "operation" => "Avulso",
       "codigo" => items["codigo"],
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],

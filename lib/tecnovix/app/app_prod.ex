@@ -34,6 +34,6 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
-  def get_payments(_cliente) do
+  def get_payments(_cliente, _filtro) do
   end
 end

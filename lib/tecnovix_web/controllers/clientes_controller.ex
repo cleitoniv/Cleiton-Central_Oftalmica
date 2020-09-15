@@ -219,4 +219,17 @@ defmodule TecnovixWeb.ClientesController do
       |> render("cards.json", %{item: cards})
     end
   end
+
+  def get_payments(conn, %{"filtro" => filtro}) do
+    stub = Screens.stub()
+
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, payments} <- stub.get_payments(cliente, filtro) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: payments}))
+    end
+  end
 end

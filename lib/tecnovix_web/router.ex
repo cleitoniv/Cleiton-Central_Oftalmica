@@ -100,6 +100,7 @@ defmodule TecnovixWeb.Router do
       post "/card", TecnovixWeb.CartaoCreditoClienteController, :create
       get "/pedido/:id", TecnovixWeb.PedidosDeVendaController, :detail_order_id
       post "/contrato_parceria", TecnovixWeb.ContratoDeParceriaController, :create
+      get "/payments", TecnovixWeb.ClientesController, :get_payments
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
