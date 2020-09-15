@@ -16,6 +16,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Biosoft Asférica Mensal",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: @product_url,
         type: "miopia",
         boxes: 200
@@ -27,6 +29,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A2",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: @product_url,
         type: "miopia",
         boxes: 321
@@ -38,6 +42,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A3",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: @product_url,
         type: "miopia",
         boxes: 29
@@ -49,6 +55,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A4",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: @product_url,
         type: "hipermetropia",
         boxes: 0
@@ -74,8 +82,25 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_notifications_open(_cliente) do
+    notifications =
     %{
-      opens: 2
+      opens: 2,
+      notifications: [
+        %{
+          id: 0,
+          lido: 1,
+          data: "2020/01/05",
+          title: "Pedido Confirmado",
+          mensagem: "Pagamento confirmado e a previsão de entrega é para 22/07/2019."
+        },
+        %{
+          id: 1,
+          lido: 1,
+          data: "2020/01/05",
+          title: "Aguardando Pagamento",
+          mensagem: "Estamos aguardando o pagamento do boleto referente ao pedido."
+        }
+      ]
     }
   end
 
@@ -111,6 +136,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A1",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 0,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: "teste.com.br",
         type: "miopia",
         boxes: 0
@@ -122,6 +149,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A2",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 0,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: "teste.com.br",
         type: "miopia",
         boxes: 0
@@ -170,6 +199,8 @@ defmodule Tecnovix.App.ScreensTest do
           title: "Bioview Asferica Cx 6",
           produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
           value: 30000,
+          value_produto: 14100,
+          value_finan: 14100,
           quantity: 2,
           buy_type: "Avulso"
         },
@@ -191,6 +222,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Biosoft Asférica Mensal",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: @product_url,
         type: "miopia",
         boxes: 2,
@@ -214,6 +247,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A2",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: @product_url,
         type: "miopia",
         boxes: 0,
@@ -237,6 +272,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A3",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: @product_url,
         type: "miopia",
         boxes: 0,
@@ -260,6 +297,8 @@ defmodule Tecnovix.App.ScreensTest do
         title: "Bioview Asférica A4",
         produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
         value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
         image_url: @product_url,
         type: "hipermetropia",
         boxes: 0,
@@ -478,12 +517,45 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   def get_mypoints(_cliente) do
-    pedido_points = [
+    pedido_points =
       %{
         saldo: 50,
-        inclusao: "2020/08/15",
-        valor: ""
+        pedidos: [
+          %{
+            id: 0,
+            inclusao: "2020/08/15",
+            valor: 12000,
+            nome: "Marcos Barbosa Santos",
+            points: "+2",
+            num_pedido: 282740
+          },
+          %{
+            id: 1,
+            inclusao: "2020/08/15",
+            valor: 12000,
+            nome: "Pedro de Oliveira Palaoro",
+            points: "+2",
+            num_pedido: 282739
+          },
+          %{
+            id: 2,
+            inclusao: "2020/08/15",
+            valor: 24000,
+            nome: "Luana Oliveira",
+            points: "+4",
+            num_pedido: 282738
+          },
+          %{
+            id: 3,
+            inclusao: "2020/08/15",
+            valor: 36000,
+            nome: "Oliver Ribeiro",
+            points: "+5",
+            num_pedido: 282740
+          }
+        ]
       }
-    ]
+
+    {:ok, pedido_points}
   end
 end
