@@ -13,7 +13,6 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :pd_correios, :string
     field :vendedor_1, :string
     field :status_ped, :integer, default: 0
-    field :operation, :string
     field :previsao_entrega, :string
     field :frete, :integer, default: 0
     has_one :contrato_de_parceria, Tecnovix.ContratoDeParceriaSchema
@@ -38,8 +37,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :tipo_venda_ret_id,
       :pd_correios,
       :vendedor_1,
-      :status_ped,
-      :operation
+      :status_ped
     ])
     |> validate_required([:client_id])
     |> cast_assoc(:items)

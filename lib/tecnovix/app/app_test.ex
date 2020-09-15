@@ -318,15 +318,61 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_payments(_cliente) do
-    %{
-      total: 400,
-      number: "**** **** **** 1234",
-      avista: "A vista (5% de desconto)",
-      x2: "2x(3% de desconto)",
-      x3: "3x(2% de desconto)",
-      x4: "4x"
-    }
+  def get_payments(_cliente, filtro) do
+    payments =
+      [
+        %{
+          id: 0,
+          vencimento: "30/03/20",
+          nf: 6848529,
+          valor: 12000,
+          method: "BOLETO",
+          status: 0
+        },
+        %{
+          id: 1,
+          vencimento: "30/03/20",
+          nf: 6848529,
+          valor: 12000,
+          method: "CREDIT_CARD",
+          status: 1
+        },
+        %{
+          id: 2,
+          vencimento: "30/03/20",
+          nf: 6848529,
+          valor: 12000,
+          method: "CREDIT_CARD",
+          status: 0
+        },
+        %{
+          id: 3,
+          vencimento: "30/03/20",
+          nf: 6848529,
+          valor: 12000,
+          method: "CREDIT_FINAN",
+          status: 1
+        },
+        %{
+          id: 4,
+          vencimento: "30/03/20",
+          nf: 6848529,
+          valor: 12000,
+          method: "CREDIT_PRODUCT",
+          status: 1
+        },
+        %{
+          id: 5,
+          vencimento: "30/03/20",
+          nf: 6848529,
+          valor: 12000,
+          method: "BOLETO",
+          status: 2
+        }
+      ]
+
+      result = Enum.filter(payments, fn payment -> payment.status == String.to_integer(filtro) end)
+      {:ok, result}
   end
 
   defp parse_items(items) do

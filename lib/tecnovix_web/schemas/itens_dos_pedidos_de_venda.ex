@@ -6,6 +6,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     belongs_to :descricao_generica_do_produto, Tecnovix.DescricaoGenericaDoProdutoSchema
     field :filial, :string
     field :nocontrato, :string
+    field :operation, :string
     field :produto, :string
     field :quantidade, :integer
     field :prc_unitario, :integer
@@ -49,6 +50,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :num_pac,
       :dt_nas_pac,
       :virtotal,
+      :operation,
       :esferico,
       :cilindrico,
       :eixo,

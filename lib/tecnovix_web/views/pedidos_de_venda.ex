@@ -16,7 +16,6 @@ defmodule TecnovixWeb.PedidosDeVendaView do
         pd_correios: item.pd_correios,
         vendedor_1: item.vendedor_1,
         status_ped: item.status_ped,
-        operation: item.operation,
         items:
           render_many(item.items, TecnovixWeb.ItensDosPedidosDeVendaView, "itens_pedidos.json",
             as: :item

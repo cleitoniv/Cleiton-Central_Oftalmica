@@ -8,6 +8,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       filial: item.filial,
       nocontrato: item.nocontrato,
       codigo: item.codigo,
+      operation: item.operation,
       produto: item.produto,
       quantidade: item.quantidade,
       prc_unitario: item.prc_unitario,
