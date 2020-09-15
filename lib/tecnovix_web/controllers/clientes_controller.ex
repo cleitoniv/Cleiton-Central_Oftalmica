@@ -252,11 +252,10 @@ defmodule TecnovixWeb.ClientesController do
     {:ok, cliente} = conn.private.auth
 
     with {:ok, notifications} <- stub.get_notifications(cliente) do
-
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true}))
+      |> send_resp(200, Jason.encode!(%{success: true, data: notifications}))
     end
   end
 end

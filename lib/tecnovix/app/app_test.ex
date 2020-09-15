@@ -82,8 +82,7 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_notifications(_cliente) do
-    notifications =
-    %{
+    notifications = %{
       opens: 2,
       notifications: [
         %{
@@ -154,14 +153,16 @@ defmodule Tecnovix.App.ScreensTest do
           lido: 0,
           data: "2020/01/05",
           title: "Efetivação de Devolução",
-          mensagem: "Sua solicitação de devolução em crédito ou troca foi analisada por nossa equipe."
+          mensagem:
+            "Sua solicitação de devolução em crédito ou troca foi analisada por nossa equipe."
         },
         %{
           id: 10,
           lido: 0,
           data: "2020/01/05",
           title: "Solicitação de Devolução",
-          mensagem: "Recebemos sua solicitação de devolução em crédito ou troca, iremos analisá-la."
+          mensagem:
+            "Recebemos sua solicitação de devolução em crédito ou troca, iremos analisá-la."
         },
         %{
           id: 11,
@@ -430,60 +431,59 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_payments(_cliente, filtro) do
-    payments =
-      [
-        %{
-          id: 0,
-          vencimento: "30/03/20",
-          nf: 6848529,
-          valor: 12000,
-          method: "BOLETO",
-          status: 0
-        },
-        %{
-          id: 1,
-          vencimento: "30/03/20",
-          nf: 6848529,
-          valor: 12000,
-          method: "CREDIT_CARD",
-          status: 1
-        },
-        %{
-          id: 2,
-          vencimento: "30/03/20",
-          nf: 6848529,
-          valor: 12000,
-          method: "CREDIT_CARD",
-          status: 0
-        },
-        %{
-          id: 3,
-          vencimento: "30/03/20",
-          nf: 6848529,
-          valor: 12000,
-          method: "CREDIT_FINAN",
-          status: 1
-        },
-        %{
-          id: 4,
-          vencimento: "30/03/20",
-          nf: 6848529,
-          valor: 12000,
-          method: "CREDIT_PRODUCT",
-          status: 1
-        },
-        %{
-          id: 5,
-          vencimento: "30/03/20",
-          nf: 6848529,
-          valor: 12000,
-          method: "BOLETO",
-          status: 2
-        }
-      ]
+    payments = [
+      %{
+        id: 0,
+        vencimento: "30/03/20",
+        nf: 6_848_529,
+        valor: 12000,
+        method: "BOLETO",
+        status: 0
+      },
+      %{
+        id: 1,
+        vencimento: "30/03/20",
+        nf: 6_848_529,
+        valor: 12000,
+        method: "CREDIT_CARD",
+        status: 1
+      },
+      %{
+        id: 2,
+        vencimento: "30/03/20",
+        nf: 6_848_529,
+        valor: 12000,
+        method: "CREDIT_CARD",
+        status: 0
+      },
+      %{
+        id: 3,
+        vencimento: "30/03/20",
+        nf: 6_848_529,
+        valor: 12000,
+        method: "CREDIT_FINAN",
+        status: 1
+      },
+      %{
+        id: 4,
+        vencimento: "30/03/20",
+        nf: 6_848_529,
+        valor: 12000,
+        method: "CREDIT_PRODUCT",
+        status: 1
+      },
+      %{
+        id: 5,
+        vencimento: "30/03/20",
+        nf: 6_848_529,
+        valor: 12000,
+        method: "BOLETO",
+        status: 2
+      }
+    ]
 
-      result = Enum.filter(payments, fn payment -> payment.status == String.to_integer(filtro) end)
-      {:ok, result}
+    result = Enum.filter(payments, fn payment -> payment.status == String.to_integer(filtro) end)
+    {:ok, result}
   end
 
   defp parse_items(items) do
@@ -562,7 +562,7 @@ defmodule Tecnovix.App.ScreensTest do
             pedido.items,
             fn item ->
               %{
-                type: item.type,
+                type: item.tipo_venda,
                 operation: item.operation,
                 num_pac: item.num_pac,
                 paciente: item.paciente,
@@ -589,44 +589,43 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   def get_mypoints(_cliente) do
-    pedido_points =
-      %{
-        saldo: 50,
-        pedidos: [
-          %{
-            id: 0,
-            inclusao: "2020/08/15",
-            valor: 12000,
-            nome: "Marcos Barbosa Santos",
-            points: "+2",
-            num_pedido: 282740
-          },
-          %{
-            id: 1,
-            inclusao: "2020/08/15",
-            valor: 12000,
-            nome: "Pedro de Oliveira Palaoro",
-            points: "+2",
-            num_pedido: 282739
-          },
-          %{
-            id: 2,
-            inclusao: "2020/08/15",
-            valor: 24000,
-            nome: "Luana Oliveira",
-            points: "+4",
-            num_pedido: 282738
-          },
-          %{
-            id: 3,
-            inclusao: "2020/08/15",
-            valor: 36000,
-            nome: "Oliver Ribeiro",
-            points: "+5",
-            num_pedido: 282740
-          }
-        ]
-      }
+    pedido_points = %{
+      saldo: 50,
+      pedidos: [
+        %{
+          id: 0,
+          inclusao: "2020/08/15",
+          valor: 12000,
+          nome: "Marcos Barbosa Santos",
+          points: "+2",
+          num_pedido: 282_740
+        },
+        %{
+          id: 1,
+          inclusao: "2020/08/15",
+          valor: 12000,
+          nome: "Pedro de Oliveira Palaoro",
+          points: "+2",
+          num_pedido: 282_739
+        },
+        %{
+          id: 2,
+          inclusao: "2020/08/15",
+          valor: 24000,
+          nome: "Luana Oliveira",
+          points: "+4",
+          num_pedido: 282_738
+        },
+        %{
+          id: 3,
+          inclusao: "2020/08/15",
+          valor: 36000,
+          nome: "Oliver Ribeiro",
+          points: "+5",
+          num_pedido: 282_740
+        }
+      ]
+    }
 
     {:ok, pedido_points}
   end

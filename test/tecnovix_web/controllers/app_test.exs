@@ -109,29 +109,29 @@ defmodule Tecnovix.Test.App do
         end
       )
 
-      items =
-        Enum.map(
-          items_json,
-          fn map ->
-            case map["type"] do
-              "A" ->
-                item =
-                  Enum.filter(items, fn item ->
-                    item["codigo"] == "123132213123"
-                  end)
+    items =
+      Enum.map(
+        items_json,
+        fn map ->
+          case map["type"] do
+            "A" ->
+              item =
+                Enum.filter(items, fn item ->
+                  item["codigo"] == "123132213123"
+                end)
 
-                Map.put(map, "items", item)
+              Map.put(map, "items", item)
 
-              "C" ->
-                item =
-                  Enum.filter(items, fn item ->
-                    item["codigo"] == "12313131"
-                  end)
+            "C" ->
+              item =
+                Enum.filter(items, fn item ->
+                  item["codigo"] == "12313131"
+                end)
 
-                Map.put(map, "items", item)
-            end
+              Map.put(map, "items", item)
           end
-        )
+        end
+      )
 
     pedido =
       build_conn()
@@ -224,7 +224,7 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/payments?filtro=1")
       |> json_response(200)
 
-      assert payments["success"] == true
+    assert payments["success"] == true
 
     points =
       build_conn()
@@ -232,16 +232,15 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/points")
       |> json_response(200)
 
-      assert points["success"] == true
+    assert points["success"] == true
 
     notifications =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/notifications")
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
 
-      assert notifications["success"] == true
-
+    assert notifications["success"] == true
   end
 end
