@@ -548,8 +548,6 @@ defmodule Tecnovix.App.ScreensTest do
 
   def get_pedido_id(cliente_id, pedido_id) do
     with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
-      IO.inspect(pedido)
-
       pedido = %{
         data_inclusao: pedido.inserted_at,
         num_pedido: pedido.id,
@@ -583,7 +581,6 @@ defmodule Tecnovix.App.ScreensTest do
           |> parse_items()
       }
 
-      IO.inspect(pedido)
       {:ok, pedido}
     end
   end
