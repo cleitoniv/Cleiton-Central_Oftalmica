@@ -546,6 +546,13 @@ defmodule Tecnovix.App.ScreensTest do
           eixo_e: item.eixo,
           cilindro_e: item.cilindro
         }
+
+      _ ->
+          %{
+            esferico_e: "-",
+            eixo_e: "-",
+            cilindro_e: "-"
+          }
     end
   end
 
