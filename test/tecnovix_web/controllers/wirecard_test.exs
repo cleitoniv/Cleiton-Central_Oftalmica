@@ -44,7 +44,6 @@ defmodule Tecnovix.Test.Wirecard do
           )
         end
       )
-      |> IO.inspect()
 
     items =
       Enum.map(
