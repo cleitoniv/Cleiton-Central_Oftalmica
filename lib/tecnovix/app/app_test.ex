@@ -548,11 +548,11 @@ defmodule Tecnovix.App.ScreensTest do
         }
 
       _ ->
-          %{
-            esferico_e: nil,
-            eixo_e: nil,
-            cilindro_e: nil
-          }
+        %{
+          esferico_e: nil,
+          eixo_e: nil,
+          cilindro_e: nil
+        }
     end
   end
 
@@ -652,7 +652,7 @@ defmodule Tecnovix.App.ScreensTest do
       image_url: @product_url,
       type: "miopia",
       boxes: 200,
-      nf: 213568596
+      nf: 213_568_596
     }
 
     {:ok, product}

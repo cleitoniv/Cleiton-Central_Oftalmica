@@ -247,8 +247,8 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/product_serie/1")
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
 
-      assert product_serie["success"] == true
+    assert product_serie["success"] == true
   end
 end
