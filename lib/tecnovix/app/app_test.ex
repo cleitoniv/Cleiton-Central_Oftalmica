@@ -99,6 +99,76 @@ defmodule Tecnovix.App.ScreensTest do
           data: "2020/01/05",
           title: "Aguardando Pagamento",
           mensagem: "Estamos aguardando o pagamento do boleto referente ao pedido."
+        },
+        %{
+          id: 2,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Pedido Entregue",
+          mensagem: "Entrega do seu pedido nº26555 efetuada com sucesso em seu endereço."
+        },
+        %{
+          id: 3,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Reposição de Pedidos",
+          mensagem: "Confira a lista de possiveis reposições de produtos para seus clientes."
+        },
+        %{
+          id: 4,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Boleto Vencido",
+          mensagem: "Existem boletos vencidos em sua conta, pague-os para continuar comprando."
+        },
+        %{
+          id: 5,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Boleto a Vencer",
+          mensagem: "Existem boletos que estão prestes a vencer, não esqueça do pagamento."
+        },
+        %{
+          id: 6,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Credito Financeiro Adquirido",
+          mensagem: "Confirmamos a sua compra de Créditos Financeiros para sua conta."
+        },
+        %{
+          id: 7,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Credito de Produto Adquirido",
+          mensagem: "Confirmamos a sua compra de Créditos de Produtos para sua conta."
+        },
+        %{
+          id: 8,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Resgate de Pontos",
+          mensagem: "Adicionamos a sua conta o Crédito Financeiro referente ao Resgate de Pontos."
+        },
+        %{
+          id: 9,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Efetivação de Devolução",
+          mensagem: "Sua solicitação de devolução em crédito ou troca foi analisada por nossa equipe."
+        },
+        %{
+          id: 10,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Solicitação de Devolução",
+          mensagem: "Recebemos sua solicitação de devolução em crédito ou troca, iremos analisá-la."
+        },
+        %{
+          id: 11,
+          lido: 0,
+          data: "2020/01/05",
+          title: "Lentes quase acabando!",
+          mensagem: "O último pedido feito para seu paciente Luana, está quase acabando."
         }
       ]
     }
@@ -480,7 +550,6 @@ defmodule Tecnovix.App.ScreensTest do
       pedido = %{
         data_inclusao: pedido.inserted_at,
         num_pedido: pedido.numero,
-        type: pedido.tipo_venda,
         valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         frete: pedido.frete,
         valor_total:
