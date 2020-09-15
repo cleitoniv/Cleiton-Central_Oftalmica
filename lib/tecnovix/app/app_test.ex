@@ -521,6 +521,8 @@ defmodule Tecnovix.App.ScreensTest do
               |> Map.put(:codigo_item, codigo_item.codigo_item)
               |> Map.put(:nome_produto, codigo_item.nome_produto)
               |> Map.put(:duracao, "1 Ano")
+              |> Map.put(:type, codigo_item.type)
+              |> Map.put(:operation, codigo_item.operation)
 
             Map.merge(map, p_olho)
           end)
