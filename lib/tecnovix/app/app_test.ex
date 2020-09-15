@@ -651,7 +651,8 @@ defmodule Tecnovix.App.ScreensTest do
       value_finan: 14100,
       image_url: @product_url,
       type: "miopia",
-      boxes: 200
+      boxes: 200,
+      nf: 213568596
     }
 
     {:ok, product}
