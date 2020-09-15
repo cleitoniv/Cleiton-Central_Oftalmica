@@ -549,11 +549,11 @@ defmodule Tecnovix.App.ScreensTest do
         }
 
       _ ->
-          %{
-            esferico_e: nil,
-            eixo_e: nil,
-            cilindro_e: nil
-          }
+        %{
+          esferico_e: nil,
+          eixo_e: nil,
+          cilindro_e: nil
+        }
     end
   end
 
@@ -638,5 +638,24 @@ defmodule Tecnovix.App.ScreensTest do
     }
 
     {:ok, pedido_points}
+  end
+
+  def get_product_serie(_cliente, _num_serie) do
+    product = %{
+      id: 0,
+      tests: 0,
+      credits: 0,
+      title: "Biosoft Asférica Mensal",
+      produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
+      value: 15100,
+      value_produto: 14100,
+      value_finan: 14100,
+      image_url: @product_url,
+      type: "miopia",
+      boxes: 200,
+      nf: 213_568_596
+    }
+
+    {:ok, product}
   end
 end

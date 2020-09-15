@@ -12,6 +12,7 @@ defmodule Tecnovix.App.Screens do
   @callback get_cards(cliente :: term) :: {:ok, term}
   @callback get_payments(cliente :: term, filtro :: term) :: {:ok, term}
   @callback get_mypoints(cliente :: term) :: {:ok, term}
+  @callback get_product_serie(cliente :: term, num_serie :: term) :: {:ok, term}
 
   def stub() do
     case Mix.env() do
