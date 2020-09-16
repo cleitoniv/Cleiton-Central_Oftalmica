@@ -105,6 +105,8 @@ defmodule TecnovixWeb.Router do
       get "/points", TecnovixWeb.ClientesController, :get_mypoints
       get "/notifications", TecnovixWeb.ClientesController, :get_notifications
       get "/product_serie/:num_serie", TecnovixWeb.ClientesController, :get_product_serie
+      post "/devolution_continue", TecnovixWeb.ClientesController, :devolution_continue
+      post "/next_step", TecnovixWeb.ClientesController, :next_step
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

@@ -65,10 +65,5 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
       :dt_nas_pac,
       :numero
     ])
-    |> validate_required([
-      :pre_devolucao_id,
-      :descricao_generica_do_produto_id,
-      :sub_descricao_generica_do_produto_id
-    ])
   end
 end

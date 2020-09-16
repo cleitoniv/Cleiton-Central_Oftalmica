@@ -216,7 +216,7 @@ defmodule TecnovixWeb.UsersTest do
         end)
       end)
 
-      map =
+    map =
       Enum.map(single_param, fn map ->
         Map.put(map, "items", items)
       end)
@@ -225,8 +225,7 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente/pre_devolucao", %{"param" => map})
     |> json_response(200)
-    |> IO.inspect
-    
+    |> IO.inspect()
   end
 
   test "Pegando os cartões do cliente" do
@@ -307,5 +306,97 @@ defmodule TecnovixWeb.UsersTest do
     # IO.inspect Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema)
 
     assert card["success"] == true
+  end
+
+  test "Testando o GenServer" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    products = [
+      %{
+        serie: "011" <> "0989898",
+        id: 0,
+        tests: 0,
+        credits: 0,
+        title: "Biosoft Asférica Mensal",
+        produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
+        value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
+        image_url: @product_url,
+        type: "miopia",
+        boxes: 50,
+        quantidade: 10,
+        nf: "213_568_596",
+        group: "011C"
+      },
+      %{
+        serie: "011" <> "0989898",
+        id: 0,
+        tests: 0,
+        credits: 0,
+        title: "Biosoft Asférica Mensal",
+        produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
+        value: 15100,
+        value_produto: 14100,
+        value_finan: 14100,
+        image_url: @product_url,
+        type: "miopia",
+        boxes: 50,
+        quantidade: 10,
+        nf: "213_568_596",
+        group: "010C"
+      }
+    ]
+
+    devolution =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/devolution_continue", %{"products" => products, "tipo" => "T"})
+      |> json_response(200)
+      |> Map.get("data")
+      |> Map.get("product")
+
+    devolution_params = %{
+      paciente: "Mauricio",
+      numero: "123",
+      dt_nas_pac: "2020-07-07",
+      esferico: 1.25,
+      cilindrico: 1.0,
+      eixo: 1.22,
+      cor: "Azul",
+      adicao: 1.55
+    }
+
+    next =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/next_step", %{
+        "group" => devolution["group"],
+        "quantidade" => 10,
+        "devolution" => devolution_params
+      })
+      |> json_response(200)
+      |> Map.get("data")
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente/next_step", %{
+      "group" => next["group"],
+      "quantidade" => 10,
+      "devolution" => devolution_params
+    })
+    |> json_response(200)
+
+    IO.inspect(
+      Tecnovix.Repo.all(Tecnovix.ItensPreDevolucaoSchema)
+    )
   end
 end

@@ -497,6 +497,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> order_by([p], desc: p.inserted_at)
       |> Repo.all()
 
-      {:ok, pedidos}
+    {:ok, pedidos}
   end
 end
