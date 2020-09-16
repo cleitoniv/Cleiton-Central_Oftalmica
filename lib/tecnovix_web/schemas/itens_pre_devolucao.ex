@@ -22,6 +22,14 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
     field :item_doc, :string
     field :contrato, :string
     field :tipo, :string
+    field :paciente, :string
+    field :numero, :integer
+    field :dt_nas_pac, :date
+    field :esferico, :decimal
+    field :cilindrico, :decimal
+    field :eixo, :decimal
+    field :cor, :string
+    field :adicao, :decimal
     belongs_to :pre_devolucao, Tecnovix.PreDevolucaoSchema
     timestamps()
   end
@@ -47,7 +55,15 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
       :serie_saida,
       :item_doc,
       :contrato,
-      :tipo
+      :tipo,
+      :cor,
+      :adicao,
+      :esferico,
+      :cilindrico,
+      :eixo,
+      :paciente,
+      :dt_nas_pac,
+      :numero
     ])
     |> validate_required([
       :pre_devolucao_id,

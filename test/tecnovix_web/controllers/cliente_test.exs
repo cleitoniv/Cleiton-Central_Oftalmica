@@ -210,16 +210,23 @@ defmodule TecnovixWeb.UsersTest do
     {:ok, items} = TestHelp.items("items.json")
 
     items =
-      Enum.map(single_param["items"], fn x ->
-        Map.put(x, "descricao_generica_do_produto_id", descricao.id)
+      Enum.flat_map(single_param, fn devolucao ->
+        Enum.map(devolucao["items"], fn x ->
+          Map.put(x, "descricao_generica_do_produto_id", descricao.id)
+        end)
       end)
 
-    map = Map.put(single_param, "items", items)
+      map =
+      Enum.map(single_param, fn map ->
+        Map.put(map, "items", items)
+      end)
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente/pre_devolucao", %{"param" => map})
     |> json_response(200)
+    |> IO.inspect
+    
   end
 
   test "Pegando os cartões do cliente" do

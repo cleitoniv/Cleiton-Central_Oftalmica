@@ -36,13 +36,21 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   def create(cliente, params) do
     devolucao =
-      cliente
-      |> pre_devolucao(params)
-      |> itens_pre_devolucao()
+      Enum.map(params, fn param ->
+        devolucao =
+          cliente
+          |> pre_devolucao(param)
+          |> itens_pre_devolucao()
 
-    %PreDevolucaoSchema{}
-    |> PreDevolucaoSchema.changeset(devolucao)
-    |> Repo.insert()
+        {:ok, item} =
+          %PreDevolucaoSchema{}
+          |> PreDevolucaoSchema.changeset(devolucao)
+          |> Repo.insert()
+
+        item
+      end)
+
+    {:ok, devolucao}
   end
 
   # Ajeitando o mapa da tabela PRE DEVOLUCAO

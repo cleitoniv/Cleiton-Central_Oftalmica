@@ -17,11 +17,11 @@ defmodule TecnovixWeb.PreDevolucaoController do
   def create(conn, %{"param" => params}) do
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, devolucao} <- PreDevolucaoModel.create(cliente, params) do
+    with {:ok, devolucoes} <- PreDevolucaoModel.create(cliente, params) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> render("devolucao.json", %{item: devolucao})
+      |> render("devolucoes.json", %{item: devolucoes})
     else
       _ ->
         {:error, :not_created}
