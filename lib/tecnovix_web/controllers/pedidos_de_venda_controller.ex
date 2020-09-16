@@ -15,7 +15,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> render("pedidos.json", %{item: pedido})
+      |> render("pedido.json", %{item: pedido})
     end
   end
 
@@ -66,7 +66,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> render("pedidos.json", %{item: pedido})
+      |> render("pedido.json", %{item: pedido})
     else
       _ -> {:error, :order_not_created}
     end
@@ -83,6 +83,15 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> send_resp(200, Jason.encode!(%{success: true, data: pedido}))
     else
       _ -> {:error, :not_found}
+    end
+  end
+
+  def get_pedidos(conn, %{"filtro" => filtro}) do
+    with {:ok, pedidos} <- PedidosDeVendaModel.get_pedidos_protheus(filtro) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedidos_protheus.json", %{item: pedidos})
     end
   end
 end
