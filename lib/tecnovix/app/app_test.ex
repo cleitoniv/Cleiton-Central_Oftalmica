@@ -640,7 +640,7 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, pedido_points}
   end
 
-  def get_product_serie(_cliente, _num_serie) do
+  def get_product_serie(_cliente, "010" <> _num_serie) do
     product = %{
       id: 0,
       tests: 0,
@@ -652,8 +652,32 @@ defmodule Tecnovix.App.ScreensTest do
       value_finan: 14100,
       image_url: @product_url,
       type: "miopia",
-      boxes: 200,
-      nf: "213568596"
+      boxes: 50,
+      quantidade: 10,
+      nf: "213_568_596",
+      group: "010C"
+    }
+
+    {:ok, product}
+  end
+
+  def get_product_serie(_cliente, "011" <> num_serie) do
+    product = %{
+      serie: "011" <> num_serie,
+      id: 0,
+      tests: 0,
+      credits: 0,
+      title: "Biosoft Asférica Mensal",
+      produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
+      value: 15100,
+      value_produto: 14100,
+      value_finan: 14100,
+      image_url: @product_url,
+      type: "miopia",
+      boxes: 50,
+      quantidade: 10,
+      nf: "213_568_596",
+      group: "011C"
     }
 
     {:ok, product}

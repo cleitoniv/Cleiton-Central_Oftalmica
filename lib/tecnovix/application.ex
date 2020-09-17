@@ -15,7 +15,8 @@ defmodule Tecnovix.Application do
       # Starts a worker by calling: Tecnovix.Worker.start_link(arg)
       # {Tecnovix.Worker, arg},
       {Absinthe.Subscription, [TecnovixWeb.Endpoint]},
-      {Tecnovix.Services.Auth, []}
+      {Tecnovix.Services.Auth, []},
+      {Tecnovix.Services.Devolucao, []}
       # {Tecnovix.Services.Order, []}
     ]
 

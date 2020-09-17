@@ -11,7 +11,6 @@ defmodule TecnovixWeb.PedidosDeVendaView do
         filial: item.filial,
         numero: item.numero,
         cliente: item.cliente,
-        tipo_venda: item.tipo_venda,
         tipo_venda_ret_id: item.tipo_venda_ret_id,
         pd_correios: item.pd_correios,
         vendedor_1: item.vendedor_1,
@@ -25,9 +24,13 @@ defmodule TecnovixWeb.PedidosDeVendaView do
     }
   end
 
+  def render("pedidos_protheus.json", %{item: item}) when is_list(item) do
+    render_many(item, __MODULE__, "pedido.json", as: :item)
+  end
+
   multi_parser("pedidos.json", [:filial, :cliente, :cliente_id])
 
-  def render("pedidos.json", %{item: item}) do
+  def render("pedido.json", %{item: item}) do
     __MODULE__.build(%{item: item})
   end
 end

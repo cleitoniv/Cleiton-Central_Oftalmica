@@ -7,6 +7,7 @@ defmodule TecnovixWeb.ClientesController do
   alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.ClientesSchema
   alias Tecnovix.App.Screens
+  alias Tecnovix.Services.Devolucao
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -269,6 +270,38 @@ defmodule TecnovixWeb.ClientesController do
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
+    end
+  end
+
+  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) do
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{"success" => true, "data" => devolution}))
+    end
+  end
+
+  def next_step(conn, %{"group" => group, "quantidade" => quantidade, "devolution" => devolution}) do
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, next} <- Devolucao.next(cliente.id, group, quantidade, devolution) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(
+        200,
+        Jason.encode!(%{"success" => true, "data" => next, "status" => "continue"})
+      )
+    else
+      :finish ->
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(
+          200,
+          Jason.encode!(%{"success" => true, "data" => %{}, "status" => "completed"})
+        )
     end
   end
 end

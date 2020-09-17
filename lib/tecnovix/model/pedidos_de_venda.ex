@@ -488,4 +488,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
         {:ok, pedido}
     end
   end
+
+  def get_pedidos_protheus(filtro) do
+    pedidos =
+      PedidosDeVendaSchema
+      |> preload(:items)
+      |> where([p], p.status_ped == ^filtro)
+      |> order_by([p], desc: p.inserted_at)
+      |> Repo.all()
+
+    {:ok, pedidos}
+  end
 end
