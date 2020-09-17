@@ -148,16 +148,13 @@ defmodule TecnovixWeb.InsertOrUpdate do
   test "insert or update of the table PEDIDOS_DE_VENDA" do
     %{"access_token" => token} = Generator.sync_user("thiagoboeker", "123456")
 
-    single_param = TestHelp.single_json("single_pedidos_de_venda.json")
+    single_param = TestHelp.single_json("single_pedidos_and_items.json")
     multi_param = TestHelp.multi_json("multi_pedidos_de_venda.json")
     multi_param = %{"data" => multi_param}
 
     build_conn()
     |> Generator.put_auth(token)
     |> post("/api/sync/pedidos_de_venda", single_param)
-    |> recycle()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pedidos_de_venda", multi_param)
     |> json_response(200)
   end
 
