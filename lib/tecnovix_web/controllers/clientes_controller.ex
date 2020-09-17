@@ -150,6 +150,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def orders(conn, %{"filtro" => filtro}) do
+    IO.inspect conn
     stub = Screens.stub()
     {:ok, cliente} = conn.private.auth
 

@@ -8,7 +8,7 @@ defmodule Tecnovix.LogsClienteSchema do
     belongs_to :cliente, ClientesSchema
     field :uid, :string, autogenerate: {Ecto.UUID, :autogenerate, []}
     belongs_to :usuario_cliente, UsuariosClienteSchema
-    field :data, :utc_datetime, autogenerate: {DateTime, :utc_now, []}
+    field :data, :utc_datetime, autogenerate: {DateTime, :truncate, [DateTime.utc_now(), :second]}
     field :ip, :string
     field :dispositivo, :string
     field :acao_realizada, :string
@@ -27,6 +27,6 @@ defmodule Tecnovix.LogsClienteSchema do
       :dispositivo,
       :acao_realizada
     ])
-    |> validate_required([:cliente_id, :data])
+    |> validate_required([:cliente_id])
   end
 end

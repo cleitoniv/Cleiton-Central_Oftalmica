@@ -35,12 +35,18 @@ defmodule TecnovixWeb.PedidosDeVendaController do
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
          {:ok, _pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) do
-      # payment = Jason.decode!(payment.body)
-      # url = "https://sandbox.moip.com.br/simulador/authorize?payment_id=#{payment["id"]}&amount=#{31200}"
-      # HTTPoison.get(url)
-      # {:ok, order} = Tecnovix.Resource.Wirecard.Actions.get(payment["id"], :payments)
-      # Jason.decode!(order.body) |> IO.inspect
+           ip=
+             conn.remote_ip
+             |> Tuple.to_list()
+             |> Enum.join()
 
+          logs = %{
+            "ip" => ip,
+            "cliente_id" => cliente.id,
+            "dispositivo" => "Samsung A30S",
+            "acao_realizada" => "Pedido criado com sucesso."
+          }
+          Tecnovix.LogsClienteModel.create(logs)
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

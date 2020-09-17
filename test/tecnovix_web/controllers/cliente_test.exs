@@ -365,7 +365,7 @@ defmodule TecnovixWeb.UsersTest do
       |> Map.get("product")
 
     devolution_params = %{
-      num_serie: "0110989898",
+      num_de_serie: "0110989898",
       paciente: "Mauricio",
       numero: "123",
       dt_nas_pac: "2020-07-07",
@@ -395,5 +395,8 @@ defmodule TecnovixWeb.UsersTest do
       "devolution" => devolution_params
     })
     |> json_response(200)
+
+    # IO.inspect Tecnovix.Repo.all(Tecnovix.PreDevolucaoSchema)
+    # |> Tecnovix.Repo.preload(:items)
   end
 end
