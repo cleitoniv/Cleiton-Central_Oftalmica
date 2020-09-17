@@ -11,7 +11,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   action_fallback Tecnovix.Resources.Fallback
 
   def insert_or_update(conn, params) do
-    IO.inspect "oi 1"
     with {:ok, pedido} <- PedidosDeVendaModel.insert_or_update(params) do
       conn
       |> put_status(200)

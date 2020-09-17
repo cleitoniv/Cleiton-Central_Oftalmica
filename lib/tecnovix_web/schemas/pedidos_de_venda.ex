@@ -59,7 +59,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :vendedor_1,
       :status_ped
     ])
-    |> cast_assoc(:items)
+    |> cast_assoc(:items, with: &Tecnovix.ItensDosPedidosDeVendaSchema.changeset_sync/2)
     |> cast_assoc(:contrato_de_parceria)
   end
 end

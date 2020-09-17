@@ -68,4 +68,40 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :quantidade
     ])
   end
+
+  def changeset_sync(struct, params \\ %{}) do
+    struct
+    |> cast(params, [
+      :pedido_de_venda_id,
+      :descricao_generica_do_produto_id,
+      :filial,
+      :codigo,
+      :nocontrato,
+      :tipo_venda,
+      :codigo_item,
+      :produto,
+      :quantidade,
+      :prc_unitario,
+      :olho,
+      :paciente,
+      :num_pac,
+      :dt_nas_pac,
+      :virtotal,
+      :operation,
+      :esferico,
+      :cilindrico,
+      :eixo,
+      :cor,
+      :adic_padrao,
+      :adicao,
+      :nota_fiscal,
+      :serie_nf,
+      :num_pedido,
+      :url_image
+    ])
+    |> validate_required([
+      :produto,
+      :quantidade
+    ])
+  end
 end

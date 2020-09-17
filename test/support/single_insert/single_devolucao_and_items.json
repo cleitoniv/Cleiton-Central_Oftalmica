@@ -9,9 +9,6 @@
   "status": "1",
   "items": [
     {
-      "pre_devolucao_id": 1,
-      "descricao_generica_do_produto_id": 1,
-      "sub_descricao_generica_do_produto_id": 1,
       "filial": "123",
       "cod_pre_dev": "teste",
       "item": "2",
