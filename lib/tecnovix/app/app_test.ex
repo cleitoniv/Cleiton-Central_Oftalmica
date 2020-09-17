@@ -418,6 +418,7 @@ defmodule Tecnovix.App.ScreensTest do
         end
       )
 
+    IO.inspect(detail)
     {:ok, detail}
   end
 
@@ -641,6 +642,7 @@ defmodule Tecnovix.App.ScreensTest do
 
   def get_product_serie(_cliente, "010" <> _num_serie) do
     product = %{
+      num_serie: "010C000001",
       id: 0,
       tests: 0,
       credits: 0,
@@ -662,7 +664,11 @@ defmodule Tecnovix.App.ScreensTest do
 
   def get_product_serie(_cliente, "011" <> num_serie) do
     product = %{
+<<<<<<< HEAD
       num_serie: "011" <> num_serie,
+=======
+      num_serie: "011C" <> num_serie,
+>>>>>>> ad77270c36900ad96802f4b654ac4a0213610bd3
       id: 0,
       tests: 0,
       credits: 0,
