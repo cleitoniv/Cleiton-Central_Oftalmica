@@ -77,8 +77,6 @@ defmodule Tecnovix.Test.Wirecard do
 
     Tecnovix.Repo.all(Tecnovix.PedidosDeVendaSchema)
     |> Tecnovix.Repo.preload(:items)
-    |> IO.inspect()
-
     assert data["success"] == true
   end
 

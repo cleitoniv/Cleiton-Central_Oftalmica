@@ -43,4 +43,23 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     |> cast_assoc(:items)
     |> cast_assoc(:contrato_de_parceria)
   end
+
+  def changeset_sync(struct, params \\ %{}) do
+    struct
+    |> cast(params, [
+      :previsao_entrega,
+      :frete,
+      :order_id,
+      :client_id,
+      :filial,
+      :numero,
+      :cliente,
+      :tipo_venda_ret_id,
+      :pd_correios,
+      :vendedor_1,
+      :status_ped
+    ])
+    |> cast_assoc(:items)
+    |> cast_assoc(:contrato_de_parceria)
+  end
 end

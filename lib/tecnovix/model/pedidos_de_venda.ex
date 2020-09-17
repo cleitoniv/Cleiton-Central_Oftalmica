@@ -19,7 +19,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
                 filial: pedidos["filial"],
                 numero: pedidos["numero"]
               ) do
-         create(pedidos)
+         create_sync(pedidos)
        else
          changeset ->
            Repo.preload(changeset, :items)
@@ -28,9 +28,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
      end)}
   end
 
+  def create_sync(params) do
+    %PedidosDeVendaSchema{}
+    |> PedidosDeVendaSchema.changeset_sync(params)
+    |> Repo.insert
+  end
+
   def insert_or_update(%{"filial" => filial, "numero" => numero} = params) do
     with nil <- Repo.get_by(PedidosDeVendaSchema, filial: filial, numero: numero) do
-      __MODULE__.create(params)
+      __MODULE__.create_sync(params)
     else
       pedido ->
         {:ok, pedido}

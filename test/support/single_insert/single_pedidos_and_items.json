@@ -1,5 +1,4 @@
 {
-  "client_id": 2,
   "filial": "123",
   "numero": "123256",
   "cliente": "teste",
@@ -11,7 +10,6 @@
   "items": [
     {
     "pedido_de_venda_id": 1,
-    "descricao_generica_do_produto_id": 1,
     "filial": "teste",
     "nocontrato": "teste",
     "produto": "Lente",
