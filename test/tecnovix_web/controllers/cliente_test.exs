@@ -365,6 +365,7 @@ defmodule TecnovixWeb.UsersTest do
       |> Map.get("product")
 
     devolution_params = %{
+      serie: "0110989898",
       paciente: "Mauricio",
       numero: "123",
       dt_nas_pac: "2020-07-07",
