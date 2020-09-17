@@ -37,6 +37,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def insert_or_update(%{"filial" => filial, "numero" => numero} = params) do
     with nil <- Repo.get_by(PedidosDeVendaSchema, filial: filial, numero: numero) do
       __MODULE__.create_sync(params)
+      |> IO.inspect
     else
       pedido ->
         {:ok, pedido}
