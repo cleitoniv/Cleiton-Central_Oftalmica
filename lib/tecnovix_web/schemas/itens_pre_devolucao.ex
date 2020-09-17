@@ -24,7 +24,7 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
     field :tipo, :string
     field :paciente, :string
     field :numero, :integer
-    field :dt_nas_pac, :date
+    field :dt_nas_pac, :string
     field :esferico, :decimal
     field :cilindrico, :decimal
     field :eixo, :decimal

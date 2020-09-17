@@ -192,42 +192,6 @@ defmodule TecnovixWeb.UsersTest do
     # |> json_response(200)
   end
 
-  test "Criando uma Pre Devoluçao pelo cliente" do
-    user_firebase = Generator.user()
-    user_param = Generator.user_param()
-    contrato = TestHelp.single_json("single_contrato_de_parceria.json")
-    single_param = TestHelp.single_json("single_devolucao_and_items0.json")
-    params = TestHelp.single_json("single_descricao_generica_do_produto.json")
-    {:ok, descricao} = DescricaoModel.create(params)
-
-    cliente =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente", %{"param" => user_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    {:ok, items} = TestHelp.items("items.json")
-
-    items =
-      Enum.flat_map(single_param, fn devolucao ->
-        Enum.map(devolucao["items"], fn x ->
-          Map.put(x, "descricao_generica_do_produto_id", descricao.id)
-        end)
-      end)
-
-    map =
-      Enum.map(single_param, fn map ->
-        Map.put(map, "items", items)
-      end)
-
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente/pre_devolucao", %{"param" => map})
-    |> json_response(200)
-    |> IO.inspect()
-  end
-
   test "Pegando os cartões do cliente" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
@@ -367,8 +331,9 @@ defmodule TecnovixWeb.UsersTest do
     devolution_params = %{
       num_de_serie: "0110989898",
       paciente: "Mauricio",
+      quant: 5,
       numero: "123",
-      dt_nas_pac: "2020-07-07",
+      dt_nas_pac: "2020/07/07",
       esferico: 1.25,
       cilindrico: 1.0,
       eixo: 1.22,
