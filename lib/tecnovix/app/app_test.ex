@@ -653,7 +653,7 @@ defmodule Tecnovix.App.ScreensTest do
       image_url: @product_url,
       type: "miopia",
       boxes: 200,
-      nf: 213_568_596
+      nf: "213568596"
     }
 
     {:ok, product}
