@@ -30,6 +30,10 @@ defmodule TecnovixWeb.PedidosDeVendaView do
 
   multi_parser("pedidos.json", [:filial, :cliente, :cliente_id])
 
+  def render("pedido.json", %{item: items}) when is_list(items) do
+    render_many(items, __MODULE__, "pedido.json", as: :item)
+  end
+
   def render("pedido.json", %{item: item}) do
     __MODULE__.build(%{item: item})
   end

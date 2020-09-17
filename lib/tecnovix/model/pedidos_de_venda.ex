@@ -13,7 +13,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
-     Enum.map(params["data"], fn pedidos ->
+      Enum.map(params["data"], fn pedidos ->
+      {:ok, item} =
        with nil <-
               Repo.get_by(PedidosDeVendaSchema,
                 filial: pedidos["filial"],
@@ -23,9 +24,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
        else
          changeset ->
            Repo.preload(changeset, :items)
-           |> __MODULE__.update(pedidos)
+           |> __MODULE__.update_sync(pedidos)
        end
+
+       item
      end)}
+  end
+
+  def update_sync(changeset, params) do
+    PedidosDeVendaSchema.changeset_sync(changeset, params)
+    |> Repo.update()
   end
 
   def create_sync(params) do
@@ -38,8 +46,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
     with nil <- Repo.get_by(PedidosDeVendaSchema, filial: filial, numero: numero) do
       __MODULE__.create_sync(params)
     else
-      pedido ->
-        {:ok, pedido}
+      changeset ->
+        Repo.preload(changeset, :items)
+        |> __MODULE__.update_sync(params)
     end
   end
 
