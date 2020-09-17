@@ -308,7 +308,7 @@ defmodule TecnovixWeb.UsersTest do
     assert card["success"] == true
   end
 
-  test "Testando o GenServer" do
+  test "Testando o GenServer de pre devolucao" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
 
@@ -321,7 +321,7 @@ defmodule TecnovixWeb.UsersTest do
 
     products = [
       %{
-        serie: "011" <> "0989898",
+        num_serie: "011" <> "0989898",
         id: 0,
         tests: 0,
         credits: 0,
@@ -338,7 +338,7 @@ defmodule TecnovixWeb.UsersTest do
         group: "011C"
       },
       %{
-        serie: "011" <> "0989898",
+        num_serie: "011" <> "0989898",
         id: 0,
         tests: 0,
         credits: 0,
@@ -365,7 +365,7 @@ defmodule TecnovixWeb.UsersTest do
       |> Map.get("product")
 
     devolution_params = %{
-      serie: "0110989898",
+      num_serie: "0110989898",
       paciente: "Mauricio",
       numero: "123",
       dt_nas_pac: "2020-07-07",
@@ -395,9 +395,5 @@ defmodule TecnovixWeb.UsersTest do
       "devolution" => devolution_params
     })
     |> json_response(200)
-
-    IO.inspect(
-      Tecnovix.Repo.all(Tecnovix.ItensPreDevolucaoSchema)
-    )
   end
 end
