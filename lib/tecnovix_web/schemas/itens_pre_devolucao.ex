@@ -12,7 +12,7 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
     field :filial_orig, :string
     field :num_de_serie, :string
     field :produto, :string
-    field :quant, :decimal
+    field :quant, :integer
     field :prod_subs, :string
     field :descricao, :string
     field :doc_devol, :string
