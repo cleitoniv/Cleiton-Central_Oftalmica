@@ -31,17 +31,18 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def create_sync(params) do
     %PedidosDeVendaSchema{}
     |> PedidosDeVendaSchema.changeset_sync(params)
-    |> Repo.insert
+    |> Repo.insert()
   end
 
   def insert_or_update(%{"filial" => filial, "numero" => numero} = params) do
+    IO.inspect "oi 2"
     with nil <- Repo.get_by(PedidosDeVendaSchema, filial: filial, numero: numero) do
       __MODULE__.create_sync(params)
-      |> IO.inspect
     else
       pedido ->
         {:ok, pedido}
     end
+    |> IO.inspect
   end
 
   def insert_or_update(_params) do
