@@ -245,9 +245,22 @@ defmodule Tecnovix.Test.App do
     product_serie =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/product_serie/1")
+      |> get("/api/cliente/product_serie/010C37281")
       |> json_response(200)
 
     assert product_serie["success"] == true
+
+    extrato_finan =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/extrato_finan")
+      |> json_response(200)
+
+    extrato_prod =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/extrato_prod")
+      |> json_response(200)
+      |> IO.inspect
   end
 end

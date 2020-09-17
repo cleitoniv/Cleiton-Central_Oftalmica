@@ -3,11 +3,7 @@ use Mix.Config
 # Configure your database
 config :tecnovix, Tecnovix.Repo,
   username: "postgres",
-<<<<<<< HEAD
   password: "vitinho01",
-=======
-  password: "q1w2e3",
->>>>>>> ad77270c36900ad96802f4b654ac4a0213610bd3
   database: "tecnovix_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox,

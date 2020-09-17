@@ -122,7 +122,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, product} <- stub.get_product_grid(cliente, filtro) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
     end
@@ -134,7 +133,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, offers} <- stub.get_offers(cliente) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: offers}))
     end
@@ -146,7 +144,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, products} <- stub.get_products_credits(cliente) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: products}))
     end
@@ -158,7 +155,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, orders} <- stub.get_order(cliente, filtro) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: orders}))
     end
@@ -170,7 +166,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, cart} <- stub.get_products_cart(cliente) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: cart}))
     end
@@ -182,7 +177,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, info} <- stub.get_info_product(cliente, id) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: info}))
     end
@@ -194,7 +188,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, detail} <- stub.get_detail_order(cliente, filtro) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: detail}))
     end
@@ -228,7 +221,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, payments} <- stub.get_payments(cliente, filtro) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: payments}))
     end
@@ -241,7 +233,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, pedidos_points} <- stub.get_mypoints(cliente) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: pedidos_points}))
     end
@@ -254,7 +245,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, notifications} <- stub.get_notifications(cliente) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: notifications}))
     end
@@ -267,7 +257,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, product} <- stub.get_product_serie(cliente, num_serie) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
     end
@@ -278,7 +267,6 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{"success" => true, "data" => devolution}))
     end
@@ -302,6 +290,30 @@ defmodule TecnovixWeb.ClientesController do
           200,
           Jason.encode!(%{"success" => true, "data" => %{}, "status" => "completed"})
         )
+    end
+  end
+
+  def get_extrato_finan(conn, _params) do
+    stub = Screens.stub()
+
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, finan} <- stub.get_extrato_finan(cliente) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: finan}))
+    end
+  end
+
+  def get_extrato_prod(conn, _params) do
+    stub = Screens.stub()
+
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, prod} <- stub.get_extrato_prod(cliente) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: prod}))
     end
   end
 end

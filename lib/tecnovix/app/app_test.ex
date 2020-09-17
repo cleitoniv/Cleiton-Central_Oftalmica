@@ -417,8 +417,7 @@ defmodule Tecnovix.App.ScreensTest do
           }
         end
       )
-
-    IO.inspect(detail)
+      
     {:ok, detail}
   end
 
@@ -598,6 +597,7 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
+  @impl true
   def get_mypoints(_cliente) do
     pedido_points = %{
       saldo: 50,
@@ -640,6 +640,7 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, pedido_points}
   end
 
+  @impl true
   def get_product_serie(_cliente, "010" <> _num_serie) do
     product = %{
       num_serie: "010C000001",
@@ -662,13 +663,10 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, product}
   end
 
+  @impl true
   def get_product_serie(_cliente, "011" <> num_serie) do
     product = %{
-<<<<<<< HEAD
-      num_serie: "011" <> num_serie,
-=======
       num_serie: "011C" <> num_serie,
->>>>>>> ad77270c36900ad96802f4b654ac4a0213610bd3
       id: 0,
       tests: 0,
       credits: 0,
@@ -686,5 +684,71 @@ defmodule Tecnovix.App.ScreensTest do
     }
 
     {:ok, product}
+  end
+
+  def get_extrato_finan(_cliente) do
+    extrato = [
+      %{
+        id: 0,
+        date: "2020/01/10",
+        pedido: 23441,
+        valor: 2000
+      },
+      %{
+        id: 1,
+        date: "2019/07/02",
+        pedido: 213545,
+        valor: -2000
+      },
+      %{
+        id: 2,
+        date: "2020/01/10",
+        pedido: 23441,
+        valor: +3600
+      }
+    ]
+
+    {:ok, extrato}
+  end
+
+  def get_extrato_prod(_cliente) do
+    extrato =[
+      %{
+        id: 0,
+        saldo: 1,
+        produto: "Biosoft SIHY 45 CX3",
+        items: [
+          %{
+            date: "2020/01/10",
+            pedido: 23441,
+            quantidade: 1
+          },
+          %{
+            date: "2020/07/02",
+            pedido: 213545,
+            quantidade: -100
+          }
+        ]
+      },
+      %{
+        id: 0,
+        saldo: 1,
+        produto: "Biosoft SIHY 45 CX3",
+        items: [
+          %{
+            date: "2020/01/10",
+            pedido: 23441,
+            quantidade: 1
+          },
+          %{
+            date: "2020/07/02",
+            pedido: 213545,
+            quantidade: -100
+          }
+        ]
+      }
+    ]
+
+    {:ok, extrato}
   end
 end

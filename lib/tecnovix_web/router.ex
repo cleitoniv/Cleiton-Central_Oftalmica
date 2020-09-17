@@ -107,6 +107,8 @@ defmodule TecnovixWeb.Router do
       get "/product_serie/:num_serie", TecnovixWeb.ClientesController, :get_product_serie
       post "/devolution_continue", TecnovixWeb.ClientesController, :devolution_continue
       post "/next_step", TecnovixWeb.ClientesController, :next_step
+      get "/extrato_finan", TecnovixWeb.ClientesController, :get_extrato_finan
+      get "/extrato_prod", TecnovixWeb.ClientesController, :get_extrato_prod
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
