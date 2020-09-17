@@ -7,7 +7,7 @@ defmodule Tecnovix.Services.Devolucao do
     |> Enum.map(fn {group, products} ->
       quantidade =
         Enum.reduce(products, 0, fn map, acc ->
-          map["quantidade"] + acc
+          acc + 1
         end)
 
       {group, quantidade}
@@ -54,6 +54,11 @@ defmodule Tecnovix.Services.Devolucao do
     product = Enum.find(products, fn product -> product["group"] == group end)
 
     {product, quantidade}
+  end
+
+  def handle_cast(:debug, state) do
+    IO.inspect state
+    {:noreply, state}
   end
 
   def handle_call({:insert, id, products, tipo}, _from, state) do

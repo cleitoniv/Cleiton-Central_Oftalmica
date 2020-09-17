@@ -642,6 +642,7 @@ defmodule Tecnovix.App.ScreensTest do
 
   def get_product_serie(_cliente, "010" <> _num_serie) do
     product = %{
+      num_serie: "010C000001",
       id: 0,
       tests: 0,
       credits: 0,
@@ -663,7 +664,7 @@ defmodule Tecnovix.App.ScreensTest do
 
   def get_product_serie(_cliente, "011" <> num_serie) do
     product = %{
-      serie: "011" <> num_serie,
+      num_serie: "011C" <> num_serie,
       id: 0,
       tests: 0,
       credits: 0,
