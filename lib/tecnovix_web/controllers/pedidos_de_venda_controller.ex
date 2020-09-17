@@ -20,6 +20,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       v -> IO.inspect v
         {:error, :order_not_created}
     end
+    |> IO.inspect
   end
 
   def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
