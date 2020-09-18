@@ -610,7 +610,7 @@ defmodule Tecnovix.App.ScreensTest do
           valor: 12000,
           nome: "Marcos Barbosa Santos",
           points: "+2",
-          num_pedido: 282_740
+          num_pedido: "282740"
         },
         %{
           id: 1,
@@ -618,7 +618,7 @@ defmodule Tecnovix.App.ScreensTest do
           valor: 12000,
           nome: "Pedro de Oliveira Palaoro",
           points: "+2",
-          num_pedido: 282_739
+          num_pedido: "282739"
         },
         %{
           id: 2,
@@ -626,7 +626,7 @@ defmodule Tecnovix.App.ScreensTest do
           valor: 24000,
           nome: "Luana Oliveira",
           points: "+4",
-          num_pedido: 282_738
+          num_pedido: "282738"
         },
         %{
           id: 3,
@@ -634,7 +634,7 @@ defmodule Tecnovix.App.ScreensTest do
           valor: 36000,
           nome: "Oliver Ribeiro",
           points: "+5",
-          num_pedido: 282_740
+          num_pedido: "282740"
         }
       ]
     }
