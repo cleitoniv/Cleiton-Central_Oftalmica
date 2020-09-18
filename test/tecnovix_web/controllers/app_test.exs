@@ -275,13 +275,11 @@ defmodule Tecnovix.Test.App do
 
   test "email" do
     user = "victorasilva0707@gmail.com"
-    cliente = "victorlokiinho@gmail.com"
-    email = Tecnovix.Email.content_email_dev([user, cliente])
+    email = Tecnovix.Email.content_email_dev(user)
 
     assert email.to == user
-    assert email.subject == "Central Oftalmica"
 
-    email = Tecnovix.Email.content_email_dev([user, cliente])
+    email = Tecnovix.Email.content_email_dev(user)
 
     email |> Tecnovix.Mailer.deliver_now()
 
