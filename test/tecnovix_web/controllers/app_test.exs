@@ -270,7 +270,13 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/send_email_dev?email=#{email}")
       |> json_response(200)
-      |> IO.inspect()
+
+    points =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/add_points", %{"num_serie" => 123123, "info_pac" => %{}})
+      |> json_response(200)
+      |> IO.inspect
   end
 
   test "email" do

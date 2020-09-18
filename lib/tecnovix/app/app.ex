@@ -16,7 +16,8 @@ defmodule Tecnovix.App.Screens do
   @callback get_extrato_finan(cliente :: term) :: {:ok, term}
   @callback get_extrato_prod(cliente :: term) :: {:ok, term}
   @callback get_emaildev(cliente :: term) :: {:ok, term}
-
+  @callback add_points(cliente :: term) :: {:ok, term}
+  
   def stub() do
     case Mix.env() do
       :prod -> Tecnovix.App.ScreensProd

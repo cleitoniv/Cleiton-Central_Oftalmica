@@ -243,7 +243,7 @@ defmodule TecnovixWeb.ClientesController do
 
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, points} <- stub.add_points(num_serie, _info_pac) do
+    with {:ok, points} <- stub.add_points(num_serie, info_pac) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: points}))
