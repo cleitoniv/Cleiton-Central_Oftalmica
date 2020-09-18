@@ -455,7 +455,7 @@ defmodule Tecnovix.App.ScreensTest do
         nf: "6848529",
         valor: 12000,
         method: "CREDIT_CARD",
-        status: 0
+        status: 1
       },
       %{
         id: 3,
@@ -640,6 +640,14 @@ defmodule Tecnovix.App.ScreensTest do
     }
 
     {:ok, pedido_points}
+  end
+
+  @impl true
+  def add_points(num_serie, _info_pac) do
+    case num_serie == 123_123 do
+      true -> {:ok, 2}
+      false -> {:error, :num_serie_invalid}
+    end
   end
 
   @impl true
