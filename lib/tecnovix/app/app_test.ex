@@ -438,6 +438,7 @@ defmodule Tecnovix.App.ScreensTest do
         nf: 6_848_529,
         valor: 12000,
         method: "BOLETO",
+        codigo_barra: "34191.79001 01043.510047 91020.150008 6 83820026000",
         status: 0
       },
       %{
@@ -478,6 +479,7 @@ defmodule Tecnovix.App.ScreensTest do
         nf: 6_848_529,
         valor: 12000,
         method: "BOLETO",
+        codigo_barra: "34191.79001 01043.510047 91020.150008 6 83820026000",
         status: 2
       }
     ]
