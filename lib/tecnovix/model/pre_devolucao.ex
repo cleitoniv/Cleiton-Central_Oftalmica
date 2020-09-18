@@ -67,7 +67,8 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   # Ajeitando o mapa da tabela PRE DEVOLUCAO
   def pre_devolucao(cliente, params, tipo) do
-    IO.inspect params
+    IO.inspect(params)
+
     %{
       "client_id" => cliente.id,
       "filial" => "N",

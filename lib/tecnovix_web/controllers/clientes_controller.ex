@@ -322,7 +322,8 @@ defmodule TecnovixWeb.ClientesController do
 
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, _} <- stub.get_and_send_email_dev(email, cliente.email) do
+    with {:ok, _} <- stub.get_and_send_email_dev(email),
+         {:ok, _} <- stub.get_and_send_email_dev(cliente.email) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))

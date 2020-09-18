@@ -18,22 +18,20 @@ defmodule Tecnovix.Email do
     )
   end
 
-  #enviando email para o cliente de devolucao
-  def send_email_dev(to, cliente_email) do
-    email = content_email_dev([to, cliente_email])
+  # enviando email para o cliente de devolucao
+  def send_email_dev(email) do
+    email = content_email_dev(email)
+    |> Mailer.deliver_now(response: true)
 
     {:ok, email}
   end
 
-  def content_email_dev(emails) do
-      for email <- emails do
-        new_email(
+  def content_email_dev(email) do
+      new_email(
         from: @remetente,
         to: email,
         subject: "Central Oftalmica - Pedido de Devolução",
         text_body: "teste"
-        )
-        |> Mailer.deliver_now(response: true)
-      end
+      )
   end
 end

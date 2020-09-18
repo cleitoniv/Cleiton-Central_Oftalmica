@@ -697,7 +697,7 @@ defmodule Tecnovix.App.ScreensTest do
       %{
         id: 1,
         date: "2019/07/02",
-        pedido: 213545,
+        pedido: 213_545,
         valor: -2000
       },
       %{
@@ -712,7 +712,7 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   def get_extrato_prod(_cliente) do
-    extrato =[
+    extrato = [
       %{
         id: 0,
         saldo: 1,
@@ -725,7 +725,7 @@ defmodule Tecnovix.App.ScreensTest do
           },
           %{
             date: "2020/07/02",
-            pedido: 213545,
+            pedido: 213_545,
             quantidade: -100
           }
         ]
@@ -742,7 +742,7 @@ defmodule Tecnovix.App.ScreensTest do
           },
           %{
             date: "2020/07/02",
-            pedido: 213545,
+            pedido: 213_545,
             quantidade: -100
           }
         ]
@@ -753,8 +753,8 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_and_send_email_dev(email, cliente_email) do
-    case Tecnovix.Email.send_email_dev(email, cliente_email) do
+  def get_and_send_email_dev(email) do
+    case Tecnovix.Email.send_email_dev(email) do
       {:ok, email} -> {:ok, email}
       _ -> {:error, :email_not_send}
     end

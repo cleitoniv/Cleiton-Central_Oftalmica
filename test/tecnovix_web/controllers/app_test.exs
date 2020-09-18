@@ -263,13 +263,28 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/extrato_prod")
       |> json_response(200)
 
-      email = "victorasilva0707@gmail.com"
+    email = "victorasilva0707@gmail.com"
 
     send_email =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/send_email_dev?email=#{email}")
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
+  end
+
+  test "email" do
+    user = "victorasilva0707@gmail.com"
+    cliente = "victorlokiinho@gmail.com"
+    email = Tecnovix.Email.content_email_dev([user, cliente])
+
+    assert email.to == user
+    assert email.subject == "Central Oftalmica"
+
+    email = Tecnovix.Email.content_email_dev([user, cliente])
+
+    email |> Tecnovix.Mailer.deliver_now()
+
+    assert_delivered_email(email)
   end
 end
