@@ -435,7 +435,7 @@ defmodule Tecnovix.App.ScreensTest do
       %{
         id: 0,
         vencimento: "30/03/20",
-        nf: 6_848_529,
+        nf: "6848529",
         valor: 12000,
         method: "BOLETO",
         codigo_barra: "34191.79001 01043.510047 91020.150008 6 83820026000",
@@ -444,7 +444,7 @@ defmodule Tecnovix.App.ScreensTest do
       %{
         id: 1,
         vencimento: "30/03/20",
-        nf: 6_848_529,
+        nf: "6848529",
         valor: 12000,
         method: "CREDIT_CARD",
         status: 1
@@ -452,7 +452,7 @@ defmodule Tecnovix.App.ScreensTest do
       %{
         id: 2,
         vencimento: "30/03/20",
-        nf: 6_848_529,
+        nf: "6848529",
         valor: 12000,
         method: "CREDIT_CARD",
         status: 0
@@ -460,7 +460,7 @@ defmodule Tecnovix.App.ScreensTest do
       %{
         id: 3,
         vencimento: "30/03/20",
-        nf: 6_848_529,
+        nf: "6848529",
         valor: 12000,
         method: "CREDIT_FINAN",
         status: 1
@@ -468,7 +468,7 @@ defmodule Tecnovix.App.ScreensTest do
       %{
         id: 4,
         vencimento: "30/03/20",
-        nf: 6_848_529,
+        nf: "6848529",
         valor: 12000,
         method: "CREDIT_PRODUCT",
         status: 1
@@ -476,7 +476,7 @@ defmodule Tecnovix.App.ScreensTest do
       %{
         id: 5,
         vencimento: "30/03/20",
-        nf: 6_848_529,
+        nf: "6848529",
         valor: 12000,
         method: "BOLETO",
         codigo_barra: "34191.79001 01043.510047 91020.150008 6 83820026000",

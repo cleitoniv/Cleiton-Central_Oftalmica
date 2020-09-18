@@ -69,15 +69,12 @@ defmodule Tecnovix.Test.Wirecard do
         end
       )
 
-    data =
+    pedido =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-
-    IO.inspect(Tecnovix.Repo.all(Tecnovix.LogsClienteSchema))
-
-    assert data["success"] == true
+      |> Map.get("data")
   end
 
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // USUARIO_CLIENTE" do
