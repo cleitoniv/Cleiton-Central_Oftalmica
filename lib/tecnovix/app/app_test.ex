@@ -417,7 +417,7 @@ defmodule Tecnovix.App.ScreensTest do
           }
         end
       )
-      
+
     {:ok, detail}
   end
 
@@ -750,5 +750,13 @@ defmodule Tecnovix.App.ScreensTest do
     ]
 
     {:ok, extrato}
+  end
+
+  @impl true
+  def get_and_send_email_dev(email, cliente_email) do
+    case Tecnovix.Email.send_email_dev(email, cliente_email) do
+      {:ok, email} -> {:ok, email}
+      _ -> {:error, :email_not_send}
+    end
   end
 end

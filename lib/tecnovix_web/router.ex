@@ -109,6 +109,7 @@ defmodule TecnovixWeb.Router do
       post "/next_step", TecnovixWeb.ClientesController, :next_step
       get "/extrato_finan", TecnovixWeb.ClientesController, :get_extrato_finan
       get "/extrato_prod", TecnovixWeb.ClientesController, :get_extrato_prod
+      get "/send_email_dev", TecnovixWeb.ClientesController, :get_and_send_email_dev
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

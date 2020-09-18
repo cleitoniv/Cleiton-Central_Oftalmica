@@ -7,6 +7,7 @@ defmodule Tecnovix.Test.App do
   alias Tecnovix.TestHelper
   alias Tecnovix.Resource.Wirecard.Actions
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
+  use Bamboo.Test
 
   describe "Tela de login e tela de cadastro inicial" do
     test "Cadastro efetuado com sucesso" do
@@ -260,6 +261,14 @@ defmodule Tecnovix.Test.App do
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/extrato_prod")
+      |> json_response(200)
+
+      email = "victorasilva0707@gmail.com"
+
+    send_email =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/send_email_dev?email=#{email}")
       |> json_response(200)
       |> IO.inspect
   end

@@ -23,7 +23,7 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
     field :contrato, :string
     field :tipo, :string
     field :paciente, :string
-    field :numero, :integer
+    field :numero, :string
     field :dt_nas_pac, :string
     field :esferico, :decimal
     field :cilindrico, :decimal

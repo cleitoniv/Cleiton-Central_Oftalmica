@@ -150,7 +150,6 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def orders(conn, %{"filtro" => filtro}) do
-    IO.inspect conn
     stub = Screens.stub()
     {:ok, cliente} = conn.private.auth
 
@@ -315,6 +314,18 @@ defmodule TecnovixWeb.ClientesController do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: prod}))
+    end
+  end
+
+  def get_and_send_email_dev(conn, %{"email" => email}) do
+    stub = Screens.stub()
+
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, _} <- stub.get_and_send_email_dev(email, cliente.email) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true}))
     end
   end
 end
