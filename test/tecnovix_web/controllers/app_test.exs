@@ -271,18 +271,20 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/send_email_dev?email=#{email}")
       |> json_response(200)
 
+      paciente = %{"paciente" => "Victor", "num_pac" => "123123", "dt_nas_pac" => "2020-07-07", "num_serie" => "123123"}
+
     points =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/add_points", %{"num_serie" => 123_123, "info_pac" => %{}})
+      |> post("/api/cliente/add_points", %{"param" => paciente})
       |> json_response(200)
+      |> IO.inspect
 
     rescue_points =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/rescue_points")
       |> json_response(200)
-      |> IO.inspect
   end
 
   test "email" do

@@ -654,14 +654,6 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def add_points(num_serie, _info_pac) do
-    case num_serie == 123_123 do
-      true -> {:ok, 2}
-      false -> {:error, :num_serie_invalid}
-    end
-  end
-
-  @impl true
   def get_product_serie(_cliente, "010" <> _num_serie) do
     product = %{
       num_serie: "010C000001",
