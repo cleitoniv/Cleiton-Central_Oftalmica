@@ -111,6 +111,7 @@ defmodule TecnovixWeb.Router do
       get "/extrato_prod", TecnovixWeb.ClientesController, :get_extrato_prod
       get "/send_email_dev", TecnovixWeb.ClientesController, :get_and_send_email_dev
       post "/add_points", TecnovixWeb.ClientesController, :add_points
+      get "/rescue_points", TecnovixWeb.ClientesController, :get_rescue_points
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
