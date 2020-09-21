@@ -250,17 +250,6 @@ defmodule TecnovixWeb.ClientesController do
       end
   end
 
-  def rescue_points(conn, %{"points" => points, "credit_finan" => credit_finan}) do
-    stub = Screens.stub()
-
-    {:ok, cliente} = conn.private.auth
-
-    with {:ok, _rescue_points} <- stub.rescue_points(points, credit_finan) do
-      conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true}))
-    end
-  end
   def get_notifications(conn, _params) do
     stub = Screens.stub()
 

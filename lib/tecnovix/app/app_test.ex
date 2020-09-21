@@ -651,17 +651,7 @@ defmodule Tecnovix.App.ScreensTest do
 
     {:ok, points}
   end
-
-  @impl true
-  def rescue_points(points, credit_finan) do
-    points =
-      case points do
-        x -> credit_finan
-      end
-
-    {:ok, points}
-  end
-
+  
   @impl true
   def get_product_serie(_cliente, "010" <> _num_serie) do
     product = %{
