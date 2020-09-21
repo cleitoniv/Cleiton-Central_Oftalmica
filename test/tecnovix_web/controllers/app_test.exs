@@ -278,13 +278,13 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/add_points", %{"param" => paciente})
       |> json_response(200)
-      |> IO.inspect
 
     rescue_points =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/rescue_points")
+      |> get("/api/cliente/rescue_points?points=100")
       |> json_response(200)
+      |> IO.inspect
   end
 
   test "email" do

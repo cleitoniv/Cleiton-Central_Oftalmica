@@ -238,12 +238,12 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def get_rescue_points(conn, _params) do
+  def get_rescue_points(conn, %{"points" => points}) do
       stub = Screens.stub()
 
       {:ok, cliente} = conn.private.auth
 
-      with {:ok, points} <- stub.get_rescue_points(cliente) do
+      with {:ok, points} <- stub.get_rescue_points(cliente, points) do
         conn
         |> put_resp_content_type("application/json")
         |> send_resp(200, Jason.encode!(%{success: true, data: points}))

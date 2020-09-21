@@ -643,12 +643,11 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_rescue_points(_cliente) do
-    points =
-      %{
-        points: 50,
-        credit_finan: 104
-      }
+  def get_rescue_points(_cliente, points) do
+    points=
+      case points do
+        x -> %{"credit_finan" => 104}
+      end
 
     {:ok, points}
   end
