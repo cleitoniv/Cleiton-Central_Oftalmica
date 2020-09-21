@@ -271,7 +271,7 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/send_email_dev?email=#{email}")
       |> json_response(200)
 
-      paciente = %{"paciente" => "Victor", "num_pac" => "123123", "dt_nas_pac" => "2020-07-07", "num_serie" => "123123"}
+      paciente = %{"paciente" => "Victor", "num_pac" => "123123", "dt_nas_pac" => "07/07/2020", "num_serie" => "123123"}
 
     points =
       build_conn()
