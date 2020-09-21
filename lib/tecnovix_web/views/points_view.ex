@@ -8,7 +8,8 @@ defmodule TecnovixWeb.PointsView do
       num_pac: item.num_pac,
       dt_nas_pac: item.dt_nas_pac,
       points: item.points,
-      status: item.status
+      status: item.status,
+      success: true
     }
   end
 end
