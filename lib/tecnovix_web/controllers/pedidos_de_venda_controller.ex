@@ -102,6 +102,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("pedidos_protheus.json", %{item: pedidos})
+    else
+      _ -> {:error, :not_found}
     end
   end
 end

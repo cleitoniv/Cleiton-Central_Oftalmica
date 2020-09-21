@@ -33,11 +33,16 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def get_clientes_app(filtro) do
-    query =
-      from c in ClientesSchema,
-        where: c.sit_app == ^filtro
+    clientes =
+      ClientesSchema
+      |> where([c], c.sit_app == ^filtro)
+      |> order_by([c], desc: c.inserted_at)
+      |> Repo.all()
 
-    {:ok, Repo.all(query)}
+    case clientes do
+      [] -> {:error, :not_found}
+      clientes -> {:ok, clientes}
+    end
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do

@@ -30,7 +30,7 @@ config :tecnovix,
        "B9cwPTrRRrk/W+4psbuf2AI7Z6G/ncMDdunFXp52LqpwgiBTVUCYyBbjbre90S2v"
 
 config :tecnovix, Tecnovix.Mailer,
-  adapter: Bamboo.SendGridAdapter,
+  adapter: Bamboo.TestAdapter,
   api_key: "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"
 
 config :tecnovix, :protheus_username, "TECNOVIX"

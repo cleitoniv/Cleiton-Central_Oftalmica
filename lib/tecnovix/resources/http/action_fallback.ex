@@ -51,7 +51,7 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :not_found}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(404, Jason.encode!(%{"success" => false, "data" => "Recurso não encontrado."}))
+    |> send_resp(404, Jason.encode!(%{"success" => false, "data" => "Não encontrado."}))
     |> halt()
   end
 
