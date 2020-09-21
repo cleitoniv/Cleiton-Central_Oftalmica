@@ -7,14 +7,15 @@ defmodule Tecnovix.PointsSchema do
     field :paciente, :string
     field :num_pac, :string
     field :dt_nas_pac, :date
-    field :points, :string
+    field :points, :integer
     field :status, :integer, default: 0
+    field :credit_finan, :integer
 
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:num_serie, :paciente, :num_pac, :dt_nas_pac, :points, :status])
+    |> cast(params, [:num_serie, :paciente, :num_pac, :dt_nas_pac, :points, :credit_finan, :status])
   end
 end
