@@ -279,10 +279,16 @@ defmodule Tecnovix.Test.App do
       |> post("/api/cliente/add_points", %{"param" => paciente})
       |> json_response(200)
 
-    rescue_points =
+    convert_points =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/rescue_points?points=100")
+      |> get("/api/cliente/convert_points?points=100")
+      |> json_response(200)
+
+    convert_points =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/rescue_points", %{"points" => 100, "credit_finan" => 104})
       |> json_response(200)
       |> IO.inspect
   end
