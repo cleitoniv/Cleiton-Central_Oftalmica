@@ -7,7 +7,6 @@ defmodule TecnovixWeb.PointsController do
     {:ok, cliente} = conn.private.auth
 
     with {:ok, info} <- PointsModel.create(params) do
-
       conn
       |> put_resp_content_type("application/json")
       |> render("item.json", %{item: info})

@@ -239,15 +239,15 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def convert_points(conn, %{"points" => points}) do
-      stub = Screens.stub()
+    stub = Screens.stub()
 
-      {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = conn.private.auth
 
-      with {:ok, points} <- stub.convert_points(cliente, points) do
-        conn
-        |> put_resp_content_type("application/json")
-        |> send_resp(200, Jason.encode!(%{success: true, data: points}))
-      end
+    with {:ok, points} <- stub.convert_points(cliente, points) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: points}))
+    end
   end
 
   def get_notifications(conn, _params) do

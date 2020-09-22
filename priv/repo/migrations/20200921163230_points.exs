@@ -9,7 +9,7 @@ defmodule Tecnovix.Repo.Migrations.Points do
       add :dt_nas_pac, :date
       add :points, :string
       add :status, :integer
-      
+
       timestamps()
     end
   end

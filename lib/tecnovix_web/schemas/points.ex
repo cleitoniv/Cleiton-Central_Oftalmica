@@ -16,6 +16,14 @@ defmodule Tecnovix.PointsSchema do
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:num_serie, :paciente, :num_pac, :dt_nas_pac, :points, :credit_finan, :status])
+    |> cast(params, [
+      :num_serie,
+      :paciente,
+      :num_pac,
+      :dt_nas_pac,
+      :points,
+      :credit_finan,
+      :status
+    ])
   end
 end

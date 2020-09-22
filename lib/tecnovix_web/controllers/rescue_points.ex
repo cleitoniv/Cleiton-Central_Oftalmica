@@ -9,6 +9,7 @@ defmodule TecnovixWeb.RescuePointsController do
 
     {:ok, cliente} = conn.private.auth
     params = Map.put(params, "cliente_id", cliente.id)
+
     with {:ok, rescue_points} <- RescueModel.create(params) do
       conn
       |> put_status(200)

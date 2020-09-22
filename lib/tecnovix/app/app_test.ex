@@ -644,14 +644,14 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def convert_points(_cliente, points) do
-    points=
+    points =
       case points do
         x -> %{"credit_finan" => 104}
       end
 
     {:ok, points}
   end
-  
+
   @impl true
   def get_product_serie(_cliente, "010" <> _num_serie) do
     product = %{
@@ -699,26 +699,29 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   def get_extrato_finan(_cliente) do
-    extrato = [
-      %{
-        id: 0,
-        date: "2020/01/10",
-        pedido: 23441,
-        valor: 2000
-      },
-      %{
-        id: 1,
-        date: "2019/07/02",
-        pedido: 213_545,
-        valor: -2000
-      },
-      %{
-        id: 2,
-        date: "2020/01/10",
-        pedido: 23441,
-        valor: +3600
-      }
-    ]
+    extrato = %{
+      data: [
+        %{
+          id: 0,
+          date: "10/02/2020",
+          pedido: 23441,
+          valor: 2000
+        },
+        %{
+          id: 1,
+          date: "07/02/2020",
+          pedido: 213_545,
+          valor: -2000
+        },
+        %{
+          id: 2,
+          date: "10/02/2020",
+          pedido: 23441,
+          valor: +3600
+        }
+      ],
+      date: "Fevereiro/2020"
+    }
 
     {:ok, extrato}
   end
