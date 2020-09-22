@@ -87,7 +87,7 @@ defmodule Tecnovix.App.ScreensTest do
       notifications: [
         %{
           id: 0,
-          lido: true,
+          lido: false,
           data: "2020-01-05",
           title: "Pedido Confirmado",
           mensagem: "Pagamento confirmado e a previsão de entrega é para 22/07/2019.",
@@ -95,7 +95,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 1,
-          lido: true,
+          lido: false,
           data: "2020-01-05",
           title: "Aguardando Pagamento",
           mensagem: "Estamos aguardando o pagamento do boleto referente ao pedido.",
@@ -103,7 +103,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 2,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Pedido Entregue",
           mensagem: "Entrega do seu pedido nº26555 efetuada com sucesso em seu endereço.",
@@ -111,7 +111,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 3,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Reposição de Pedidos",
           mensagem: "Confira a lista de possiveis reposições de produtos para seus clientes.",
@@ -119,7 +119,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 4,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Boleto Vencido",
           mensagem: "Existem boletos vencidos em sua conta, pague-os para continuar comprando.",
@@ -127,7 +127,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 5,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Boleto a Vencer",
           mensagem: "Existem boletos que estão prestes a vencer, não esqueça do pagamento.",
@@ -135,7 +135,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 6,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Credito Financeiro Adquirido",
           mensagem: "Confirmamos a sua compra de Créditos Financeiros para sua conta.",
@@ -143,7 +143,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 7,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Credito de Produto Adquirido",
           mensagem: "Confirmamos a sua compra de Créditos de Produtos para sua conta.",
@@ -151,7 +151,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 8,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Resgate de Pontos",
           mensagem: "Adicionamos a sua conta o Crédito Financeiro referente ao Resgate de Pontos.",
@@ -159,7 +159,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 9,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Efetivação de Devolução",
           mensagem:
@@ -168,7 +168,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 10,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Solicitação de Devolução",
           mensagem:
@@ -177,7 +177,7 @@ defmodule Tecnovix.App.ScreensTest do
         },
         %{
           id: 11,
-          lido: false,
+          lido: true,
           data: "2020-01-05",
           title: "Lentes quase acabando!",
           mensagem: "O último pedido feito para seu paciente Luana, está quase acabando.",
