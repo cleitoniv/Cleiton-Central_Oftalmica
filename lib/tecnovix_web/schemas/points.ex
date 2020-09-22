@@ -9,7 +9,6 @@ defmodule Tecnovix.PointsSchema do
     field :dt_nas_pac, :date
     field :points, :integer
     field :status, :integer, default: 0
-    field :credit_finan, :integer
 
     timestamps()
   end
@@ -22,7 +21,6 @@ defmodule Tecnovix.PointsSchema do
       :num_pac,
       :dt_nas_pac,
       :points,
-      :credit_finan,
       :status
     ])
   end

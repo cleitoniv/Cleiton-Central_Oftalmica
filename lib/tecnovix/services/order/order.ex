@@ -14,8 +14,7 @@ defmodule Tecnovix.Services.Order do
 
         case order["status"] do
           "PAID" ->
-            PedidosDeVendaModel.update(map, Map.put(map, :status, 1))
-
+            PedidosDeVendaModel.update_order(map)
           _ ->
             []
         end
@@ -50,7 +49,7 @@ defmodule Tecnovix.Services.Order do
   end
 
   def handle_call(:get, _from, state) do
-    {:reply, {:ok, state}, state}
+    {:reply, {:ok, state},state}
   end
 
   def get_msg() do

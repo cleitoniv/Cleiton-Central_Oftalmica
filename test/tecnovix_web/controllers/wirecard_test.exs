@@ -346,9 +346,11 @@ defmodule Tecnovix.Test.Wirecard do
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
+      |> recycle()
+      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
 
     start_supervised!(Tecnovix.Services.Order)
-    Tecnovix.Services.Order.get_msg()
+    IO.inspect Tecnovix.Services.Order.get_msg()
   end
 end

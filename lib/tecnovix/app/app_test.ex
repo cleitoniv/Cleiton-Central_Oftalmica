@@ -90,63 +90,72 @@ defmodule Tecnovix.App.ScreensTest do
           lido: 1,
           data: "2020/01/05",
           title: "Pedido Confirmado",
-          mensagem: "Pagamento confirmado e a previsão de entrega é para 22/07/2019."
+          mensagem: "Pagamento confirmado e a previsão de entrega é para 22/07/2019.",
+          type: "PEDIDO_CONFIRMADO"
         },
         %{
           id: 1,
           lido: 1,
           data: "2020/01/05",
           title: "Aguardando Pagamento",
-          mensagem: "Estamos aguardando o pagamento do boleto referente ao pedido."
+          mensagem: "Estamos aguardando o pagamento do boleto referente ao pedido.",
+          type: "AGUARDANDO_PAGAMENTO"
         },
         %{
           id: 2,
           lido: 0,
           data: "2020/01/05",
           title: "Pedido Entregue",
-          mensagem: "Entrega do seu pedido nº26555 efetuada com sucesso em seu endereço."
+          mensagem: "Entrega do seu pedido nº26555 efetuada com sucesso em seu endereço.",
+          type: "PEDIDO_ENTREGUE"
         },
         %{
           id: 3,
           lido: 0,
           data: "2020/01/05",
           title: "Reposição de Pedidos",
-          mensagem: "Confira a lista de possiveis reposições de produtos para seus clientes."
+          mensagem: "Confira a lista de possiveis reposições de produtos para seus clientes.",
+          type: "REPOSICAO_PEDIDOS"
         },
         %{
           id: 4,
           lido: 0,
           data: "2020/01/05",
           title: "Boleto Vencido",
-          mensagem: "Existem boletos vencidos em sua conta, pague-os para continuar comprando."
+          mensagem: "Existem boletos vencidos em sua conta, pague-os para continuar comprando.",
+          type: "BOLETO_VENCIDO"
         },
         %{
           id: 5,
           lido: 0,
           data: "2020/01/05",
           title: "Boleto a Vencer",
-          mensagem: "Existem boletos que estão prestes a vencer, não esqueça do pagamento."
+          mensagem: "Existem boletos que estão prestes a vencer, não esqueça do pagamento.",
+          type: "BOLETO_VENCER"
         },
         %{
           id: 6,
           lido: 0,
           data: "2020/01/05",
           title: "Credito Financeiro Adquirido",
-          mensagem: "Confirmamos a sua compra de Créditos Financeiros para sua conta."
+          mensagem: "Confirmamos a sua compra de Créditos Financeiros para sua conta.",
+          type: "FINANCEIRO_ADQUIRIDO"
         },
         %{
           id: 7,
           lido: 0,
           data: "2020/01/05",
           title: "Credito de Produto Adquirido",
-          mensagem: "Confirmamos a sua compra de Créditos de Produtos para sua conta."
+          mensagem: "Confirmamos a sua compra de Créditos de Produtos para sua conta.",
+          type: "PRODUTO_ADQUIRIDO"
         },
         %{
           id: 8,
           lido: 0,
           data: "2020/01/05",
           title: "Resgate de Pontos",
-          mensagem: "Adicionamos a sua conta o Crédito Financeiro referente ao Resgate de Pontos."
+          mensagem: "Adicionamos a sua conta o Crédito Financeiro referente ao Resgate de Pontos.",
+          type: "RESGATE_PONTOS"
         },
         %{
           id: 9,
@@ -154,7 +163,8 @@ defmodule Tecnovix.App.ScreensTest do
           data: "2020/01/05",
           title: "Efetivação de Devolução",
           mensagem:
-            "Sua solicitação de devolução em crédito ou troca foi analisada por nossa equipe."
+            "Sua solicitação de devolução em crédito ou troca foi analisada por nossa equipe.",
+          type: "EFETIVACAO_DEV"
         },
         %{
           id: 10,
@@ -162,14 +172,16 @@ defmodule Tecnovix.App.ScreensTest do
           data: "2020/01/05",
           title: "Solicitação de Devolução",
           mensagem:
-            "Recebemos sua solicitação de devolução em crédito ou troca, iremos analisá-la."
+            "Recebemos sua solicitação de devolução em crédito ou troca, iremos analisá-la.",
+          type: "SOLICITACAO_DEV"
         },
         %{
           id: 11,
           lido: 0,
           data: "2020/01/05",
           title: "Lentes quase acabando!",
-          mensagem: "O último pedido feito para seu paciente Luana, está quase acabando."
+          mensagem: "O último pedido feito para seu paciente Luana, está quase acabando.",
+          type: "LENTES_ACABANDO"
         }
       ]
     }

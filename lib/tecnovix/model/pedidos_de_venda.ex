@@ -69,6 +69,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
+  def update_order(changeset) do
+    changeset
+    |> Ecto.Changeset.change(status_ped: 1)
+    |> Repo.update()
+  end
+
   def payment(%{"id_cartao" => cartao_id}, order) do
     order = Jason.decode!(order.body)
     order_id = order["id"]
