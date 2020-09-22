@@ -137,7 +137,7 @@ defmodule Tecnovix.App.ScreensTest do
           id: 6,
           lido: true,
           data: "2020-01-05",
-          title: "Credito Financeiro Adquirido",
+          title: "Credito Financeiro",
           mensagem: "Confirmamos a sua compra de Créditos Financeiros para sua conta.",
           type: "FINANCEIRO_ADQUIRIDO"
         },
@@ -145,7 +145,7 @@ defmodule Tecnovix.App.ScreensTest do
           id: 7,
           lido: true,
           data: "2020-01-05",
-          title: "Credito de Produto Adquirido",
+          title: "Credito de Produto",
           mensagem: "Confirmamos a sua compra de Créditos de Produtos para sua conta.",
           type: "PRODUTO_ADQUIRIDO"
         },
