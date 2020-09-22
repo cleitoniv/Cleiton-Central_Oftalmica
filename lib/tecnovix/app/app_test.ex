@@ -87,7 +87,7 @@ defmodule Tecnovix.App.ScreensTest do
       notifications: [
         %{
           id: 0,
-          lido: true|,
+          lido: true,
           data: "2020/01/05",
           title: "Pedido Confirmado",
           mensagem: "Pagamento confirmado e a previsão de entrega é para 22/07/2019.",
