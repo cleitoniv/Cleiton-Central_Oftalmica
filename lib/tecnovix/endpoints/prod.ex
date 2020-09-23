@@ -25,6 +25,8 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
   @impl true
   def get_client_products(_params) do
+    url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/ESTREST"
+    HTTPoison.get(url)
   end
 
   @impl true

@@ -20,4 +20,17 @@ defmodule TecnovixWeb.ProtheusController do
         {:error, :protheus_not_found}
     end
   end
+
+  def get_product(conn, _params) do
+    protheus = Protheus.stub()
+
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, resp} <- protheus.get_client_products(cliente) do
+      resp = Jason.decode!(resp)
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: resp}))
+    end
+  end
 end

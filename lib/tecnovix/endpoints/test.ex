@@ -77,6 +77,9 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
   @impl true
   def get_client_products(_params) do
+    resp = Jason.encode!(Tecnovix.TestHelp.product_client())
+
+    {:ok, resp}
   end
 
   @impl true
@@ -103,7 +106,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
       end)
       |> Map.new()
 
-      [endereco, num] = String.split(organize["A1_END"], [", ", ","])
+      [_endereco, num] = String.split(organize["A1_END"], [", ", ","])
 
       organize = Map.put(organize, "A1_NUM", num)
 
@@ -112,8 +115,8 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
   def field_crm_cnae(field) do
     case field["id"] do
-      "A1_YCRM" -> "A1_YCRM-CNAE"
-      "A1_CNAE" -> "A1_YCRM-CNAE"
+      "A1_YCRM" -> "A1_YCRM_CNAE"
+      "A1_CNAE" -> "A1_YCRM_CNAE"
       _ -> field["id"]
     end
   end

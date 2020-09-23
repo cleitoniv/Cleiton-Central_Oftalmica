@@ -7,7 +7,20 @@ defmodule Tecnovix.App.ScreensTest do
   @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
 
   @impl true
-  def get_product_grid(_cliente, filtro) do
+  def get_product_grid(cliente, filtro) do
+    protheus = Protheus.stub()
+
+    {:ok, products} = protheus.get_client_products(cliente)
+
+    products = Jason.decode!(products)
+
+    Enum.flat_map(products, fn resource ->
+      Enum.flat_map(resource["models"], fn model ->
+        Enum.flat_map(model["fields"], fn product ->
+          product
+        end)
+      end)
+    end)
     produtos = [
       %{
         id: 0,
@@ -785,6 +798,17 @@ defmodule Tecnovix.App.ScreensTest do
     case Tecnovix.Email.send_email_dev(email) do
       {:ok, email} -> {:ok, email}
       _ -> {:error, :email_not_send}
+    end
+  end
+
+  def organize_fields(map) do
+    case map["id"] do
+      "BM_DESC" -> "title"
+      "SALDO" -> "boxes"
+      "SALDOTESTE" -> "test"
+      "VALORA" -> "value"
+      "VALORC" -> "value_produto"
+      "VALORE" -> "value_finan"
     end
   end
 end
