@@ -15,7 +15,7 @@ defmodule Tecnovix.App.Screens do
   @callback get_product_serie(cliente :: term, num_serie :: term) :: {:ok, term}
   @callback get_extrato_finan(cliente :: term) :: {:ok, term}
   @callback get_extrato_prod(cliente :: term) :: {:ok, term}
-  @callback get_emaildev(cliente :: term) :: {:ok, term}
+  @callback get_and_send_email_dev(email :: term) :: {:ok, term}
   @callback convert_points(cliente :: term) :: {:ok, term}
 
   def stub() do

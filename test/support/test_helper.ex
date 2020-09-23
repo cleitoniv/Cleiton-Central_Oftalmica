@@ -19,6 +19,11 @@ defmodule Tecnovix.TestHelp do
     |> Jason.decode!()
   end
 
+  def cliente_cnpj() do
+    File.read!("test/support/protheus/cliente_cnpj.json")
+    |> Jason.decode!()
+  end
+
   def items(path) do
     File.read!("test/support/wirecard/" <> path)
     |> Jason.decode()

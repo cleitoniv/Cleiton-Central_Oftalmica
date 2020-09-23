@@ -43,6 +43,20 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   @impl true
+  def get_cliente(%{cnpj_cpf: "038" <> _cnpj}) do
+    resp = Jason.encode!(Tecnovix.TestHelp.cliente_cnpj())
+
+    {:ok, %{status_code: 200, body: resp}}
+  end
+
+  @impl true
+  def get_cliente(%{cnpj_cpf: "037" <> _cpf}) do
+    resp = Jason.encode!(Tecnovix.TestHelp.cliente())
+
+    {:ok, %{status_code: 200, body: resp}}
+  end
+
+  @impl true
   def get_cliente(_params) do
     resp = Jason.encode!(Tecnovix.TestHelp.cliente())
 
@@ -71,5 +85,24 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
   @impl true
   def generate_boleto(_params) do
+  end
+
+  def organize_cliente(http) do
+    cliente = Jason.decode!(http.body)
+
+    organize =
+      Enum.flat_map(cliente["resources"], fn resource ->
+        Enum.flat_map(resource["models"], fn model ->
+          Enum.reduce(model["fields"], %{}, fn field, acc ->
+            case Map.has_key?(acc, field["id"]) do
+              false -> Map.put(acc, field["id"], field["value"])
+              true -> acc
+            end
+          end)
+        end)
+      end)
+      |> Map.new()
+
+    {:ok, organize}
   end
 end

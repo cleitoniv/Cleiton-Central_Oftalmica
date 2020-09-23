@@ -32,7 +32,7 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :protheus_not_found}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(%{"status" => "NOT_FOUND"}))
+    |> send_resp(200, Jason.encode!(%{"success" => false , "status" => "NOT_FOUND"}))
   end
 
   def call(conn, {:error, :card_not_created}) do
