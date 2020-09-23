@@ -154,7 +154,8 @@ defmodule Tecnovix.App.ScreensTest do
           lido: true,
           data: "2020-01-05",
           title: "Resgate de Pontos",
-          mensagem: "Adicionamos a sua conta o Crédito Financeiro referente ao Resgate de Pontos.",
+          mensagem:
+            "Adicionamos a sua conta o Crédito Financeiro referente ao Resgate de Pontos.",
           type: "RESGATE_PONTOS"
         },
         %{

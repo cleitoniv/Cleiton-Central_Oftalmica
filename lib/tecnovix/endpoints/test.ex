@@ -95,7 +95,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         Enum.flat_map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn field, acc ->
             case Map.has_key?(acc, field["id"]) do
-              false -> Map.put(acc, field["id"], field["value"])
+              false -> Map.put(acc, field_crm_cnae(field), field["value"])
               true -> acc
             end
           end)
@@ -103,6 +103,18 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
       end)
       |> Map.new()
 
+      [endereco, num] = String.split(organize["A1_END"], [", ", ","])
+
+      organize = Map.put(organize, "A1_NUM", num)
+
     {:ok, organize}
+  end
+
+  def field_crm_cnae(field) do
+    case field["id"] do
+      "A1_YCRM" -> "A1_YCRM-CNAE"
+      "A1_CNAE" -> "A1_YCRM-CNAE"
+      _ -> field["id"]
+    end
   end
 end

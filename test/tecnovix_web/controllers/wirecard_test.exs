@@ -351,6 +351,6 @@ defmodule Tecnovix.Test.Wirecard do
       |> json_response(200)
 
     start_supervised!(Tecnovix.Services.Order)
-    IO.inspect Tecnovix.Services.Order.get_msg()
+    IO.inspect(Tecnovix.Services.Order.get_msg())
   end
 end
