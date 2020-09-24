@@ -55,6 +55,7 @@ defmodule Tecnovix.App.ScreensTest do
           end)
           |> Map.put("image_url", @product_url)
           |> Map.put("type", "miopia")
+          |> Map.put("visint", true)
         end)
       end)
 
@@ -70,7 +71,6 @@ defmodule Tecnovix.App.ScreensTest do
           end
         end)
       end)
-      |> IO.inspect
 
     data =
       case filtro do
@@ -322,18 +322,7 @@ defmodule Tecnovix.App.ScreensTest do
         image_url: @product_url,
         type: "miopia",
         boxes: 2,
-        description: "Produzido com material hidrofilico...",
-        material: "Hidrogel Methafilcon",
-        dk_t: 21,
-        visint: true,
-        espessura: "0,09mm",
-        hidratacao: "55%",
-        assepsia: "Quimica",
-        descarte: "Mensal",
-        desenho: "Asférico",
-        diametro: "14.4",
-        curva_base: 21,
-        esferico: "+8.00 a -10.00"
+
       },
       %{
         id: 1,
