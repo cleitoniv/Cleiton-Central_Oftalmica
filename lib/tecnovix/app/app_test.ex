@@ -11,7 +11,7 @@ defmodule Tecnovix.App.ScreensTest do
     case map["id"] do
       "BM_DESC" -> "title"
       "SALDO" -> "boxes"
-      "SALDOTESTE" -> "test"
+      "SALDOTESTE" -> "tests"
       "VALORA" -> "value"
       "VALORC" -> "value_produto"
       "VALORE" -> "value_finan"
@@ -23,7 +23,7 @@ defmodule Tecnovix.App.ScreensTest do
   def value_cents_1(key, acc) do
     case key do
       "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
-      "test" ->  Map.put(acc, key, String.to_float(acc[key]) |> floor())
+      "tests" ->  Map.put(acc, key, String.to_float(acc[key]) |> floor())
       _ -> Map.put(acc, key, (String.to_float(acc[key]) |> floor()) * 100)
     end
   end
@@ -31,7 +31,7 @@ defmodule Tecnovix.App.ScreensTest do
   def value_cents_2(key, acc) do
     case key do
       "boxes" -> Map.put(acc, key, String.to_integer(acc[key]))
-      "test" ->  Map.put(acc, key, String.to_integer(acc[key]))
+      "tests" ->  Map.put(acc, key, String.to_integer(acc[key]))
       _ -> Map.put(acc, key, (String.to_integer(acc[key])) * 100)
     end
   end
@@ -54,10 +54,11 @@ defmodule Tecnovix.App.ScreensTest do
             end
           end)
           |> Map.put("image_url", @product_url)
+          |> Map.put("type", "miopia")
         end)
       end)
 
-    list = ["boxes", "test", "value", "value_produto", "value_finan"]
+    list = ["boxes", "tests", "value", "value_produto", "value_finan"]
 
     produtos =
       Enum.map(grid, fn map ->
@@ -69,11 +70,12 @@ defmodule Tecnovix.App.ScreensTest do
           end
         end)
       end)
+      |> IO.inspect
 
     data =
       case filtro do
         "all" -> produtos
-        _ -> Enum.filter(produtos, fn items -> items.type == filtro end)
+        _ -> Enum.filter(produtos, fn items -> items["type"] == filtro end)
       end
 
     {:ok, data}
