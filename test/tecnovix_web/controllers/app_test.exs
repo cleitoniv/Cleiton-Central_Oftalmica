@@ -324,6 +324,6 @@ defmodule Tecnovix.Test.App do
     |> Generator.put_auth(token)
     |> get("/api/cliente/protheus/products")
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 end

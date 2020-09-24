@@ -24,9 +24,10 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   @impl true
-  def get_client_products(_params) do
+  def get_client_products(%{token: token}) do
+    header = Protheus.authenticate(@header, token)
     url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/ESTREST"
-    HTTPoison.get(url)
+    HTTPoison.get(url, header)
   end
 
   @impl true

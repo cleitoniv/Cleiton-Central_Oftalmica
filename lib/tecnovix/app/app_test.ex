@@ -23,7 +23,7 @@ defmodule Tecnovix.App.ScreensTest do
   def value_cents_1(key, acc) do
     case key do
       "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
-      "tests" ->  Map.put(acc, key, String.to_float(acc[key]) |> floor())
+      "tests" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
       _ -> Map.put(acc, key, (String.to_float(acc[key]) |> floor()) * 100)
     end
   end
@@ -31,8 +31,8 @@ defmodule Tecnovix.App.ScreensTest do
   def value_cents_2(key, acc) do
     case key do
       "boxes" -> Map.put(acc, key, String.to_integer(acc[key]))
-      "tests" ->  Map.put(acc, key, String.to_integer(acc[key]))
-      _ -> Map.put(acc, key, (String.to_integer(acc[key])) * 100)
+      "tests" -> Map.put(acc, key, String.to_integer(acc[key]))
+      _ -> Map.put(acc, key, String.to_integer(acc[key]) * 100)
     end
   end
 
@@ -56,6 +56,7 @@ defmodule Tecnovix.App.ScreensTest do
           |> Map.put("image_url", @product_url)
           |> Map.put("type", "miopia")
           |> Map.put("visint", true)
+          |> Map.put("previsao_entrega", 5)
         end)
       end)
 
@@ -321,8 +322,7 @@ defmodule Tecnovix.App.ScreensTest do
         value_finan: 14100,
         image_url: @product_url,
         type: "miopia",
-        boxes: 2,
-
+        boxes: 2
       },
       %{
         id: 1,

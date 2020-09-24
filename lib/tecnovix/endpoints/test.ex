@@ -106,9 +106,9 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
       end)
       |> Map.new()
 
-      [_endereco, num] = String.split(organize["A1_END"], [", ", ","])
+    [_endereco, num] = String.split(organize["A1_END"], [", ", ","])
 
-      organize = Map.put(organize, "A1_NUM", num)
+    organize = Map.put(organize, "A1_NUM", num)
 
     {:ok, organize}
   end

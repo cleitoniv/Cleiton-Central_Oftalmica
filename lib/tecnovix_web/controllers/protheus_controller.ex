@@ -28,6 +28,7 @@ defmodule TecnovixWeb.ProtheusController do
 
     with {:ok, resp} <- protheus.get_client_products(cliente) do
       resp = Jason.decode!(resp)
+
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: resp}))
