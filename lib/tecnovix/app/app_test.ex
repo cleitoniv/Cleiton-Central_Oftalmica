@@ -3,8 +3,38 @@ defmodule Tecnovix.App.ScreensTest do
   alias Tecnovix.ClientesModel
   alias Tecnovix.PedidosDeVendaModel
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
+  alias Tecnovix.Endpoints.Protheus
 
   @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
+
+  def organize_field(map) do
+    case map["id"] do
+      "BM_DESC" -> "title"
+      "SALDO" -> "boxes"
+      "SALDOTESTE" -> "test"
+      "VALORA" -> "value"
+      "VALORC" -> "value_produto"
+      "VALORE" -> "value_finan"
+      "BM_GRUPO" -> "group"
+      v -> v
+    end
+  end
+
+  def value_cents_1(key, acc) do
+    case key do
+      "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
+      "test" ->  Map.put(acc, key, String.to_float(acc[key]) |> floor())
+      _ -> Map.put(acc, key, (String.to_float(acc[key]) |> floor()) * 100)
+    end
+  end
+
+  def value_cents_2(key, acc) do
+    case key do
+      "boxes" -> Map.put(acc, key, String.to_integer(acc[key]))
+      "test" ->  Map.put(acc, key, String.to_integer(acc[key]))
+      _ -> Map.put(acc, key, (String.to_integer(acc[key])) * 100)
+    end
+  end
 
   @impl true
   def get_product_grid(cliente, filtro) do
@@ -14,67 +44,31 @@ defmodule Tecnovix.App.ScreensTest do
 
     products = Jason.decode!(products)
 
-    Enum.flat_map(products, fn resource ->
-      Enum.flat_map(resource["models"], fn model ->
-        Enum.flat_map(model["fields"], fn product ->
-          product
+    grid =
+      Enum.flat_map(products["resources"], fn resource ->
+        Enum.map(resource["models"], fn model ->
+          Enum.reduce(model["fields"], %{}, fn product, acc ->
+            case Map.has_key?(acc, product["id"]) do
+              false -> Map.put(acc, organize_field(product), product["value"])
+              true -> acc
+            end
+          end)
+          |> Map.put("image_url", @product_url)
         end)
       end)
-    end)
-    produtos = [
-      %{
-        id: 0,
-        tests: 0,
-        credits: 0,
-        title: "Biosoft Asférica Mensal",
-        produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
-        value: 15100,
-        value_produto: 14100,
-        value_finan: 14100,
-        image_url: @product_url,
-        type: "miopia",
-        boxes: 200
-      },
-      %{
-        id: 1,
-        tests: 0,
-        credits: 0,
-        title: "Bioview Asférica A2",
-        produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
-        value: 15100,
-        value_produto: 14100,
-        value_finan: 14100,
-        image_url: @product_url,
-        type: "miopia",
-        boxes: 321
-      },
-      %{
-        id: 2,
-        tests: 0,
-        credits: 0,
-        title: "Bioview Asférica A3",
-        produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
-        value: 15100,
-        value_produto: 14100,
-        value_finan: 14100,
-        image_url: @product_url,
-        type: "miopia",
-        boxes: 29
-      },
-      %{
-        id: 3,
-        tests: 0,
-        credits: 0,
-        title: "Bioview Asférica A4",
-        produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
-        value: 15100,
-        value_produto: 14100,
-        value_finan: 14100,
-        image_url: @product_url,
-        type: "hipermetropia",
-        boxes: 0
-      }
-    ]
+
+    list = ["boxes", "test", "value", "value_produto", "value_finan"]
+
+    produtos =
+      Enum.map(grid, fn map ->
+        Enum.reduce(list, map, fn key, acc ->
+          cond do
+            acc[key] == "0" -> Map.put(acc, key, 0)
+            String.contains?(acc[key], ".") -> value_cents_1(key, acc)
+            true -> value_cents_2(key, acc)
+          end
+        end)
+      end)
 
     data =
       case filtro do
@@ -798,17 +792,6 @@ defmodule Tecnovix.App.ScreensTest do
     case Tecnovix.Email.send_email_dev(email) do
       {:ok, email} -> {:ok, email}
       _ -> {:error, :email_not_send}
-    end
-  end
-
-  def organize_fields(map) do
-    case map["id"] do
-      "BM_DESC" -> "title"
-      "SALDO" -> "boxes"
-      "SALDOTESTE" -> "test"
-      "VALORA" -> "value"
-      "VALORC" -> "value_produto"
-      "VALORE" -> "value_finan"
     end
   end
 end

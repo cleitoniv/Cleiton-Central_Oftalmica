@@ -278,11 +278,11 @@ defmodule Tecnovix.Test.App do
       "num_serie" => "123123"
     }
 
-    points =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/add_points", %{"param" => paciente})
-      |> json_response(200)
+    # points =
+    #   build_conn()
+    #   |> Generator.put_auth(user_firebase["idToken"])
+    #   |> post("/api/cliente/add_points", %{"param" => paciente})
+    #   |> json_response(200)
 
     convert_points =
       build_conn()
