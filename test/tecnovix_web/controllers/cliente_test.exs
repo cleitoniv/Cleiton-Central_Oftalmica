@@ -145,6 +145,9 @@ defmodule TecnovixWeb.UsersTest do
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente/atend_pref", %{"horario" => "tarde"})
+    |> recycle()
+    |> post("/api/cliente/atend_pref", %{"horario" => "manha"})
+
     |> json_response(200)
     |> IO.inspect()
   end
