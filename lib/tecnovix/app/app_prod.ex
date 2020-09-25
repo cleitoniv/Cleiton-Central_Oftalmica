@@ -1,5 +1,35 @@
 defmodule Tecnovix.App.ScreensProd do
   @behavior Tecnovix.App.Screens
+  alias Tecnovix.Endpoints.Protheus
+  
+  def organize_field(map) do
+    case map["id"] do
+      "BM_DESC" -> "title"
+      "SALDO" -> "boxes"
+      "SALDOTESTE" -> "tests"
+      "VALORA" -> "value"
+      "VALORC" -> "value_produto"
+      "VALORE" -> "value_finan"
+      "BM_GRUPO" -> "group"
+      v -> v
+    end
+  end
+
+  def value_cents_1(key, acc) do
+    case key do
+      "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
+      "tests" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
+      _ -> Map.put(acc, key, (String.to_float(acc[key]) |> floor()) * 100)
+    end
+  end
+
+  def value_cents_2(key, acc) do
+    case key do
+      "boxes" -> Map.put(acc, key, String.to_integer(acc[key]))
+      "tests" -> Map.put(acc, key, String.to_integer(acc[key]))
+      _ -> Map.put(acc, key, String.to_integer(acc[key]) * 100)
+    end
+  end
 
   @impl true
   def get_product_grid(cliente, filtro) do

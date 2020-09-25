@@ -57,6 +57,12 @@ defmodule Tecnovix.App.ScreensTest do
           |> Map.put("type", "miopia")
           |> Map.put("visint", true)
           |> Map.put("previsao_entrega", 5)
+          |> Map.put("has_esferico", true)
+          |> Map.put("has_eixo", true)
+          |> Map.put("has_cilindrico", true)
+          |> Map.put("graus_esferico", [-0.5, 0.75, 1.0, 1.5])
+          |> Map.put("graus_eixo", [-0.5, 0.75, 1.0, 1.5])
+          |> Map.put("graus_cilindrico", [-0.5, 0.75, 1.0, 1.5])
         end)
       end)
 
