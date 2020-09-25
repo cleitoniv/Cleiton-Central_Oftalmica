@@ -152,6 +152,7 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/current_user")
       |> json_response(200)
+      |> IO.inspect
 
     assert current_user["money"] == 5500
     assert current_user["points"] == 100

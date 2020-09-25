@@ -97,13 +97,15 @@ defmodule TecnovixWeb.ClientesController do
 
         credits_info = stub.get_credits(user)
         {:ok, notifications} = stub.get_notifications(user)
+        dia_remessa = stub.get_dia_remessa(user)
 
         conn
         |> put_view(TecnovixWeb.ClientesView)
         |> render("current_user.json", %{
           item: user,
           credits: credits_info,
-          notifications: notifications
+          notifications: notifications,
+          dia_remessa: dia_remessa
         })
     end
   end

@@ -4,6 +4,8 @@ defmodule Tecnovix.App.ScreensTest do
   alias Tecnovix.PedidosDeVendaModel
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
   alias Tecnovix.Endpoints.Protheus
+  alias Tecnovix.Repo
+  alias Tecnovix.ClientesSchema
 
   @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
 
@@ -99,6 +101,22 @@ defmodule Tecnovix.App.ScreensTest do
       money: 5500,
       points: 100
     }
+  end
+
+  @impl true
+  def get_dia_remessa(cliente) do
+    case Repo.get(ClientesSchema, cliente.id) do
+      nil -> {:error, :not_found}
+      cliente ->
+      case cliente.dia_remessa do
+        nil -> "-"
+        "1" -> "Segunda-feira"
+        "2" -> "Terça-feira"
+        "3" -> "Quarta-feira"
+        "4" -> "Quinta-feira"
+        "5" -> "Sexta-feira"
+      end
+    end
   end
 
   @impl true
