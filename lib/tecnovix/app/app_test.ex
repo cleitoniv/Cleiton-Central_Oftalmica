@@ -36,6 +36,10 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
+  def end_entrega(endereco, bairro, municipio, num, cep, complemento) do
+    "#{endereco}, #{complemento}, #{bairro}, #{municipio}. #{cep}"
+  end
+
   @impl true
   def get_product_grid(cliente, filtro) do
     protheus = Protheus.stub()
@@ -63,6 +67,7 @@ defmodule Tecnovix.App.ScreensTest do
           |> Map.put("graus_esferico", [-0.5, 0.75, 1.0, 1.5])
           |> Map.put("graus_eixo", [-0.5, 0.75, 1.0, 1.5])
           |> Map.put("graus_cilindrico", [-0.5, 0.75, 1.0, 1.5])
+          |> Map.put("end_entrega", end_entrega(cliente.endereco, cliente.bairro, cliente.municipio, cliente.numero, cliente.cep, cliente.complemento))
         end)
       end)
 
