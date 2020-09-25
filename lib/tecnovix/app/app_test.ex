@@ -7,8 +7,6 @@ defmodule Tecnovix.App.ScreensTest do
   alias Tecnovix.Repo
   alias Tecnovix.ClientesSchema
 
-  @product_url "http://portal.centraloftalmica.com/images/021C.jpg"
-
   def organize_field(map) do
     case map["id"] do
       "BM_DESC" -> "title"
@@ -77,6 +75,7 @@ defmodule Tecnovix.App.ScreensTest do
 
     produtos =
       Enum.map(grid, fn map ->
+        map = Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
         Enum.reduce(list, map, fn key, acc ->
           cond do
             acc[key] == "0" -> Map.put(acc, key, 0)
