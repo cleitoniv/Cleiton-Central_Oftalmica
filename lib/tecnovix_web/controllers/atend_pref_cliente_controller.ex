@@ -59,10 +59,7 @@ defmodule TecnovixWeb.AtendPrefClienteController do
   #   end
   # end
 
-  def get_and_crud_atendimento(
-        conn,
-        %{"dia_remessa" => dia_remessa, "horario" => horario} = params
-      ) do
+  def get_and_crud_atendimento(conn, %{"horario" => horario} = params) do
     {:ok, cliente} = conn.private.auth
 
     with {:ok, atendimento} <- AtendPrefClienteModel.formatting_atend(params, cliente) do

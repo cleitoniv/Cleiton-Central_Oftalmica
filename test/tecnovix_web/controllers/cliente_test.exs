@@ -121,7 +121,7 @@ defmodule TecnovixWeb.UsersTest do
     |> IO.inspect()
   end
 
-  test "atend pref" do
+  test "Alimentando a tebela Atendimento Preferencial" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
     user_client_param = Generator.users_cliente()
@@ -144,8 +144,9 @@ defmodule TecnovixWeb.UsersTest do
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente/atend_pref", %{"dia_remessa" => "quinta-feira", "horario" => "tarde"})
+    |> post("/api/cliente/atend_pref", %{"horario" => "tarde"})
     |> json_response(200)
+    |> IO.inspect()
   end
 
   test "show cliente/usuario and atendimento preferencial cliente" do

@@ -38,8 +38,16 @@ defmodule Tecnovix.AtendPrefClienteModel do
   end
 
   def formatting_atend(params, cliente) do
+    dia_remessa =
+      case cliente.dia_remessa do
+        nil -> "-"
+        "1" -> "segunda-feira"
+        "2" -> "terça-feira"
+        "3" -> "quarta-feira"
+        "4" -> "quinta-feira"
+        "5" -> "sexta-feira"
+      end
 
-    dia_remessa = String.downcase(params["dia_remessa"])
     horario = String.downcase(params["horario"])
     {dia, _} = String.split_at(dia_remessa, 3)
 
