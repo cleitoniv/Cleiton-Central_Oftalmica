@@ -27,35 +27,48 @@ defmodule TecnovixWeb.AtendPrefClienteController do
   # SOMENTE O REPRESENTANTE PODERAR ALTERAR O ATENDIMENTO PREFERENCIAL
   # USUARIO CLIENTE E O CLIENTE SÓ PODERAR VER
 
-  def atend_pref(conn, %{"param" => params}) do
+  # def atend_pref(conn, %{"param" => params}) do
+  #   {:ok, cliente} = conn.private.auth
+  #
+  #   with {:ok, atendimento} <- AtendPrefClienteModel.create(params, cliente.id) do
+  #     case conn.private.auth do
+  #       {:ok, %Tecnovix.ClientesSchema{}} ->
+  #         LogsClienteModel.create(%{
+  #           "cliente_id" => cliente.id,
+  #           "data" => DateTime.utc_now(),
+  #           "ip" => "teste",
+  #           "dispositivo" => "teste",
+  #           "acao_realizada" => "Atendimento preferencial do cliente atualizado"
+  #         })
+  #
+  #       {:ok, %Tecnovix.UsuariosClienteSchema{} = params} ->
+  #         LogsClienteModel.create(%{
+  #           "cliente_id" => params.cliente_id,
+  #           "usuario_cliente_id" => params.id,
+  #           "data" => DateTime.utc_now(),
+  #           "ip" => "teste",
+  #           "dispositivo" => "teste",
+  #           "acao_realizada" => "Atendimento preferencial do cliente atualizado"
+  #         })
+  #     end
+  #
+  #     conn
+  #     |> put_status(:created)
+  #     |> put_resp_content_type("applicaton/json")
+  #     |> put_view(TecnovixWeb.AtendPrefClienteView)
+  #   end
+  # end
+
+  def get_and_crud_atendimento(
+        conn,
+        %{"dia_remessa" => dia_remessa, "horario" => horario} = params
+      ) do
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, atendimento} <- AtendPrefClienteModel.create(params, cliente.id) do
-      case conn.private.auth do
-        {:ok, %Tecnovix.ClientesSchema{}} ->
-          LogsClienteModel.create(%{
-            "cliente_id" => cliente.id,
-            "data" => DateTime.utc_now(),
-            "ip" => "teste",
-            "dispositivo" => "teste",
-            "acao_realizada" => "Atendimento preferencial do cliente atualizado"
-          })
-
-        {:ok, %Tecnovix.UsuariosClienteSchema{} = params} ->
-          LogsClienteModel.create(%{
-            "cliente_id" => params.cliente_id,
-            "usuario_cliente_id" => params.id,
-            "data" => DateTime.utc_now(),
-            "ip" => "teste",
-            "dispositivo" => "teste",
-            "acao_realizada" => "Atendimento preferencial do cliente atualizado"
-          })
-      end
-
+    with {:ok, atendimento} <- AtendPrefClienteModel.formatting_atend(params, cliente) do
       conn
-      |> put_status(:created)
-      |> put_resp_content_type("applicaton/json")
-      |> put_view(TecnovixWeb.AtendPrefClienteView)
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
       |> render("show.json", %{item: atendimento})
     end
   end

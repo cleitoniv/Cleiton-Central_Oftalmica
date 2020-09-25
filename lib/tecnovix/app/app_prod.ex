@@ -1,7 +1,7 @@
 defmodule Tecnovix.App.ScreensProd do
   @behavior Tecnovix.App.Screens
   alias Tecnovix.Endpoints.Protheus
-  
+
   def organize_field(map) do
     case map["id"] do
       "BM_DESC" -> "title"

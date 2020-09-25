@@ -29,7 +29,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
       create(params)
     else
       atend_pref ->
-        {:ok, atend_pref}
+        __MODULE__.update(atend_pref, params)
     end
   end
 
@@ -37,10 +37,19 @@ defmodule Tecnovix.AtendPrefClienteModel do
     {:error, :invalid_parameter}
   end
 
-  def create(params, cliente_id) do
-    case __MODULE__.get_by(cliente_id: cliente_id) do
-      nil -> __MODULE__.create(params)
-      atend_pref -> __MODULE__.update(atend_pref, params)
-    end
+  def formatting_atend(params, cliente) do
+
+    dia_remessa = String.downcase(params["dia_remessa"])
+    horario = String.downcase(params["horario"])
+    {dia, _} = String.split_at(dia_remessa, 3)
+
+    horario_new = "#{dia}_#{horario}"
+
+    Map.new()
+    |> Map.put(horario_new, 1)
+    |> Map.put("cod_cliente", cliente.codigo)
+    |> Map.put("loja_cliente", cliente.loja)
+    |> Map.put("cliente_id", cliente.id)
+    |> create()
   end
 end

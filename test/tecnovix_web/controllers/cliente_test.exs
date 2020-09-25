@@ -142,23 +142,10 @@ defmodule TecnovixWeb.UsersTest do
 
     user_client_firebase = Generator.create_user_firebase(user_client["email"])
 
-    # build_conn()
-    # |> Generator.put_auth(user_firebase["idToken"])
-    # |> post("/api/atend_pref_cliente", %{
-    #   "param" => %{"cliente_id" => user["id"], "cod_cliente" => "1234", "seg_tarde" => 1}
-    # })
-    # |> recycle()
-    # |> post("/api/atend_pref_cliente", %{
-    #   "param" => %{"cliente_id" => user["id"], "cod_cliente" => "5678", "seg_tarde" => 1}
-    # })
-    # |> recycle()
-    # |> Generator.put_auth(user_client_firebase["idToken"])
-    # |> post("/api/atend_pref_cliente", %{
-    #   "param" => %{"cliente_id" => user_client["id"], "cod_cliente" => "1224", "sab_manha" => 1}
-    # })
-    # |> json_response(201)
-    #
-    # Tecnovix.Repo.all(Tecnovix.AtendPrefClienteSchema)
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente/atend_pref", %{"dia_remessa" => "quinta-feira", "horario" => "tarde"})
+    |> json_response(200)
   end
 
   test "show cliente/usuario and atendimento preferencial cliente" do

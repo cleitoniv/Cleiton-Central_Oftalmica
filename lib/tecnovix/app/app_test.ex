@@ -6,6 +6,7 @@ defmodule Tecnovix.App.ScreensTest do
   alias Tecnovix.Endpoints.Protheus
   alias Tecnovix.Repo
   alias Tecnovix.ClientesSchema
+  alias Tecnovix.AtendPrefClienteModel
 
   def organize_field(map) do
     case map["id"] do
@@ -67,7 +68,17 @@ defmodule Tecnovix.App.ScreensTest do
           |> Map.put("graus_esferico", [-0.5, 0.75, 1.0, 1.5])
           |> Map.put("graus_eixo", [-0.5, 0.75, 1.0, 1.5])
           |> Map.put("graus_cilindrico", [-0.5, 0.75, 1.0, 1.5])
-          |> Map.put("end_entrega", end_entrega(cliente.endereco, cliente.bairro, cliente.municipio, cliente.numero, cliente.cep, cliente.complemento))
+          |> Map.put(
+            "end_entrega",
+            end_entrega(
+              cliente.endereco,
+              cliente.bairro,
+              cliente.municipio,
+              cliente.numero,
+              cliente.cep,
+              cliente.complemento
+            )
+          )
         end)
       end)
 
@@ -75,7 +86,13 @@ defmodule Tecnovix.App.ScreensTest do
 
     produtos =
       Enum.map(grid, fn map ->
-        map = Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/021C.jpg")
+        map =
+          Map.put(
+            map,
+            "image_url",
+            "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg"
+          )
+
         Enum.reduce(list, map, fn key, acc ->
           cond do
             acc[key] == "0" -> Map.put(acc, key, 0)
@@ -105,16 +122,18 @@ defmodule Tecnovix.App.ScreensTest do
   @impl true
   def get_dia_remessa(cliente) do
     case Repo.get(ClientesSchema, cliente.id) do
-      nil -> {:error, :not_found}
+      nil ->
+        {:error, :not_found}
+
       cliente ->
-      case cliente.dia_remessa do
-        nil -> "-"
-        "1" -> "Segunda-feira"
-        "2" -> "Terça-feira"
-        "3" -> "Quarta-feira"
-        "4" -> "Quinta-feira"
-        "5" -> "Sexta-feira"
-      end
+        case cliente.dia_remessa do
+          nil -> "-"
+          "1" -> "Segunda-feira"
+          "2" -> "Terça-feira"
+          "3" -> "Quarta-feira"
+          "4" -> "Quinta-feira"
+          "5" -> "Sexta-feira"
+        end
     end
   end
 

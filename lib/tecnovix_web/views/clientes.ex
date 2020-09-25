@@ -187,7 +187,12 @@ defmodule TecnovixWeb.ClientesView do
     }
   end
 
-  def render("current_user.json", %{item: item, credits: credits, notifications: notifications, dia_remessa: dia_remessa}) do
+  def render("current_user.json", %{
+        item: item,
+        credits: credits,
+        notifications: notifications,
+        dia_remessa: dia_remessa
+      }) do
     __MODULE__.build(%{item: item})
     |> Map.put(:points, credits.points)
     |> Map.put(:money, credits.money)

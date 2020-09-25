@@ -114,6 +114,7 @@ defmodule TecnovixWeb.Router do
       post "/add_points", TecnovixWeb.PointsController, :add_points
       get "/convert_points", TecnovixWeb.ClientesController, :convert_points
       post "/rescue_points", TecnovixWeb.RescuePointsController, :rescue_points
+      post "/atend_pref", TecnovixWeb.AtendPrefClienteController, :get_and_crud_atendimento
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
