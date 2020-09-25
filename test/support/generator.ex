@@ -42,6 +42,7 @@ defmodule TecnovixWeb.Support.Generator do
       "municipio" => "Serra",
       "crm_medico" => "teste",
       "cod_cliente" => "nil",
+      "dia_remessa" => "3",
       "loja_cliente" => "12",
       "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
       "complemento" => "Casa"
