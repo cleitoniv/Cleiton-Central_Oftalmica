@@ -95,7 +95,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
     organize =
       Enum.flat_map(cliente["resources"], fn resource ->
-        Enum.flat_map(resource["models"], fn model ->
+        Enum.map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn field, acc ->
             case Map.has_key?(acc, field["id"]) do
               false -> Map.put(acc, field_crm_cnae(field), field["value"])
@@ -104,7 +104,6 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
           end)
         end)
       end)
-      |> Map.new()
 
     [_endereco, num] = String.split(organize["A1_END"], [", ", ","])
 

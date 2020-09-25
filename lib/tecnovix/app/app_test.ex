@@ -5,7 +5,7 @@ defmodule Tecnovix.App.ScreensTest do
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
   alias Tecnovix.Endpoints.Protheus
 
-  @product_url "https://onelens.fbitsstatic.net/img/p/lentes-de-contato-bioview-asferica-80342/353788.jpg?w=530&h=530&v=202004021417"
+  @product_url "ftp://191.32.234.242/bioview-asferica.jpg"
 
   def organize_field(map) do
     case map["id"] do

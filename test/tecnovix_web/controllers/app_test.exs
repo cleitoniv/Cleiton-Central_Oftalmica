@@ -162,7 +162,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/produtos?filtro=Miopía")
       |> json_response(200)
-      |> IO.inspect
 
     assert product["success"] == true
 
