@@ -8,7 +8,7 @@ defmodule TecnovixWeb.ClientesController do
   alias Tecnovix.ClientesSchema
   alias Tecnovix.App.Screens
   alias Tecnovix.Services.Devolucao
-
+  alias TecnovixWeb.Auth.Firebase
   action_fallback Tecnovix.Resources.Fallback
 
   def insert_or_update(conn, params) do
@@ -26,6 +26,14 @@ defmodule TecnovixWeb.ClientesController do
       |> put_status(201)
       |> put_resp_content_type("application/json")
       |> render("clientes.json", %{item: cliente})
+    end
+  end
+
+  def update_password(conn, %{"idToken" => idToken, "new_password" => new_password}) do
+    with {:ok, _password} <- Firebase.update_password(%{idToken: idToken, password: new_password}) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true}))
     end
   end
 

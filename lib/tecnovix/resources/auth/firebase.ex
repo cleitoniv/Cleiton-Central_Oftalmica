@@ -159,4 +159,12 @@ defmodule TecnovixWeb.Auth.Firebase do
     url = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" <> @firebase_api_key
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
   end
+
+  def update_password(%{idToken: _idToken, password: _password} = params) do
+    params = Map.put(params, :returnSecureToken, true)
+
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" <> @firebase_api_key
+
+    HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
+  end
 end

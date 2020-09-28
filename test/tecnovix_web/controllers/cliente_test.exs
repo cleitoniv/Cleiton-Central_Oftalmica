@@ -147,7 +147,6 @@ defmodule TecnovixWeb.UsersTest do
     |> post("/api/cliente/atend_pref", %{"horario" => "tarde"})
     |> recycle()
     |> post("/api/cliente/atend_pref", %{"horario" => "manha"})
-
     |> json_response(200)
     |> IO.inspect()
   end
@@ -354,5 +353,27 @@ defmodule TecnovixWeb.UsersTest do
 
     # IO.inspect Tecnovix.Repo.all(Tecnovix.PreDevolucaoSchema)
     # |> Tecnovix.Repo.preload(:items)
+  end
+
+  test "Atualizando a senha do usuario cliente" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    update =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/update_password", %{
+        "idToken" => user_firebase["idToken"],
+        "new_password" => "111111"
+      })
+      |> json_response(200)
+      |> IO.inspect()
   end
 end

@@ -86,6 +86,7 @@ defmodule TecnovixWeb.Router do
       get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
       pipe_through :cliente
       get "/current_user", TecnovixWeb.ClientesController, :current_user
+      post "/update_password", TecnovixWeb.ClientesController, :update_password
       get "/", TecnovixWeb.ClientesController, :show
       post "/cliente_user", TecnovixWeb.UsuariosClienteController, :create_user
       post "/pedidos", TecnovixWeb.PedidosDeVendaController, :create

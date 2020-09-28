@@ -98,16 +98,24 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         Enum.map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn field, acc ->
             case Map.has_key?(acc, field["id"]) do
-              false -> Map.put(acc, field_crm_cnae(field), field["value"])
-              true -> acc
+              false ->
+                case field["id"] == "A1_END" do
+                  true ->
+                    [endereco, num] = String.split(field["value"], [", ", ","])
+
+                    Map.put(acc, field_crm_cnae(field), field["value"])
+                    |> Map.put("A1_NUM", num)
+
+                  false ->
+                    Map.put(acc, field_crm_cnae(field), field["value"])
+                end
+
+              true ->
+                acc
             end
           end)
         end)
       end)
-
-    [_endereco, num] = String.split(organize["A1_END"], [", ", ","])
-
-    organize = Map.put(organize, "A1_NUM", num)
 
     {:ok, organize}
   end

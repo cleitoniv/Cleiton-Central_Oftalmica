@@ -61,18 +61,21 @@ defmodule Tecnovix.AtendPrefClienteModel do
       |> Map.put("cliente_id", cliente.id)
 
     case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
-      nil -> create(atend)
+      nil ->
+        create(atend) |> IO.inspect()
+
       changeset ->
-        previous = Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
-          case value == 1 do
-            true -> [key]
-            false -> []
-          end
-        end)
-        |> Enum.at(0)
+        previous =
+          Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
+            case value == 1 do
+              true -> [key]
+              false -> []
+            end
+          end)
+          |> Enum.at(0)
 
         atend = Map.put(atend, "#{previous}", 0)
-        update(changeset, atend)
+        update(changeset, atend) |> IO.inspect()
     end
   end
 end
