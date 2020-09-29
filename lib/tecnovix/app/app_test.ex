@@ -17,6 +17,14 @@ defmodule Tecnovix.App.ScreensTest do
       "VALORC" -> "value_produto"
       "VALORE" -> "value_finan"
       "BM_GRUPO" -> "group"
+      "HASEIXO" -> "has_eixo"
+      "HASGRAU" -> "has_esferico"
+      "HASCILIND" -> "has_cilindrico"
+      "HASADICAO" -> "has_adicao"
+      "HASCOLOR" -> "has_cor"
+      "HASCURVA" -> "has_curva"
+      "HASDIAMET" -> "has_diametro"
+      "HASRAIO" -> "has_raio"
       v -> v
     end
   end
@@ -42,13 +50,7 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_product_grid(cliente, filtro) do
-    protheus = Protheus.stub()
-
-    {:ok, products} = protheus.get_client_products(cliente)
-
-    products = Jason.decode!(products)
-
+  def get_product_grid(products, cliente, filtro) do
     grid =
       Enum.flat_map(products["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->

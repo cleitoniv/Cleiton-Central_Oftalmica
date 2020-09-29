@@ -2,6 +2,10 @@ defmodule Tecnovix.App.ScreensProd do
   @behavior Tecnovix.App.Screens
   alias Tecnovix.Endpoints.Protheus
 
+  defp end_entrega(endereco, bairro, municipio, num, cep, complemento) do
+    "#{endereco}, #{complemento}, #{bairro}, #{municipio}. #{cep}"
+  end
+
   def organize_field(map) do
     case map["id"] do
       "BM_DESC" -> "title"
@@ -32,13 +36,7 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
-  def get_product_grid(cliente, filtro) do
-    protheus = Protheus.stub()
-
-    {:ok, products} = protheus.get_client_products(cliente)
-
-    products = Jason.decode!(products)
-
+  def get_product_grid(products, cliente, filtro) do
     grid =
       Enum.flat_map(products["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->
@@ -48,9 +46,23 @@ defmodule Tecnovix.App.ScreensProd do
               true -> acc
             end
           end)
-          |> Map.put("image_url", @product_url)
           |> Map.put("type", "miopia")
           |> Map.put("visint", true)
+          |> Map.put("previsao_entrega", 5)
+          |> Map.put("graus_esferico", [-0.5, 0.75, 1.0, 1.5])
+          |> Map.put("graus_eixo", [-0.5, 0.75, 1.0, 1.5])
+          |> Map.put("graus_cilindrico", [-0.5, 0.75, 1.0, 1.5])
+          |> Map.put(
+            "end_entrega",
+            end_entrega(
+              cliente.endereco,
+              cliente.bairro,
+              cliente.municipio,
+              cliente.numero,
+              cliente.cep,
+              cliente.complemento
+            )
+          )
         end)
       end)
 
@@ -58,6 +70,13 @@ defmodule Tecnovix.App.ScreensProd do
 
     produtos =
       Enum.map(grid, fn map ->
+        map =
+          Map.put(
+            map,
+            "image_url",
+            "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg"
+          )
+
         Enum.reduce(list, map, fn key, acc ->
           cond do
             acc[key] == "0" -> Map.put(acc, key, 0)

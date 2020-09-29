@@ -8,6 +8,8 @@ defmodule TecnovixWeb.ClientesController do
   alias Tecnovix.ClientesSchema
   alias Tecnovix.App.Screens
   alias Tecnovix.Services.Devolucao
+  alias Tecnovix.Services.Auth
+  alias Tecnovix.Endpoints.Protheus
   alias TecnovixWeb.Auth.Firebase
   action_fallback Tecnovix.Resources.Fallback
 
@@ -127,13 +129,23 @@ defmodule TecnovixWeb.ClientesController do
       end
 
     stub = Screens.stub()
-
+    protheus = Protheus.stub()
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, product} <- stub.get_product_grid(cliente, filtro) do
+    with {:ok, auth} <- Auth.token(),
+         {:ok, products} <-
+           protheus.get_client_products(%{
+             cliente: cliente.codigo,
+             loja: cliente.loja,
+             count: 50,
+             token: auth["access_token"]
+           }),
+         {:ok, grid} <- stub.get_product_grid(products, cliente, filtro) do
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: product}))
+      |> send_resp(200, Jason.encode!(%{success: true, data: grid}))
+    else
+      _ -> {:error, :not_found}
     end
   end
 

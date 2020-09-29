@@ -76,9 +76,10 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   @impl true
-  def get_client_products(_params) do
+  def get_client_products(%{cliente: _cliente, loja: _loja, count: _count, token: _token}) do
     resp = Jason.encode!(Tecnovix.TestHelp.product_client())
-
+    |> Jason.decode!()
+    
     {:ok, resp}
   end
 

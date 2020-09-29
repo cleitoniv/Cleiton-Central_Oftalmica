@@ -24,10 +24,17 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   @impl true
-  def get_client_products(%{token: token}) do
+  def get_client_products(%{cliente: cliente, loja: loja, count: count, token: token}) do
     header = Protheus.authenticate(@header, token)
-    url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/ESTREST"
-    HTTPoison.get(url, header)
+
+    url =
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/GRIDREST/?CLIENTE=#{cliente}&LOJA=#{
+        loja
+      }&COUNT=#{count}"
+
+    {:ok, get} = HTTPoison.get(url, header)
+
+    {:ok, Jason.decode!(get.body)}
   end
 
   @impl true

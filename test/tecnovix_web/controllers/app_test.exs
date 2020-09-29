@@ -152,7 +152,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/current_user")
       |> json_response(200)
-      |> IO.inspect()
 
     assert current_user["money"] == 5500
     assert current_user["points"] == 100
@@ -310,22 +309,5 @@ defmodule Tecnovix.Test.App do
     email |> Tecnovix.Mailer.deliver_now()
 
     assert_delivered_email(email)
-  end
-
-  test "Buscando os produtos do cliente" do
-    {:ok, user_firebase} =
-      Firebase.create_user(%{
-        email: "victor#{Ecto.UUID.autogenerate()}@gmail.com",
-        password: "123456"
-      })
-
-    token = Jason.decode!(user_firebase.body)
-    token = token["idToken"]
-
-    build_conn()
-    |> Generator.put_auth(token)
-    |> get("/api/cliente/protheus/products")
-    |> json_response(200)
-    |> IO.inspect()
   end
 end
