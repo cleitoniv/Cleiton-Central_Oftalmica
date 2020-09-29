@@ -29,6 +29,59 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
+  def organize_value(map) do
+    case map["id"] do
+      "HASEIXO" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASGRAU" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASCILIND" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASADICAO" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASCOLOR" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASCURVA" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASDIAMET" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASRAIO" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+      _ -> map["value"]
+    end
+  end
+
   def value_cents_1(key, acc) do
     case key do
       "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
@@ -56,7 +109,7 @@ defmodule Tecnovix.App.ScreensTest do
         Enum.map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn product, acc ->
             case Map.has_key?(acc, product["id"]) do
-              false -> Map.put(acc, organize_field(product), product["value"])
+              false -> Map.put(acc, organize_field(product), organize_value(product))
               true -> acc
             end
           end)

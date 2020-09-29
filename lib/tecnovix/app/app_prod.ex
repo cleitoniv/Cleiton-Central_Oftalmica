@@ -15,6 +15,14 @@ defmodule Tecnovix.App.ScreensProd do
       "VALORC" -> "value_produto"
       "VALORE" -> "value_finan"
       "BM_GRUPO" -> "group"
+      "HASEIXO" -> "has_eixo"
+      "HASGRAU" -> "has_esferico"
+      "HASCILIND" -> "has_cilindrico"
+      "HASADICAO" -> "has_adicao"
+      "HASCOLOR" -> "has_cor"
+      "HASCURVA" -> "has_curva"
+      "HASDIAMET" -> "has_diametro"
+      "HASRAIO" -> "has_raio"
       v -> v
     end
   end
