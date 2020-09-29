@@ -14,6 +14,7 @@
     "type": "A",
     "items": [
       {
+      "grupo": "011C",
       "filial": "teste",
       "codigo": "123132213123",
       "nocontrato": "teste",
@@ -41,6 +42,7 @@
     "type": "C",
     "items": [
       {
+        "grupo": "010C",
         "quantidade": 2,
         "prc_unitario": 14000,
         "produto": "Bioview Torica",

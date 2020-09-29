@@ -34,7 +34,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
-         {:ok, _pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) do
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) do
+      IO.inspect(pedido)
+
       ip =
         conn.remote_ip
         |> Tuple.to_list()

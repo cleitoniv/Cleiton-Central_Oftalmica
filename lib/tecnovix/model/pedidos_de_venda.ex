@@ -158,7 +158,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
       "num_pedido" => items["num_pedido"],
-      "url_image" => items["url_image"],
+      "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
+      "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10)
     }
   end
@@ -248,7 +249,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
       "num_pedido" => items["num_pedido"],
-      "url_image" => items["url_image"],
+      "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
+      "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10)
     }
   end
@@ -285,7 +287,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
       "num_pedido" => items["num_pedido"],
-      "url_image" => items["url_image"],
+      "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
+      "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10)
     }
   end
@@ -316,7 +319,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
       "num_pedido" => items["num_pedido"],
-      "url_image" => items["url_image"],
+      "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
+      "grupo" => items["grupo"],
       "codigo_item" => items["codigo_item"]
     }
   end
@@ -347,7 +351,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
       "num_pedido" => items["num_pedido"],
-      "url_image" => items["url_image"],
+      "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
+      "grupo" => items["grupo"],
       "codigo_item" => items["codigo_item"]
     }
   end

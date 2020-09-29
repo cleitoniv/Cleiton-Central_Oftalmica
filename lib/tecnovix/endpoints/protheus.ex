@@ -5,7 +5,7 @@ defmodule Tecnovix.Endpoints.Protheus do
   @callback get_address_by_cep(term) :: {:ok, term}
   @callback get_delivery_prevision(term) :: {:ok, term}
   @callback get_product_by_serial(term) :: {:ok, term}
-  @callback get_client_products(term) :: {:ok, term}
+  @callback get_client_products(products :: term, cliente :: term, filtro :: term) :: {:ok, term}
   @callback get_client_points(term) :: {:ok, term}
   @callback generate_boleto(term) :: {:ok, term}
 

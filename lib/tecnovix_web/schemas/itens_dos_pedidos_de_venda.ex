@@ -28,6 +28,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :url_image, :string
     field :codigo_item, :string
     field :codigo, :string
+    field :grupo, :string
     belongs_to :pedido_de_venda, Tecnovix.PedidosDeVendaSchema
     timestamps()
   end
@@ -39,6 +40,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :descricao_generica_do_produto_id,
       :filial,
       :codigo,
+      :grupo,
       :nocontrato,
       :tipo_venda,
       :codigo_item,
