@@ -8,6 +8,19 @@ defmodule Tecnovix.App.ScreensTest do
   alias Tecnovix.ClientesSchema
   alias Tecnovix.AtendPrefClienteModel
 
+  def get_endereco_entrega(_cliente) do
+    endereco = %{
+      cep: "29027-445",
+      endereco: "Rua Dr.Eurico Aguiar",
+      numero: "130",
+      complemento: "Sala 609",
+      bairro: "Santa Helena",
+      cidade: "Vitória"
+    }
+
+    {:ok, endereco}
+  end
+
   def organize_field(map) do
     case map["id"] do
       "BM_DESC" -> "title"

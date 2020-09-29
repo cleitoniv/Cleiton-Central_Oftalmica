@@ -2,6 +2,9 @@ defmodule Tecnovix.App.ScreensProd do
   @behavior Tecnovix.App.Screens
   alias Tecnovix.Endpoints.Protheus
 
+  def get_endereco_entrega(_cliente) do
+  end
+
   defp end_entrega(endereco, bairro, municipio, num, cep, complemento) do
     "#{endereco}, #{complemento}, #{bairro}, #{municipio}. #{cep}"
   end

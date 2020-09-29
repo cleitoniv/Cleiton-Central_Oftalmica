@@ -297,6 +297,13 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/rescue_points", %{"points" => 100, "credit_finan" => 104})
       |> json_response(200)
+
+    endereco_entrega =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/endereco_entrega")
+      |> json_response(200)
+      |> IO.inspect
   end
 
   test "email" do

@@ -93,6 +93,18 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
+  def get_endereco_entrega(conn, _params) do
+    stub = Screens.stub()
+
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, endereco} <- stub.get_endereco_entrega(cliente) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: endereco}))
+    end
+  end
+
   def current_user(conn, _params) do
     {:ok, user} = conn.private.auth
     |> IO.inspect
