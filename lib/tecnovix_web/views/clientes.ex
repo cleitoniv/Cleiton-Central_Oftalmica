@@ -21,6 +21,7 @@ defmodule TecnovixWeb.ClientesView do
       bairro: item.bairro,
       cep: item.cep,
       cdmunicipio: item.cdmunicipio,
+      municipio: item.municipio,
       ddd: item.ddd,
       telefone: item.telefone,
       bloqueado: item.bloqueado,
