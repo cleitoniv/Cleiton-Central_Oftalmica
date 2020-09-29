@@ -3,6 +3,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
 
   def build(%{item: item}) do
     %{
+      id: item.id,
       pedido_de_venda_id: item.pedido_de_venda_id,
       descricao_generica_do_produto_id: item.descricao_generica_do_produto_id,
       filial: item.filial,
