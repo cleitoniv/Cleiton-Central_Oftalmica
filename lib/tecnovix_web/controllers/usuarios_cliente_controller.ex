@@ -88,7 +88,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
   end
 
   def create_user(conn, %{"param" => params}) do
-    params = Map.put(params, "password", Tecnovix.Repo.generate_event_id())
+    params = Map.put(params, "password", String.slice(Tecnovix.Repo.generate_event_id(), 6..12))
 
     case conn.private.auth do
       {:ok, %ClientesSchema{} = user} ->
