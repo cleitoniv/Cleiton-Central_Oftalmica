@@ -35,7 +35,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) do
-      IO.inspect(pedido)
 
       ip =
         conn.remote_ip
@@ -54,7 +53,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true}))
+      |> render("pedido.json", %{item: pedido})
     else
       _ -> {:error, :order_not_created}
     end

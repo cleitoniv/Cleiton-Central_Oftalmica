@@ -629,10 +629,11 @@ defmodule Tecnovix.App.ScreensTest do
               |> Map.put(:quantidade, codigo_item.quantidade)
               |> Map.put(:valor_total, codigo_item.valor_total)
               |> Map.put(:olho, codigo_item.olho)
-              |> Map.put(:url_image, @product_url)
+              |> Map.put(:url_image, "http://portal.centraloftalmica.com/images/#{codigo_item.grupo}.jpg")
               |> Map.put(:codigo_item, codigo_item.codigo_item)
               |> Map.put(:nome_produto, codigo_item.nome_produto)
               |> Map.put(:duracao, "1 Ano")
+              |> Map.put(:grupo, codigo_item.grupo)
               |> Map.put(:type, codigo_item.type)
               |> Map.put(:operation, codigo_item.operation)
 
@@ -697,7 +698,8 @@ defmodule Tecnovix.App.ScreensTest do
                 esferico: item.esferico,
                 eixo: item.eixo,
                 cilindro: item.cilindrico,
-                url_image: @product_url,
+                grupo: item.grupo,
+                url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
                 codigo_item: item.codigo_item,
                 duracao: "1 ano"
               }

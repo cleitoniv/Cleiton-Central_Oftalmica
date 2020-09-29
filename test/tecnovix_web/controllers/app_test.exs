@@ -146,6 +146,7 @@ defmodule Tecnovix.Test.App do
       |> recycle()
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
+      |> Map.get("data")
 
     current_user =
       build_conn()
@@ -162,7 +163,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/produtos?filtro=Miopía")
       |> json_response(200)
-      |> IO.inspect()
 
     assert product["success"] == true
 
@@ -211,14 +211,16 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/detail_order?filtro=0")
       |> json_response(200)
+      |> IO.inspect
 
     assert detail_order["success"] == true
 
-    # pedido_por_id =
-    #   build_conn()
-    #   |> Generator.put_auth(user_firebase["idToken"])
-    #   |> get("/api/cliente/pedido/#{pedido["id"]}")
-    #   |> json_response(200)
+    pedido_por_id =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/pedido/#{pedido["id"]}")
+      |> json_response(200)
+      |> IO.inspect
 
     payments =
       build_conn()
