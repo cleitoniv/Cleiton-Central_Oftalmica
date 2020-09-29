@@ -18,6 +18,38 @@
               "value": "010C"
             },
             {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
               "id": "BM_YGRPTES",
               "order": 2,
               "value": "010T"
@@ -81,6 +113,38 @@
               "value": "011C"
             },
             {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
               "id": "BM_YGRPTES",
               "order": 2,
               "value": "011T"
@@ -142,6 +206,38 @@
               "id": "BM_GRUPO",
               "order": 1,
               "value": "013C"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
             },
             {
               "id": "BM_YGRPTES",
@@ -210,6 +306,38 @@
               "id": "BM_YGRPTES",
               "order": 2,
               "value": "010T"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
             },
             {
               "id": "TPPROD",
@@ -290,6 +418,38 @@
               "value": "CX"
             },
             {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
               "id": "SALDO",
               "order": 6,
               "value": "1320.00000000"
@@ -336,6 +496,38 @@
               "id": "BM_YGRPTES",
               "order": 2,
               "value": "030T"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
             },
             {
               "id": "TPPROD",
@@ -421,6 +613,38 @@
               "value": "28.00000000"
             },
             {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
               "id": "SALDOTESTE",
               "order": 7,
               "value": "0"
@@ -474,6 +698,38 @@
               "value": "SILIDROGEL TORICA CX6"
             },
             {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
               "id": "B1_UM",
               "order": 5,
               "value": "CX"
@@ -524,6 +780,38 @@
             {
               "id": "BM_YGRPTES",
               "order": 2
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
             },
             {
               "id": "TPPROD",
@@ -582,6 +870,38 @@
               "id": "BM_GRUPO",
               "order": 1,
               "value": "060C"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
             },
             {
               "id": "BM_YGRPTES",
