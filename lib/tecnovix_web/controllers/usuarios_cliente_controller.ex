@@ -11,7 +11,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
          {:ok, %{status_code: 200}} <-
            Firebase.create_user(%{email: user.email, password: user.password}) do
       # verificando se o email foi enviado com sucesso
-      case Email.send_email({user.nome, user.email}) do
+      case Email.send_email({user.nome, user.email}, params["password"]) do
         {_send, {:delivered_email, _email}} ->
           # atualizando o campo senha_enviada para 1(indicando que o email foi enviado)
           UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
@@ -27,7 +27,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
         "data" => DateTime.utc_now(),
         "ip" => "teste",
         "dispositivo" => "teste",
-        "acao_realizada" => "Realizou o cadastro"
+        "acao_realizada" => "Usuario Cliente cadastrado."
       })
 
       # registrando a acao na tabela logs_cliente
@@ -36,8 +36,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: user})
     else
-      _ ->
-        {:error, :register_error}
+      _ -> {:error, :register_error}
     end
   end
 
@@ -89,6 +88,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
   end
 
   def create_user(conn, %{"param" => params}) do
+    params = Map.put(params, "password", Tecnovix.Repo.generate_event_id())
+
     case conn.private.auth do
       {:ok, %ClientesSchema{} = user} ->
         params = Map.put(params, "cliente_id", user.id)

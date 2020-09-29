@@ -20,6 +20,7 @@ defmodule Tecnovix.UsuariosClienteSchema do
     struct
     |> cast(params, [:cliente_id, :uid, :nome, :email, :cargo, :status, :password])
     |> validate_required([:cliente_id, :nome, :email, :status, :password])
+    |> unique_constraint(:email, message: "Email já cadastrado.")
   end
 
   def update(struct, params \\ %{}) do

@@ -4,17 +4,17 @@ defmodule Tecnovix.Email do
 
   @remetente Application.fetch_env!(:tecnovix, :remetente)
 
-  def send_email(to) do
-    content_email(to)
+  def send_email(to, senha) do
+    content_email(to, senha)
     |> Mailer.deliver_now(response: true)
   end
 
-  def content_email(email) do
+  def content_email(email, senha) do
     new_email(
       from: @remetente,
       to: email,
       subject: "Central Oftalmica",
-      text_body: "Senha de acesso " <> Tecnovix.Repo.generate_event_id()
+      text_body: "Senha de acesso " <> senha
     )
   end
 

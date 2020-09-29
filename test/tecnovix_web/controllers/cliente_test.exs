@@ -24,7 +24,7 @@ defmodule TecnovixWeb.UsersTest do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
       |> json_response(201)
-      |> Map.get("data")
+      |> IO.inspect
 
     # Motrando a Logs
     Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)
@@ -83,12 +83,13 @@ defmodule TecnovixWeb.UsersTest do
 
   test "testing email" do
     user = "victorasilva0707@gmail.com"
-    email = Tecnovix.Email.content_email(user)
+    senha = Tecnovix.Repo.generate_event_id()
+    email = Tecnovix.Email.content_email(user, senha)
 
     assert email.to == user
     assert email.subject == "Central Oftalmica"
 
-    email = Tecnovix.Email.content_email(user)
+    email = Tecnovix.Email.content_email(user, senha)
 
     email |> Tecnovix.Mailer.deliver_now()
 
