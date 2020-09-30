@@ -35,6 +35,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     resp = Jason.encode!(Tecnovix.TestHelp.cliente())
 
     {:ok, %{status_code: 200, body: resp}}
+    |> IO.inspect
   end
 
   @impl true
@@ -101,7 +102,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         end)
       end)
       |> Map.new()
-      
+
     {:ok, organize}
   end
 
