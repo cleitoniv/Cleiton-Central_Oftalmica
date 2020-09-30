@@ -2,11 +2,21 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.CartaoDeCreditoModel
   alias Tecnovix.CartaoDeCreditoModel, as: CartaoModel
+  alias Tecnovix.UsuariosClienteSchema
 
   action_fallback Tecnovix.Resources.Fallback
 
+  def verify_auth({:ok, cliente}) do
+    case cliente do
+      %UsuariosClienteSchema{} ->
+         user = Tecnovix.Repo.preload(cliente, :cliente)
+         {:ok, user.cliente}
+      v -> {:ok, v}
+    end
+  end
+
   def create(conn, %{"param" => params}) do
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, _result} <- CartaoModel.get_cc(%{"cliente_id" => cliente.id}),
          {:ok, cartao} <- CartaoModel.primeiro_cartao(params, cliente.id),

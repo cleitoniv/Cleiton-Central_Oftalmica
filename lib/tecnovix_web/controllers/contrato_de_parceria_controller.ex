@@ -2,6 +2,7 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.ContratoDeParceriaModel
   alias Tecnovix.ContratoDeParceriaModel
+  alias Tecnovix.UsuariosClienteSchema
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -14,8 +15,17 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
     end
   end
 
+  def verify_auth({:ok, cliente}) do
+    case cliente do
+      %UsuariosClienteSchema{} ->
+         user = Tecnovix.Repo.preload(cliente, :cliente)
+         {:ok, user.cliente}
+      v -> {:ok, v}
+    end
+  end
+
   def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, items_order} <- ContratoDeParceriaModel.items_order(items),
          {:ok, order} <- ContratoDeParceriaModel.order(cliente, items_order),

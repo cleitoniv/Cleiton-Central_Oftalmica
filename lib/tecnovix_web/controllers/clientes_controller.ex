@@ -96,7 +96,7 @@ defmodule TecnovixWeb.ClientesController do
   def get_endereco_entrega(conn, _params) do
     stub = Screens.stub()
 
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, endereco} <- stub.get_endereco_entrega(cliente) do
       conn
@@ -107,7 +107,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def current_user(conn, _params) do
     {:ok, user} = conn.private.auth
-    
+
     case user do
       %UsuariosClienteSchema{} ->
         user = Tecnovix.Repo.preload(user, :cliente)
@@ -145,6 +145,15 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
+  def verify_auth({:ok, cliente}) do
+    case cliente do
+      %UsuariosClienteSchema{} ->
+         user = Tecnovix.Repo.preload(cliente, :cliente)
+         {:ok, user.cliente}
+      v -> {:ok, v}
+    end
+  end
+
   def products(conn, %{"filtro" => filtro}) do
     filtro =
       case filtro do
@@ -155,7 +164,8 @@ defmodule TecnovixWeb.ClientesController do
 
     stub = Screens.stub()
     protheus = Protheus.stub()
-    {:ok, cliente} = conn.private.auth
+
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, auth} <- Auth.token(),
          {:ok, products} <-
@@ -177,7 +187,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def offers(conn, _params) do
     stub = Screens.stub()
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, offers} <- stub.get_offers(cliente) do
       conn
@@ -188,7 +198,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def products_credits(conn, _params) do
     stub = Screens.stub()
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, products} <- stub.get_products_credits(cliente) do
       conn
@@ -199,7 +209,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def orders(conn, %{"filtro" => filtro}) do
     stub = Screens.stub()
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, orders} <- stub.get_order(cliente, filtro) do
       conn
@@ -210,7 +220,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def cart(conn, _params) do
     stub = Screens.stub()
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, cart} <- stub.get_products_cart(cliente) do
       conn
@@ -221,7 +231,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def info_product(conn, %{"id" => id}) do
     stub = Screens.stub()
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, info} <- stub.get_info_product(cliente, id) do
       conn
@@ -232,7 +242,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def detail_order(conn, %{"filtro" => filtro}) do
     stub = Screens.stub()
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, detail} <- stub.get_detail_order(cliente, filtro) do
       conn
@@ -265,7 +275,7 @@ defmodule TecnovixWeb.ClientesController do
   def get_payments(conn, %{"filtro" => filtro}) do
     stub = Screens.stub()
 
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, payments} <- stub.get_payments(cliente, filtro) do
       conn
@@ -277,7 +287,7 @@ defmodule TecnovixWeb.ClientesController do
   def get_mypoints(conn, _params) do
     stub = Screens.stub()
 
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, pedidos_points} <- stub.get_mypoints(cliente) do
       conn
@@ -289,7 +299,7 @@ defmodule TecnovixWeb.ClientesController do
   def convert_points(conn, %{"points" => points}) do
     stub = Screens.stub()
 
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, points} <- stub.convert_points(cliente, points) do
       conn
@@ -301,7 +311,7 @@ defmodule TecnovixWeb.ClientesController do
   def get_notifications(conn, _params) do
     stub = Screens.stub()
 
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, notifications} <- stub.get_notifications(cliente) do
       conn
@@ -323,7 +333,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) do
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
       conn
@@ -333,7 +343,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def next_step(conn, %{"group" => group, "quantidade" => quantidade, "devolution" => devolution}) do
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, next} <- Devolucao.next(cliente.id, group, quantidade, devolution) do
       conn
@@ -356,7 +366,7 @@ defmodule TecnovixWeb.ClientesController do
   def get_extrato_finan(conn, _params) do
     stub = Screens.stub()
 
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, finan} <- stub.get_extrato_finan(cliente) do
       conn
@@ -368,7 +378,7 @@ defmodule TecnovixWeb.ClientesController do
   def get_extrato_prod(conn, _params) do
     stub = Screens.stub()
 
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, prod} <- stub.get_extrato_prod(cliente) do
       conn
@@ -380,7 +390,7 @@ defmodule TecnovixWeb.ClientesController do
   def get_and_send_email_dev(conn, %{"email" => email}) do
     stub = Screens.stub()
 
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, _} <- stub.get_and_send_email_dev(email),
          {:ok, _} <- stub.get_and_send_email_dev(cliente.email) do
