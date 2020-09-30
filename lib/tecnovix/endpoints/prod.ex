@@ -79,7 +79,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
     organize =
       Enum.flat_map(cliente["resources"], fn resource ->
-        Enum.map(resource["models"], fn model ->
+        Enum.flat_map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn field, acc ->
             case Map.has_key?(acc, field["id"]) do
               false ->
@@ -100,7 +100,8 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
           end)
         end)
       end)
-
+      |> Map.new()
+      
     {:ok, organize}
   end
 

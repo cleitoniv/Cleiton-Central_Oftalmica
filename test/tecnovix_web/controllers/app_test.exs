@@ -25,6 +25,7 @@ defmodule Tecnovix.Test.App do
         |> Generator.put_auth(token)
         |> get("/api/cliente/protheus/#{"03801285720"}")
         |> json_response(200)
+        |> IO.inspect
 
       assert resp["status"] == "FOUND"
 
@@ -301,7 +302,7 @@ defmodule Tecnovix.Test.App do
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/endereco_entrega")
-      |> json_response(200) 
+      |> json_response(200)
   end
 
   test "email" do
