@@ -107,7 +107,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def current_user(conn, _params) do
     {:ok, user} = conn.private.auth
-    IO.inspect "oi"
+    
     case user do
       %UsuariosClienteSchema{} ->
         user = Tecnovix.Repo.preload(user, :cliente)
@@ -170,7 +170,8 @@ defmodule TecnovixWeb.ClientesController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: grid}))
     else
-      _ -> {:error, :not_found}
+      v -> IO.inspect v
+        {:error, :not_found}
     end
   end
 

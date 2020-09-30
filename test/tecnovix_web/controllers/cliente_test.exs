@@ -226,8 +226,7 @@ defmodule TecnovixWeb.UsersTest do
 
     {:ok, usuarioAuth} = Firebase.sign_in(%{email: user_client["email"], password: "123456"})
     usuarioAuth = Jason.decode!(usuarioAuth.body)
-    |> IO.inspect
-    
+
     build_conn()
     |> Generator.put_auth(usuarioAuth["idToken"])
     |> get("/api/cliente/cards")
