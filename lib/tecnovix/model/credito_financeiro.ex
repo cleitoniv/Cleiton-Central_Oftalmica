@@ -6,6 +6,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   alias Tecnovix.ClientesSchema
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
   alias Tecnovix.CreditoFinanceiroSchema, as: Credito
+  import Ecto.Query
 
   def insert(params, order, payment, cliente_id) do
     case credito_params(params, order, payment, cliente_id) do
