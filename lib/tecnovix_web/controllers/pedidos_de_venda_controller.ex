@@ -31,10 +31,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
-    with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
-         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
-         {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) do
+    with {:ok, items_order} <- PedidosDeVendaModel.items_order(items) |> IO.inspect,
+         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente) |> IO.inspect,
+         {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order) |> IO.inspect,
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) |> IO.inspect do
 
       ip =
         conn.remote_ip
@@ -55,7 +55,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> put_resp_content_type("application/json")
       |> render("pedido.json", %{item: pedido})
     else
-      _ -> {:error, :order_not_created}
+      v -> IO.inspect v
+           {:error, :order_not_created}
     end
   end
 
