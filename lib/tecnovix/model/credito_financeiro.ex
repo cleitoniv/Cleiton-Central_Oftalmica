@@ -5,6 +5,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   alias Tecnovix.Resource.Wirecard.Actions, as: Wirecard
   alias Tecnovix.ClientesSchema
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
+  alias Tecnovix.CreditoFinanceiroSchema, as: Credito
 
   def insert(params, order, payment, cliente_id) do
     case credito_params(params, order, payment, cliente_id) do
@@ -205,5 +206,14 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       end)
 
     {:ok, order}
+  end
+
+  def sum_credits(cliente) do
+    Credito
+    |> where([c], ^cliente.id == c.cliente_id)
+    |> Repo.all()
+    |> Enum.reduce(0, fn credit, acc ->
+      credit.valor + acc
+    end)
   end
 end

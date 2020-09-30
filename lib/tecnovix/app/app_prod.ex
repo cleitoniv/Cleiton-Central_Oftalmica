@@ -179,10 +179,10 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
-  def get_credits(_cliente) do
+  def get_credits(cliente) do
     %{
-      money: 5500,
-      points: 100
+      money: Tecnovix.CreditoFinanceiroModel.sum_credits(cliente),
+      points: 0
     }
   end
 
