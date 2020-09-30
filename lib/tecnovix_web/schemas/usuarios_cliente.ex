@@ -25,7 +25,7 @@ defmodule Tecnovix.UsuariosClienteSchema do
 
   def update(struct, params \\ %{}) do
     struct
-    |> cast(params, [:nome, :cargo])
+    |> cast(params, [:nome, :cargo, :status])
   end
 
   def update_senha(struct, params \\ %{}) do

@@ -66,9 +66,10 @@ defmodule TecnovixWeb.UsersTest do
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> put("/api/usuarios_cliente/#{user_client["id"]}", %{
-      "param" => %{user_client_param | "cargo" => "Assistente"}
+      "param" => %{user_client_param | "status" => 0}
     })
     |> json_response(200)
+    |> IO.inspect
 
     {:ok, register} = Tecnovix.UsuariosClienteModel.search_register_email(user_client["email"])
 

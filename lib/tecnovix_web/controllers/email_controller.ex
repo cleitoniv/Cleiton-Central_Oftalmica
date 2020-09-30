@@ -14,6 +14,7 @@ defmodule Tecnovix.Email do
       from: @remetente,
       to: email,
       subject: "Central Oftalmica",
+      html_body: {TecnovixWeb.LayoutView, "email_senha_html.eex"},
       text_body: "Senha de acesso " <> senha
     )
   end
