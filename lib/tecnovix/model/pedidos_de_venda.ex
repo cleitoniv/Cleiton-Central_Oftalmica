@@ -85,7 +85,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.payment_params()
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
-
+      |> IO.inspect
+      
     case payment do
       {:ok, %{status_code: 201}} -> payment
       _ -> {:error, :payment_not_created}
