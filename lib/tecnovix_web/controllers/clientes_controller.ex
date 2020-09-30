@@ -107,14 +107,14 @@ defmodule TecnovixWeb.ClientesController do
 
   def current_user(conn, _params) do
     {:ok, user} = conn.private.auth
-
+    IO.inspect "oi"
     case user do
       %UsuariosClienteSchema{} ->
-        user = Repo.preload(user, :cliente)
+        user = Tecnovix.Repo.preload(user, :cliente) |> IO.inspect
 
         stub = Screens.stub()
 
-        credits_info = stub.get_credits(user.cliente)
+        credits_info = stub.get_credits(user.cliente) |> IO.inspect
         {:ok, notifications} = stub.get_notifications(user)
         dia_remessa = stub.get_dia_remessa(user)
 
