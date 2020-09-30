@@ -110,18 +110,18 @@ defmodule TecnovixWeb.ClientesController do
     IO.inspect "oi"
     case user do
       %UsuariosClienteSchema{} ->
-        user = Tecnovix.Repo.preload(user, :cliente) |> IO.inspect
+        user = Tecnovix.Repo.preload(user, :cliente)
 
         stub = Screens.stub()
 
-        credits_info = stub.get_credits(user.cliente) |> IO.inspect
-        {:ok, notifications} = stub.get_notifications(user)
-        dia_remessa = stub.get_dia_remessa(user)
+        credits_info = stub.get_credits(user.cliente)
+        {:ok, notifications} = stub.get_notifications(user.cliente)
+        dia_remessa = stub.get_dia_remessa(user.cliente)
 
         conn
         |> put_view(TecnovixWeb.ClientesView)
         |> render("current_user.json", %{
-          item: user,
+          item: user.cliente,
           credits: credits_info,
           notifications: notifications,
           dia_remessa: dia_remessa
