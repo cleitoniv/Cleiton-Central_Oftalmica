@@ -147,7 +147,6 @@ defmodule Tecnovix.App.ScreensProd do
           )
         end)
       end)
-      |> IO.inspect
 
     list = ["boxes", "tests", "value", "value_produto", "value_finan"]
 
