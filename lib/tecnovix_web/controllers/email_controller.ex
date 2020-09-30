@@ -10,13 +10,11 @@ defmodule Tecnovix.Email do
   end
 
   def content_email(email, senha) do
-    new_email(
-      from: @remetente,
-      to: email,
-      subject: "Central Oftalmica",
-      html_body: {TecnovixWeb.LayoutView, "email_senha_html.eex"},
-      text_body: "Senha de acesso " <> senha
-    )
+    new_email
+    |> from(@remetente)
+    |> to(email)
+    |> subject("Central Oftalmica")
+    |> text_body("Sua senha de acesso " <> senha)
   end
 
   # enviando email para o cliente de devolucao
