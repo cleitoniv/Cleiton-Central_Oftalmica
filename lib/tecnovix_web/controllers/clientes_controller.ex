@@ -110,9 +110,22 @@ defmodule TecnovixWeb.ClientesController do
 
     case user do
       %UsuariosClienteSchema{} ->
+        user = Repo.preload(user, :cliente)
+
+        stub = Screens.stub()
+
+        credits_info = stub.get_credits(user.cliente)
+        {:ok, notifications} = stub.get_notifications(user)
+        dia_remessa = stub.get_dia_remessa(user)
+
         conn
-        |> put_view(TecnovixWeb.UsuariosClienteView)
-        |> render("show.json", %{item: user})
+        |> put_view(TecnovixWeb.ClientesView)
+        |> render("current_user.json", %{
+          item: user,
+          credits: credits_info,
+          notifications: notifications,
+          dia_remessa: dia_remessa
+        })
 
       %ClientesSchema{} ->
         stub = Screens.stub()
