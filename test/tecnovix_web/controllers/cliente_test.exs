@@ -83,13 +83,13 @@ defmodule TecnovixWeb.UsersTest do
 
   test "testing email" do
     user = "victorasilva0707@gmail.com"
-    senha = Tecnovix.Repo.generate_event_id()
-    email = Tecnovix.Email.content_email(user, senha)
+    senha = String.slice(Tecnovix.Repo.generate_event_id(), 6..12)
+    email = Tecnovix.Email.content_email(user, senha, "Victor")
 
     assert email.to == user
-    assert email.subject == "Central Oftalmica"
+    assert email.subject == "Central Oftalmica - Senha de acesso"
 
-    email = Tecnovix.Email.content_email(user, senha)
+    email = Tecnovix.Email.content_email(user, senha, "Victor")
 
     email |> Tecnovix.Mailer.deliver_now()
 

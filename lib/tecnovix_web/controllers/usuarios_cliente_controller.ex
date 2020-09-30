@@ -11,7 +11,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
          {:ok, %{status_code: 200}} <-
            Firebase.create_user(%{email: user.email, password: user.password}) do
       # verificando se o email foi enviado com sucesso
-      case Email.send_email({user.nome, user.email}, params["password"]) do
+      case Email.send_email({user.nome, user.email}, params["password"], params["nome"]) do
         {_send, {:delivered_email, _email}} ->
           # atualizando o campo senha_enviada para 1(indicando que o email foi enviado)
           UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
