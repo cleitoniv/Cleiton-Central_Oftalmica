@@ -6,6 +6,8 @@ defmodule TecnovixWeb.UsersTest do
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
   alias Tecnovix.CartaoDeCreditoModel, as: CartaoModel
   alias TecnovixWeb.Auth.Firebase
+  require Phoenix.ChannelTest, as: Channel
+  @endpoint TecnovixWeb.Endpoint
 
   test "user" do
     user_firebase = Generator.user()
@@ -396,5 +398,26 @@ defmodule TecnovixWeb.UsersTest do
     {:ok, desc} = Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
     {:ok, desc} = Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
     Tecnovix.DescricaoGenericaDoProdutoModel.get_graus(desc.grupo)
+  end
+
+  test "Testando o socket de open notifications" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    desc_param = Generator.desc_generica()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    {:ok, socket} = Channel.connect(TecnovixWeb.Socket, %{"token" => user_firebase["idToken"]}, %{})
+    {:ok, _, socket} = Channel.subscribe_and_join(socket, "cliente:#{cliente["id"]}", %{})
+    resp = Channel.push(socket, "update_notifications_number", %{})
+
+    Channel.assert_reply(resp, :ok)
+
+    Channel.assert_broadcast("update_notifications_number", %{}) |> IO.inspect
   end
 end
