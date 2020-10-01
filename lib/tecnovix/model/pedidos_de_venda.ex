@@ -86,7 +86,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
       |> IO.inspect
-      
+
     case payment do
       {:ok, %{status_code: 201}} -> payment
       _ -> {:error, :payment_not_created}
@@ -521,7 +521,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       PedidosDeVendaSchema
       |> preload(:items)
       |> where([p], p.status_ped == ^filtro)
-      |> order_by([p], desc: p.inserted_at)
+      |> order_by([p], asc: p.inserted_at)
       |> Repo.all()
 
     case pedidos do
