@@ -148,9 +148,11 @@ defmodule TecnovixWeb.ClientesController do
   def verify_auth({:ok, cliente}) do
     case cliente do
       %UsuariosClienteSchema{} ->
-         user = Tecnovix.Repo.preload(cliente, :cliente)
-         {:ok, user.cliente}
-      v -> {:ok, v}
+        user = Tecnovix.Repo.preload(cliente, :cliente)
+        {:ok, user.cliente}
+
+      v ->
+        {:ok, v}
     end
   end
 
@@ -180,7 +182,8 @@ defmodule TecnovixWeb.ClientesController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: grid}))
     else
-      v -> IO.inspect v
+      v ->
+        IO.inspect(v)
         {:error, :not_found}
     end
   end

@@ -23,6 +23,25 @@ defmodule TecnovixWeb.Support.Generator do
     }
   end
 
+  def desc_generica() do
+    %{
+      "grupo" => "010C",
+      "codigo" => "005678",
+      "descricao" => "Testando",
+      "esferico" => 1.25,
+      "cilindrico" => 1.50,
+      "eixo" => 1,
+      "cor" => "Azul",
+      "diametro" => 1.0,
+      "curva_base" => 1.5,
+      "adic_padrao" => "1",
+      "adicao" => 1,
+      "raio_curva" => "1.5",
+      "link_am_app" => "http",
+      "blo_de_tela" => "1"
+    }
+  end
+
   def user_param() do
     %{
       "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",

@@ -85,7 +85,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.payment_params()
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
-      |> IO.inspect
+      |> IO.inspect()
 
     case payment do
       {:ok, %{status_code: 201}} -> payment
@@ -171,6 +171,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "order_id" => verify_type("A", order),
       "filial" => "",
       "numero" => "",
+      "loja" => cliente.loja,
       "cliente" => cliente.codigo,
       "pd_correios" => "",
       "vendedor_1" => "",
@@ -516,11 +517,25 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def get_pedidos_protheus(filtro) do
+  def get_pedidos_protheus(filtro, nil) do
     pedidos =
       PedidosDeVendaSchema
       |> preload(:items)
       |> where([p], p.status_ped == ^filtro)
+      |> order_by([p], asc: p.inserted_at)
+      |> Repo.all()
+
+    case pedidos do
+      [] -> {:error, :not_found}
+      pedidos -> {:ok, pedidos}
+    end
+  end
+
+  def get_pedidos_protheus(filtro, nao_integrado) do
+    pedidos =
+      PedidosDeVendaSchema
+      |> preload(:items)
+      |> where([p], p.status_ped == ^filtro and p.integrado == ^nao_integrado)
       |> order_by([p], asc: p.inserted_at)
       |> Repo.all()
 

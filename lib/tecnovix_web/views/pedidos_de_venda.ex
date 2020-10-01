@@ -9,6 +9,8 @@ defmodule TecnovixWeb.PedidosDeVendaView do
         client_id: item.client_id,
         order_id: item.order_id,
         filial: item.filial,
+        loja: item.loja,
+        integrado: item.integrado,
         numero: item.numero,
         cliente: item.cliente,
         tipo_venda_ret_id: item.tipo_venda_ret_id,

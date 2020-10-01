@@ -9,9 +9,11 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
   def verify_auth({:ok, cliente}) do
     case cliente do
       %UsuariosClienteSchema{} ->
-         user = Tecnovix.Repo.preload(cliente, :cliente)
-         {:ok, user.cliente}
-      v -> {:ok, v}
+        user = Tecnovix.Repo.preload(cliente, :cliente)
+        {:ok, user.cliente}
+
+      v ->
+        {:ok, v}
     end
   end
 

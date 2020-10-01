@@ -7,6 +7,7 @@ defmodule Tecnovix.App.ScreensTest do
   alias Tecnovix.Repo
   alias Tecnovix.ClientesSchema
   alias Tecnovix.AtendPrefClienteModel
+  alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
   def get_endereco_entrega(_cliente) do
     endereco = %{
@@ -642,7 +643,10 @@ defmodule Tecnovix.App.ScreensTest do
               |> Map.put(:quantidade, codigo_item.quantidade)
               |> Map.put(:valor_total, codigo_item.valor_total)
               |> Map.put(:olho, codigo_item.olho)
-              |> Map.put(:url_image, "http://portal.centraloftalmica.com/images/#{codigo_item.grupo}.jpg")
+              |> Map.put(
+                :url_image,
+                "http://portal.centraloftalmica.com/images/#{codigo_item.grupo}.jpg"
+              )
               |> Map.put(:codigo_item, codigo_item.codigo_item)
               |> Map.put(:nome_produto, codigo_item.nome_produto)
               |> Map.put(:duracao, "1 Ano")

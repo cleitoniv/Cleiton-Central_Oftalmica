@@ -31,11 +31,11 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
-    with {:ok, items_order} <- PedidosDeVendaModel.items_order(items) |> IO.inspect,
-         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente) |> IO.inspect,
-         {:ok, payment} <- PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order) |> IO.inspect,
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) |> IO.inspect do
-
+    with {:ok, items_order} <- PedidosDeVendaModel.items_order(items) |> IO.inspect(),
+         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente) |> IO.inspect(),
+         {:ok, payment} <-
+           PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order) |> IO.inspect(),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) |> IO.inspect() do
       ip =
         conn.remote_ip
         |> Tuple.to_list()
@@ -55,8 +55,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> put_resp_content_type("application/json")
       |> render("pedido.json", %{item: pedido})
     else
-      v -> IO.inspect v
-           {:error, :order_not_created}
+      v ->
+        IO.inspect(v)
+        {:error, :order_not_created}
     end
   end
 
@@ -98,8 +99,19 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
+  def get_pedidos(conn, %{"filtro" => filtro, "nao_integrado" => nao_integrado}) do
+    with {:ok, pedidos} <- PedidosDeVendaModel.get_pedidos_protheus(filtro, nao_integrado) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedidos_protheus.json", %{item: pedidos})
+    else
+      _ -> {:error, :not_found}
+    end
+  end
+
   def get_pedidos(conn, %{"filtro" => filtro}) do
-    with {:ok, pedidos} <- PedidosDeVendaModel.get_pedidos_protheus(filtro) do
+    with {:ok, pedidos} <- PedidosDeVendaModel.get_pedidos_protheus(filtro, nil) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

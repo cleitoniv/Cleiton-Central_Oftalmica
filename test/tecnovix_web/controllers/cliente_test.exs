@@ -69,7 +69,7 @@ defmodule TecnovixWeb.UsersTest do
       "param" => %{user_client_param | "status" => 0}
     })
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
 
     {:ok, register} = Tecnovix.UsuariosClienteModel.search_register_email(user_client["email"])
 
@@ -231,7 +231,7 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(usuarioAuth["idToken"])
     |> get("/api/cliente/cards")
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 
   test "Inserindo um cartão na conta cliente" do
@@ -376,6 +376,25 @@ defmodule TecnovixWeb.UsersTest do
         "new_password" => "111111"
       })
       |> json_response(200)
-      |> IO.inspect()
+  end
+
+  test "Pegando os Graus na DESCRICAO GENERICA DO PRODUTO" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    desc_param = Generator.desc_generica()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    {:ok, desc} =
+      Tecnovix.DescricaoGenericaDoProdutoModel.create(Map.put(desc_param, "esferico", 2.5))
+
+    {:ok, desc} = Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
+    {:ok, desc} = Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
+    Tecnovix.DescricaoGenericaDoProdutoModel.get_graus(desc.grupo)
   end
 end

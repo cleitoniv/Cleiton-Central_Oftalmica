@@ -8,6 +8,8 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :order_id, :string
     field :filial, :string
     field :numero, :string
+    field :integrado, :string, default: "0"
+    field :loja, :string
     field :cliente, :string
     field :tipo_venda_ret_id, :integer
     field :pd_correios, :string
@@ -30,6 +32,8 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :previsao_entrega,
       :frete,
       :order_id,
+      :integrado,
+      :loja,
       :client_id,
       :filial,
       :numero,

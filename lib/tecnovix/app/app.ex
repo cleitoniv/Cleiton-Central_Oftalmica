@@ -20,7 +20,7 @@ defmodule Tecnovix.App.Screens do
   @callback get_dia_remessa(cliente :: term) :: {:ok, term}
   @callback get_and_crud_atendimento(params :: term) :: {:ok, term}
   @callback get_endereco_entrega(cliente :: term) :: {:ok, term}
-  
+
   def stub() do
     case Mix.env() do
       :prod -> Tecnovix.App.ScreensProd
