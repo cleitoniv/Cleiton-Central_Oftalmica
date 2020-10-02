@@ -12,10 +12,10 @@ defmodule Tecnovix.App.ScreensTest do
   def get_graus(grupo) do
     graus = %{
       cor: ["Azul"],
-      graus_adicao: ["1.15, 1.5, 2.0, 2.25, 2.50"],
-      graus_cilindrico: ["1.15, 1.5, 2.0, 2.25, 2.50"],
-      graus_eixo: ["10, 20, 30, 40, 50, 60, 70, 180"],
-      graus_esferico: ["1.15, 1.5, 2.0, 2.25, 2.50"]
+      graus_adicao: ["1.15", "1.5", "1.75", "2.0","2.25"],
+      graus_cilindrico: ["1.15", "1.5", "1.75", "2.0","2.25"],
+      graus_eixo: ["10", "20", "30", "40", "50", "60", "70"],
+      graus_esferico: ["1.15", "1.5", "1.75", "2.0","2.25"]
     }
 
     {:ok, graus}
