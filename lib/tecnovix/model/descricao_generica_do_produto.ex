@@ -11,17 +11,19 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
        with nil <-
               Repo.get_by(DescricaoSchema, grupo: descricao["grupo"], codigo: descricao["codigo"]) do
-         create(descricao)
+         {:ok, create} = create(descricao)
+         create
        else
          changeset ->
           {:ok, update} = __MODULE__.update(changeset, descricao)
           update
        end
      end)}
-     |> IO.inspect
   end
 
   def insert_or_update(%{"grupo" => grupo, "codigo" => codigo} = params) do
+    params = Map.put(params, "grupo", String.upcase(params["grupo"]))
+
     with nil <- Repo.get_by(DescricaoSchema, grupo: grupo, codigo: codigo) do
       __MODULE__.create(params)
     else
