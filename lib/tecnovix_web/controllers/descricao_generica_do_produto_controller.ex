@@ -15,4 +15,5 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
     else
       v -> IO.inspect v
     end
+  end
 end
