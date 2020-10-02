@@ -31,11 +31,11 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
-    with {:ok, items_order} <- PedidosDeVendaModel.items_order(items) |> IO.inspect(),
-         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente) |> IO.inspect(),
+    with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
+         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <-
-           PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order) |> IO.inspect(),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) |> IO.inspect() do
+           PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) do
       ip =
         conn.remote_ip
         |> Tuple.to_list()

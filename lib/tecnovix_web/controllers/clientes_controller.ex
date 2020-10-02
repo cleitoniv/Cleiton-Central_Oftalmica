@@ -326,7 +326,7 @@ defmodule TecnovixWeb.ClientesController do
   def get_product_serie(conn, %{"num_serie" => num_serie}) do
     stub = Screens.stub()
 
-    {:ok, cliente} = conn.private.auth
+    {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, product} <- stub.get_product_serie(cliente, num_serie) do
       conn
