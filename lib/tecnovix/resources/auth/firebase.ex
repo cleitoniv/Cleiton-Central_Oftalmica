@@ -110,6 +110,7 @@ defmodule TecnovixWeb.Auth.Firebase do
          {:ok, user} <- Tecnovix.ClientesModel.search_register_email(jwt.fields["email"]),
          true <- user.sit_app != "D" do
       put_private(conn, :auth, {:ok, user})
+      |> put_private(:auth_user, {:ok, nil})
     else
       false ->
         {:error, :cliente_desativado}

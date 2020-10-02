@@ -4,13 +4,24 @@ defmodule Tecnovix.LogsClienteModel do
   alias Tecnovix.Repo
 
   def create(ip, usuario, cliente, msg) do
-    logs = %{
-      "ip" => ip,
-      "usuario_cliente_id" => usuario.id,
-      "cliente_id" => cliente.id,
-      "dispositivo" => "Samsung A30S",
-      "acao_realizada" => msg
-    }
+    logs =
+    case usuario do
+      nil -> %{
+        "ip" => ip,
+        "usuario_cliente_id" => "",
+        "cliente_id" => cliente.id,
+        "dispositivo" => "Samsung A30S",
+        "acao_realizada" => msg
+      }
+
+      usuario -> %{
+        "ip" => ip,
+        "usuario_cliente_id" => usuario.id,
+        "cliente_id" => cliente.id,
+        "dispositivo" => "Samsung A30S",
+        "acao_realizada" => msg
+      }
+    end
 
     %LogsClienteSchema{}
     |> LogsClienteSchema.changeset(logs)
