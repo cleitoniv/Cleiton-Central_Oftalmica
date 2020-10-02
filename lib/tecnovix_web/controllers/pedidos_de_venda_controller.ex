@@ -23,6 +23,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
+    {:ok, usuario} = usuario_auth(conn.private.auth_user)
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
@@ -36,8 +37,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
         conn.remote_ip
         |> Tuple.to_list()
         |> Enum.join()
-
-      {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),

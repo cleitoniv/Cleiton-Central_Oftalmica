@@ -22,12 +22,17 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
       {:ok, cliente} = conn.private.auth
 
+      ip =
+        conn.remote_ip
+        |> Tuple.to_list()
+        |> Enum.join()
+
       LogsClienteModel.create(%{
         "cliente_id" => cliente.id,
         "data" => DateTime.utc_now(),
-        "ip" => "teste",
-        "dispositivo" => "teste",
-        "acao_realizada" => "Usuario Cliente cadastrado."
+        "ip" => ip,
+        "dispositivo" => "Samsung A30S",
+        "acao_realizada" => "Usuario Cliente #{user.nome} cadastrado."
       })
 
       # registrando a acao na tabela logs_cliente
