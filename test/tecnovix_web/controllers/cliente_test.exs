@@ -412,12 +412,14 @@ defmodule TecnovixWeb.UsersTest do
       |> json_response(201)
       |> Map.get("data")
 
-    {:ok, socket} = Channel.connect(TecnovixWeb.Socket, %{"token" => user_firebase["idToken"]}, %{})
+    {:ok, socket} =
+      Channel.connect(TecnovixWeb.Socket, %{"token" => user_firebase["idToken"]}, %{})
+
     {:ok, _, socket} = Channel.subscribe_and_join(socket, "cliente:#{cliente["id"]}", %{})
     resp = Channel.push(socket, "update_notifications_number", %{})
 
     Channel.assert_reply(resp, :ok)
 
-    Channel.assert_broadcast("update_notifications_number", %{}) |> IO.inspect
+    Channel.assert_broadcast("update_notifications_number", %{}) |> IO.inspect()
   end
 end

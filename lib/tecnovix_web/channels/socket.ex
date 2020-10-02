@@ -16,12 +16,13 @@ defmodule TecnovixWeb.Socket do
     with {true, jwt = %JOSE.JWT{}, _jws} <- Firebase.verify_jwt({:init, token}),
          {:ok, user} <- Tecnovix.ClientesModel.search_register_email(jwt.fields["email"]),
          true <- user.sit_app != "D" do
-           {:ok, user}
+      {:ok, user}
     else
       false ->
         {:error, :cliente_desativado}
 
-      _ -> user_cliente_auth(token)
+      _ ->
+        user_cliente_auth(token)
     end
   end
 
@@ -29,12 +30,13 @@ defmodule TecnovixWeb.Socket do
     with {true, jwt = %JOSE.JWT{}, _jws} <- Firebase.verify_jwt({:init, token}),
          {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]),
          true <- user.status == 1 do
-           {:ok, user}
+      {:ok, user}
     else
       false ->
         {:error, :inatived}
 
-      _ -> {:error, :not_authorized}
+      _ ->
+        {:error, :not_authorized}
     end
   end
 end

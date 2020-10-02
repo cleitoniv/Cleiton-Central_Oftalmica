@@ -17,7 +17,7 @@ defmodule TecnovixWeb.Channel do
       %ClientesSchema{} = cliente ->
         check_cliente_id(id, "#{cliente.id}", socket)
 
-      %UsuariosClienteSchema{} = usuario->
+      %UsuariosClienteSchema{} = usuario ->
         check_cliente_id(id, "#{usuario.id}", socket)
     end
   end

@@ -8,7 +8,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoSchema do
     field :descricao, :string
     field :esferico, :decimal
     field :cilindrico, :decimal
-    field :eixo, :integer
+    field :eixo, :decimal
     field :cor, :string
     field :diametro, :decimal
     field :curva_base, :decimal
