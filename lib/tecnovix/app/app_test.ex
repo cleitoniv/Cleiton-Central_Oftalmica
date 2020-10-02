@@ -10,15 +10,11 @@ defmodule Tecnovix.App.ScreensTest do
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
   def get_graus(grupo) do
-    graus = %{
-      cor: ["Azul"],
-      graus_adicao: ["1.15", "1.5", "1.75", "2.0","2.25"],
-      graus_cilindrico: ["1.15", "1.5", "1.75", "2.0","2.25"],
-      graus_eixo: ["10", "20", "30", "40", "50", "60", "70"],
-      graus_esferico: ["1.15", "1.5", "1.75", "2.0","2.25"]
-    }
-
-    {:ok, graus}
+    case DescricaoModel.get_graus(grupo) do
+      nil -> {:error, :not_found}
+      {list, grupo} -> {:ok, grupo}
+        _ -> {:error, :not_found}
+    end
   end
 
   def get_endereco_entrega(_cliente) do
