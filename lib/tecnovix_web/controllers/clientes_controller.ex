@@ -402,4 +402,14 @@ defmodule TecnovixWeb.ClientesController do
       |> send_resp(200, Jason.encode!(%{success: true}))
     end
   end
+
+  def get_graus(conn, %{"grupo" => grupo}) do
+    stub = Screens.stub()
+
+    with {:ok, graus} <- stub.get_graus(grupo) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: graus}))
+    end
+  end
 end

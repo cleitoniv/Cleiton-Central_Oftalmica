@@ -18,6 +18,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
           update
        end
      end)}
+     |> IO.inspect
   end
 
   def insert_or_update(%{"grupo" => grupo, "codigo" => codigo} = params) do

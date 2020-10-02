@@ -397,7 +397,7 @@ defmodule TecnovixWeb.UsersTest do
 
     {:ok, desc} = Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
     {:ok, desc} = Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
-    Tecnovix.DescricaoGenericaDoProdutoModel.get_graus(desc.grupo)
+    Tecnovix.DescricaoGenericaDoProdutoModel.get_graus(desc.grupo) |> IO.inspect
   end
 
   test "Testando o socket de open notifications" do
