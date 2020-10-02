@@ -8,9 +8,8 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     {:ok,
      Enum.map(data, fn descricao ->
        descricao = Map.put(descricao, "grupo", String.upcase(descricao["grupo"]))
-
        with nil <-
-              Repo.get_by(DescricaoSchema, grupo: String.upcase(descricao["grupo"]), codigo: descricao["codigo"]) do
+              Repo.get_by(DescricaoSchema, codigo: descricao["codigo"]) do
          {:ok, create} = create(descricao)
          create
        else
@@ -24,7 +23,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   def insert_or_update(%{"grupo" => grupo, "codigo" => codigo} = params) do
     params = Map.put(params, "grupo", String.upcase(params["grupo"]))
 
-    with nil <- Repo.get_by(DescricaoSchema, grupo: grupo, codigo: codigo) do
+    with nil <- Repo.get_by(DescricaoSchema, codigo: codigo) do
       __MODULE__.create(params)
     else
       changeset ->

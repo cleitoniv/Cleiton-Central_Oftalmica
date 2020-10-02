@@ -13,7 +13,7 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
       |> put_resp_content_type("application/json")
       |> render("descricao.json", %{item: descricao})
     else
-      v -> IO.inspect v
+      _ -> {:error, :not_created}
     end
   end
 end

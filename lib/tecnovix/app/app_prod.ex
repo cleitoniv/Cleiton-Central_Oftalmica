@@ -7,6 +7,15 @@ defmodule Tecnovix.App.ScreensProd do
   alias Tecnovix.Repo
   alias Tecnovix.ClientesSchema
   alias Tecnovix.AtendPrefClienteModel
+  alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
+
+  def get_graus(grupo) do
+    case DescricaoModel.get_graus(grupo) do
+      nil -> {:error, :not_found}
+      {list, grupo} -> {:ok, grupo}
+        _ -> {:error, :not_found}
+    end
+  end
 
   def get_endereco_entrega(_cliente) do
     endereco = %{

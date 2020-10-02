@@ -92,10 +92,10 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/descricao_generica_do_produto", single_param)
     |> recycle()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/descricao_generica_do_produto", multi_param)
+    |> post("/api/sync/descricao_generica_do_produto", Map.put(single_param, "grupo", "dsa"))
     |> json_response(200)
-    |> IO.inspect
+
+    IO.inspect Tecnovix.Repo.all(Tecnovix.DescricaoGenericaDoProdutoSchema)
   end
 
   test "insert or update of the table ITENS_DO_CONTRATO_DE_PARCERIA" do
