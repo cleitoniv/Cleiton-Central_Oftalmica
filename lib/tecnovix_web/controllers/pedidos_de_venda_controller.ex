@@ -31,6 +31,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
+      {:ok, usuario} = usuario_auth(conn.private.auth_user)
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <-
@@ -43,6 +44,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
       logs = %{
         "ip" => ip,
+        "usuario_cliente_id" => usuario.id,
         "cliente_id" => cliente.id,
         "dispositivo" => "Samsung A30S",
         "acao_realizada" => "Pedido criado com sucesso."
@@ -58,6 +60,13 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       v ->
         IO.inspect(v)
         {:error, :order_not_created}
+    end
+  end
+
+  defp usuario_auth(auth) do
+    case auth do
+      nil -> ""
+      usuario -> usuario
     end
   end
 
