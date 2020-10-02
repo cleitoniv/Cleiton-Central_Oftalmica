@@ -18,7 +18,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :virtotal, :integer
     field :esferico, :decimal
     field :cilindrico, :decimal
-    field :eixo, :decimal
+    field :eixo, :integer
     field :cor, :string
     field :adic_padrao, :string
     field :adicao, :decimal
