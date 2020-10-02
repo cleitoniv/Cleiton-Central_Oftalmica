@@ -21,7 +21,9 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoView do
     }
   end
 
-  multi_parser("descricao.json", [:codigo, :grupo])
+  def render("descricao.json", %{item: items}) when is_list(items) do
+    render_many(items, __MODULE__, "descricao.json", as: :item)
+  end
 
   def render("descricao.json", %{item: item}) do
     __MODULE__.build(%{item: item})

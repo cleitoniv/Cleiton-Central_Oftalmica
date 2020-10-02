@@ -95,6 +95,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/descricao_generica_do_produto", multi_param)
     |> json_response(200)
+    |> IO.inspect
   end
 
   test "insert or update of the table ITENS_DO_CONTRATO_DE_PARCERIA" do

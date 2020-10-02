@@ -7,13 +7,15 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(data, fn descricao ->
-       Map.put(descricao, "grupo", String.downcase(descricao["grupo"]))
+       descricao = Map.put(descricao, "grupo", String.upcase(descricao["grupo"]))
+
        with nil <-
               Repo.get_by(DescricaoSchema, grupo: descricao["grupo"], codigo: descricao["codigo"]) do
          create(descricao)
        else
          changeset ->
-           __MODULE__.update(changeset, descricao)
+          {:ok, update} = __MODULE__.update(changeset, descricao)
+          update
        end
      end)}
   end
