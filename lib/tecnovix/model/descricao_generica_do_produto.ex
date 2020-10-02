@@ -10,7 +10,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
        descricao = Map.put(descricao, "grupo", String.upcase(descricao["grupo"]))
 
        with nil <-
-              Repo.get_by(DescricaoSchema, grupo: descricao["grupo"], codigo: descricao["codigo"]) do
+              Repo.get_by(DescricaoSchema, grupo: String.upcase(descricao["grupo"]), codigo: descricao["codigo"]) do
          {:ok, create} = create(descricao)
          create
        else
