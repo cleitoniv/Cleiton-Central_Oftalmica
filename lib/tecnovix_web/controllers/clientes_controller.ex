@@ -182,9 +182,7 @@ defmodule TecnovixWeb.ClientesController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: grid}))
     else
-      v ->
-        IO.inspect(v)
-        {:error, :not_found}
+      _ -> {:error, :not_found}
     end
   end
 
