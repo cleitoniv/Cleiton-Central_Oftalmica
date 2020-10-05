@@ -3,7 +3,7 @@
     "olho_direito": {
         "degree": 0.5,
         "cylinder": 5.5,
-        "axis": 3.2
+        "axis": 10
       },
     "paciente": {
       "nome": "Victor",

@@ -31,7 +31,7 @@
             },
             {
               "id": "HASCOLOR",
-              "value": "0"
+              "value": "1"
             },
             {
               "id": "HASCURVA",
@@ -39,7 +39,7 @@
             },
             {
               "id": "HASADICAO",
-              "value": "0"
+              "value": "1"
             },
             {
               "id": "HASCILIND",

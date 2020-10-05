@@ -11,7 +11,7 @@ defmodule Tecnovix.App.ScreensProd do
 
   def get_graus(grupo) do
     graus = %{
-      cor: ["Azul"],
+      cor: ["Azul", "Vermelho", "Marrom"],
       graus_adicao: [1.15, 1.5, 1.75, 2.0,2.25],
       graus_cilindrico: [1.15, 1.5, 1.75, 2.0,2.25],
       graus_eixo: [10, 20, 30, 40, 50, 60, 70],
