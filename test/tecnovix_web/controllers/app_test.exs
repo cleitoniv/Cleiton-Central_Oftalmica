@@ -251,6 +251,7 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/product_serie/010C37281")
       |> json_response(200)
+      |> IO.inspect
 
     assert product_serie["success"] == true
 

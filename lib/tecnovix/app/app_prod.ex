@@ -9,6 +9,8 @@ defmodule Tecnovix.App.ScreensProd do
   alias Tecnovix.AtendPrefClienteModel
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
+  @product_url "http://portal.centraloftalmica.com/images/010C.jpg"
+
   def get_graus(grupo) do
     graus = %{
       cor: ["Azul", "Vermelho", "Marrom"],
