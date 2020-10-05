@@ -823,6 +823,29 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
+  def get_product_serie(_cliente, num_serie) do
+    product = %{
+      num_serie: num_serie,
+      id: 0,
+      tests: 0,
+      credits: 0,
+      title: "Biosoft Asférica Mensal",
+      produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
+      value: 15100,
+      value_produto: 14100,
+      value_finan: 14100,
+      image_url: @product_url,
+      type: "miopia",
+      boxes: 50,
+      quantidade: 10,
+      nf: "213_568_596",
+      group: "010C"
+    }
+
+    {:ok, product}
+  end
+
+  @impl true
   def get_product_serie(_cliente, "011" <> num_serie) do
     product = %{
       num_serie: "011C" <> num_serie,
