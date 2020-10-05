@@ -37,6 +37,5 @@ defmodule Tecnovix.Email do
     |> to(email)
     |> subject("Central Oftalmica - Devolução de Produto")
     |> html_body(template_devolucao())
-    |> text_body("teste teste teste")
   end
 end
