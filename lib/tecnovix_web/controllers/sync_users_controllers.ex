@@ -32,7 +32,7 @@ defmodule TecnovixWeb.SyncUsersController do
   def login(conn, %{"refresh_token" => refresh_token}) do
     with {:ok, user_id} <-
            Phoenix.Token.verify(TecnovixWeb.Endpoint, @sync_users_salt, refresh_token,
-             max_age: 60
+             max_age: 3_600
            ) do
       token =
         Phoenix.Token.sign(TecnovixWeb.Endpoint, @salt, %{type: "refresh", user_id: user_id})
