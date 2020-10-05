@@ -817,7 +817,7 @@ defmodule Tecnovix.App.ScreensProd do
       type: "miopia",
       boxes: 50,
       quantidade: 10,
-      nf: "213_568_596",
+      nf: "213568596",
       group: "010C"
     }
 
@@ -840,7 +840,7 @@ defmodule Tecnovix.App.ScreensProd do
       type: "miopia",
       boxes: 50,
       quantidade: 10,
-      nf: "213_568_596",
+      nf: "213568596",
       group: "010C"
     }
 
@@ -863,7 +863,7 @@ defmodule Tecnovix.App.ScreensProd do
       type: "miopia",
       boxes: 50,
       quantidade: 10,
-      nf: "213_568_596",
+      nf: "213568596",
       group: "011C"
     }
 
