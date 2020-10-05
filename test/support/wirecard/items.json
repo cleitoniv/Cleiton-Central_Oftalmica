@@ -3,7 +3,9 @@
     "olho_direito": {
         "degree": 0.5,
         "cylinder": 5.5,
-        "axis": 10
+        "axis": 10,
+        "adicao": 10.0,
+        "cor": "Azul"
       },
     "paciente": {
       "nome": "Victor",
