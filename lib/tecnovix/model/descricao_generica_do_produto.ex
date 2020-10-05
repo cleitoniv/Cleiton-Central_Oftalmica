@@ -57,7 +57,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
   def parse_fields({list, acc}, field) do
     fields =
-      Enum.map(list, fn map -> Map.get(map, field) end)
+      Enum.map(list, fn map -> Decimal.to_float(Map.get(map, field)) end)
       |> Enum.uniq()
       |> Enum.sort(:desc)
 
