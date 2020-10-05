@@ -5,23 +5,23 @@ defmodule Tecnovix.LogsClienteModel do
 
   def create(ip, usuario, cliente, msg) do
     logs =
-    case usuario do
-      nil -> %{
-        "ip" => ip,
-        "usuario_cliente_id" => "",
-        "cliente_id" => cliente.id,
-        "dispositivo" => "Samsung A30S",
-        "acao_realizada" => msg
-      }
+      case usuario do
+        nil -> %{
+          "ip" => ip,
+          "usuario_cliente_id" => "",
+          "cliente_id" => cliente.id,
+          "dispositivo" => "Samsung A30S",
+          "acao_realizada" => msg
+        }
 
-      usuario -> %{
-        "ip" => ip,
-        "usuario_cliente_id" => usuario.id,
-        "cliente_id" => cliente.id,
-        "dispositivo" => "Samsung A30S",
-        "acao_realizada" => msg
-      }
-    end
+        usuario -> %{
+          "ip" => ip,
+          "usuario_cliente_id" => usuario.id,
+          "cliente_id" => cliente.id,
+          "dispositivo" => "Samsung A30S",
+          "acao_realizada" => msg
+        }
+      end
 
     %LogsClienteSchema{}
     |> LogsClienteSchema.changeset(logs)
