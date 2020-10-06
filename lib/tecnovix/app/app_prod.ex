@@ -1,23 +1,17 @@
 defmodule Tecnovix.App.ScreensProd do
   @behavior Tecnovix.App.Screens
-  alias Tecnovix.ClientesModel
-  alias Tecnovix.PedidosDeVendaModel
+  alias Tecnovix.{ClientesModel, PedidosDeVendaModel, Repo, ClientesSchema}
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
-  alias Tecnovix.Endpoints.Protheus
-  alias Tecnovix.Repo
-  alias Tecnovix.ClientesSchema
-  alias Tecnovix.AtendPrefClienteModel
-  alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
   @product_url "http://portal.centraloftalmica.com/images/010C.jpg"
 
   def get_graus(grupo) do
     graus = %{
       cor: ["Azul", "Vermelho", "Marrom"],
-      graus_adicao: [1.15, 1.5, 1.75, 2.0,2.25],
-      graus_cilindrico: [1.15, 1.5, 1.75, 2.0,2.25],
+      graus_adicao: [1.15, 1.5, 1.75, 2.0, 2.25],
+      graus_cilindrico: [1.15, 1.5, 1.75, 2.0, 2.25],
       graus_eixo: [10, 20, 30, 40, 50, 60, 70],
-      graus_esferico: [1.15, 1.5, 1.75, 2.0,2.25]
+      graus_esferico: [1.15, 1.5, 1.75, 2.0, 2.25]
     }
 
     {:ok, graus}

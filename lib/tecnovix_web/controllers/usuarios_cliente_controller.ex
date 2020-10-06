@@ -2,8 +2,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.UsuariosClienteModel
   alias Tecnovix.{Email, UsuariosClienteModel, ClientesSchema, LogsClienteModel}
-  alias TecnovixWeb.Auth.Firebase
-  alias TecnovixWeb.LogsClienteController
+  alias TecnovixWeb.{Auth.Firebase, LogsClienteController}
+
   action_fallback Tecnovix.Resources.Fallback
 
   def create(conn, %{"param" => params}) do

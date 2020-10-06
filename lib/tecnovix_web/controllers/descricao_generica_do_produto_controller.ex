@@ -7,7 +7,6 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
 
   def insert_or_update(conn, params) do
     with {:ok, descricao} <- DescricaoModel.insert_or_update(params) do
-
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

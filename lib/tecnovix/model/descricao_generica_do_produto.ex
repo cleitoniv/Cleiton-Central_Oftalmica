@@ -8,14 +8,15 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     {:ok,
      Enum.map(data, fn descricao ->
        descricao = Map.put(descricao, "grupo", String.upcase(descricao["grupo"]))
+
        with nil <-
               Repo.get_by(DescricaoSchema, codigo: descricao["codigo"]) do
          {:ok, create} = create(descricao)
          create
        else
          changeset ->
-          {:ok, update} = __MODULE__.update(changeset, descricao)
-          update
+           {:ok, update} = __MODULE__.update(changeset, descricao)
+           update
        end
      end)}
   end

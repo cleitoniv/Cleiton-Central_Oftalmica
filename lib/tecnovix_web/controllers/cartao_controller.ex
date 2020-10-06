@@ -38,7 +38,13 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
          {:ok, cartao} <- CartaoModel.primeiro_cartao(params, cliente.id),
          {:ok, detail_card} <- CartaoModel.detail_card(cartao, cliente),
          {:ok, card} <- CartaoModel.create(detail_card),
-         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Cartão de crédito adicionado com sucesso.") do
+         {:ok, _logs} <-
+           LogsClienteModel.create(
+             ip,
+             usuario,
+             cliente,
+             "Cartão de crédito adicionado com sucesso."
+           ) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

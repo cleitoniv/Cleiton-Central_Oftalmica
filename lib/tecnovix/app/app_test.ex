@@ -1,12 +1,7 @@
 defmodule Tecnovix.App.ScreensTest do
   @behavior Tecnovix.App.Screens
-  alias Tecnovix.ClientesModel
-  alias Tecnovix.PedidosDeVendaModel
+  alias Tecnovix.{ClientesModel, PedidosDeVendaModel, Repo, ClientesSchema}
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
-  alias Tecnovix.Endpoints.Protheus
-  alias Tecnovix.Repo
-  alias Tecnovix.ClientesSchema
-  alias Tecnovix.AtendPrefClienteModel
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
   @product_url "http://portal.centraloftalmica.com/images/010C.jpg"
@@ -15,7 +10,7 @@ defmodule Tecnovix.App.ScreensTest do
     case DescricaoModel.get_graus(grupo) do
       nil -> {:error, :not_found}
       {list, grupo} -> {:ok, grupo}
-        _ -> {:error, :not_found}
+      _ -> {:error, :not_found}
     end
   end
 
@@ -816,29 +811,6 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_product_serie(_cliente, num_serie) do
-    product = %{
-      num_serie: num_serie,
-      id: 0,
-      tests: 0,
-      credits: 0,
-      title: "Biosoft Asférica Mensal",
-      produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
-      value: 15100,
-      value_produto: 14100,
-      value_finan: 14100,
-      image_url: @product_url,
-      type: "miopia",
-      boxes: 50,
-      quantidade: 10,
-      nf: "213_568_596",
-      group: "010C"
-    }
-
-    {:ok, product}
-  end
-
-  @impl true
   def get_product_serie(_cliente, "011" <> num_serie) do
     product = %{
       num_serie: "011C" <> num_serie,
@@ -856,6 +828,29 @@ defmodule Tecnovix.App.ScreensTest do
       quantidade: 10,
       nf: "213_568_596",
       group: "011C"
+    }
+
+    {:ok, product}
+  end
+
+  @impl true
+  def get_product_serie(_cliente, num_serie) do
+    product = %{
+      num_serie: num_serie,
+      id: 0,
+      tests: 0,
+      credits: 0,
+      title: "Biosoft Asférica Mensal",
+      produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
+      value: 15100,
+      value_produto: 14100,
+      value_finan: 14100,
+      image_url: @product_url,
+      type: "miopia",
+      boxes: 50,
+      quantidade: 10,
+      nf: "213_568_596",
+      group: "010C"
     }
 
     {:ok, product}

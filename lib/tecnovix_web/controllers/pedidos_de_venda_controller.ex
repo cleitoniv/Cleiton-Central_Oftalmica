@@ -1,13 +1,14 @@
 defmodule TecnovixWeb.PedidosDeVendaController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.PedidosDeVendaModel
-  alias Tecnovix.PedidosDeVendaModel
-  alias Tecnovix.ClientesSchema
-  alias Tecnovix.UsuariosClienteSchema
-  alias Tecnovix.App.Screens
-  alias Tecnovix.Services.Order
-  alias Tecnovix.LogsClienteModel
-  alias Ecto.Multi
+
+  alias Tecnovix.{
+    PedidosDeVendaModel,
+    ClientesSchema,
+    UsuariosClienteSchema,
+    App.Screens,
+    LogsClienteModel
+  }
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -24,6 +25,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
+
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
@@ -33,18 +35,18 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
-      ip =
-        conn.remote_ip
-        |> Tuple.to_list()
-        |> Enum.join()
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <-
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order),
-         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Pedido criado com sucesso.") do
-
+         {:ok, _logs} <-
+           LogsClienteModel.create(ip, usuario, cliente, "Pedido criado com sucesso.") do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

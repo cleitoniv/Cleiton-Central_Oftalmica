@@ -1,7 +1,15 @@
 defmodule TecnovixWeb.ClientesController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.ClientesModel
-  alias Tecnovix.{ClientesModel, UsuariosClienteModel, AtendPrefClienteModel, UsuariosClienteSchema, ClientesSchema}
+
+  alias Tecnovix.{
+    ClientesModel,
+    UsuariosClienteModel,
+    AtendPrefClienteModel,
+    UsuariosClienteSchema,
+    ClientesSchema
+  }
+
   alias Tecnovix.{App.Screens, Services.Devolucao, Services.Auth, Endpoints.Protheus}
   alias TecnovixWeb.Auth.Firebase
   action_fallback Tecnovix.Resources.Fallback

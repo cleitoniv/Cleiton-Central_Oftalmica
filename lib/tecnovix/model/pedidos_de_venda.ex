@@ -1,14 +1,16 @@
 defmodule Tecnovix.PedidosDeVendaModel do
   use Tecnovix.DAO, schema: Tecnovix.PedidosDeVendaSchema
-  alias Tecnovix.Repo
-  alias Tecnovix.PedidosDeVendaSchema
-  alias Tecnovix.PedidosDeVendaModel
+
+  alias Tecnovix.{
+    Repo,
+    PedidosDeVendaSchema,
+    PedidosDeVendaModel,
+    ClientesSchema,
+    UsuariosClienteSchema
+  }
+
   alias Tecnovix.Resource.Wirecard.Actions, as: Wirecard
-  alias Tecnovix.ClientesSchema
-  alias Tecnovix.UsuariosClienteSchema
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
-  alias Tecnovix.App.ScreensTest
-  alias Ecto.Multi
   import Ecto.Query
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
@@ -31,17 +33,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
      end)}
   end
 
-  def update_sync(changeset, params) do
-    PedidosDeVendaSchema.changeset_sync(changeset, params)
-    |> Repo.update()
-  end
-
-  def create_sync(params) do
-    %PedidosDeVendaSchema{}
-    |> PedidosDeVendaSchema.changeset_sync(params)
-    |> Repo.insert()
-  end
-
   def insert_or_update(%{"filial" => filial, "numero" => numero} = params) do
     with nil <- Repo.get_by(PedidosDeVendaSchema, filial: filial, numero: numero) do
       __MODULE__.create_sync(params)
@@ -54,6 +45,17 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def insert_or_update(_params) do
     {:error, :invalid_parameter}
+  end
+
+  def update_sync(changeset, params) do
+    PedidosDeVendaSchema.changeset_sync(changeset, params)
+    |> Repo.update()
+  end
+
+  def create_sync(params) do
+    %PedidosDeVendaSchema{}
+    |> PedidosDeVendaSchema.changeset_sync(params)
+    |> Repo.insert()
   end
 
   def order(items, cliente) do

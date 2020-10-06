@@ -1,8 +1,7 @@
 defmodule TecnovixWeb.ContratoDeParceriaController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.ContratoDeParceriaModel
-  alias Tecnovix.ContratoDeParceriaModel
-  alias Tecnovix.UsuariosClienteSchema
+  alias Tecnovix.{ContratoDeParceriaModel, UsuariosClienteSchema}
 
   action_fallback Tecnovix.Resources.Fallback
 
