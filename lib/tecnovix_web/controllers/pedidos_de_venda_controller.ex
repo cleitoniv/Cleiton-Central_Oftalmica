@@ -110,6 +110,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     else
       _ -> {:error, :not_found}
     end
+    |> IO.inspect
   end
 
   def get_pedidos(conn, %{"filtro" => filtro}) do
