@@ -76,7 +76,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
   def verify_field(map, field) do
     case field do
-      :cor -> String.capitalize(Map.get(map, field))
+      :cor -> Map.get(map, field)
       :graus_eixo -> Map.get(map, field)
       _ -> Decimal.to_float(Map.get(map, field))
     end
