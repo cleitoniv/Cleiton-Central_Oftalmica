@@ -78,7 +78,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     case field do
       :cor -> String.capitalize(Map.get(map, field))
       :graus_eixo -> Map.get(map, field)
-      :graus_esferico -> Decimal.to_float(Map.get(map, field)) |> IO.inspect
       _ -> Decimal.to_float(Map.get(map, field))
     end
   end
