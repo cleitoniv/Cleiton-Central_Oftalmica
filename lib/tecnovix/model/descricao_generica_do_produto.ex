@@ -65,6 +65,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
        |> IO.inspect()
       _ -> nil
     end
+
     fields =
       Enum.map(list, fn map -> verify_field(map, field) end)
       |> Enum.uniq()
@@ -75,8 +76,9 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
   def verify_field(map, field) do
     case field do
-      :cor -> Map.get(map, field)
+      :cor -> String.capitalize(Map.get(map, field))
       :graus_eixo -> Map.get(map, field)
+      :graus_esferico -> Decimal.to_float(Map.get(map, field)) |> IO.inspect
       _ -> Decimal.to_float(Map.get(map, field))
     end
   end
