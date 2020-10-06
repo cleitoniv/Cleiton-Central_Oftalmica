@@ -57,15 +57,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   end
 
   def parse_fields({list, acc}, field) do
-    case field do
-      :graus_esferico -> Enum.map(list, fn map ->
-        map.graus_esferico
-       end)
-       |> Enum.uniq()
-       |> IO.inspect()
-      _ -> nil
-    end
-
     fields =
       Enum.map(list, fn map -> verify_field(map, field) end)
       |> Enum.uniq()
@@ -76,7 +67,11 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
   def verify_field(map, field) do
     case field do
-      :cor -> Map.get(map, field)
+      :cor ->
+        case Map.get(map, field) do
+          nil -> nil
+          value -> String.capitalize(value)
+        end
       :graus_eixo -> Map.get(map, field)
       _ -> Decimal.to_float(Map.get(map, field))
     end
