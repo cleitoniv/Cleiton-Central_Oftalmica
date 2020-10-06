@@ -70,13 +70,13 @@ defmodule Tecnovix.App.ScreensProd do
 
       "HASADICAO" ->
         case map["value"] do
-          "0" -> true
+          "0" -> false
           "1" -> true
         end
 
       "HASCOLOR" ->
         case map["value"] do
-          "0" -> true
+          "0" -> false
           "1" -> true
         end
 
