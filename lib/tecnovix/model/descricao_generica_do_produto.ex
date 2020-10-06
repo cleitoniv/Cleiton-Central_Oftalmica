@@ -50,7 +50,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       |> Repo.all()
 
     parse_fields({graus, %{}}, :graus_esferico)
-    |> IO.inspect()
     |> parse_fields(:graus_cilindrico)
     |> parse_fields(:graus_eixo)
     |> parse_fields(:graus_adicao)
@@ -58,6 +57,10 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   end
 
   def parse_fields({list, acc}, field) do
+    case field do
+      :graus_esferico -> IO.inspect list
+      _ -> nil
+    end
     fields =
       Enum.map(list, fn map -> verify_field(map, field) end)
       |> Enum.uniq()
