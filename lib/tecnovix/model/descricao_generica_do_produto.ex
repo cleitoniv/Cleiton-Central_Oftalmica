@@ -50,6 +50,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       |> Repo.all()
 
     parse_fields({graus, %{}}, :graus_esferico)
+    |> IO.inspect()
     |> parse_fields(:graus_cilindrico)
     |> parse_fields(:graus_eixo)
     |> parse_fields(:graus_adicao)
@@ -68,6 +69,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   def verify_field(map, field) do
     case field do
       :cor -> Map.get(map, field)
+      :graus_eixo -> Map.get(map, field)
       _ -> Decimal.to_float(Map.get(map, field))
     end
   end

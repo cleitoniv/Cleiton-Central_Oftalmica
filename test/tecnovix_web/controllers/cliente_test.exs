@@ -393,7 +393,7 @@ defmodule TecnovixWeb.UsersTest do
       |> Map.get("data")
 
     {:ok, _desc} =
-      Tecnovix.DescricaoGenericaDoProdutoModel.create(Map.put(desc_param, "esferico", 2.5))
+      Tecnovix.DescricaoGenericaDoProdutoModel.create(Map.put(desc_param, "esferico", -2.5))
 
     for _ <- 1..40000 do
       Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
