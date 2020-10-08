@@ -52,7 +52,7 @@ defmodule Tecnovix.App.ScreensTest do
       "HASDIAMET" -> "has_diametro"
       "HASRAIO" -> "has_raio"
       "DSTRATAM" -> "type"
-      
+
       v -> v
     end
   end
@@ -124,7 +124,7 @@ defmodule Tecnovix.App.ScreensTest do
     case key do
       "boxes" -> Map.put(acc, key, String.to_integer(acc[key]))
       "tests" -> Map.put(acc, key, String.to_integer(acc[key]))
-      _ -> Map.put(acc, key, String.to_integer(acc[key]) * 100)
+      _ -> Map.put(acc, key, String.to_float(acc[key]) * 100)
     end
   end
 
