@@ -236,6 +236,14 @@ defmodule Tecnovix.App.ScreensProd do
       {:ok, notifications}
   end
 
+  defp count_lido(lido, acc) do
+    case lido do
+      false -> acc + 1
+      true -> acc + 0
+    end
+  end
+
+
   defp format_type(titulo) do
     titulo
     |> String.upcase()
