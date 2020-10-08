@@ -188,16 +188,20 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   defp organize_filters_grid(products) do
-    IO.inspect products
     products
     |> Enum.map(fn product ->
-      product["type"]
+      case product["type"] do
+        nil -> product["type"]
+        type ->
+          product["type"]
+          |> String.downcase()
+          |> String.capitalize()
+      end
     end)
     |> Enum.uniq()
     |> Enum.filter(fn map ->
       map != nil
     end)
-    |> IO.inspect
   end
 
   def offers(conn, _params) do
