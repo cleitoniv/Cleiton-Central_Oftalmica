@@ -158,13 +158,6 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def products(conn, %{"filtro" => filtro}) do
-    filtro =
-      case filtro do
-        "Todos" -> "all"
-        "Miopía" -> "miopia"
-        "Hipermetropia" -> "hipermetropia"
-      end
-
     stub = Screens.stub()
     protheus = Protheus.stub()
 

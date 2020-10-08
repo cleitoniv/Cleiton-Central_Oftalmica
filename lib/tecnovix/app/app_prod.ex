@@ -180,7 +180,7 @@ defmodule Tecnovix.App.ScreensProd do
 
     data =
       case filtro do
-        "all" -> produtos
+        "Todos" -> produtos
         _ -> Enum.filter(produtos, fn items -> items["type"] == filtro end)
       end
 
