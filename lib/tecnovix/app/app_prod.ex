@@ -106,6 +106,8 @@ defmodule Tecnovix.App.ScreensProd do
           "1" -> true
         end
 
+      "DSTRATAM" -> String.capitalize(String.downcase(map["value"]))
+
       _ ->
         map["value"]
     end
