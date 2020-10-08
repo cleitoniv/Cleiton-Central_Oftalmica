@@ -220,7 +220,7 @@ defmodule Tecnovix.App.ScreensProd do
   defp organize_notifications(notifications) do
     notifications =
       %{
-        opens: 2,
+        opens: Enum.reduce(notifications, 0, fn notification, acc -> count_lido(notification.lido, acc)end),
         notifications: Enum.map(notifications, fn notification ->
           %{
             id: notification.id,
