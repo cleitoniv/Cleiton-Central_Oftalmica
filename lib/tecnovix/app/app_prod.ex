@@ -132,7 +132,6 @@ defmodule Tecnovix.App.ScreensProd do
 
   @impl true
   def get_product_grid(products, cliente, filtro) do
-    IO.inspect products
     grid =
       Enum.flat_map(products["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->
@@ -145,9 +144,6 @@ defmodule Tecnovix.App.ScreensProd do
           |> Map.put("type", "miopia")
           |> Map.put("visint", true)
           |> Map.put("previsao_entrega", 5)
-          |> Map.put("graus_esferico", [-0.5, 0.75, 1.0, 1.5])
-          |> Map.put("graus_eixo", [-0.5, 0.75, 1.0, 1.5])
-          |> Map.put("graus_cilindrico", [-0.5, 0.75, 1.0, 1.5])
           |> Map.put(
             "end_entrega",
             end_entrega(
@@ -314,58 +310,6 @@ defmodule Tecnovix.App.ScreensProd do
     ]
 
     {:ok, products}
-  end
-
-  @impl true
-  def get_order(_cliente, filtro) do
-    orders = [
-      %{
-        paciente: "Marcos Barbosa Santos",
-        pedido: "282740",
-        date: "2020-08-15",
-        value: 12000,
-        status: "pendentes"
-      },
-      %{
-        paciente: "Marcos Barbosa Santos",
-        pedido: "282740",
-        date: "2020-08-15",
-        value: 12000,
-        status: "entregues"
-      },
-      %{
-        paciente: "Marcos Barbosa Santos",
-        pedido: "282740",
-        date: "2020-08-15",
-        value: 12000,
-        status: "reposição"
-      }
-    ]
-
-    orders = Enum.filter(orders, fn x -> x.status == filtro end)
-    {:ok, orders}
-  end
-
-  @impl true
-  def get_products_cart(_cliente) do
-    cart = [
-      %{
-        products: %{
-          id: 0,
-          title: "Bioview Asferica Cx 6",
-          produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
-          value: 30000,
-          value_produto: 14100,
-          value_finan: 14100,
-          quantity: 2,
-          buy_type: "Avulso"
-        },
-        delivery_fee: 10000,
-        total: 40000
-      }
-    ]
-
-    {:ok, cart}
   end
 
   @impl true

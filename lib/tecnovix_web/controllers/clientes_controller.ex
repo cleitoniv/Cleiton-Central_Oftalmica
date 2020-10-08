@@ -209,28 +209,6 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def orders(conn, %{"filtro" => filtro}) do
-    stub = Screens.stub()
-    {:ok, cliente} = verify_auth(conn.private.auth)
-
-    with {:ok, orders} <- stub.get_order(cliente, filtro) do
-      conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: orders}))
-    end
-  end
-
-  def cart(conn, _params) do
-    stub = Screens.stub()
-    {:ok, cliente} = verify_auth(conn.private.auth)
-
-    with {:ok, cart} <- stub.get_products_cart(cliente) do
-      conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: cart}))
-    end
-  end
-
   def info_product(conn, %{"id" => id}) do
     stub = Screens.stub()
     {:ok, cliente} = verify_auth(conn.private.auth)
