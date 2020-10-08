@@ -132,6 +132,7 @@ defmodule Tecnovix.App.ScreensProd do
 
   @impl true
   def get_product_grid(products, cliente, filtro) do
+    IO.inspect products
     grid =
       Enum.flat_map(products["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->
