@@ -15,7 +15,6 @@ defmodule Tecnovix.Services.Order do
         case order["status"] do
           "PAID" ->
             PedidosDeVendaModel.update_order(map)
-
           _ ->
             []
         end

@@ -29,6 +29,7 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
     field :cilindrico, :decimal
     field :eixo, :decimal
     field :cor, :string
+    field :olho, :string
     field :adicao, :decimal
     belongs_to :pre_devolucao, Tecnovix.PreDevolucaoSchema
     timestamps()
@@ -41,6 +42,7 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
       :descricao_generica_do_produto_id,
       :sub_descricao_generica_do_produto_id,
       :filial,
+      :olho,
       :cod_pre_dev,
       :item,
       :filial_orig,

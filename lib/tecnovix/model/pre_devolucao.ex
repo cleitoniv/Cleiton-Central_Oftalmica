@@ -67,8 +67,6 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   # Ajeitando o mapa da tabela PRE DEVOLUCAO
   def pre_devolucao(cliente, params, tipo) do
-    IO.inspect(params)
-
     %{
       "client_id" => cliente.id,
       "filial" => "N",
@@ -104,6 +102,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   def new_product(params) do
     params
     |> Map.put("prod_subs", params["prod_subs"])
+    |> Map.put("olho", params["olho"])
   end
 
   # Incluindo no mapa de itens, campos e valores sobre o produto velho
