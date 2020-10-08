@@ -181,10 +181,21 @@ defmodule TecnovixWeb.ClientesController do
          {:ok, grid} <- stub.get_product_grid(products, cliente, filtro) do
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: grid}))
+      |> send_resp(200, Jason.encode!(%{success: true, data: grid, filters: organize_filters_grid(grid)}))
     else
       _ -> {:error, :not_found}
     end
+  end
+
+  defp organize_filters_grid(products) do
+    products
+    |> Enum.map(fn product ->
+      product.type
+    end)
+    |> Enum.uniq()
+    |> Enum.filter(fn map ->
+      map != nil
+    end)
   end
 
   def offers(conn, _params) do
