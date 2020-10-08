@@ -1,6 +1,6 @@
 defmodule Tecnovix.App.ScreensTest do
   @behavior Tecnovix.App.Screens
-  alias Tecnovix.{ClientesModel, PedidosDeVendaModel, Repo, ClientesSchema}
+  alias Tecnovix.{ClientesModel, PedidosDeVendaModel, Repo, ClientesSchema, NotificacoesClienteModel}
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
@@ -210,113 +210,36 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_notifications(_cliente) do
-    notifications = %{
-      opens: 2,
-      notifications: [
-        %{
-          id: 0,
-          lido: false,
-          data: "2020-01-05",
-          title: "Pedido Confirmado",
-          mensagem: "Pagamento confirmado e a previsão de entrega é para 22/07/2019.",
-          type: "PEDIDO_CONFIRMADO"
-        },
-        %{
-          id: 1,
-          lido: false,
-          data: "2020-01-05",
-          title: "Aguardando Pagamento",
-          mensagem: "Estamos aguardando o pagamento do boleto referente ao pedido.",
-          type: "AGUARDANDO_PAGAMENTO"
-        },
-        %{
-          id: 2,
-          lido: true,
-          data: "2020-01-05",
-          title: "Pedido Entregue",
-          mensagem: "Entrega do seu pedido nº26555 efetuada com sucesso em seu endereço.",
-          type: "PEDIDO_ENTREGUE"
-        },
-        %{
-          id: 3,
-          lido: true,
-          data: "2020-01-05",
-          title: "Reposição de Pedidos",
-          mensagem: "Confira a lista de possiveis reposições de produtos para seus clientes.",
-          type: "REPOSICAO_PEDIDOS"
-        },
-        %{
-          id: 4,
-          lido: true,
-          data: "2020-01-05",
-          title: "Boleto Vencido",
-          mensagem: "Existem boletos vencidos em sua conta, pague-os para continuar comprando.",
-          type: "BOLETO_VENCIDO"
-        },
-        %{
-          id: 5,
-          lido: true,
-          data: "2020-01-05",
-          title: "Boleto a Vencer",
-          mensagem: "Existem boletos que estão prestes a vencer, não esqueça do pagamento.",
-          type: "BOLETO_VENCER"
-        },
-        %{
-          id: 6,
-          lido: true,
-          data: "2020-01-05",
-          title: "Credito Financeiro",
-          mensagem: "Confirmamos a sua compra de Créditos Financeiros para sua conta.",
-          type: "FINANCEIRO_ADQUIRIDO"
-        },
-        %{
-          id: 7,
-          lido: true,
-          data: "2020-01-05",
-          title: "Credito de Produto",
-          mensagem: "Confirmamos a sua compra de Créditos de Produtos para sua conta.",
-          type: "PRODUTO_ADQUIRIDO"
-        },
-        %{
-          id: 8,
-          lido: true,
-          data: "2020-01-05",
-          title: "Resgate de Pontos",
-          mensagem:
-            "Adicionamos a sua conta o Crédito Financeiro referente ao Resgate de Pontos.",
-          type: "RESGATE_PONTOS"
-        },
-        %{
-          id: 9,
-          lido: true,
-          data: "2020-01-05",
-          title: "Efetivação de Devolução",
-          mensagem:
-            "Sua solicitação de devolução em crédito ou troca foi analisada por nossa equipe.",
-          type: "EFETIVACAO_DEV"
-        },
-        %{
-          id: 10,
-          lido: true,
-          data: "2020-01-05",
-          title: "Solicitação de Devolução",
-          mensagem:
-            "Recebemos sua solicitação de devolução em crédito ou troca, iremos analisá-la.",
-          type: "SOLICITACAO_DEV"
-        },
-        %{
-          id: 11,
-          lido: true,
-          data: "2020-01-05",
-          title: "Lentes quase acabando!",
-          mensagem: "O último pedido feito para seu paciente Luana, está quase acabando.",
-          type: "LENTES_ACABANDO"
-        }
-      ]
-    }
+  def get_notifications(cliente) do
+    case NotificacoesClienteModel.get_notifications(cliente) do
+      nil -> []
+      notifications -> organize_notifications(notifications)
+    end
+  end
 
-    {:ok, notifications}
+  defp organize_notifications(notifications) do
+    notifications =
+      %{
+        opens: 2,
+        notifications: Enum.map(notifications, fn notification ->
+          %{
+            id: notification.id,
+            lido: notification.lido,
+            data: notification.data,
+            title: notification.titulo,
+            mensagem: notification.descricao,
+            type: format_type(notification.titulo)
+          }
+        end)
+      }
+
+      {:ok, notifications}
+  end
+
+  defp format_type(titulo) do
+    titulo
+    |> String.upcase()
+    |> String.replace(" ", "_")
   end
 
   @impl true

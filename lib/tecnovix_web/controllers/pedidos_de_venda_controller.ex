@@ -7,7 +7,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     ClientesSchema,
     UsuariosClienteSchema,
     App.Screens,
-    LogsClienteModel
+    LogsClienteModel,
+    NotificacoesClienteModel
   }
 
   action_fallback Tecnovix.Resources.Fallback
@@ -46,14 +47,15 @@ defmodule TecnovixWeb.PedidosDeVendaController do
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order),
          {:ok, _logs} <-
-           LogsClienteModel.create(ip, usuario, cliente, "Pedido criado com sucesso.") do
+           LogsClienteModel.create(ip, usuario, cliente, "Pedido criado com sucesso."),
+         {:ok, notificacao} <- NotificacoesClienteModel.confirmed_payment(pedido, cliente) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("pedido.json", %{item: pedido})
     else
-      v -> IO.inspect v
-      {:error, :order_not_created}
+      v -> IO.inspect v 
+        {:error, :order_not_created}
     end
   end
 
