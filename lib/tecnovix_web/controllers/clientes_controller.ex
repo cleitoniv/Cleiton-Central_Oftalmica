@@ -190,7 +190,7 @@ defmodule TecnovixWeb.ClientesController do
   defp organize_filters_grid(products) do
     products
     |> Enum.map(fn product ->
-      product["type"]) |> IO.inspect
+      product["type"]
     end)
     |> Enum.uniq()
     |> Enum.filter(fn map ->
