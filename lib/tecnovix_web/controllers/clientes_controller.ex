@@ -188,6 +188,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   defp organize_filters_grid(products) do
+    IO.inspect products
     products
     |> Enum.map(fn product ->
       product["type"]

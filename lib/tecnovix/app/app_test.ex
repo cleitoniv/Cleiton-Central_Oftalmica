@@ -144,6 +144,7 @@ defmodule Tecnovix.App.ScreensTest do
             end
           end)
           |> Map.put("visint", true)
+          |> Map.put("type", "TORICA")
           |> Map.put("previsao_entrega", 5)
           |> Map.put(
             "end_entrega",
