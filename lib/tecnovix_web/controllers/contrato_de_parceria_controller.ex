@@ -1,7 +1,7 @@
 defmodule TecnovixWeb.ContratoDeParceriaController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.ContratoDeParceriaModel
-  alias Tecnovix.{ContratoDeParceriaModel, UsuariosClienteSchema}
+  alias Tecnovix.{ContratoDeParceriaModel, UsuariosClienteSchema, NotificacoesClienteModel}
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -30,8 +30,9 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
 
     with {:ok, items_order} <- ContratoDeParceriaModel.items_order(items),
          {:ok, order} <- ContratoDeParceriaModel.order(cliente, items_order),
-         {:ok, payment} <- ContratoDeParceriaModel.payment(id_cartao, order),
-         {:ok, contrato} <- ContratoDeParceriaModel.create_contrato(cliente, items, order) do
+         {:ok, _payment} <- ContratoDeParceriaModel.payment(id_cartao, order),
+         {:ok, contrato} <- ContratoDeParceriaModel.create_contrato(cliente, items, order),
+         {:ok, _notifications} <- NotificacoesClienteModel.credit_product_adquired(contrato, cliente) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

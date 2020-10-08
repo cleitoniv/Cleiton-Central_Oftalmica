@@ -72,8 +72,12 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
           nil -> nil
           value -> String.capitalize(value)
         end
-      :graus_eixo -> Map.get(map, field)
-      _ -> Decimal.to_float(Map.get(map, field))
+
+      :graus_eixo ->
+        Map.get(map, field)
+
+      _ ->
+        Decimal.to_float(Map.get(map, field))
     end
   end
 end

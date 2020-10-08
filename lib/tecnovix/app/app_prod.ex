@@ -1,6 +1,13 @@
 defmodule Tecnovix.App.ScreensProd do
   @behavior Tecnovix.App.Screens
-  alias Tecnovix.{ClientesModel, PedidosDeVendaModel, Repo, ClientesSchema, NotificacoesClienteModel}
+  alias Tecnovix.{
+    ClientesModel,
+    PedidosDeVendaModel,
+    Repo,
+    ClientesSchema,
+    NotificacoesClienteModel
+  }
+
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
@@ -10,7 +17,7 @@ defmodule Tecnovix.App.ScreensProd do
     case DescricaoModel.get_graus(grupo) do
       nil -> {:error, :not_found}
       {list, grupo} -> {:ok, grupo}
-        _ -> {:error, :not_found}
+      _ -> {:error, :not_found}
     end
   end
 
@@ -218,10 +225,13 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   defp organize_notifications(notifications) do
-    notifications =
-      %{
-        opens: Enum.reduce(notifications, 0, fn notification, acc -> count_lido(notification.lido, acc)end),
-        notifications: Enum.map(notifications, fn notification ->
+    notifications = %{
+      opens:
+        Enum.reduce(notifications, 0, fn notification, acc ->
+          count_lido(notification.lido, acc)
+        end),
+      notifications:
+        Enum.map(notifications, fn notification ->
           %{
             id: notification.id,
             lido: notification.lido,
@@ -231,9 +241,9 @@ defmodule Tecnovix.App.ScreensProd do
             type: format_type(notification.titulo)
           }
         end)
-      }
+    }
 
-      {:ok, notifications}
+    {:ok, notifications}
   end
 
   defp count_lido(lido, acc) do
@@ -242,7 +252,6 @@ defmodule Tecnovix.App.ScreensProd do
       true -> acc + 0
     end
   end
-
 
   defp format_type(titulo) do
     titulo
