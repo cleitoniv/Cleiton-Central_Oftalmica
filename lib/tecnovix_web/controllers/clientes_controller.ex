@@ -181,8 +181,7 @@ defmodule TecnovixWeb.ClientesController do
          {:ok, grid} <- stub.get_product_grid(products, cliente, filtro) do
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: grid, filters: organize_filters_grid(grid)}))
-      |> IO.inspect()
+      |> send_resp(200, Jason.encode!(%{success: true, data: grid}))
     else
       _ -> {:error, :not_found}
     end

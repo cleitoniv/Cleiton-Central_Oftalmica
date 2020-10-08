@@ -184,7 +184,6 @@ defmodule Tecnovix.App.ScreensProd do
         _ -> Enum.filter(produtos, fn items -> items["type"] == filtro end)
       end
 
-      IO.inspect data
     {:ok, data}
   end
 
