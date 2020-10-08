@@ -220,7 +220,7 @@ defmodule Tecnovix.App.ScreensTest do
   defp organize_notifications(notifications) do
     notifications =
       %{
-        opens: 2,
+        opens: Enum.reduce(notifications, 0, fn notification, acc -> count_lido(notification.lido, acc)end),
         notifications: Enum.map(notifications, fn notification ->
           %{
             id: notification.id,
@@ -234,6 +234,13 @@ defmodule Tecnovix.App.ScreensTest do
       }
 
       {:ok, notifications}
+  end
+
+  defp count_lido(lido, acc) do
+    case lido do
+      false -> acc + 1
+      true -> acc + 0
+    end
   end
 
   defp format_type(titulo) do
