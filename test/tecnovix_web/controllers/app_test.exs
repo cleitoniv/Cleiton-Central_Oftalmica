@@ -25,7 +25,6 @@ defmodule Tecnovix.Test.App do
         |> Generator.put_auth(token)
         |> get("/api/cliente/protheus/#{"03801285720"}")
         |> json_response(200)
-        |> IO.inspect()
 
       assert resp["status"] == "FOUND"
 
@@ -164,7 +163,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/produtos?filtro=Miopía")
       |> json_response(200)
-      |> IO.inspect()
 
     assert product["success"] == true
 
@@ -243,7 +241,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/notifications")
       |> json_response(200)
-      |> IO.inspect()
 
     assert notifications["success"] == true
 
@@ -252,7 +249,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/product_serie/010C37281")
       |> json_response(200)
-      |> IO.inspect()
 
     assert product_serie["success"] == true
 

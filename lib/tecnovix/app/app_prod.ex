@@ -51,6 +51,7 @@ defmodule Tecnovix.App.ScreensProd do
       "HASCURVA" -> "has_curva"
       "HASDIAMET" -> "has_diametro"
       "HASRAIO" -> "has_raio"
+      "DSTRATAM" -> "type"
       v -> v
     end
   end
@@ -141,7 +142,6 @@ defmodule Tecnovix.App.ScreensProd do
               true -> acc
             end
           end)
-          |> Map.put("type", "miopia")
           |> Map.put("visint", true)
           |> Map.put("previsao_entrega", 5)
           |> Map.put(
@@ -184,6 +184,7 @@ defmodule Tecnovix.App.ScreensProd do
         _ -> Enum.filter(produtos, fn items -> items["type"] == filtro end)
       end
 
+      IO.inspect data
     {:ok, data}
   end
 
