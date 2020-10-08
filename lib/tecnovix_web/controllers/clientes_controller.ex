@@ -188,7 +188,9 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   defp organize_filters_grid(products) do
-    products
+    ["Todos"]
+    ++
+    (products
     |> Enum.map(fn product ->
       case product["type"] do
         nil -> product["type"]
@@ -201,7 +203,7 @@ defmodule TecnovixWeb.ClientesController do
     |> Enum.uniq()
     |> Enum.filter(fn map ->
       map != nil
-    end)
+    end))
   end
 
   def offers(conn, _params) do
