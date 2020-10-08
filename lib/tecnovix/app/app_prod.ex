@@ -115,7 +115,7 @@ defmodule Tecnovix.App.ScreensProd do
     case key do
       "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
       "tests" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
-      _ -> Map.put(acc, key, (String.to_float(acc[key]) |> floor()) * 100)
+      _ -> Map.put(acc, key, String.to_float(acc[key]) * 100)
     end
   end
 

@@ -161,8 +161,9 @@ defmodule Tecnovix.Test.App do
     product =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/produtos?filtro=Miopía")
+      |> get("/api/cliente/produtos?filtro=Todos")
       |> json_response(200)
+      |> IO.inspect
 
     assert product["success"] == true
 
@@ -181,22 +182,6 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
 
     assert products_credits["success"] == true
-
-    orders =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/orders?filtro=entregues")
-      |> json_response(200)
-
-    assert orders["success"] == true
-
-    cart =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/cart")
-      |> json_response(200)
-
-    assert cart["success"] == true
 
     product =
       build_conn()

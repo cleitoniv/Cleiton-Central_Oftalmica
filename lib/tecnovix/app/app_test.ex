@@ -51,6 +51,8 @@ defmodule Tecnovix.App.ScreensTest do
       "HASCURVA" -> "has_curva"
       "HASDIAMET" -> "has_diametro"
       "HASRAIO" -> "has_raio"
+      "DSTRATAM" -> "type"
+      
       v -> v
     end
   end
@@ -114,7 +116,7 @@ defmodule Tecnovix.App.ScreensTest do
     case key do
       "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
       "tests" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
-      _ -> Map.put(acc, key, (String.to_float(acc[key]) |> floor()) * 100)
+      _ -> Map.put(acc, key, String.to_float(acc[key]) * 100)
     end
   end
 
@@ -141,12 +143,8 @@ defmodule Tecnovix.App.ScreensTest do
               true -> acc
             end
           end)
-          |> Map.put("type", "miopia")
           |> Map.put("visint", true)
           |> Map.put("previsao_entrega", 5)
-          |> Map.put("graus_esferico", [-0.5, 0.75, 1.0, 1.5])
-          |> Map.put("graus_eixo", [-0.5, 0.75, 1.0, 1.5])
-          |> Map.put("graus_cilindrico", [-0.5, 0.75, 1.0, 1.5])
           |> Map.put(
             "end_entrega",
             end_entrega(
