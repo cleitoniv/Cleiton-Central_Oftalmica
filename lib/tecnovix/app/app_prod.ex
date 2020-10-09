@@ -194,7 +194,9 @@ defmodule Tecnovix.App.ScreensProd do
     data =
       case filtro do
         "Todos" -> produtos
-        _ -> Enum.filter(produtos, fn items -> String.downcase(items["type"]) == String.downcase(filtro) end)
+        _ ->
+        Enum.filter(produtos, fn items -> items["type"] != nil end)
+        |> Enum.filter(fn items -> String.downcase(items["type"]) == String.downcase(filtro) end)
       end
 
     {:ok, data, filters}
