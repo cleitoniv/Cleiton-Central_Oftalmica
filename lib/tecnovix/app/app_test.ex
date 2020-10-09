@@ -248,8 +248,8 @@ defmodule Tecnovix.App.ScreensTest do
             title: notification.titulo,
             mensagem: notification.descricao,
             type: case notification.titulo do
-              "Crédito Financeiro Adquirido" -> "CREDIT_FINAN"
-              "Crédito de Produto Adquirido" -> "CREDIT_PRODUCT"
+              "Crédito Financeiro Adquirido" -> "FINANCEIRO_ADQUIRIDO"
+              "Crédito de Produto Adquirido" -> "PRODUTO_ADQUIRIDO"
               _ -> format_type(notification.titulo)
             end
           }
