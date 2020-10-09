@@ -685,6 +685,8 @@ defmodule Tecnovix.App.ScreensProd do
 
   @impl true
   def get_product_serie(_cliente, product_serial, serial) do
+    product_serial = Jason.decode!(product_serial.body)
+    
     product =
       Enum.flat_map(product_serial["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->
