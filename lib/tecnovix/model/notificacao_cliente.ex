@@ -24,7 +24,7 @@ defmodule Tecnovix.NotificacoesClienteModel do
   def get_notifications(cliente) do
     NotificacoesClienteSchema
     |> where([n], n.cliente_id == ^cliente.id)
-    |> order_by([c], asc: c.inserted_at)
+    |> order_by([n], desc: n.inserted_at)
     |> Repo.all()
   end
 
