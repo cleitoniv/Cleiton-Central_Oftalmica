@@ -77,10 +77,11 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
   @impl true
   def get_product_by_serial(%{cliente: _cliente, loja: _loja, serial: _serial, token: _token}) do
-        resp =
-          Jason.encode!(TestHelp.serial_product())
-          |> Jason.decode!()
-        {:ok, resp}
+    resp =
+      Jason.encode!(TestHelp.serial_product())
+      |> Jason.decode!()
+
+    {:ok, resp}
   end
 
   @impl true

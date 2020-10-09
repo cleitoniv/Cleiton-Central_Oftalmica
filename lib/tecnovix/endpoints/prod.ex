@@ -30,7 +30,8 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
     {:ok, product_serial} =
       HTTPoison.get(url, header)
-      |> IO.inspect()
+
+    {:ok, Jason.decode!(product_serial.body)}
   end
 
   @impl true
