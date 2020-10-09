@@ -52,6 +52,11 @@ defmodule Tecnovix.App.ScreensTest do
       "HASDIAMET" -> "has_diametro"
       "HASRAIO" -> "has_raio"
       "DSTRATAM" -> "type"
+      "GRUPO" -> "group"
+      "SUCESS" -> "success"
+      "DOC" -> "NF"
+      "DESCSTAT" -> "mensagem"
+      "PRDDESC" -> "title"
       v -> v
     end
   end
@@ -104,6 +109,12 @@ defmodule Tecnovix.App.ScreensTest do
         case map["value"] do
           "0" -> false
           "1" -> true
+        end
+
+      "SUCESS" ->
+        case map["value"] do
+          "FALSE" -> false
+          "TRUE" -> true
         end
 
       _ ->
@@ -726,24 +737,23 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_product_serie(_cliente, product_serial) do
-    product = %{
-      num_serie: "43242342",
-      id: 0,
-      tests: 0,
-      credits: 0,
-      title: "Biosoft Asférica Mensal",
-      produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
-      value: 15100,
-      value_produto: 14100,
-      value_finan: 14100,
-      image_url: @product_url,
-      type: "miopia",
-      boxes: 50,
-      quantidade: 10,
-      nf: "213_568_596",
-      group: "010C"
-    }
+  def get_product_serie(_cliente, product_serial, serial) do
+    product =
+      Enum.flat_map(product_serial["resources"], fn resource ->
+        Enum.map(resource["models"], fn model ->
+          Enum.reduce(model["fields"], %{}, fn product, acc ->
+            case Map.has_key?(acc, product["id"]) do
+              false -> Map.put(acc, organize_field(product), organize_value(product))
+              true -> acc
+            end
+          end)
+          |> Map.put("num_serie", serial)
+        end)
+      end)
+
+      product = Enum.map(product, fn map ->
+        Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
+      end)
 
     {:ok, product}
   end

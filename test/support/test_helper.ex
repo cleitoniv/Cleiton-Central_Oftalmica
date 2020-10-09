@@ -29,6 +29,11 @@ defmodule Tecnovix.TestHelp do
     |> Jason.decode!()
   end
 
+  def serial_product() do
+    File.read!("test/support/protheus/product_serial.json")
+    |> Jason.decode!()
+  end
+
   def items(path) do
     File.read!("test/support/wirecard/" <> path)
     |> Jason.decode()

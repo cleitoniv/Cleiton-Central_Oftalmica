@@ -28,8 +28,9 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     url =
       "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=005087&LOJA=01&NUMSERIE=S03006503"
 
-    {:ok, product_serial} = HTTPoison.get(url, header)
-    |> IO.inspect
+    {:ok, product_serial} =
+      HTTPoison.get(url, header)
+      |> IO.inspect()
   end
 
   @impl true

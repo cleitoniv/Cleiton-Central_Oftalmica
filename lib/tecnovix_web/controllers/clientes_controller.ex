@@ -323,14 +323,14 @@ defmodule TecnovixWeb.ClientesController do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, auth} <- Auth.token(),
-         {:ok, %{status_code: 200} = product_serial} <-
+         {:ok, product_serial} <-
            stub_protheus.get_product_by_serial(%{
              cliente: cliente.codigo,
              loja: cliente.loja,
              serial: num_serie,
              token: auth["access_token"]
            }),
-         {:ok, product} <- stub.get_product_serie(cliente, product_serial) do
+         {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
