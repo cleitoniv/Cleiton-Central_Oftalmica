@@ -329,9 +329,10 @@ defmodule TecnovixWeb.ClientesController do
              loja: cliente.loja,
              serial: num_serie,
              token: auth["access_token"]
-           }),
-         {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie) do
+           }) |> IO.inspect ,
+         {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie) |> IO.inspect do
 
+          IO.inspect "product: #{product}"
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
@@ -340,7 +341,6 @@ defmodule TecnovixWeb.ClientesController do
       {:ok, %{status_code: 400}} -> {:error, :product_serial_error}
       _ -> {:error, :not_found}
     end
-    |> IO.inspect
   end
 
   def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) do
