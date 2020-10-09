@@ -118,6 +118,7 @@ defmodule TecnovixWeb.Router do
       post "/atend_pref", TecnovixWeb.AtendPrefClienteController, :get_and_crud_atendimento
       get "/endereco_entrega", TecnovixWeb.ClientesController, :get_endereco_entrega
       get "/get_graus", TecnovixWeb.ClientesController, :get_graus
+      post "/read_notification", Tecnovix.Web.NotificacoesController, :read_notification
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

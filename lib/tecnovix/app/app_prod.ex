@@ -188,6 +188,7 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end)
       end)
+      |> IO.inspect
 
     data =
       case filtro do

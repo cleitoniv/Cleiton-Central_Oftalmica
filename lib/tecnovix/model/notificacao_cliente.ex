@@ -4,6 +4,10 @@ defmodule Tecnovix.NotificacoesClienteModel do
   alias Tecnovix.NotificacoesClienteSchema
   import Ecto.Query
 
+  def read_notification(cliente, read) do
+    
+  end
+
   def get_notifications(cliente) do
     NotificacoesClienteSchema
     |> where([n], n.cliente_id == ^cliente.id)
