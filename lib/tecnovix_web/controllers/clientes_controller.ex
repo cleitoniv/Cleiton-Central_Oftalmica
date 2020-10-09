@@ -329,8 +329,9 @@ defmodule TecnovixWeb.ClientesController do
              loja: cliente.loja,
              serial: num_serie,
              token: auth["access_token"]
-           }),
-         {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie) do
+           }) |> IO.inspect,
+         {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie) |> IO.inspect do
+           IO.inspect "oi #{product}"
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
