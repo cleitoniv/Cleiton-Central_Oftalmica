@@ -23,6 +23,5 @@ defmodule TecnovixWeb.NotificacoesController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
     end
-    |> IO.inspect
   end
 end

@@ -10,9 +10,15 @@ defmodule Tecnovix.NotificacoesClienteModel do
       |> where([n], ^cliente.id == n.cliente_id and n.lido == false and ^notification_id == n.id)
       |> update([n], set: [lido: true])
       |> Repo.update_all([])
-      |> IO.inspect
-      
+
     {:ok, notification}
+  end
+
+  def verify_notification(pedido, cliente) do
+    case Enum.any?(pedido.items, fn map -> map.tipo_venda == "C" end) do
+      true -> credit_finan_adquired(pedido, cliente)
+      _ -> confirmed_payment(pedido, cliente)
+    end
   end
 
   def get_notifications(cliente) do

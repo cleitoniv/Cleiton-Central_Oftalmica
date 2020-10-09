@@ -48,7 +48,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order),
          {:ok, _logs} <-
            LogsClienteModel.create(ip, usuario, cliente, "Pedido criado com sucesso."),
-         {:ok, notificacao} <- NotificacoesClienteModel.confirmed_payment(pedido, cliente) do
+         {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
+
+           IO.inspect notificacao
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
