@@ -752,7 +752,7 @@ defmodule Tecnovix.App.ScreensTest do
       end)
 
     product =
-      Enum.map(product, fn map ->
+      Enum.reduce(product, %{}, fn map, _acc ->
         Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
       end)
 
