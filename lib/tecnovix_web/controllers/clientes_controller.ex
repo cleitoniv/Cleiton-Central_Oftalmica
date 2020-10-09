@@ -323,7 +323,7 @@ defmodule TecnovixWeb.ClientesController do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, auth} <- Auth.token(),
-         {:ok, product_serial} <-
+         {:ok, %{status_code: 200} = product_serial} <-
            stub_protheus.get_product_by_serial(%{
              cliente: cliente.codigo,
              loja: cliente.loja,

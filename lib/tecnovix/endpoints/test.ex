@@ -76,12 +76,16 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   @impl true
-  def get_product_by_serial(%{cliente: _cliente, loja: _loja, serial: _serial, token: _token}) do
-    resp =
-      Jason.encode!(TestHelp.serial_product())
-      |> Jason.decode!()
+  def get_product_by_serial(
+        %{cliente: cliente, loja: loja, serial: serial, token: token} = params
+      ) do
+    header = Protheus.authenticate(@header, token)
 
-    {:ok, resp}
+    url =
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=005087&LOJA=01&NUMSERIE=#{serial}"
+
+    {:ok, product_serial} =
+      HTTPoison.get(url, header)
   end
 
   @impl true
