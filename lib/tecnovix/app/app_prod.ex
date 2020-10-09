@@ -695,6 +695,7 @@ defmodule Tecnovix.App.ScreensProd do
             end
           end)
           |> Map.put("num_serie", serial)
+          |> Map.put("produto", String.slice(Ecto.UUID.autogenerate(), 1..15))
         end)
       end)
 
