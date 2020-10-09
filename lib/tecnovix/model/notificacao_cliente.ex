@@ -4,8 +4,15 @@ defmodule Tecnovix.NotificacoesClienteModel do
   alias Tecnovix.NotificacoesClienteSchema
   import Ecto.Query
 
-  def read_notification(cliente, read) do
-    
+  def read_notification(notification_id, cliente) do
+    notification =
+      NotificacoesClienteSchema
+      |> where([n], ^cliente.id == n.cliente_id and n.lido == false and ^notification_id == n.id)
+      |> update([n], set: [lido: true])
+      |> Repo.update_all([])
+      |> IO.inspect
+      
+    {:ok, notification}
   end
 
   def get_notifications(cliente) do

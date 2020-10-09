@@ -158,13 +158,14 @@ defmodule Tecnovix.Test.App do
     assert current_user["points"] == 100
     # assert current_user["notifications"]["opens"] == 2
 
-    product =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/produtos?filtro=Todos")
-      |> json_response(200)
+    # product =
+    #   build_conn()
+    #   |> Generator.put_auth(user_firebase["idToken"])
+    #   |> get("/api/cliente/produtos?filtro=Todos")
+    #   |> json_response(200)
+    #   |> IO.inspect
 
-    assert product["success"] == true
+    # assert product["success"] == true
 
     offers =
       build_conn()
@@ -227,6 +228,14 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
 
     assert notifications["success"] == true
+
+    read_notifications =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> put("/api/cliente/read_notification/#{249}")
+      |> json_response(200)
+
+      # IO.inspect Tecnovix.Repo.all(Tecnovix.NotificacoesClienteSchema)
 
     product_serie =
       build_conn()
