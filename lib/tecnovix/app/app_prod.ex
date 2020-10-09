@@ -54,7 +54,7 @@ defmodule Tecnovix.App.ScreensProd do
       "DSTRATAM" -> "type"
       "GRUPO" -> "group"
       "SUCESS" -> "success"
-      "DOC" -> "NF"
+      "DOC" -> "nf"
       "DESCSTAT" -> "mensagem"
       "PRDDESC" -> "title"
       v -> v
