@@ -340,6 +340,7 @@ defmodule TecnovixWeb.ClientesController do
       {:ok, %{status_code: 400}} -> {:error, :product_serial_error}
       _ -> {:error, :not_found}
     end
+    |> IO.inspect
   end
 
   def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) do
