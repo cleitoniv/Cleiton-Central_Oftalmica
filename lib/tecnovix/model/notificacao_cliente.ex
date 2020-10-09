@@ -16,7 +16,7 @@ defmodule Tecnovix.NotificacoesClienteModel do
 
   def verify_notification(pedido, cliente) do
     case Enum.any?(pedido.items, fn map -> map.tipo_venda == "C" end) do
-      true -> credit_finan_adquired(pedido, cliente)
+      true -> credit_product_adquired(pedido, cliente)
       _ -> confirmed_payment(pedido, cliente)
     end
   end
