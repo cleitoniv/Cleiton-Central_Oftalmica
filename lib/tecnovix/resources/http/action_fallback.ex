@@ -15,6 +15,16 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :product_serial_error}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "Error na serie do produto."})
+    )
+    |> halt()
+  end
+
   def call(conn, {:error, :num_serie_invalid}) do
     conn
     |> put_resp_content_type("application/json")
@@ -25,7 +35,7 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :not_authorized}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(401, Jason.encode!(%{"success" => false, "data" => "Cliente não autorizado."}))
+    |> send_resp(401, Jason.encode!(%{"success" => false, "data" => "Não autorizado."}))
     |> halt()
   end
 

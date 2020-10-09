@@ -1,5 +1,8 @@
 defmodule Tecnovix.Endpoints.ProtheusTest do
   @behaviour Tecnovix.Endpoints.Protheus
+  alias Tecnovix.Endpoints.Protheus
+
+  @header [{"Content-Type", "application/x-www-form-urlencoded"}]
 
   @impl true
   def token(_params) do
@@ -72,7 +75,17 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   @impl true
-  def get_product_by_serial(_params) do
+  def get_product_by_serial(
+        %{cliente: cliente, loja: loja, serial: serial, token: token} = params
+      ) do
+    header = Protheus.authenticate(@header, token)
+
+    url =
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=005087&LOJA=01&NUMSERIE=S03006503"
+
+    {:ok, product_serial} =
+      HTTPoison.get(url, header)
+      |> IO.inspect()
   end
 
   @impl true

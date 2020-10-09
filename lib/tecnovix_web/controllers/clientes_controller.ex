@@ -174,29 +174,33 @@ defmodule TecnovixWeb.ClientesController do
          {:ok, grid} <- stub.get_product_grid(products, cliente, filtro) do
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: grid, filters: organize_filters_grid(grid)}))
+      |> send_resp(
+        200,
+        Jason.encode!(%{success: true, data: grid, filters: organize_filters_grid(grid)})
+      )
     else
       _ -> {:error, :not_found}
     end
   end
 
   defp organize_filters_grid(products) do
-    ["Todos"]
-    ++
-    (products
-    |> Enum.map(fn product ->
-      case product["type"] do
-        nil -> product["type"]
-        type ->
-          product["type"]
-          |> String.downcase()
-          |> String.capitalize()
-      end
-    end)
-    |> Enum.uniq()
-    |> Enum.filter(fn map ->
-      map != nil
-    end))
+    ["Todos"] ++
+      (products
+       |> Enum.map(fn product ->
+         case product["type"] do
+           nil ->
+             product["type"]
+
+           type ->
+             product["type"]
+             |> String.downcase()
+             |> String.capitalize()
+         end
+       end)
+       |> Enum.uniq()
+       |> Enum.filter(fn map ->
+         map != nil
+       end))
   end
 
   def offers(conn, _params) do
@@ -314,13 +318,26 @@ defmodule TecnovixWeb.ClientesController do
 
   def get_product_serie(conn, %{"num_serie" => num_serie}) do
     stub = Screens.stub()
+    stub_protheus = Protheus.stub()
 
     {:ok, cliente} = verify_auth(conn.private.auth)
 
-    with {:ok, product} <- stub.get_product_serie(cliente, num_serie) do
+    with {:ok, auth} <- Auth.token(),
+         {:ok, %{status_code: 200} = product_serial} <-
+           stub_protheus.get_product_by_serial(%{
+             cliente: cliente.codigo,
+             loja: cliente.loja,
+             serial: num_serie,
+             token: auth["access_token"]
+           }),
+         {:ok, product} <- stub.get_product_serie(cliente, product_serial) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
+    else
+      {:ok, %{status_code: 401}} -> {:error, :not_authorized}
+      {:ok, %{status_code: 400}} -> {:error, :product_serial_error}
+      _ -> {:error, :not_found}
     end
   end
 

@@ -18,7 +18,8 @@ defmodule TecnovixWeb.PreDevolucaoController do
     {:ok, cliente} = conn.private.auth
 
     with {:ok, devolucoes} <- PreDevolucaoModel.create(cliente, params),
-         {:ok, _notifications} <- NotificacoesClienteModel.solicitation_devolution(devolucoes, cliente) do
+         {:ok, _notifications} <-
+           NotificacoesClienteModel.solicitation_devolution(devolucoes, cliente) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
