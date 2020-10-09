@@ -171,36 +171,16 @@ defmodule TecnovixWeb.ClientesController do
              count: 50,
              token: auth["access_token"]
            }),
-         {:ok, grid} <- stub.get_product_grid(products, cliente, filtro) do
+         {:ok, grid, filters} <- stub.get_product_grid(products, cliente, filtro) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(
         200,
-        Jason.encode!(%{success: true, data: grid, filters: organize_filters_grid(grid)})
+        Jason.encode!(%{success: true, data: grid, filters: filters})
       )
     else
       _ -> {:error, :not_found}
     end
-  end
-
-  defp organize_filters_grid(products) do
-    ["Todos"] ++
-      (products
-       |> Enum.map(fn product ->
-         case product["type"] do
-           nil ->
-             product["type"]
-
-           type ->
-             product["type"]
-             |> String.downcase()
-             |> String.capitalize()
-         end
-       end)
-       |> Enum.uniq()
-       |> Enum.filter(fn map ->
-         map != nil
-       end))
   end
 
   def offers(conn, _params) do

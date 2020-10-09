@@ -188,15 +188,36 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end)
       end)
-      |> IO.inspect
+
+    filters = organize_filters_grid(produtos)
 
     data =
       case filtro do
         "Todos" -> produtos
-        _ -> Enum.filter(produtos, fn items -> items["type"] == filtro end)
+        _ -> Enum.filter(produtos, fn items -> String.downcase(items["type"]) == String.downcase(filtro) end)
       end
 
-    {:ok, data}
+    {:ok, data, filters}
+  end
+
+  defp organize_filters_grid(products) do
+    ["Todos"] ++
+      (products
+       |> Enum.map(fn product ->
+         case product["type"] do
+           nil ->
+             product["type"]
+
+           type ->
+             product["type"]
+             |> String.downcase()
+             |> String.capitalize()
+         end
+       end)
+       |> Enum.uniq()
+       |> Enum.filter(fn map ->
+         map != nil
+       end))
   end
 
   @impl true
