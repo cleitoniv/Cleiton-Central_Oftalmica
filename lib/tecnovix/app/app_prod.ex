@@ -697,8 +697,7 @@ defmodule Tecnovix.App.ScreensProd do
           |> Map.put("num_serie", serial)
         end)
       end)
-      |> IO.inspect
-      
+
     product =
       Enum.map(product, fn map ->
         Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
