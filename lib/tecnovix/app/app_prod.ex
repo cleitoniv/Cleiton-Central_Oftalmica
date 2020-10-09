@@ -699,7 +699,7 @@ defmodule Tecnovix.App.ScreensProd do
       end)
 
     product =
-      Enum.map(product, fn map ->
+      Enum.flat_map(product, fn map ->
         Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
       end)
 
