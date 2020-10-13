@@ -56,6 +56,7 @@ defmodule TecnovixWeb.Support.Generator do
       "endereco" => "Rua Benedito Barcelos",
       "numero" => "111",
       "bairro" => "Bela Vista",
+      "estado" => "Vitoria",
       "cep" => "29027445",
       "cdmunicipio" => "teste",
       "municipio" => "Serra",

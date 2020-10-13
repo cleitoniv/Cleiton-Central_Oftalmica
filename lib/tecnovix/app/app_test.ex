@@ -386,28 +386,6 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_products_cart(_cliente) do
-    cart = [
-      %{
-        products: %{
-          id: 0,
-          title: "Bioview Asferica Cx 6",
-          produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
-          value: 30000,
-          value_produto: 14100,
-          value_finan: 14100,
-          quantity: 2,
-          buy_type: "Avulso"
-        },
-        delivery_fee: 10000,
-        total: 40000
-      }
-    ]
-
-    {:ok, cart}
-  end
-
-  @impl true
   def get_info_product(_cliente, id) do
     product = [
       %{

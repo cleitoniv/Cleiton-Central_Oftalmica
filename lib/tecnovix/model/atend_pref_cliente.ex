@@ -74,7 +74,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
           end)
           |> Enum.at(0)
 
-        atend = Map.put(atend, "#{previous}", 0) |> IO.inspect
+        atend = Map.put(atend, "#{previous}", 0)
         update(changeset, atend)
     end
   end

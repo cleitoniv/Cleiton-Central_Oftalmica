@@ -16,6 +16,7 @@ defmodule Tecnovix.ClientesSchema do
     field :numero, :string
     field :complemento, :string
     field :bairro, :string
+    field :estado, :string
     field :cep, :string
     field :cdmunicipio, :string
     field :municipio, :string
@@ -53,6 +54,7 @@ defmodule Tecnovix.ClientesSchema do
       :cep,
       :cdmunicipio,
       :municipio,
+      :estado,
       :ddd,
       :telefone,
       :bloqueado,
@@ -82,11 +84,13 @@ defmodule Tecnovix.ClientesSchema do
       :data_nascimento,
       :nome,
       :nome_empresarial,
+      :estado,
       :email,
       :endereco,
       :numero,
       :complemento,
       :bairro,
+      :estado,
       :cep,
       :cdmunicipio,
       :municipio,
@@ -135,6 +139,7 @@ defmodule Tecnovix.ClientesSchema do
           :endereco,
           :numero,
           :bairro,
+          :estado,
           :cep,
           :municipio,
           :crm_medico
@@ -156,6 +161,7 @@ defmodule Tecnovix.ClientesSchema do
           :nome_empresarial,
           :endereco,
           :numero,
+          :estado,
           :bairro,
           :cep,
           :municipio
