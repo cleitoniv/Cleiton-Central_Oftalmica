@@ -67,13 +67,12 @@ defmodule Tecnovix.AtendPrefClienteModel do
       changeset ->
         previous =
           Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
-            case value == 1 do
+            case value == 1 and key != :id do
               true -> [key]
               false -> []
             end
           end)
           |> Enum.at(0)
-          |> IO.inspect
 
         atend = Map.put(atend, "#{previous}", 0) |> IO.inspect
         update(changeset, atend)
