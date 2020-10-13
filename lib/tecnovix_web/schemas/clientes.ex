@@ -67,7 +67,7 @@ defmodule Tecnovix.ClientesSchema do
     ])
     |> validate_required([:fisica_jurid, :cnpj_cpf, :email])
     |> validate_inclusion(:fisica_jurid, ["F", "J"])
-    |> unique_constraint(:clientes_contraint)
+    |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint)
     |> validations_fisic_jurid(params)
   end
 
@@ -140,7 +140,7 @@ defmodule Tecnovix.ClientesSchema do
           :crm_medico
         ])
         |> validate_ramo_fisica(params)
-        |> unique_constraint(:clientes_contraint)
+        |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint)
 
       "J" ->
         changeset
@@ -161,7 +161,7 @@ defmodule Tecnovix.ClientesSchema do
           :municipio
         ])
         |> validate_ramo_juridica(params)
-        |> unique_constraint(:clientes_contraint)
+        |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint)
 
       _ ->
         changeset

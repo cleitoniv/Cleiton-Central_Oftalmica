@@ -38,6 +38,8 @@ defmodule Tecnovix.AtendPrefClienteModel do
   end
 
   def formatting_atend(params, cliente) do
+    IO.inspect params
+    IO.inspect cliente
     dia_remessa =
       case cliente.dia_remessa do
         nil -> "-"
@@ -62,7 +64,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
 
     case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
       nil ->
-        create(atend) |> IO.inspect()
+        create(atend)
 
       changeset ->
         previous =
@@ -75,7 +77,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
           |> Enum.at(0)
 
         atend = Map.put(atend, "#{previous}", 0)
-        update(changeset, atend) |> IO.inspect()
+        update(changeset, atend)
     end
   end
 end
