@@ -311,7 +311,6 @@ defmodule TecnovixWeb.ClientesController do
              token: auth["access_token"]
            }),
          {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie) do
-
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
