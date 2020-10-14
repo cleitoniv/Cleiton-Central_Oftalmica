@@ -398,4 +398,15 @@ defmodule TecnovixWeb.ClientesController do
       |> send_resp(200, Jason.encode!(%{success: true, data: graus}))
     end
   end
+
+  def get_endereco_by_cep(conn, %{"cep" => cep}) do
+    with {:ok, %{status_code: 200} = endereco} <- ClientesModel.get_endereco_by_cep(cep) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: Jason.decode!(endereco.body)}))
+    else
+      {:error, %{status_code: 401}} -> {:error, :not_authorized}
+      _ -> {:error, :not_found}
+    end
+  end
 end

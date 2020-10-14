@@ -427,4 +427,23 @@ defmodule TecnovixWeb.UsersTest do
 
     Channel.assert_broadcast("update_notifications_number", %{}) |> IO.inspect()
   end
+
+  test "Testando REST do ViaCEP" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    desc_param = Generator.desc_generica()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> get("/api/cliente/get_endereco_by_cep?cep=29027445")
+    |> json_response(200)
+    |> IO.inspect
+  end
 end
