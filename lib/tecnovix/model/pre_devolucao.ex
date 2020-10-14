@@ -1,9 +1,7 @@
 defmodule Tecnovix.PreDevolucaoModel do
   use Tecnovix.DAO, schema: Tecnovix.PreDevolucaoSchema
-  alias Tecnovix.Repo
-  alias Tecnovix.PreDevolucaoSchema
+  alias Tecnovix.{PreDevolucaoSchema, NotificacoesClienteModel, ClientesSchema, Repo}
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
-  alias Tecnovix.ClientesSchema
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
@@ -129,7 +127,7 @@ defmodule Tecnovix.PreDevolucaoModel do
     cliente = Repo.get(ClientesSchema, cliente_id)
     case create(cliente, devolutions, tipo) do
       {:ok, dev} -> NotificacoesClienteModel.solicitation_devolution(dev, cliente)
-      erro -> erro 
+      erro -> erro
     end
   end
 end
