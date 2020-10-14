@@ -83,7 +83,8 @@ defmodule TecnovixWeb.Router do
       pipe_through :guest
       post "/", TecnovixWeb.ClientesController, :create_user
       get "/protheus/products", TecnovixWeb.ProtheusController, :get_product
-      get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
+      get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :
+      get "/get_endereco_by_cep", TecnovixWeb.ClientesController, :get_endereco_by_cep
       pipe_through :cliente
       get "/current_user", TecnovixWeb.ClientesController, :current_user
       post "/update_password", TecnovixWeb.ClientesController, :update_password
@@ -119,7 +120,6 @@ defmodule TecnovixWeb.Router do
       get "/endereco_entrega", TecnovixWeb.ClientesController, :get_endereco_entrega
       get "/get_graus", TecnovixWeb.ClientesController, :get_graus
       put "/read_notification/:id", TecnovixWeb.NotificacoesController, :read_notification
-      get "/get_endereco_by_cep", TecnovixWeb.ClientesController, :get_endereco_by_cep
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
