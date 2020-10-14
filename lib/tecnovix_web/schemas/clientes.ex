@@ -67,9 +67,9 @@ defmodule Tecnovix.ClientesSchema do
       :wirecard_cliente_id,
       :fcm_token
     ])
-    |> validate_required([:fisica_jurid, :cnpj_cpf, :email])
+    |> validate_required([:fisica_jurid, :cnpj_cpf, :email], message: "Não pode estar em branco.")
     |> validate_inclusion(:fisica_jurid, ["F", "J"])
-    |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint)
+    |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint, message: "Esse dado já existe.")
     |> validations_fisic_jurid(params)
   end
 
