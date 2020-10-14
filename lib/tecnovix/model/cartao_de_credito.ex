@@ -29,6 +29,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
           |> Map.put("complemento_endereco_cobranca", cliente.complemento)
           |> Map.put("bairro_endereco_cobranca", cliente.bairro)
           |> Map.put("cidade_endereco_cobranca", cliente.municipio)
+          |> Map.put("estado_endereco_cobranca", cliente.estado)
         end
       )
 
@@ -48,6 +49,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
       |> Map.put("complemento_endereco_cobranca", cliente.complemento)
       |> Map.put("bairro_endereco_cobranca", cliente.bairro)
       |> Map.put("cidade_endereco_cobranca", cliente.municipio)
+      |> Map.put("estado_endereco_cobranca", cliente.estado)
 
     {:ok, card}
   end
