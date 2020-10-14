@@ -106,7 +106,7 @@ defmodule Tecnovix.ClientesSchema do
       :wirecard_cliente_id,
       :fcm_token
     ])
-    |> validate_required([:nome, :email, :telefone])
+    |> validate_required([:nome, :email, :telefone],  message: "Não pode estar em branco.")
   end
 
   def validate_ramo_fisica(changeset, params \\ %{}) do
@@ -143,7 +143,7 @@ defmodule Tecnovix.ClientesSchema do
           :cep,
           :municipio,
           :crm_medico
-        ])
+        ],  message: "Não pode estar em branco.")
         |> validate_ramo_fisica(params)
         |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint)
 
@@ -165,7 +165,7 @@ defmodule Tecnovix.ClientesSchema do
           :bairro,
           :cep,
           :municipio
-        ])
+        ],  message: "Não pode estar em branco.")
         |> validate_ramo_juridica(params)
         |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint)
 
