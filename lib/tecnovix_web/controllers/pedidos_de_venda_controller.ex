@@ -42,10 +42,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Enum.join()
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
-         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente) |> IO.inspect,
+         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <-
-           PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order) |> IO.inspect,
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order) |> IO.inspect,
+           PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order),
          {:ok, _logs} <-
            LogsClienteModel.create(ip, usuario, cliente, "Pedido criado com sucesso."),
          {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
