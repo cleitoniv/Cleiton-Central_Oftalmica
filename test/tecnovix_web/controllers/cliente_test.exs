@@ -151,7 +151,7 @@ defmodule TecnovixWeb.UsersTest do
     |> recycle()
     |> post("/api/cliente/atend_pref", %{"horario" => "Manha"})
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 
   test "show cliente/usuario and atendimento preferencial cliente" do
@@ -444,6 +444,6 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/get_endereco_by_cep?cep=29027445")
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 end

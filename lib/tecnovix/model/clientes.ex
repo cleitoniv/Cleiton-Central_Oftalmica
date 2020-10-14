@@ -118,7 +118,7 @@ defmodule Tecnovix.ClientesModel do
 
   def get_endereco_by_cep(cep) do
     url = "viacep.com.br/ws/#{cep}/json/"
-    
+
     {:ok, endereco} = HTTPoison.get(url, [{"Content-Type", "application/json"}])
   end
 end

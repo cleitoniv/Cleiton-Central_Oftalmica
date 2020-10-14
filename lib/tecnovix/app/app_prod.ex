@@ -272,7 +272,7 @@ defmodule Tecnovix.App.ScreensProd do
             data: notification.data,
             title: notification.titulo,
             mensagem: notification.descricao,
-            type: format_type(notification.titulo)
+            type: formatting_type(notification.titulo)
           }
         end)
     }
@@ -287,10 +287,25 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  defp format_type(titulo) do
-    titulo
-    |> String.upcase()
-    |> String.replace(" ", "_")
+  defp formatting_type(titulo) do
+    case titulo do
+      "Solicitação de Devolução" ->
+        "SOLICITACAO_DEV"
+
+      "Efetivação de Devolução" ->
+        "EFETIVACAO_DEV"
+
+      "Crédito Financeiro Adquirido" ->
+        "FINANCEIRO_ADQUIRIDO"
+
+      "Crédito de Produto Adquirido" ->
+        "PRODUTO_ADQUIRIDO"
+
+      _ ->
+        titulo
+        |> String.upcase()
+        |> String.replace(" ", "_")
+    end
   end
 
   @impl true

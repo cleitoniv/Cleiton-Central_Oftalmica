@@ -401,7 +401,8 @@ defmodule TecnovixWeb.ClientesController do
 
   def get_endereco_by_cep(conn, %{"cep" => cep}) do
     with {:ok, %{status_code: 200} = endereco} <- ClientesModel.get_endereco_by_cep(cep) do
-    endereco = Jason.decode!(endereco.body)
+      endereco = Jason.decode!(endereco.body)
+
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: formatting_endereco(endereco)}))
