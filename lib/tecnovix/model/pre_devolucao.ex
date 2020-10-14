@@ -127,6 +127,9 @@ defmodule Tecnovix.PreDevolucaoModel do
         tipo: tipo
       }) do
     cliente = Repo.get(ClientesSchema, cliente_id)
-    create(cliente, devolutions, tipo)
+    case create(cliente, devolutions, tipo) do
+      {:ok, dev} -> NotificacoesClienteModel.solicitation_devolution(dev, cliente)
+      erro -> erro 
+    end
   end
 end

@@ -20,7 +20,6 @@ defmodule TecnovixWeb.PreDevolucaoController do
     with {:ok, devolucoes} <- PreDevolucaoModel.create(cliente, params),
          {:ok, notifications} <-
            NotificacoesClienteModel.solicitation_devolution(devolucoes, cliente) do
-             IO.inspect "Notification - #{notifications}"
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
