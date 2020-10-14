@@ -401,12 +401,18 @@ defmodule TecnovixWeb.ClientesController do
 
   def get_endereco_by_cep(conn, %{"cep" => cep}) do
     with {:ok, %{status_code: 200} = endereco} <- ClientesModel.get_endereco_by_cep(cep) do
+    endereco = Jason.decode!(endereco.body)
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: Jason.decode!(endereco.body)}))
+      |> send_resp(200, Jason.encode!(%{success: true, data: formatting_endereco(endereco)}))
     else
       {:error, %{status_code: 401}} -> {:error, :not_authorized}
       _ -> {:error, :not_found}
     end
+  end
+
+  defp formatting_endereco(endereco) do
+    endereco
+    |> Map.put("ibge", String.slice(endereco["ibge"], 2..7))
   end
 end

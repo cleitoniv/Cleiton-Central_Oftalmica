@@ -428,7 +428,7 @@ defmodule TecnovixWeb.UsersTest do
     Channel.assert_broadcast("update_notifications_number", %{}) |> IO.inspect()
   end
 
-  test "Testando REST do ViaCEP" do
+  test "Testando REST do Via CEP" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
     desc_param = Generator.desc_generica()
