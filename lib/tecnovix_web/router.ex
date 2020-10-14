@@ -83,7 +83,7 @@ defmodule TecnovixWeb.Router do
       pipe_through :guest
       post "/", TecnovixWeb.ClientesController, :create_user
       get "/protheus/products", TecnovixWeb.ProtheusController, :get_product
-      get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :
+      get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
       get "/get_endereco_by_cep", TecnovixWeb.ClientesController, :get_endereco_by_cep
       pipe_through :cliente
       get "/current_user", TecnovixWeb.ClientesController, :current_user
