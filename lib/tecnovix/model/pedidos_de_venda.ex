@@ -402,7 +402,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           "street" => cliente.endereco,
           "streetNumber" => cliente.numero,
           "zipCode" => cliente.cep,
-          "state" => "SP",
+          "state" => cliente.estado,
           "country" => "BRA"
         }
       }
