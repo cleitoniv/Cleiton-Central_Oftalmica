@@ -10,7 +10,7 @@ defmodule TecnovixWeb.ProtheusController do
 
     with {:ok, auth} <- Auth.token(),
          {:ok, response = %{status_code: 200}} <-
-           protheus.get_cliente(%{cnpj_cpf: cnpj_cpf, token: auth["acess_token"]}),
+           protheus.get_cliente(%{cnpj_cpf: cnpj_cpf, token: auth["access_token"]}),
          {:ok, data} <- protheus.organize_cliente(response) do
       conn
       |> put_resp_content_type("application/json")

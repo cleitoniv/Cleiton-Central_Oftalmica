@@ -18,6 +18,11 @@
               "value": "000063"
             },
             {
+              "id": "A1_EST",
+              "order": 2,
+              "value": "ES"
+            },
+            {
               "id": "A1_LOJA",
               "order": 2,
               "value": "01"

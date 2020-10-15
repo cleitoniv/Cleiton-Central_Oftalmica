@@ -34,20 +34,6 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   @impl true
-  def get_cliente(%{cnpj_cpf: "038" <> _cnpj}) do
-    resp = Jason.encode!(Tecnovix.TestHelp.cliente_cnpj())
-
-    {:ok, %{status_code: 200, body: resp}}
-  end
-
-  @impl true
-  def get_cliente(%{cnpj_cpf: "037" <> _cpf}) do
-    resp = Jason.encode!(Tecnovix.TestHelp.cliente())
-
-    {:ok, %{status_code: 200, body: resp}}
-  end
-
-  @impl true
   def get_client_products(%{cliente: cliente, loja: loja, count: count, token: token}) do
     header = Protheus.authenticate(@header, token)
 
