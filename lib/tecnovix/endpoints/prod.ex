@@ -85,11 +85,18 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
                       [endereco, num] ->
                         Map.put(acc, field_crm_cnae(field), field["value"])
                         |> Map.put("A1_NUM", num)
-                      [endereco] -> Map.put(acc, field_crm_cnae(field), field["value"])
+
+                      [endereco] ->
+                        Map.put(acc, field_crm_cnae(field), field["value"])
                     end
 
                   false ->
-                    Map.put(acc, field_crm_cnae(field), field["value"])
+                    case field["id"] == "A1_DTNASC" do
+                      true ->
+                        [ano, mes, dia]= String.slice(field["value"], "-")
+                        "#{dia}-#{mes}-#{ano}"
+                      false -> Map.put(acc, field_crm_cnae(field), field["value"])
+                    end
                 end
 
               true ->
@@ -99,8 +106,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         end)
       end)
       |> Map.new()
-      |> IO.inspect()
-      
+
     {:ok, organize}
   end
 

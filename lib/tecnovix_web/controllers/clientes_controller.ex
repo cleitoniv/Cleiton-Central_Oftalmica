@@ -54,7 +54,7 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, cliente} <- ClientesModel.insert_or_update(params) do
       conn
-      |> put_status(200)
+      |> put_status(201)
       |> put_resp_content_type("application/json")
       |> render("clientes.json", %{item: cliente})
     end
