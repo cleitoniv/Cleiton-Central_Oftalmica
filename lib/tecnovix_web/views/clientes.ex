@@ -155,7 +155,9 @@ defmodule TecnovixWeb.ClientesView do
     }
   end
 
-  def render("cliente.json", %{item: item}) do
+  multi_parser("clientes.json", [:loja, :codigo, :cnpj_cpf])
+
+  def render("clientes.json", %{item: item}) do
     %{
       success: true,
       data: %{
@@ -204,6 +206,4 @@ defmodule TecnovixWeb.ClientesView do
     |> Map.put(:notifications, notifications)
     |> Map.put(:dia_remessa, dia_remessa)
   end
-
-  multi_parser("clientes.json", [:loja, :codigo, :cnpj_cpf])
 end

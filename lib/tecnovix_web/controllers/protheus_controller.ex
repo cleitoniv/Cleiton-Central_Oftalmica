@@ -10,8 +10,8 @@ defmodule TecnovixWeb.ProtheusController do
 
     with {:ok, auth} <- Auth.token(),
          {:ok, response = %{status_code: 200}} <-
-           protheus.get_cliente(%{cnpj_cpf: cnpj_cpf, token: auth["access_token"]}) |> IO.inspect,
-         {:ok, data} <- protheus.organize_cliente(response) |> IO.inspect do
+           protheus.get_cliente(%{cnpj_cpf: cnpj_cpf, token: auth["access_token"]}),
+         {:ok, data} <- protheus.organize_cliente(response) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, status: "FOUND", data: data}))

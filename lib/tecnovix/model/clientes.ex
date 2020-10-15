@@ -49,10 +49,12 @@ defmodule Tecnovix.ClientesModel do
     {:ok,
      Enum.map(params["data"], fn cliente ->
        with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
-         create(cliente)
+         {:ok, create} = create(cliente)
+         create
        else
          changeset ->
-           __MODULE__.update(changeset, cliente)
+           {:ok, update} = __MODULE__.update(changeset, cliente)
+           update
        end
      end)}
   end
