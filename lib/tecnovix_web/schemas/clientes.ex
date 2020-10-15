@@ -69,7 +69,10 @@ defmodule Tecnovix.ClientesSchema do
     ])
     |> validate_required([:fisica_jurid, :cnpj_cpf, :email], message: "Não pode estar em branco.")
     |> validate_inclusion(:fisica_jurid, ["F", "J"])
-    |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint, message: "Esse dado já existe.")
+    |> unique_constraint([:uid], message: "UID já existe")
+    |> unique_constraint([:codigo], message: "Codigo já existe")
+    |> unique_constraint([:email], message: "Esse email já existe")
+    |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
     |> validations_fisic_jurid(params)
   end
 
@@ -107,6 +110,10 @@ defmodule Tecnovix.ClientesSchema do
       :fcm_token
     ])
     |> validate_required([:nome, :email, :telefone],  message: "Não pode estar em branco.")
+    |> unique_constraint([:uid], message: "UID já existe")
+    |> unique_constraint([:codigo], message: "Codigo já existe")
+    |> unique_constraint([:email], message: "Esse email já existe")
+    |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
   end
 
   def validate_ramo_fisica(changeset, params \\ %{}) do
@@ -145,7 +152,10 @@ defmodule Tecnovix.ClientesSchema do
           :crm_medico
         ],  message: "Não pode estar em branco.")
         |> validate_ramo_fisica(params)
-        |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint)
+        |> unique_constraint([:uid], message: "UID já existe")
+        |> unique_constraint([:codigo], message: "Codigo já existe")
+        |> unique_constraint([:email], message: "Esse email já existe")
+        |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
 
       "J" ->
         changeset
@@ -167,7 +177,11 @@ defmodule Tecnovix.ClientesSchema do
           :municipio
         ],  message: "Não pode estar em branco.")
         |> validate_ramo_juridica(params)
-        |> unique_constraint([:uid, :codigo, :email, :cnpj_cpf], name: :clientes_constraint)
+        |> unique_constraint([:uid], message: "UID já existe")
+        |> unique_constraint([:codigo], message: "Codigo já existe")
+        |> unique_constraint([:email], message: "Esse email já existe")
+        |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
+
 
       _ ->
         changeset
