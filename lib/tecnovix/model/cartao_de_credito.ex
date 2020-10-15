@@ -21,7 +21,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
           map
           |> Map.put("cliente_id", cliente.id)
           |> Map.put("cpf_titular", cliente.cnpj_cpf)
-          |> Map.put("telefone_titular", cliente.telefone)
+          |> Map.put("telefone_titular", "#{cliente.ddd}" <> "#{cliente.telefone}")
           |> Map.put("data_nascimento_titular", cliente.data_nascimento)
           |> Map.put("cep_endereco_cobranca", cliente.cep)
           |> Map.put("logradouro_endereco_cobranca", cliente.endereco)
@@ -37,11 +37,17 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   end
 
   def detail_card(params, cliente) do
+    telefone =
+      case cliente.telefone do
+        "55" <> telefone -> "55" <> "#{cliente.ddd}" <> "#{telefone}"
+          telefone -> "55" <> "#{cliente.ddd}" <> "#{telefone}"
+      end
+
     card =
       params
       |> Map.put("cliente_id", cliente.id)
       |> Map.put("cpf_titular", cliente.cnpj_cpf)
-      |> Map.put("telefone_titular", cliente.telefone)
+      |> Map.put("telefone_titular", telefone)
       |> Map.put("data_nascimento_titular", cliente.data_nascimento)
       |> Map.put("cep_endereco_cobranca", cliente.cep)
       |> Map.put("logradouro_endereco_cobranca", cliente.endereco)

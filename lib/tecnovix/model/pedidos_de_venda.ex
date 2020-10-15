@@ -377,7 +377,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "amount" => %{
         "currency" => "BRL",
         "subtotals" => %{
-          "shipping" => 1000
+          "shipping" => 0
         }
       },
       "items" => items,
@@ -388,15 +388,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
         "birthDate" => cliente.data_nascimento,
         "taxDocument" => %{
           "type" => fisica_jurid,
-          "number" => "12345678901"
+          "number" => cliente.cnpj_cpf
         },
         "phone" => %{
-          "countryCode" => String.slice(cliente.telefone, 0..1),
+          "countryCode" => "55",
           "areaCode" => cliente.ddd,
-          "number" => String.slice(cliente.telefone, 4..13)
+          "number" => cliente.telefone
         },
         "shippingAddress" => %{
-          "city" => "Serra",
+          "city" => cliente.municipio,
           "complement" => cliente.complemento,
           "district" => cliente.bairro,
           "street" => cliente.endereco,
@@ -417,7 +417,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def payment_params({:ok, cartao = %CartaoSchema{}}) do
     %{
-      "installmentCount" => 6,
+      "installmentCount" => 0,
       "statementDescriptor" => "central",
       "fundingInstrument" => %{
         "method" => "CREDIT_CARD",
@@ -434,7 +434,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
               "number" => cartao.cpf_titular
             },
             "phone" => %{
-              "countryCode" => String.slice(cartao.telefone_titular, 0..1),
+              "countryCode" => "55",
               "areaCode" => String.slice(cartao.telefone_titular, 2..3),
               "number" => String.slice(cartao.telefone_titular, 4..13)
             },

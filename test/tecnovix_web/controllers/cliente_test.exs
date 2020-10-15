@@ -210,7 +210,12 @@ defmodule TecnovixWeb.UsersTest do
     user_client_param = Generator.users_cliente()
     user_firebase = Generator.user()
     user_param = Generator.user_param()
-
+    card = %{
+      "cartao_number" => "5555666677778884",
+      "nome_titular" => "Victor Teste",
+      "mes_validade" => "12",
+      "ano_validade" => "2022"
+    }
     cliente =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
@@ -218,8 +223,12 @@ defmodule TecnovixWeb.UsersTest do
       |> json_response(201)
       |> Map.get("data")
 
-    {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
-    {:ok, cartao} = CartaoModel.create(Generator.cartao_cliente(cliente["id"]))
+    card =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/card", %{"param" => card})
+      |> json_response(200)
+      |> IO.inspect
 
     user_client =
       build_conn()
