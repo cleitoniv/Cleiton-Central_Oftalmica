@@ -51,7 +51,13 @@ defmodule TecnovixWeb.ClientesController do
     {:ok, jwt} = conn.private.auth
     params = Map.put(params, "email", jwt.fields["email"])
     params = Map.put(params, "uid", jwt.fields["user_id"])
-    __MODULE__.create(conn, %{"param" => params})
+
+    with {:ok, cliente} <- ClientesModel.insert_or_update(params) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("clientes.json", %{item: cliente})
+    end
   end
 
   def show(conn, _params) do
