@@ -289,14 +289,22 @@ defmodule Tecnovix.App.ScreensProd do
 
   defp formatting_type(titulo) do
     case titulo do
-      "Solicitação de Devolução" -> "SOLICITACAO_DEV"
-      "Efetivação de Devolução" -> "EFETIVACAO_DEV"
-      "Crédito Financeiro Adquirido" -> "FINANCEIRO_ADQUIRIDO"
-      "Crédito de Produto Adquirido" -> "PRODUTO_ADQUIRIDO"
+      "Solicitação de Devolução" ->
+        "SOLICITACAO_DEV"
+
+      "Efetivação de Devolução" ->
+        "EFETIVACAO_DEV"
+
+      "Crédito Financeiro Adquirido" ->
+        "FINANCEIRO_ADQUIRIDO"
+
+      "Crédito de Produto Adquirido" ->
+        "PRODUTO_ADQUIRIDO"
+
       _ ->
-      titulo
-      |> String.upcase()
-      |> String.replace(" ", "_")
+        titulo
+        |> String.upcase()
+        |> String.replace(" ", "_")
     end
   end
 

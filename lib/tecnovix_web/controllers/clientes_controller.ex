@@ -41,7 +41,12 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def create_user(conn, %{"param" => params}) do
-    params = Map.put(params, "data_nascimento", ClientesModel.formatting_dtnasc(params["data_nascimento"]))
+    params =
+      Map.put(
+        params,
+        "data_nascimento",
+        ClientesModel.formatting_dtnasc(params["data_nascimento"])
+      )
 
     {:ok, jwt} = conn.private.auth
     params = Map.put(params, "email", jwt.fields["email"])

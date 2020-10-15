@@ -81,10 +81,11 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
               false ->
                 case field["id"] == "A1_END" do
                   true ->
-                    [endereco, num] = String.split(field["value"], [", ", ","])
-
-                    Map.put(acc, field_crm_cnae(field), field["value"])
-                    |> Map.put("A1_NUM", num)
+                    case String.split(field["value"], [", ", ","]) do
+                      [endereco, num] ->
+                        Map.put(acc, field_crm_cnae(field), field["value"])
+                        |> Map.put("A1_NUM", num)
+                    end
 
                   false ->
                     Map.put(acc, field_crm_cnae(field), field["value"])
@@ -97,7 +98,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         end)
       end)
       |> Map.new()
-      
+
     {:ok, organize}
   end
 

@@ -109,7 +109,7 @@ defmodule Tecnovix.ClientesSchema do
       :wirecard_cliente_id,
       :fcm_token
     ])
-    |> validate_required([:nome, :email, :telefone],  message: "Não pode estar em branco.")
+    |> validate_required([:nome, :email, :telefone], message: "Não pode estar em branco.")
     |> unique_constraint([:uid], message: "UID já existe")
     |> unique_constraint([:codigo], message: "Codigo já existe")
     |> unique_constraint([:email], message: "Esse email já existe")
@@ -134,23 +134,26 @@ defmodule Tecnovix.ClientesSchema do
     case params["fisica_jurid"] do
       "F" ->
         changeset
-        |> validate_required([
-          :nome,
-          :email,
-          :ddd,
-          :telefone,
-          :data_nascimento,
-          :ramo,
-          :fisica_jurid,
-          :cnpj_cpf,
-          :endereco,
-          :numero,
-          :bairro,
-          :estado,
-          :cep,
-          :municipio,
-          :crm_medico
-        ],  message: "Não pode estar em branco.")
+        |> validate_required(
+          [
+            :nome,
+            :email,
+            :ddd,
+            :telefone,
+            :data_nascimento,
+            :ramo,
+            :fisica_jurid,
+            :cnpj_cpf,
+            :endereco,
+            :numero,
+            :bairro,
+            :estado,
+            :cep,
+            :municipio,
+            :crm_medico
+          ],
+          message: "Não pode estar em branco."
+        )
         |> validate_ramo_fisica(params)
         |> unique_constraint([:uid], message: "UID já existe")
         |> unique_constraint([:codigo], message: "Codigo já existe")
@@ -159,29 +162,31 @@ defmodule Tecnovix.ClientesSchema do
 
       "J" ->
         changeset
-        |> validate_required([
-          :nome,
-          :email,
-          :ddd,
-          :telefone,
-          :data_nascimento,
-          :ramo,
-          :fisica_jurid,
-          :cnpj_cpf,
-          :nome_empresarial,
-          :endereco,
-          :numero,
-          :estado,
-          :bairro,
-          :cep,
-          :municipio
-        ],  message: "Não pode estar em branco.")
+        |> validate_required(
+          [
+            :nome,
+            :email,
+            :ddd,
+            :telefone,
+            :data_nascimento,
+            :ramo,
+            :fisica_jurid,
+            :cnpj_cpf,
+            :nome_empresarial,
+            :endereco,
+            :numero,
+            :estado,
+            :bairro,
+            :cep,
+            :municipio
+          ],
+          message: "Não pode estar em branco."
+        )
         |> validate_ramo_juridica(params)
         |> unique_constraint([:uid], message: "UID já existe")
         |> unique_constraint([:codigo], message: "Codigo já existe")
         |> unique_constraint([:email], message: "Esse email já existe")
         |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
-
 
       _ ->
         changeset

@@ -70,13 +70,13 @@ defmodule Tecnovix.NotificacoesClienteModel do
   end
 
   def solicitation_devolution(_devolution, cliente) do
-    IO.inspect "Cheguei aqui"
+    IO.inspect("Cheguei aqui")
     titulo = "Solicitação de Devolução"
     descricao = "Recebemos sua solicitação de devolução em crédito ou troca, iremos analisá-la."
 
     params_notifications(cliente, titulo, descricao)
     |> __MODULE__.create()
 
-    IO.inspect "Cheguei aqui 2"
+    IO.inspect("Cheguei aqui 2")
   end
 end

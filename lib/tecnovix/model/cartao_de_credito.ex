@@ -40,7 +40,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
     telefone =
       case cliente.telefone do
         "55" <> telefone -> "55" <> "#{cliente.ddd}" <> "#{telefone}"
-          telefone -> "55" <> "#{cliente.ddd}" <> "#{telefone}"
+        telefone -> "55" <> "#{cliente.ddd}" <> "#{telefone}"
       end
 
     card =
