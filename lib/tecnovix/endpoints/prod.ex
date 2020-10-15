@@ -34,14 +34,6 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   @impl true
-  def get_cliente(%{cnpj_cpf: cnpj_cpf, token: token}) do
-    params = %{"A1_CGC" => cnpj_cpf}
-    url = Protheus.generate_url("/rest/fwmodel/sa1rest", params)
-    header = Protheus.authenticate(@header, token)
-    HTTPoison.get(url, header)
-  end
-
-  @impl true
   def get_cliente(%{cnpj_cpf: "038" <> _cnpj}) do
     resp = Jason.encode!(Tecnovix.TestHelp.cliente_cnpj())
 
@@ -82,6 +74,14 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     params = Map.put(params, :grant_type, "refresh_token")
     url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
     HTTPoison.post(url, [], @header)
+  end
+
+  @impl true
+  def get_cliente(%{cnpj_cpf: cnpj_cpf, token: token}) do
+    params = %{"A1_CGC" => cnpj_cpf}
+    url = Protheus.generate_url("/rest/fwmodel/sa1rest", params)
+    header = Protheus.authenticate(@header, token)
+    HTTPoison.get(url, header)
   end
 
   def organize_cliente(http) do
