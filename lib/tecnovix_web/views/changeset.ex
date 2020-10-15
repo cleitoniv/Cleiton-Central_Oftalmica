@@ -6,7 +6,14 @@ defmodule TecnovixWeb.ChangesetView do
   end
 
   def render("error.json", %{changeset: changeset}) do
-    %{success: false, data: %{errors: translate_errors(changeset)}}
+    error =
+      translate_errors(changeset)
+      |> Enum.map(fn {key, value} ->
+        {String.upcase(Atom.to_string(key)), value}
+      end)
+      |> Map.new()
+
+    %{success: false, data: %{errors: error}}
   end
 
   def render("multi_error.json", %{changeset: changeset, identifiers: identifiers}) do
