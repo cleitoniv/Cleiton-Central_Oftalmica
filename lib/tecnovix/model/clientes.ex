@@ -70,9 +70,9 @@ defmodule Tecnovix.ClientesModel do
     else
       cliente ->
         {:error,
-        %Ecto.Changeset{}
+        %ClientesSchema{}
         |> add_error(:usuario, "Usuario já cadastrado")
-      }
+        }
     end
   end
 
