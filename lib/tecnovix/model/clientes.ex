@@ -7,6 +7,9 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Changeset
   import Ecto.Query
 
+  def formatting_dtnasc(dtnasc) do
+  end
+
   def ystapp_filter(params) do
     dynamic([c], c.sit_app == ^params["ystapp"])
   end
