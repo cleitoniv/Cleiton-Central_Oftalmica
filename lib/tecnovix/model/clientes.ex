@@ -71,6 +71,7 @@ defmodule Tecnovix.ClientesModel do
       cliente ->
         {:error,
         %ClientesSchema{}
+        |> change(%{})
         |> add_error(:usuario, "Usuario já cadastrado")
         }
     end
