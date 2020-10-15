@@ -418,7 +418,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def payment_params({:ok, cartao = %CartaoSchema{}}) do
     %{
-      "installmentCount" => 0,
+      "installmentCount" => 1,
       "statementDescriptor" => "central",
       "fundingInstrument" => %{
         "method" => "CREDIT_CARD",
