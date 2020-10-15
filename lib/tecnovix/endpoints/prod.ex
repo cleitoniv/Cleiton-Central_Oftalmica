@@ -85,6 +85,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
                       [endereco, num] ->
                         Map.put(acc, field_crm_cnae(field), field["value"])
                         |> Map.put("A1_NUM", num)
+                      [endereco] -> Map.put(acc, field_crm_cnae(field), field["value"])
                     end
 
                   false ->
