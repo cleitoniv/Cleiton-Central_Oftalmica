@@ -53,7 +53,7 @@ defmodule Tecnovix.ClientesModel do
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(params["data"], fn cliente ->
-       with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
+       with nil <- Repo.get_by(ClientesSchema, [cnpj_cpf: cliente["cnpj_cpf"], sit_app: "E"]) do
          {:ok, create} = create(cliente)
          create
        else
@@ -62,6 +62,15 @@ defmodule Tecnovix.ClientesModel do
            update
        end
      end)}
+  end
+
+  def insert_or_update_first_access(%{"cnpj_cpf" => cnpj_cpf} = params) do
+    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf) do
+      __MODULE__.create(params)
+    else
+      cliente ->
+        {:ok, cliente}
+    end
   end
 
   def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do

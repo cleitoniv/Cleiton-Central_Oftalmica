@@ -9,7 +9,10 @@ defmodule TecnovixWeb.ChangesetView do
     error =
       translate_errors(changeset)
       |> Enum.map(fn {key, value} ->
-        {String.upcase(Atom.to_string(key)), value}
+        case key == :uid do
+          true -> {"EMAIL", value}
+          false -> {String.upcase(Atom.to_string(key)), value}
+        end
       end)
       |> Map.new()
 
