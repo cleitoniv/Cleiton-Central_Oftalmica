@@ -8,6 +8,8 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Query
 
   def formatting_dtnasc(dtnasc) do
+    [dia, mes, ano] = String.split(dtnasc, "/")
+    "#{ano}-#{mes}-#{dia}"
   end
 
   def ystapp_filter(params) do
