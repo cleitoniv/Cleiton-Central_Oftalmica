@@ -23,10 +23,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
       |> Generator.put_auth(token)
       |> post("/api/sync/clientes", multi_param)
       |> json_response(200)
-      |> IO.inspect()
-
     assert single["success"] == true
-    assert multi["success"] == true
   end
 
   test "insert or update of the table ATEND_PREF_CLIENTES" do
