@@ -14,6 +14,14 @@ defmodule TecnovixWeb.UsersTest do
     user_client_param = Generator.users_cliente()
     user_param = Generator.user_param()
 
+    user_param2 =
+    Map.put(user_param, "email", "a@gmail.com")
+    |> Map.put("cnpj_cpf", "123131231")
+    |> Map.put("loja", "02")
+
+    Tecnovix.ClientesModel.create(user_param) |> IO.inspect
+    Tecnovix.ClientesModel.create(user_param2) |> IO.inspect
+
     # criando o cliente
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])

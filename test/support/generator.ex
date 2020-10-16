@@ -51,7 +51,7 @@ defmodule TecnovixWeb.Support.Generator do
       "nome" => "Victor",
       "ddd" => "27",
       "telefone" => "33225111",
-      "data_nascimento" => "07/07/1998",
+      "data_nascimento" => "1998-07-07",
       "ramo" => "1",
       "endereco" => "Rua Benedito Barcelos",
       "numero" => "111",
@@ -63,7 +63,7 @@ defmodule TecnovixWeb.Support.Generator do
       "crm_medico" => "teste",
       "cod_cliente" => "nil",
       "dia_remessa" => "3",
-      "loja_cliente" => "01",
+      "loja" => "01",
       "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
       "complemento" => "Casa"
     }
@@ -87,7 +87,7 @@ defmodule TecnovixWeb.Support.Generator do
       "cdmunicipio" => "teste",
       "municipio" => "Serra",
       "crm_medico" => "teste",
-      "cod_cliente" => "nil",
+      "cod_cliente" => "123",
       "loja_cliente" => "12",
       "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
       "complemento" => "Casa"
