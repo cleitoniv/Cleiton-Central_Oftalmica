@@ -63,6 +63,7 @@ defmodule Tecnovix.ClientesModel do
            update
        end
      end)}
+     |> IO.inspect
   end
 
   def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do
@@ -74,6 +75,7 @@ defmodule Tecnovix.ClientesModel do
       cliente ->
         __MODULE__.update(cliente, params)
     end
+    |> IO.inspect
   end
 
   def insert_or_update_first_access(%{"cnpj_cpf" => cnpj_cpf} = params) do
