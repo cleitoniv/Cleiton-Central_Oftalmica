@@ -4,6 +4,24 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   alias Tecnovix.DescricaoGenericaDoProdutoSchema, as: DescricaoSchema
   import Ecto.Query
 
+  def verify_graus(params) do
+    query =
+      DescricaoSchema
+      |> where(
+        [d],
+        d.grupo == ^params["grupo"] and d.cilindrico == ^params["cilindrico"] and
+          d.eixo == ^params["eixo"] and d.cor == ^params["cor"] and d.adicao == ^params["adicao"] and
+          d.esferico == ^params["esferico"]
+      )
+      |> first()
+      |> Repo.one()
+
+      case query.blo_de_tela do
+        1 -> {:ok, false}
+        _ -> {:ok, true}
+      end
+  end
+
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(data, fn descricao ->

@@ -15,4 +15,22 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
       _ -> {:error, :not_created}
     end
   end
+
+  def verify_graus(
+        conn,
+        %{
+          "grupo" => grupo,
+          "cor" => cor,
+          "eixo" => eixo,
+          "esferico" => esferico,
+          "cilindrico" => cilindrico,
+          "adicao" => adicao
+        } = params
+      ) do
+    with {:ok, boolean} <- DescricaoModel.verify_graus(params) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: boolean}))
+    end
+  end
 end

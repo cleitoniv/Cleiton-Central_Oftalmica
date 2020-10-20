@@ -1,7 +1,15 @@
 defmodule TecnovixWeb.PreDevolucaoController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.PreDevolucaoModel
-  alias Tecnovix.{PreDevolucaoModel, NotificacoesClienteModel, CreditoFinanceiroModel, ClientesSchema, UsuariosClienteSchema, LogsClienteModel}
+
+  alias Tecnovix.{
+    PreDevolucaoModel,
+    NotificacoesClienteModel,
+    CreditoFinanceiroModel,
+    ClientesSchema,
+    UsuariosClienteSchema,
+    LogsClienteModel
+  }
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -41,7 +49,8 @@ defmodule TecnovixWeb.PreDevolucaoController do
     with {:ok, devolucoes} <- PreDevolucaoModel.create(cliente, params),
          {:ok, notifications} <-
            NotificacoesClienteModel.solicitation_devolution(devolucoes, cliente),
-         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Devolução criada com sucesso.") do
+         {:ok, _logs} <-
+           LogsClienteModel.create(ip, usuario, cliente, "Devolução criada com sucesso.") do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
