@@ -5,7 +5,19 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   import Ecto.Query
 
   def verify_graus(params) do
-    IO.inspect params
+    params=
+      Enum.map(params, fn {key, value} ->
+        case value do
+          "" -> nil
+          _ ->
+          case key do
+            "cor" -> value
+            "group" -> value
+            _ -> String.to_float(value)
+          end
+        end
+      end)
+
     query =
       DescricaoSchema
       |> where(
