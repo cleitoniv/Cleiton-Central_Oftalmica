@@ -81,11 +81,7 @@ defmodule Tecnovix.ClientesModel do
     with nil <- Repo.get_by(ClientesSchema, [cnpj_cpf: cnpj_cpf, email: email]) |> IO.inspect() do
       __MODULE__.create(params)
     else
-      cliente ->
-        {:error,
-         %ClientesSchema{}
-         |> change(%{})
-         |> add_error(:usuario, "Usuario já cadastrado")}
+      cliente -> __MODULE__.update(cliente, params)
     end
   end
 
