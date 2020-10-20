@@ -8,7 +8,7 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Query
 
   def formatting_dtnasc(dtnasc) do
-    [dia, mes, ano] = String.split(dtnasc, "/")
+    [dia, mes, ano] = String.split(dtnasc, ["/"])
     "#{ano}-#{mes}-#{dia}"
   end
 
@@ -54,6 +54,7 @@ defmodule Tecnovix.ClientesModel do
     {:ok,
      Enum.map(params["data"], fn cliente ->
        cliente = Map.put(cliente, "sit_app", "A")
+
        with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
          {:ok, create} = create(cliente)
          create
@@ -63,7 +64,6 @@ defmodule Tecnovix.ClientesModel do
            update
        end
      end)}
-     |> IO.inspect
   end
 
   def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do
@@ -75,7 +75,6 @@ defmodule Tecnovix.ClientesModel do
       cliente ->
         __MODULE__.update(cliente, params)
     end
-    |> IO.inspect
   end
 
   def insert_or_update_first_access(%{"cnpj_cpf" => cnpj_cpf} = params) do
@@ -84,10 +83,9 @@ defmodule Tecnovix.ClientesModel do
     else
       cliente ->
         {:error,
-        %ClientesSchema{}
-        |> change(%{})
-        |> add_error(:usuario, "Usuario já cadastrado")
-        }
+         %ClientesSchema{}
+         |> change(%{})
+         |> add_error(:usuario, "Usuario já cadastrado")}
     end
   end
 

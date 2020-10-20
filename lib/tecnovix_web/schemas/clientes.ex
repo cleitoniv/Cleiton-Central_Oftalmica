@@ -156,7 +156,10 @@ defmodule Tecnovix.ClientesSchema do
         )
         |> validate_ramo_fisica(params)
         |> unique_constraint([:uid], message: "UID já existe")
-        |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
+        |> unique_constraint([:codigo, :loja],
+          message: "Codigo e Loja já existe",
+          name: :loja_codigo
+        )
         |> unique_constraint([:email], message: "Esse email já existe")
         |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
 
@@ -184,7 +187,10 @@ defmodule Tecnovix.ClientesSchema do
         )
         |> validate_ramo_juridica(params)
         |> unique_constraint([:uid], message: "UID já existe")
-        |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
+        |> unique_constraint([:codigo, :loja],
+          message: "Codigo e Loja já existe",
+          name: :loja_codigo
+        )
         |> unique_constraint([:email], message: "Esse email já existe")
         |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
 

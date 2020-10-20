@@ -23,6 +23,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
       |> Generator.put_auth(token)
       |> post("/api/sync/clientes", multi_param)
       |> json_response(200)
+
     assert single["success"] == true
   end
 

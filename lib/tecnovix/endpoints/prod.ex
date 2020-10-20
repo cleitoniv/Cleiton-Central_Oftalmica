@@ -96,9 +96,11 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
                         ano = String.slice(field["value"], 0..3)
                         mes = String.slice(field["value"], 4..5)
                         dia = String.slice(field["value"], 6..7)
-                        
+
                         Map.put(acc, field_crm_cnae(field), "#{dia}-#{mes}-#{ano}")
-                      false -> Map.put(acc, field_crm_cnae(field), field["value"])
+
+                      false ->
+                        Map.put(acc, field_crm_cnae(field), field["value"])
                     end
                 end
 

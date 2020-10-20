@@ -11,6 +11,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       codigo: item.codigo,
       tests: item.tests,
       operation: item.operation,
+      tipo_venda: item.tipo_venda,
       produto: item.produto,
       quantidade: item.quantidade,
       prc_unitario: item.prc_unitario,
