@@ -3,7 +3,7 @@ defmodule Tecnovix.Repo.Migrations.AlterClienteAddCadastro do
 
   def change do
     alter table(:clientes) do
-      :cadastrado, :boolean
+      add :cadastrado, :boolean
     end
   end
 end
