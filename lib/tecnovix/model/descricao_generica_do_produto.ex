@@ -15,6 +15,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       )
       |> first()
       |> Repo.one()
+      |> IO.inspect()
 
       case query.blo_de_tela do
         1 -> {:ok, false}
