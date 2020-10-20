@@ -5,6 +5,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   import Ecto.Query
 
   def verify_graus(params) do
+    IO.inspect params
     query =
       DescricaoSchema
       |> where(
@@ -15,7 +16,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       )
       |> first()
       |> Repo.one()
-      |> IO.inspect()
 
       case query.blo_de_tela do
         1 -> {:ok, false}
