@@ -5,16 +5,18 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   import Ecto.Query
 
   def verify_graus(params) do
-    params=
+    params =
       Enum.map(params, fn {key, value} ->
         case value do
-          "" -> nil
+          "" ->
+            nil
+
           _ ->
-          case key do
-            "cor" -> value
-            "group" -> value
-            _ -> String.to_float(value)
-          end
+            case key do
+              "cor" -> value
+              "group" -> value
+              _ -> String.to_float(value)
+            end
         end
       end)
       |> IO.inspect()
@@ -31,10 +33,10 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       |> Repo.one()
       |> IO.inspect()
 
-      case query.blo_de_tela do
-        1 -> {:ok, false}
-        _ -> {:ok, true}
-      end
+    case query.blo_de_tela do
+      1 -> {:ok, false}
+      _ -> {:ok, true}
+    end
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do

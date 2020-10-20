@@ -78,7 +78,7 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def insert_or_update_first_access(%{"cnpj_cpf" => cnpj_cpf, "email" => email} = params) do
-    with nil <- Repo.get_by(ClientesSchema, [cnpj_cpf: cnpj_cpf, email: email]) |> IO.inspect() do
+    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf, email: email) |> IO.inspect() do
       __MODULE__.create(params)
     else
       cliente ->

@@ -81,35 +81,9 @@ defmodule Tecnovix.ClientesSchema do
   def first_acess(changeset, params \\ %{}) do
     changeset
     |> cast(params, [
-      :uid,
-      :codigo,
-      :loja,
-      :fisica_jurid,
-      :cnpj_cpf,
-      :data_nascimento,
       :nome,
-      :nome_empresarial,
-      :estado,
       :email,
-      :endereco,
-      :numero,
-      :complemento,
-      :bairro,
-      :estado,
-      :cep,
-      :cdmunicipio,
-      :municipio,
-      :ddd,
       :telefone,
-      :bloqueado,
-      :sit_app,
-      :cod_cnae,
-      :ramo,
-      :vendedor,
-      :crm_medico,
-      :dia_remessa,
-      :wirecard_cliente_id,
-      :fcm_token,
       :cadastrado
     ])
     |> validate_required([:nome, :email, :telefone], message: "Não pode estar em branco.")
