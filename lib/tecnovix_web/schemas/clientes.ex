@@ -66,7 +66,7 @@ defmodule Tecnovix.ClientesSchema do
       :crm_medico,
       :dia_remessa,
       :wirecard_cliente_id,
-      :fcm_token
+      :fcm_token,
       :cadastrado
     ])
     |> validate_required([:fisica_jurid, :cnpj_cpf, :email], message: "Não pode estar em branco.")
