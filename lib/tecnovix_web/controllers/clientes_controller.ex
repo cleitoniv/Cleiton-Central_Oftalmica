@@ -47,6 +47,7 @@ defmodule TecnovixWeb.ClientesController do
         "data_nascimento",
         ClientesModel.formatting_dtnasc(params["data_nascimento"])
       )
+      |> Map.put("cadastrado", true)
 
     {:ok, jwt} = conn.private.auth
     params = Map.put(params, "email", jwt.fields["email"])

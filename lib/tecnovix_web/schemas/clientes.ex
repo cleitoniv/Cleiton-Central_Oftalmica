@@ -109,7 +109,8 @@ defmodule Tecnovix.ClientesSchema do
       :crm_medico,
       :dia_remessa,
       :wirecard_cliente_id,
-      :fcm_token
+      :fcm_token,
+      :cadastrado
     ])
     |> validate_required([:nome, :email, :telefone], message: "Não pode estar em branco.")
     |> unique_constraint([:uid], message: "UID já existe")
