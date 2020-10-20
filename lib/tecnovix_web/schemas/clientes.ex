@@ -31,6 +31,7 @@ defmodule Tecnovix.ClientesSchema do
     field :dia_remessa, :string
     field :wirecard_cliente_id, :string
     field :fcm_token, :string
+    field :cadastrado, :boolean, defaul: false
 
     timestamps(type: :utc_datetime)
   end
@@ -66,6 +67,7 @@ defmodule Tecnovix.ClientesSchema do
       :dia_remessa,
       :wirecard_cliente_id,
       :fcm_token
+      :cadastrado
     ])
     |> validate_required([:fisica_jurid, :cnpj_cpf, :email], message: "Não pode estar em branco.")
     |> validate_inclusion(:fisica_jurid, ["F", "J"])
