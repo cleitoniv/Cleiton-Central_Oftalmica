@@ -19,11 +19,11 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
   def verify_graus(
         conn,
         %{
-          "grupo" => grupo,
+          "group" => grupo,
           "cor" => cor,
-          "eixo" => eixo,
-          "esferico" => esferico,
-          "cilindrico" => cilindrico,
+          "axis" => eixo,
+          "degree" => esferico,
+          "cylinder" => cilindrico,
           "adicao" => adicao
         } = params
       ) do

@@ -9,9 +9,9 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       DescricaoSchema
       |> where(
         [d],
-        d.grupo == ^params["grupo"] and d.cilindrico == ^params["cilindrico"] and
-          d.eixo == ^params["eixo"] and d.cor == ^params["cor"] and d.adicao == ^params["adicao"] and
-          d.esferico == ^params["esferico"]
+        d.grupo == ^params["group"] and d.cilindrico == ^params["cylinder"] and
+          d.eixo == ^params["aixs"] and d.cor == ^params["cor"] and d.adicao == ^params["adicao"] and
+          d.esferico == ^params["degree"]
       )
       |> first()
       |> Repo.one()
