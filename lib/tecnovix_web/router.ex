@@ -36,6 +36,7 @@ defmodule TecnovixWeb.Router do
     pipe_through :api
 
     post "/user_sync/login", TecnovixWeb.SyncUsersController, :login
+    get "/verify_field_cadastrado", TecnovixWeb.ClientesController, :verify_field_cadastrado
 
     scope "/sync" do
       pipe_through :user_sync
@@ -81,7 +82,7 @@ defmodule TecnovixWeb.Router do
     scope "/cliente" do
       pipe_through :guest
       post "/", TecnovixWeb.ClientesController, :create_user
-      post "/first_access", TecnovixWeb.ClientesController, :first_acess
+      post "/first_access", TecnovixWeb.ClientesController, :first_access
       get "/protheus/products", TecnovixWeb.ProtheusController, :get_product
       get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
       get "/get_endereco_by_cep", TecnovixWeb.ClientesController, :get_endereco_by_cep

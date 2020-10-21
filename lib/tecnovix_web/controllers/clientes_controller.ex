@@ -23,8 +23,8 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def first_acess(conn, %{"param" => params}) do
-    with {:ok, cliente} <- ClientesModel.create_first_acess(params) do
+  def first_access(conn, %{"param" => params}) do
+    with {:ok, cliente} <- ClientesModel.create_first_access(params) do
       conn
       |> put_status(201)
       |> put_resp_content_type("application/json")
@@ -37,6 +37,14 @@ defmodule TecnovixWeb.ClientesController do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
+    end
+  end
+
+  def verify_field_cadastrado(conn, %{"email" => email}) do
+    with {:ok, result} <- ClientesModel.verify_field_cadastrado(email) do
+      conn
+      |> put_resp_content_type("applicaton/json")
+      |> send_resp(200, Jason.encode!(%{success: result}))
     end
   end
 
@@ -53,7 +61,7 @@ defmodule TecnovixWeb.ClientesController do
     params = Map.put(params, "email", jwt.fields["email"])
     params = Map.put(params, "uid", jwt.fields["user_id"])
 
-    with {:ok, cliente} <- ClientesModel.insert_or_update_first_access(params) do
+    with {:ok, cliente} <- ClientesModel.create_first_access(params) do
       conn
       |> put_status(201)
       |> put_resp_content_type("application/json")

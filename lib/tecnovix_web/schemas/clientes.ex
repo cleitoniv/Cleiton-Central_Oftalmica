@@ -31,7 +31,7 @@ defmodule Tecnovix.ClientesSchema do
     field :dia_remessa, :string
     field :wirecard_cliente_id, :string
     field :fcm_token, :string
-    field :cadastrado, :boolean, defaul: false
+    field :cadastrado, :boolean, default: false
 
     timestamps(type: :utc_datetime)
   end
@@ -78,7 +78,7 @@ defmodule Tecnovix.ClientesSchema do
     |> validations_fisic_jurid(params)
   end
 
-  def first_acess(changeset, params \\ %{}) do
+  def first_access(changeset, params \\ %{}) do
     changeset
     |> cast(params, [
       :nome,
@@ -86,7 +86,8 @@ defmodule Tecnovix.ClientesSchema do
       :telefone,
       :cadastrado
     ])
-    |> validate_required([:nome, :email, :telefone], message: "Não pode estar em branco.")
+    |> validate_required([:nome, :email, :telefone, :cadastrado], message: "Não pode estar em branco.")
+    |> validate_format(:email, ~r/@/)
     |> unique_constraint([:uid], message: "UID já existe")
     |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
     |> unique_constraint([:email], message: "Esse email já existe")

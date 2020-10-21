@@ -24,10 +24,42 @@ defmodule Tecnovix.ClientesModel do
     Repo.all(query)
   end
 
-  def create_first_acess(params) do
-    %ClientesSchema{}
-    |> ClientesSchema.first_acess(params)
-    |> Repo.insert()
+  def verify_field_cadastrado(email) do
+    cliente =
+      ClientesSchema
+      |> where([c], c.email == ^email)
+      |> select([c], %{cadastrado: c.cadastrado})
+      |> first()
+      |> Repo.one()
+
+    case cliente.cadastrado do
+      true -> {:ok, true}
+      false -> {:ok, false}
+    end
+  end
+
+  def create_first_access(params) do
+    case Repo.get_by(ClientesSchema, email: params["email"]) do
+      %{cadastrado: false} = cliente ->
+        update_first_access(cliente, params)
+
+      %{cadastrado: true} ->
+        error =
+          %ClientesSchema{}
+          |> change(%{})
+          |> add_error(:email, "Já existe um cliente com esse email.")
+
+        {:error, error}
+      _ ->
+        %ClientesSchema{}
+        |> ClientesSchema.first_access(params)
+        |> Repo.insert()
+    end
+  end
+
+  defp update_first_access(cliente, params) do
+    ClientesSchema.first_access(cliente, params)
+    |> Repo.update()
   end
 
   def get_cliente(id) do
@@ -78,7 +110,7 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def insert_or_update_first_access(%{"cnpj_cpf" => cnpj_cpf, "email" => email} = params) do
-    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf, email: email) |> IO.inspect() do
+    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf, email: email) do
       __MODULE__.create(params)
     else
       cliente ->

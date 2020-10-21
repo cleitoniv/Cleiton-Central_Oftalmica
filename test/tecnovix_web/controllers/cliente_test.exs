@@ -457,4 +457,38 @@ defmodule TecnovixWeb.UsersTest do
     |> json_response(200)
     |> IO.inspect()
   end
+
+  test "Acessando com o primeiro acesso e depois cadastrando o complemento" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    user_first_access = %{"nome" => "Victor", "email" => user_firebase["email"], "telefone" => "99999999"}
+    update_first_access = %{"nome" => "Caio", "email" => user_firebase["email"], "telefone" => "77777777"}
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente/first_access", %{"param" => user_first_access}) # criando o cliente no primeiro acesso e saindo
+    |> recycle()
+    |> post("/api/cliente/first_access", %{"param" => update_first_access}) # entrando para cadastrar denovo com o mesmo email
+    |> recycle()
+    |> post("/api/cliente", %{"param" => user_param}) # completando  o cadastro
+    |> recycle()
+    |> post("/api/cliente/first_access", %{"param" => user_first_access}) #tentando cadastrar denovo com o mesmo email
+    |> json_response(400)
+  end
+
+  test "Verificando se o email ja foi cadastrado na hora do login" do
+    user_firebase = Generator.user()
+    user_first_access = %{"nome" => "Victor", "email" => user_firebase["email"], "telefone" => "99999999"}
+
+    first_access =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/first_access", %{"param" => user_first_access}) # criando o cliente no primeiro acesso e saindo
+      |> json_response(201)
+      |> Map.get("data")
+
+    build_conn()
+    |> get("/api/verify_field_cadastrado?email=#{first_access["email"]}")
+    |> json_response(200)
+  end
 end
