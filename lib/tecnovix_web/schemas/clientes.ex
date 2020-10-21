@@ -75,6 +75,7 @@ defmodule Tecnovix.ClientesSchema do
     |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
     |> unique_constraint([:email], message: "Esse email já existe")
     |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
+    |> unique_constraint([:telefone], message: "Esse número de telefone já existe")
     |> validations_fisic_jurid(params)
   end
 
@@ -94,6 +95,7 @@ defmodule Tecnovix.ClientesSchema do
     |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
     |> unique_constraint([:email], message: "Esse email já existe")
     |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
+    |> unique_constraint([:telefone], message: "Esse número de telefone já existe")
   end
 
   def validate_ramo_fisica(changeset, params \\ %{}) do
@@ -142,6 +144,7 @@ defmodule Tecnovix.ClientesSchema do
         )
         |> unique_constraint([:email], message: "Esse email já existe")
         |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
+        |> unique_constraint([:telefone], message: "Esse número de telefone já existe")
 
       "J" ->
         changeset
@@ -173,6 +176,7 @@ defmodule Tecnovix.ClientesSchema do
         )
         |> unique_constraint([:email], message: "Esse email já existe")
         |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
+        |> unique_constraint([:telefone], message: "Esse número de telefone já existe")
 
       _ ->
         changeset
