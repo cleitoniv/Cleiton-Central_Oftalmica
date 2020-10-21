@@ -68,10 +68,10 @@ defmodule Tecnovix.ClientesModel do
      end)}
   end
 
-  def insert_or_update(%{"email" => email} = params) do
+  def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do
     params = Map.put(params, "sit_app", "A")
 
-    with nil <- Repo.get_by(ClientesSchema, [email: email, cadastrado: false]) do
+    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf) do
       __MODULE__.create(params)
     else
       cliente ->
@@ -81,6 +81,17 @@ defmodule Tecnovix.ClientesModel do
 
   def insert_or_update(_params) do
     {:error, :invalid_parameter}
+  end
+
+  def insert_or_update_first(%{"email" => email} = params) do
+    params = Map.put(params, "sit_app", "A")
+
+    with nil <- Repo.get_by(ClientesSchema, [email: email, cadastrado: false]) do
+      __MODULE__.create(params)
+    else
+      cliente ->
+        __MODULE__.update(cliente, params)
+    end
   end
 
   def insert_or_update_first_access(%{"cnpj_cpf" => cnpj_cpf, "email" => email} = params) do
