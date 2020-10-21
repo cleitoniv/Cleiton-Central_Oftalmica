@@ -84,18 +84,7 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def insert_or_update_first(%{"email" => email} = params) do
-    params = Map.put(params, "sit_app", "A")
-
-    with nil <- Repo.get_by(ClientesSchema, [email: email, cadastrado: false]) do
-      __MODULE__.create(params)
-    else
-      cliente ->
-        __MODULE__.update(cliente, params)
-    end
-  end
-
-  def insert_or_update_first_access(%{"cnpj_cpf" => cnpj_cpf, "email" => email} = params) do
-    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf, email: email) do
+    with nil <- Repo.get_by(ClientesSchema, email: email, cadastrado: false) do
       __MODULE__.create(params)
     else
       cliente ->

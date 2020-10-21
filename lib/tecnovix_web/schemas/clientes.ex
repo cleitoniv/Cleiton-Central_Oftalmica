@@ -86,7 +86,9 @@ defmodule Tecnovix.ClientesSchema do
       :telefone,
       :cadastrado
     ])
-    |> validate_required([:nome, :email, :telefone, :cadastrado], message: "Não pode estar em branco.")
+    |> validate_required([:nome, :email, :telefone, :cadastrado],
+      message: "Não pode estar em branco."
+    )
     |> validate_format(:email, ~r/@/)
     |> unique_constraint([:uid], message: "UID já existe")
     |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
