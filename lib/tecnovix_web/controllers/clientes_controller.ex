@@ -61,7 +61,7 @@ defmodule TecnovixWeb.ClientesController do
     params = Map.put(params, "email", jwt.fields["email"])
     params = Map.put(params, "uid", jwt.fields["user_id"])
 
-    with {:ok, cliente} <- ClientesModel.create_first_access(params) do
+    with {:ok, cliente} <- ClientesModel.insert_or_update(params) do
       conn
       |> put_status(201)
       |> put_resp_content_type("application/json")

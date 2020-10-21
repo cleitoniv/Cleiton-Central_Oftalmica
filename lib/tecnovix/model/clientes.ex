@@ -7,37 +7,6 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Changeset
   import Ecto.Query
 
-  def formatting_dtnasc(dtnasc) do
-    [dia, mes, ano] = String.split(dtnasc, ["/"])
-    "#{ano}-#{mes}-#{dia}"
-  end
-
-  def ystapp_filter(params) do
-    dynamic([c], c.sit_app == ^params["ystapp"])
-  end
-
-  def get_cards(cliente) do
-    query =
-      from c in Cartao,
-        where: c.cliente_id == ^cliente.id
-
-    Repo.all(query)
-  end
-
-  def verify_field_cadastrado(email) do
-    cliente =
-      ClientesSchema
-      |> where([c], c.email == ^email)
-      |> select([c], %{cadastrado: c.cadastrado})
-      |> first()
-      |> Repo.one()
-
-    case cliente.cadastrado do
-      true -> {:ok, true}
-      false -> {:ok, false}
-    end
-  end
-
   def create_first_access(params) do
     case Repo.get_by(ClientesSchema, email: params["email"]) do
       %{cadastrado: false} = cliente ->
@@ -50,6 +19,7 @@ defmodule Tecnovix.ClientesModel do
           |> add_error(:email, "Já existe um cliente com esse email.")
 
         {:error, error}
+
       _ ->
         %ClientesSchema{}
         |> ClientesSchema.first_access(params)
@@ -98,19 +68,10 @@ defmodule Tecnovix.ClientesModel do
      end)}
   end
 
-  def insert_or_update(%{"cnpj_cpf" => cnpj_cpf} = params) do
+  def insert_or_update(%{"email" => email} = params) do
     params = Map.put(params, "sit_app", "A")
 
-    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf) do
-      __MODULE__.create(params)
-    else
-      cliente ->
-        __MODULE__.update(cliente, params)
-    end
-  end
-
-  def insert_or_update_first_access(%{"cnpj_cpf" => cnpj_cpf, "email" => email} = params) do
-    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf, email: email) do
+    with nil <- Repo.get_by(ClientesSchema, [email: email, cadastrado: false]) do
       __MODULE__.create(params)
     else
       cliente ->
@@ -120,6 +81,15 @@ defmodule Tecnovix.ClientesModel do
 
   def insert_or_update(_params) do
     {:error, :invalid_parameter}
+  end
+
+  def insert_or_update_first_access(%{"cnpj_cpf" => cnpj_cpf, "email" => email} = params) do
+    with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf, email: email) do
+      __MODULE__.create(params)
+    else
+      cliente ->
+        __MODULE__.update(cliente, params)
+    end
   end
 
   def create(params) do
@@ -172,5 +142,36 @@ defmodule Tecnovix.ClientesModel do
     url = "viacep.com.br/ws/#{cep}/json/"
 
     {:ok, endereco} = HTTPoison.get(url, [{"Content-Type", "application/json"}])
+  end
+
+  def formatting_dtnasc(dtnasc) do
+    [dia, mes, ano] = String.split(dtnasc, ["/"])
+    "#{ano}-#{mes}-#{dia}"
+  end
+
+  def ystapp_filter(params) do
+    dynamic([c], c.sit_app == ^params["ystapp"])
+  end
+
+  def get_cards(cliente) do
+    query =
+      from c in Cartao,
+        where: c.cliente_id == ^cliente.id
+
+    Repo.all(query)
+  end
+
+  def verify_field_cadastrado(email) do
+    cliente =
+      ClientesSchema
+      |> where([c], c.email == ^email)
+      |> select([c], %{cadastrado: c.cadastrado})
+      |> first()
+      |> Repo.one()
+
+    case cliente.cadastrado do
+      true -> {:ok, true}
+      false -> {:ok, false}
+    end
   end
 end

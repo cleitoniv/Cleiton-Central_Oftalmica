@@ -467,13 +467,13 @@ defmodule TecnovixWeb.UsersTest do
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente/first_access", %{"param" => user_first_access}) # criando o cliente no primeiro acesso e saindo
-    |> recycle()
-    |> post("/api/cliente/first_access", %{"param" => update_first_access}) # entrando para cadastrar denovo com o mesmo email
+    # |> recycle()
+    # # |> post("/api/cliente/first_access", %{"param" => update_first_access}) # entrando para cadastrar denovo com o mesmo email
     |> recycle()
     |> post("/api/cliente", %{"param" => user_param}) # completando  o cadastro
-    |> recycle()
-    |> post("/api/cliente/first_access", %{"param" => user_first_access}) #tentando cadastrar denovo com o mesmo email
-    |> json_response(400)
+    |> json_response(201)
+
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.ClientesSchema))
   end
 
   test "Verificando se o email ja foi cadastrado na hora do login" do
