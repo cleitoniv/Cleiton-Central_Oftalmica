@@ -158,7 +158,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "prc_unitario" => items["prc_unitario"],
-      "tests" => items["tests"],
+      "tests" => formatting_test(items["tests"]),
       "virtotal" => items["quantidade"] * items["prc_unitario"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
@@ -167,6 +167,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10)
     }
+  end
+
+  def formatting_test(teste) do
+    case teste do
+      "Sim" -> "S"
+      "Não" -> "N"
+    end
   end
 
   def pedido_params(items, cliente, order) do
@@ -243,7 +250,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "paciente" => map["paciente"]["nome"],
       "num_pac" => map["paciente"]["numero"],
       "dt_nas_pac" => map["paciente"]["data_nascimento"],
-      "tests" => items["tests"],
+      "tests" => formatting_test(items["tests"]),
       "prc_unitario" => items["prc_unitario"],
       "olho" => "D",
       "virtotal" => items["quantidade"] * items["prc_unitario"],
@@ -277,7 +284,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "operation" => map["operation"],
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
-      "tests" => items["tests"],
+      "tests" => formatting_test(items["tests"]),
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "paciente" => map["paciente"]["nome"],
@@ -310,7 +317,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "operation" => map["operation"],
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
-      "tests" => items["tests"],
+      "tests" => formatting_test(items["tests"]),
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "paciente" => map["paciente"]["nome"],
@@ -344,7 +351,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "codigo" => items["codigo"],
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],
-      "tests" => items["tests"],
+      "tests" => formatting_test(items["tests"]),
       "quantidade" => items["quantidade"],
       "paciente" => map["paciente"]["nome"],
       "num_pac" => map["paciente"]["numero"],
