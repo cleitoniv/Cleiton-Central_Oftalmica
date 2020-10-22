@@ -353,4 +353,24 @@ defmodule Tecnovix.Test.Wirecard do
     start_supervised!(Tecnovix.Services.Order)
     IO.inspect(Tecnovix.Services.Order.get_msg())
   end
+
+  test "Graus bloqueados" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    params = TestHelp.single_json("single_descricao_generica_do_produto.json")
+    {:ok, descricao} = DescricaoModel.create(params)
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/verify_graus?degree=6.0&cylinder=-1.75&axis=120&lenses=&cor=&adicao=&group=010C")
+      |> json_response(200)
+      |> IO.inspect()
+  end
 end
