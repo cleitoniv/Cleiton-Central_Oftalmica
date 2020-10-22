@@ -7,24 +7,27 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   def nil_or_numeric(value) do
     case value do
       nil -> 0
+      "" -> 0
       _ -> value
     end
   end
 
   def verify_graus(params) do
-
     params =
       Enum.map(params, fn {key, value} ->
+        IO.inspect value
         value =
           case value do
             "" ->
-              nil
+              case key do
+                "adicao" -> nil_or_numeric(value)
+                _ -> nil
+              end
 
             _ ->
               case key do
                 "cor" -> value
                 "group" -> value
-                "adicao" -> nil_or_numeric(value)
                 "axis" -> nil_or_numeric(String.to_integer(value))
                 _ -> nil_or_numeric(String.to_float(value))
               end
@@ -46,7 +49,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       )
       |> first()
       |> Repo.one()
-      |> IO.inspect()
 
       cond do
         query == nil -> {:ok, false}
