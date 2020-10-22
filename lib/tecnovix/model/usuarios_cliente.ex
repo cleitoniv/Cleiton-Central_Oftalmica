@@ -25,19 +25,13 @@ defmodule Tecnovix.UsuariosClienteModel do
     |> Repo.update()
   end
 
-  def update_status(user, params) do
-    user
-    |> UsuariosClienteSchema.update_status(params)
-    |> Repo.update()
-  end
-
   def search_user(id) do
-    case Repo.get_by(UsuariosClienteSchema, id: id) do
+    case Repo.get(UsuariosClienteSchema, id) do
       nil ->
         {:error, :not_found}
 
-      v ->
-        {:ok, v}
+      usuario ->
+        {:ok, usuario}
     end
   end
 
@@ -46,8 +40,17 @@ defmodule Tecnovix.UsuariosClienteModel do
       nil ->
         {:error, :not_found}
 
-      v ->
-        {:ok, v}
+      usuario ->
+        {:ok, usuario}
     end
+  end
+
+  def delete_users(id, cliente) do
+    usuarios =
+      UsuariosClienteSchema
+      |> where([u], u.cliente_id == ^cliente.id and u.id == ^id)
+      |> first()
+      |> Repo.one()
+      |> Repo.delete()
   end
 end

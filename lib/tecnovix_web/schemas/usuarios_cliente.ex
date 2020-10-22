@@ -32,9 +32,4 @@ defmodule Tecnovix.UsuariosClienteSchema do
     struct
     |> cast(params, [:senha_enviada])
   end
-
-  def update_status(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:status])
-  end
 end

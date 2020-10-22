@@ -15,6 +15,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
             case key do
               "cor" -> value
               "group" -> value
+              "axis" -> String.to_integer(value)
               _ -> String.to_float(value)
             end
         end

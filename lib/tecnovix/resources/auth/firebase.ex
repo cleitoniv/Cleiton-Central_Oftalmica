@@ -172,11 +172,8 @@ defmodule TecnovixWeb.Auth.Firebase do
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
   end
 
-  def email_verification(%{idToken: idToken} = params) do
-    params = Map.put(params, :requestType, "VERIFY_EMAIL")
-
-    url =
-      "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" <> @firebase_api_key
+  def delete_user_firebase(%{idToken: idToken} = params) do
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:delete?key=" <> @firebase_api_key
 
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
   end

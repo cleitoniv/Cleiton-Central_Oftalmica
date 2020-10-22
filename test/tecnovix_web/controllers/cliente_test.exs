@@ -98,32 +98,6 @@ defmodule TecnovixWeb.UsersTest do
     assert_delivered_email(email)
   end
 
-  test "show all users" do
-    user_firebase = Generator.user()
-    user_param = Generator.user_param()
-    user_client_param = Generator.users_cliente()
-
-    user =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente", %{"param" => user_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    user_client =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> get("/api/usuarios_cliente?page=1&page_size=20")
-    |> json_response(200)
-    |> IO.inspect()
-  end
-
   test "Alimentando a tebela Atendimento Preferencial" do
     user_firebase = Generator.user()
     user_param = Generator.user_param()
@@ -202,49 +176,6 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/cards")
     |> json_response(200)
-  end
-
-  test "Pegando os cartões do cliente com o USUARIO CLIENTE" do
-    user_client_param = Generator.users_cliente()
-    user_firebase = Generator.user()
-    user_param = Generator.user_param()
-
-    card = %{
-      "cartao_number" => "5555666677778884",
-      "nome_titular" => "Victor Teste",
-      "mes_validade" => "12",
-      "ano_validade" => "2022"
-    }
-
-    cliente =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente", %{"param" => user_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    card =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/card", %{"param" => card})
-      |> json_response(200)
-      |> IO.inspect()
-
-    user_client =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    {:ok, usuarioAuth} = Firebase.sign_in(%{email: user_client["email"], password: "123456"})
-    usuarioAuth = Jason.decode!(usuarioAuth.body)
-
-    build_conn()
-    |> Generator.put_auth(usuarioAuth["idToken"])
-    |> get("/api/cliente/cards")
-    |> json_response(200)
-    |> IO.inspect()
   end
 
   test "Inserindo um cartão na conta cliente" do
@@ -368,27 +299,6 @@ defmodule TecnovixWeb.UsersTest do
 
     # IO.inspect Tecnovix.Repo.all(Tecnovix.PreDevolucaoSchema)
     # |> Tecnovix.Repo.preload(:items)
-  end
-
-  test "Atualizando a senha do usuario cliente" do
-    user_firebase = Generator.user()
-    user_param = Generator.user_param()
-
-    cliente =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente", %{"param" => user_param})
-      |> json_response(201)
-      |> Map.get("data")
-
-    update =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/update_password", %{
-        "idToken" => user_firebase["idToken"],
-        "new_password" => "111111"
-      })
-      |> json_response(200)
   end
 
   test "Pegando os Graus na DESCRICAO GENERICA DO PRODUTO" do

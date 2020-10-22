@@ -8,7 +8,8 @@ defmodule TecnovixWeb.UsuariosClienteView do
       nome: item.nome,
       email: item.email,
       cargo: item.cargo,
-      status: item.status
+      status: item.status,
+      password: item.password
     }
   end
 

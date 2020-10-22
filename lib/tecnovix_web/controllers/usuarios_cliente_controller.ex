@@ -2,7 +2,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.UsuariosClienteModel
   alias Tecnovix.{Email, UsuariosClienteModel, ClientesSchema, LogsClienteModel}
-  alias TecnovixWeb.{Auth.Firebase, LogsClienteController}
+  alias TecnovixWeb.{Auth.Firebase}
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -70,25 +70,24 @@ defmodule TecnovixWeb.UsuariosClienteController do
     end
   end
 
-  def delete_users(conn, %{"id" => id}) do
-    with {:ok, user} <- UsuariosClienteModel.search_user(id),
-         {:ok, user} <- UsuariosClienteModel.update_status(user, %{"status" => 0}) do
-      {:ok, cliente} = conn.private.auth
+  def delete_users(conn, %{"id" => id, "idToken" => idToken} = params) do
+    id = String.to_integer(id)
+    {:ok, cliente} = conn.private.auth
+    {:ok, usuario} = conn.private.auth_user
 
-      LogsClienteModel.create(%{
-        "cliente_id" => cliente.id,
-        "data" => DateTime.utc_now(),
-        "ip" => "teste",
-        "dispositivo" => "teste",
-        "acao_realizada" => "Usuario deletado"
-      })
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
 
+    with {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
+         {:ok, _user_firebase} <- Firebase.delete_user_firebase(%{idToken: idToken}),
+         {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario cliente deletado") do
       conn
-      |> put_status(:ok)
       |> put_resp_content_type("application/json")
-      |> render("show.json", %{item: user})
+      |> send_resp(200, Jason.encode!(%{success: true}))
     else
-      _ -> {:error, :invalid_parameter}
+      _ -> {:error, :not_found}
     end
   end
 
