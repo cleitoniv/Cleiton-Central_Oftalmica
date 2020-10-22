@@ -25,7 +25,8 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         {key, value}
       end)
       |> Map.new()
-
+      |> IO.inspect()
+      
     query =
       DescricaoSchema
       |> where(
