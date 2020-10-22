@@ -35,7 +35,8 @@
       "adicao": 1.5,
       "nota_fiscal": "123456789",
       "serie_nf": "123",
-      "num_pedido": "123456"
+      "num_pedido": "123456",
+      "tests": "Sim"
       }
     ]
   },

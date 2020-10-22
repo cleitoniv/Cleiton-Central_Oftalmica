@@ -64,7 +64,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.order_params(items)
       |> PedidosDeVendaModel.wirecard_order()
       |> Wirecard.create_order()
-      |> IO.inspect()
 
     case order do
       {:ok, %{status_code: 201}} -> order
@@ -88,7 +87,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.payment_params()
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
-      |> IO.inspect()
 
     case payment do
       {:ok, %{status_code: 201}} -> payment
@@ -158,7 +156,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "prc_unitario" => items["prc_unitario"],
-      "tests" => formatting_test(items["tests"]),
+      "tests" => "N",
       "virtotal" => items["quantidade"] * items["prc_unitario"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],

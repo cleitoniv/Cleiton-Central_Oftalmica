@@ -13,7 +13,6 @@ defmodule Tecnovix.SyncUsers do
       build_conn()
       |> post("/api/user_sync/login", %{"username" => "thiagoboeker", "password" => "123456"})
       |> json_response(200)
-      |> IO.inspect()
   end
 
   test "token" do

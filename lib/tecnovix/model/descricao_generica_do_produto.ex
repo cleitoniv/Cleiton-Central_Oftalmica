@@ -12,7 +12,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     end
   end
 
-  def verify_graus(params) do
+  def verify_graus(%{group: group} = params) do
     params =
       Enum.map(params, fn {key, value} ->
         value =
@@ -60,7 +60,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
             acc
         end
       )
-      |> IO.inspect()
 
     query =
       DescricaoSchema
@@ -73,6 +72,10 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       query.blo_de_tela == 1 -> {:ok, false}
       true -> {:ok, true}
     end
+  end
+
+  def verify_graus(params) do
+    {:ok, true}
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do

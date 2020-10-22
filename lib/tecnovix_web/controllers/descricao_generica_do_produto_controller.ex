@@ -16,10 +16,7 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
     end
   end
 
-  def verify_graus(
-        conn,
-        params
-      ) do
+  def verify_graus(conn, params) do
     with {:ok, boolean} <- DescricaoModel.verify_graus(params) do
       conn
       |> put_resp_content_type("application/json")

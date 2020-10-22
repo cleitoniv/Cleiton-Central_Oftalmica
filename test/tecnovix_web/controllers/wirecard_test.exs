@@ -371,6 +371,5 @@ defmodule Tecnovix.Test.Wirecard do
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/verify_graus?degree=5.0&cylinder=-0.75&axis=80&group=010C")
     |> json_response(200)
-    |> IO.inspect()
   end
 end

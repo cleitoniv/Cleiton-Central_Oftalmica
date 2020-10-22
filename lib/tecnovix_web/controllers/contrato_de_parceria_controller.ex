@@ -39,9 +39,7 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
       |> put_resp_content_type("application/json")
       |> render("contrato.json", %{item: contrato})
     else
-      v ->
-        IO.inspect(v)
-        {:error, :order_not_created}
+      _ -> {:error, :order_not_created}
     end
   end
 end

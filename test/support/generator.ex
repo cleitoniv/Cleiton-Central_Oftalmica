@@ -78,7 +78,7 @@ defmodule TecnovixWeb.Support.Generator do
       "nome" => "Victor",
       "ddd" => "27",
       "telefone" => "5527996211804",
-      "data_nascimento" => "2020-07-07",
+      "data_nascimento" => "07/07/2020",
       "ramo" => "1",
       "endereco" => "Rua Benedito Barcelos",
       "numero" => "111",
