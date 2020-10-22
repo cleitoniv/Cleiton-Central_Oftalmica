@@ -36,17 +36,27 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         {key, value}
       end)
       |> Map.new()
-      |> IO.inspect()
-
+      |> Enum.reduce(dynamic(true),
+        fn {"cor", nil}, acc ->
+          dynamic([p], ^acc and is_nil(p.cor))
+           {"group", value}, acc ->
+          dynamic([p], ^acc and p.grupo == ^value)
+           {"axis", value}, acc ->
+          dynamic([p], ^acc and p.eixo == ^value)
+           {"degree", value}, acc ->
+          dynamic([p], ^acc and p.esferico == ^value)
+           {"adicao", value}, acc ->
+          dynamic([p], ^acc and p.adicao == ^value)
+           {"cylinder", value}, acc ->
+          dynamic([p], ^acc and p.cilindrico == ^value)
+           {"lenses", _value}, acc ->
+             acc
+        end)
+      |> IO.inspect
 
     query =
       DescricaoSchema
-      |> where(
-        [d],
-        d.grupo == ^params["group"] and d.cilindrico == ^params["cylinder"] and
-          d.eixo == ^params["aixs"] and d.cor == ^params["cor"] and d.adicao == ^params["adicao"] and
-          d.esferico == ^params["degree"]
-      )
+      |> where(^params)
       |> first()
       |> Repo.one()
 
