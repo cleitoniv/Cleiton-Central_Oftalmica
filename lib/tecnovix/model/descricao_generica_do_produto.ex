@@ -13,14 +13,13 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   end
 
   def verify_graus(params) do
-    IO.inspect params
     params =
       Enum.map(params, fn {key, value} ->
         value =
           case value do
             "" ->
               case key do
-                "adicao" -> nil_or_numeric(value) |> IO.inspect()
+                "adicao" -> nil_or_numeric(value)
                 _ -> nil
               end
 
@@ -52,7 +51,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
            {"lenses", _value}, acc ->
              acc
         end)
-      |> IO.inspect
+        |> IO.inspect()
 
     query =
       DescricaoSchema
