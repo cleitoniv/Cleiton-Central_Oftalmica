@@ -28,10 +28,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
     query =
       DescricaoSchema
-      |> where([d], d.grupo == ^params["group"])
-      |> or_where([d], d.cilindrico == ^params["cylinder"] and
-        d.eixo == ^params["aixs"] and d.cor == ^params["cor"] and d.adicao == ^params["adicao"] and
-        d.esferico == ^params["degree"])
+      |> where([d], d.grupo == ^params["group"] and d.cilindrico == ^params["cylinder"])
       |> first()
       |> Repo.one()
       |> IO.inspect()
