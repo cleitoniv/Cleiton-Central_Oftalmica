@@ -30,7 +30,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       DescricaoSchema
       |> where(
         [d],
-        d.grupo == ^params["group"] and d.cilindrico == ^params["cylinder"]
+        d.grupo == ^params["group"]
       )
       |> first()
       |> Repo.one()
