@@ -4,6 +4,13 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   alias Tecnovix.DescricaoGenericaDoProdutoSchema, as: DescricaoSchema
   import Ecto.Query
 
+  def nil_or_numeric(value) do
+    case value do
+      nil -> 0
+      _ -> value
+    end
+  end
+
   def verify_graus(params) do
 
     params =
@@ -17,19 +24,16 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
               case key do
                 "cor" -> value
                 "group" -> value
-                "adicao" ->
-                  case value do
-                    nil -> 0
-                    _ -> value
-                  end
-                "axis" -> String.to_integer(value)
-                _ -> String.to_float(value)
+                "adicao" -> nil_or_numeric(value)
+                "axis" -> nil_or_numeric(String.to_integer(value))
+                _ -> nil_or_numeric(String.to_float(value))
               end
           end
 
         {key, value}
       end)
       |> Map.new()
+      |> IO.inspect()
 
 
     query =
