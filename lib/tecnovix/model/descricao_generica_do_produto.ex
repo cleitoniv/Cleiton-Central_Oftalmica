@@ -13,6 +13,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   end
 
   def verify_graus(%{group: group} = params) do
+    IO.inspect params
     params =
       Enum.map(params, fn {key, value} ->
         value =
@@ -75,6 +76,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   end
 
   def verify_graus(params) do
+    IO.inspect params
     {:ok, true}
   end
 
