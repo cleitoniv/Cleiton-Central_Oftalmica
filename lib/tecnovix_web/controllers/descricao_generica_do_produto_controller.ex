@@ -17,15 +17,7 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
   end
 
   def verify_graus(
-        conn,
-        %{
-          "group" => grupo,
-          "cor" => cor,
-          "axis" => eixo,
-          "degree" => esferico,
-          "cylinder" => cilindrico,
-          "adicao" => adicao
-        } = params
+        conn, params
       ) do
     with {:ok, boolean} <- DescricaoModel.verify_graus(params) do
       conn
