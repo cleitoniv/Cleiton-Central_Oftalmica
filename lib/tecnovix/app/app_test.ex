@@ -181,6 +181,12 @@ defmodule Tecnovix.App.ScreensTest do
             "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg"
           )
 
+        map =
+          case map["type"] do
+            "ACESSORIO" -> Map.put(map, "has_acessorio", true)
+            _ -> Map.put(map, "has_acessorio", false)
+          end
+
         Enum.reduce(list, map, fn key, acc ->
           cond do
             acc[key] == "0" -> Map.put(acc, key, 0)

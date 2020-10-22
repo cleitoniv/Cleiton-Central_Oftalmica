@@ -35,23 +35,32 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         {key, value}
       end)
       |> Map.new()
-      |> Enum.reduce(dynamic(true),
-        fn {"cor", nil}, acc ->
-          dynamic([p], ^acc and is_nil(p.cor))
-           {"group", value}, acc ->
-          dynamic([p], ^acc and p.grupo == ^value)
-           {"axis", value}, acc ->
-          dynamic([p], ^acc and p.eixo == ^value)
-           {"degree", value}, acc ->
-          dynamic([p], ^acc and p.esferico == ^value)
-           {"adicao", value}, acc ->
-          dynamic([p], ^acc and p.adicao == ^value)
-           {"cylinder", value}, acc ->
-          dynamic([p], ^acc and p.cilindrico == ^value)
-           {"lenses", _value}, acc ->
-             acc
-        end)
-        |> IO.inspect()
+      |> Enum.reduce(
+        dynamic(true),
+        fn
+          {"cor", nil}, acc ->
+            dynamic([p], ^acc and is_nil(p.cor))
+
+          {"group", value}, acc ->
+            dynamic([p], ^acc and p.grupo == ^value)
+
+          {"axis", value}, acc ->
+            dynamic([p], ^acc and p.eixo == ^value)
+
+          {"degree", value}, acc ->
+            dynamic([p], ^acc and p.esferico == ^value)
+
+          {"adicao", value}, acc ->
+            dynamic([p], ^acc and p.adicao == ^value)
+
+          {"cylinder", value}, acc ->
+            dynamic([p], ^acc and p.cilindrico == ^value)
+
+          {"lenses", _value}, acc ->
+            acc
+        end
+      )
+      |> IO.inspect()
 
     query =
       DescricaoSchema
@@ -59,11 +68,11 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       |> first()
       |> Repo.one()
 
-      cond do
-        query == nil -> {:ok, false}
-        query.blo_de_tela == 1 -> {:ok, false}
-        true -> {:ok, true}
-      end
+    cond do
+      query == nil -> {:ok, false}
+      query.blo_de_tela == 1 -> {:ok, false}
+      true -> {:ok, true}
+    end
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
