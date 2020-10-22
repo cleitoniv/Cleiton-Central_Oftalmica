@@ -20,6 +20,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
                 "adicao" ->
                   case value do
                     nil -> 0
+                    _ -> value
                   end
                 "axis" -> String.to_integer(value)
                 _ -> String.to_float(value)
