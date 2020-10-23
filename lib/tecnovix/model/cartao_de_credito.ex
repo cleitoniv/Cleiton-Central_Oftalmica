@@ -9,7 +9,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
       {:ok, _list} ->
         cartao =
           CartaoSchema
-          |> where([c], c.id == ^id)
+          |> where([c], c.id == ^id and c.cliente_id == ^cliente.id)
           |> update([c], inc: [status: 1])
           |> Repo.update_all([])
 
