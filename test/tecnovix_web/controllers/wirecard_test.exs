@@ -319,6 +319,24 @@ defmodule Tecnovix.Test.Wirecard do
       |> json_response(200)
       |> Map.get("data")
 
+    cartao2=
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/card", %{"param" => Map.put(cartao, "cartao_number", "4444444444")})
+      |> json_response(200)
+
+      IO.inspect(Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema))
+
+
+     build_conn()
+     |> Generator.put_auth(user_firebase["idToken"])
+     |> put("/api/cliente/select_card/#{cartao["id"]}")
+     |> json_response(200)
+     |> IO.inspect()
+
+     IO.inspect(Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema))
+
+
     {:ok, items_json} = TestHelp.items("items.json")
 
     items =
@@ -351,7 +369,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> json_response(200)
 
     start_supervised!(Tecnovix.Services.Order)
-    IO.inspect(Tecnovix.Services.Order.get_msg())
+    # IO.inspect(Tecnovix.Services.Order.get_msg())
   end
 
   test "Graus bloqueados" do

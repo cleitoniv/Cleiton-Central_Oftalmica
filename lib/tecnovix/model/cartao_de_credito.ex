@@ -4,6 +4,21 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
   import Ecto.Query
 
+  def select_card(id, cliente) do
+    case get_cc(%{"cliente_id" => cliente.id}) do
+      {:ok, _list} ->
+        cartao =
+          CartaoSchema
+          |> where([c], c.id == ^id)
+          |> update([c], inc: [status: 1])
+          |> Repo.update_all([])
+
+        {:ok, cartao}
+      _ ->
+       {:error, :not_found}
+    end
+  end
+
   def get_cc(%{"cliente_id" => cliente_id}) do
     query =
       from c in CartaoSchema,
