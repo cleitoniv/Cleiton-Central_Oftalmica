@@ -74,7 +74,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-      |> IO.inspect()
+
   end
 
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // USUARIO_CLIENTE" do
@@ -100,7 +100,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> Map.get("data")
 
     {:ok, items} = TestHelp.items("items.json")
-    {:ok, usuarioAuth} = Firebase.sign_in(%{email: user_client["email"], password: "123456"})
+    {:ok, usuarioAuth} = Firebase.sign_in(%{email: user_client["email"], password: user_client["password"]})
     usuarioAuth = Jason.decode!(usuarioAuth.body)
     cartao = Generator.cartao_cliente(cliente["id"])
 
@@ -119,7 +119,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(usuarioAuth["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-      |> IO.inspect()
+
 
     assert data["success"] == true
   end
@@ -177,7 +177,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> Map.get("data")
 
     {:ok, items} = TestHelp.items("items_credito.json")
-    {:ok, usuarioAuth} = Firebase.sign_in(%{email: user_client["email"], password: "123456"})
+    {:ok, usuarioAuth} = Firebase.sign_in(%{email: user_client["email"], password: user_client["password"]})
     usuarioAuth = Jason.decode!(usuarioAuth.body)
     cartao = Generator.cartao_cliente(cliente["id"])
 
@@ -196,7 +196,7 @@ defmodule Tecnovix.Test.Wirecard do
         "id_cartao" => cartao["id"]
       })
       |> json_response(200)
-      |> IO.inspect()
+
 
     assert data["success"] == true
   end

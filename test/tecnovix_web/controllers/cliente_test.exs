@@ -71,14 +71,9 @@ defmodule TecnovixWeb.UsersTest do
       "param" => %{user_client_param | "status" => 0}
     })
     |> json_response(200)
-    |> IO.inspect()
+
 
     {:ok, register} = Tecnovix.UsuariosClienteModel.search_register_email(user_client["email"])
-
-    build_conn()
-    |> Generator.put_auth(user_firebase["idToken"])
-    |> delete("/api/usuarios_cliente/#{user_client["id"]}")
-    |> json_response(200)
 
     assert register.email == user_client["email"]
   end
@@ -125,7 +120,7 @@ defmodule TecnovixWeb.UsersTest do
     |> recycle()
     |> post("/api/cliente/atend_pref", %{"horario" => "Manha"})
     |> json_response(200)
-    |> IO.inspect()
+
   end
 
   test "show cliente/usuario and atendimento preferencial cliente" do
@@ -346,7 +341,7 @@ defmodule TecnovixWeb.UsersTest do
 
     Channel.assert_reply(resp, :ok)
 
-    Channel.assert_broadcast("update_notifications_number", %{}) |> IO.inspect()
+    Channel.assert_broadcast("update_notifications_number", %{})
   end
 
   test "Testando REST do Via CEP" do
@@ -365,7 +360,7 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/get_endereco_by_cep?cep=29027445")
     |> json_response(200)
-    |> IO.inspect()
+
   end
 
   test "Acessando com o primeiro acesso e depois cadastrando o complemento" do
@@ -391,7 +386,7 @@ defmodule TecnovixWeb.UsersTest do
     |> recycle()
     # entrando para cadastrar denovo com o mesmo email
     |> post("/api/cliente/first_access", %{"param" => update_first_access})
-    |> IO.inspect()
+
     |> recycle()
     # completando  o cadastro
     |> post("/api/cliente", %{"param" => user_param})

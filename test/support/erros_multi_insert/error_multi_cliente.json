@@ -1,5 +1,6 @@
 [
 {
+"estado": "ES",
 "loja": "88",
 "codigo": "888",
 "cnpj_cpf": "000000000",
@@ -19,17 +20,18 @@
 "municipio": "Serra",
 "bloqueado": "2",
 "sit_app": "N",
-"cod_cnae": "",
+"cod_cnae": 00000,
 "ramo": "2",
 "vendedor": "",
 "crm_medico": "111111",
 "dia_remessa": "2"
 },
 {
+"estado": "ES",
 "loja": "53",
 "codigo": "533",
 "cnpj_cpf": "111111111",
-"fisica_jurid": "G",
+"fisica_jurid": "J",
 "nome": "LenteParis",
 "email": "LenteParis@tecnovix.com.br",
 "ddd": "027",
@@ -45,7 +47,7 @@
 "municipio": "Cariacica",
 "bloqueado": "2",
 "sit_app": "N",
-"cod_cnae": "",
+"cod_cnae": 00000,
 "ramo": "2",
 "vendedor": "",
 "crm_medico": "22222",

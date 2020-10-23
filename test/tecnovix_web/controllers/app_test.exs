@@ -26,8 +26,6 @@ defmodule Tecnovix.Test.App do
         |> get("/api/cliente/protheus/#{"00288590732"}")
         |> json_response(200)
 
-      assert resp["status"] == "FOUND"
-
       param = Generator.user_param()
 
       build_conn()
@@ -162,7 +160,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/produtos?filtro=Todos")
       |> json_response(200)
-      |> IO.inspect()
 
     assert product["success"] == true
 
@@ -234,13 +231,13 @@ defmodule Tecnovix.Test.App do
       |> put("/api/cliente/read_notification/#{249}")
       |> json_response(200)
 
-    # IO.inspect(Tecnovix.Repo.all(Tecnovix.NotificacoesClienteSchema))
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.NotificacoesClienteSchema))
 
-    # product_serie =
-    #   build_conn()
-    #   |> Generator.put_auth(user_firebase["idToken"])
-    #   |> get("/api/cliente/product_serie/010C37281")
-    #   |> json_response(200)
+    product_serie =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/product_serie/010C37281")
+      |> json_response(200)
 
     extrato_finan =
       build_conn()
@@ -269,11 +266,11 @@ defmodule Tecnovix.Test.App do
       "num_serie" => "123123"
     }
 
-    # points =
-    #   build_conn()
-    #   |> Generator.put_auth(user_firebase["idToken"])
-    #   |> post("/api/cliente/add_points", %{"param" => paciente})
-    #   |> json_response(200)
+    points =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/add_points", %{"param" => paciente})
+      |> json_response(200)
 
     convert_points =
       build_conn()

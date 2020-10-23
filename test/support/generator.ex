@@ -56,7 +56,7 @@ defmodule TecnovixWeb.Support.Generator do
       "endereco" => "Rua Benedito Barcelos",
       "numero" => "111",
       "bairro" => "Bela Vista",
-      "estado" => "Vitoria",
+      "estado" => "ES",
       "cep" => "29027445",
       "cdmunicipio" => "teste",
       "municipio" => "Serra",
@@ -90,7 +90,8 @@ defmodule TecnovixWeb.Support.Generator do
       "cod_cliente" => "123",
       "loja_cliente" => "12",
       "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
-      "complemento" => "Casa"
+      "complemento" => "Casa",
+      "estado" => "ES"
     }
   end
 

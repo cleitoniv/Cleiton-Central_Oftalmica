@@ -12,8 +12,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     end
   end
 
-  def verify_graus(%{group: group} = params) do
-    IO.inspect params
+  def verify_graus(params) do
     params =
       Enum.map(params, fn {key, value} ->
         value =
@@ -75,11 +74,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     end
   end
 
-  def verify_graus(params) do
-    IO.inspect params
-    {:ok, true}
-  end
-
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(data, fn descricao ->
@@ -121,7 +115,8 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         graus_cilindrico: d.cilindrico,
         graus_eixo: d.eixo,
         graus_adicao: d.adicao,
-        cor: d.cor
+        cor: d.cor,
+        codigo: d.codigo
       })
       |> Repo.all()
 
@@ -130,6 +125,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     |> parse_fields(:graus_eixo)
     |> parse_fields(:graus_adicao)
     |> parse_fields(:cor)
+    |> parse_fields(:codigo)
   end
 
   def parse_fields({list, acc}, field) do
@@ -150,6 +146,9 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         end
 
       :graus_eixo ->
+        Map.get(map, field)
+
+      :codigo ->
         Map.get(map, field)
 
       _ ->

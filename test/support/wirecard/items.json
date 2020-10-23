@@ -45,6 +45,7 @@
     "type": "C",
     "items": [
       {
+        "tests": "Não",
         "grupo": "010C",
         "quantidade": 2,
         "prc_unitario": 14000,

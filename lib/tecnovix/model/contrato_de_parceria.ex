@@ -69,9 +69,9 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           "number" => "12345678901"
         },
         "phone" => %{
-          "countryCode" => String.slice(cliente.telefone, 0..1),
+          "countryCode" => "55",
           "areaCode" => cliente.ddd,
-          "number" => String.slice(cliente.telefone, 4..13)
+          "number" => cliente.telefone
         },
         "shippingAddress" => %{
           "city" => "Serra",
