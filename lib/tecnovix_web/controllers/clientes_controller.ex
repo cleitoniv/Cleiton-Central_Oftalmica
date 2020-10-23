@@ -129,7 +129,6 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def current_user(conn, _params) do
-    IO.inspect conn
     {:ok, user} = conn.private.auth
 
     case user do

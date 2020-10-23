@@ -194,7 +194,6 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end)
       end)
-      |> IO.inspect()
 
     filters = organize_filters_grid(produtos)
 

@@ -126,6 +126,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     |> parse_fields(:graus_adicao)
     |> parse_fields(:cor)
     |> parse_fields(:codigo)
+    |> IO.inspect
   end
 
   def parse_fields({list, acc}, field) do
