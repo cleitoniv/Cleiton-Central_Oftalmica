@@ -60,5 +60,6 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
       :mes_validade,
       :ano_validade
     ])
+    |> unique_constraint(:cartao_number, message: "Já existe um cartão com esse número.")
   end
 end

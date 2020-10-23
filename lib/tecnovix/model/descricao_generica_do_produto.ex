@@ -115,8 +115,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         graus_cilindrico: d.cilindrico,
         graus_eixo: d.eixo,
         graus_adicao: d.adicao,
-        cor: d.cor,
-        codigo: d.codigo
+        cor: d.cor
       })
       |> Repo.all()
 
@@ -125,8 +124,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     |> parse_fields(:graus_eixo)
     |> parse_fields(:graus_adicao)
     |> parse_fields(:cor)
-    |> parse_fields(:codigo)
-    |> IO.inspect
   end
 
   def parse_fields({list, acc}, field) do
@@ -147,9 +144,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         end
 
       :graus_eixo ->
-        Map.get(map, field)
-
-      :codigo ->
         Map.get(map, field)
 
       _ ->
