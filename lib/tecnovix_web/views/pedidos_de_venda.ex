@@ -8,7 +8,7 @@ defmodule TecnovixWeb.PedidosDeVendaView do
         id: item.id,
         client_id: item.client_id,
         order_id: item.order_id,
-        tipo_pagamento: item.pagamento,
+        tipo_pagamento: item.tipo_pagamento,
         parcela: item.parcela,
         filial: item.filial,
         loja: item.loja,
