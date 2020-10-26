@@ -34,6 +34,7 @@ defmodule Tecnovix.Services.Order do
       |> where([p], p.status_ped == 0)
       |> Repo.all()
       |> verify_pedidos()
+      |> IO.inspect
 
     with {:ok, state} = resp <- pedidos do
       Process.send_after(self(), {:ok, state}, 5000)
@@ -47,13 +48,5 @@ defmodule Tecnovix.Services.Order do
   def handle_info({:ok, msg}, state) do
     Process.send_after(self(), {:ok, state}, 5000)
     {:noreply, msg}
-  end
-
-  def handle_call(:get, _from, state) do
-    {:reply, {:ok, state}, state}
-  end
-
-  def get_msg() do
-    GenServer.call(:order, :get)
   end
 end

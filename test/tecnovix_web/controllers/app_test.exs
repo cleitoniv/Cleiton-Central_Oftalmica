@@ -303,4 +303,72 @@ defmodule Tecnovix.Test.App do
 
     assert_delivered_email(email)
   end
+
+  test "Testando o Proceso de pagamento do pedido" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    params = TestHelp.single_json("single_descricao_generica_do_produto.json")
+    {:ok, descricao} = DescricaoModel.create(params)
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    cartao = Generator.cartao_cliente(cliente["id"])
+
+    cartao =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/card", %{"param" => cartao})
+      |> json_response(200)
+      |> Map.get("data")
+
+    {:ok, items_json} = TestHelp.items("items.json")
+
+    items =
+      Enum.flat_map(
+        items_json,
+        fn map ->
+          Enum.map(
+            map["items"],
+            fn items ->
+              Map.put(items, "descricao_generica_do_produto_id", descricao.id)
+            end
+          )
+        end
+      )
+
+    items =
+      Enum.map(
+        items_json,
+        fn map ->
+          case map["type"] do
+            "A" ->
+              item =
+                Enum.filter(items, fn item ->
+                  item["codigo"] == "123132213123"
+                end)
+
+              Map.put(map, "items", item)
+
+            "C" ->
+              item =
+                Enum.filter(items, fn item ->
+                  item["codigo"] == "12313131"
+                end)
+
+              Map.put(map, "items", item)
+          end
+        end
+      )
+
+    pedido =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
+      |> json_response(200)
+  end
 end

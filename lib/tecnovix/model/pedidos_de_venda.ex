@@ -168,7 +168,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def formatting_test(teste) do
-    IO.inspect teste
     case teste do
       "Sim" -> "S"
       "Não" -> "N"
