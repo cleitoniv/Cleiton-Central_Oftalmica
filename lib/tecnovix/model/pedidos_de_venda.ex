@@ -178,6 +178,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def pedido_params(items, cliente, order) do
     pedido = %{
       "client_id" => cliente.id,
+      "tipo_pagamento" => "CREDIT_CARD",
+      "parcela" => 1,
       "order_id" => verify_type("A", order),
       "filial" => "",
       "numero" => "",
