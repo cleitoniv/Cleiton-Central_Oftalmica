@@ -9,8 +9,8 @@ defmodule Tecnovix.Services.Order do
   def verify_pedidos(pedidos) do
     verify =
       Enum.map(pedidos, fn map ->
-        {:ok, order_encode} = Wirecard.get(map.order_id, :orders)
-        order = Jason.decode!(order_encode.body)
+        {:ok, order_json} = Wirecard.get(map.order_id, :orders)
+        order = Jason.decode!(order_json.body)
 
         case order["status"] do
           "PAID" ->
@@ -34,7 +34,6 @@ defmodule Tecnovix.Services.Order do
       |> where([p], p.status_ped == 0)
       |> Repo.all()
       |> verify_pedidos()
-      |> IO.inspect
 
     with {:ok, state} = resp <- pedidos do
       Process.send_after(self(), {:ok, state}, 5000)

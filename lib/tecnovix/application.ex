@@ -16,8 +16,8 @@ defmodule Tecnovix.Application do
       # {Tecnovix.Worker, arg},
       {Absinthe.Subscription, [TecnovixWeb.Endpoint]},
       {Tecnovix.Services.Auth, []},
-      {Tecnovix.Services.Devolucao, []},
-      {Tecnovix.Services.Order, []}
+      {Tecnovix.Services.Devolucao, []}
+      # {Tecnovix.Services.Order, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
