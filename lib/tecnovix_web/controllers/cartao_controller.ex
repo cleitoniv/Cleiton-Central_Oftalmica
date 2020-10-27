@@ -16,10 +16,10 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, _result} <- CartaoModel.get_cc(%{"cliente_id" => cliente.id}),
-         {:ok, cartao} <- CartaoModel.primeiro_cartao(params, cliente.id),
-         {:ok, detail_card} <- CartaoModel.detail_card(cartao, cliente),
-         {:ok, card} <- CartaoModel.create(detail_card),
+    with {:ok, _result} <- CartaoModel.get_cc(%{"cliente_id" => cliente.id}) |> IO.inspect,
+         {:ok, cartao} <- CartaoModel.primeiro_cartao(params, cliente.id) |> IO.inspect,
+         {:ok, detail_card} <- CartaoModel.detail_card(cartao, cliente) |> IO.inspect,
+         {:ok, card} <- CartaoModel.create(detail_card) |> IO.inspect,
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,

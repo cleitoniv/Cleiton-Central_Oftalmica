@@ -252,7 +252,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     pedido = %{
       "client_id" => cliente.id,
       "tipo_pagamento" => "BOLETO",
-      "status_ped" => "B",
+      "status_ped" => 0,
       "parcela" => parcela,
       "order_id" => nil,
       "filial" => "",
