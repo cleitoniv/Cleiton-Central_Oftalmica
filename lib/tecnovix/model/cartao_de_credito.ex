@@ -37,7 +37,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
 
     {:ok, select_card} =
       case card do
-        nil -> []
+        nil -> {:ok, []}
         card ->
           CartaoSchema.changeset(Map.put(card, :status, 1))
           |> Repo.update()
