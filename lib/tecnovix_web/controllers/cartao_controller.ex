@@ -16,10 +16,10 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, _result} <- CartaoModel.get_cc(%{"cliente_id" => cliente.id}) |> IO.inspect,
-         {:ok, cartao} <- CartaoModel.primeiro_cartao(params, cliente.id) |> IO.inspect,
-         {:ok, detail_card} <- CartaoModel.detail_card(cartao, cliente) |> IO.inspect,
-         {:ok, card} <- CartaoModel.create(detail_card) |> IO.inspect,
+    with {:ok, _result} <- CartaoModel.get_cc(%{"cliente_id" => cliente.id}),
+         {:ok, cartao} <- CartaoModel.primeiro_cartao(params, cliente.id),
+         {:ok, detail_card} <- CartaoModel.detail_card(cartao, cliente),
+         {:ok, card} <- CartaoModel.create(detail_card),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
@@ -31,8 +31,6 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: card})
-    else
-      _ -> {:error, :card_not_created}
     end
   end
 

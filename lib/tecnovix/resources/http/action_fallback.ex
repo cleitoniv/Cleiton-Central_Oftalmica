@@ -103,6 +103,7 @@ defmodule Tecnovix.Resources.Fallback do
   end
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
+    IO.inspect changeset
     conn
     |> put_resp_content_type("application/json")
     |> put_status(:bad_request)
