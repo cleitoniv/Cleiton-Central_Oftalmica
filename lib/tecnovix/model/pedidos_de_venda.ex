@@ -81,16 +81,23 @@ defmodule Tecnovix.PedidosDeVendaModel do
     order = Jason.decode!(order.body)
     order_id = order["id"]
 
-    payment =
+    {:ok, payment} =
       cartao_id
       |> PedidosDeVendaModel.get_cartao_cliente()
       |> PedidosDeVendaModel.payment_params()
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
 
-    case payment do
-      {:ok, %{status_code: 201}} -> payment
-      _ -> {:error, :payment_not_created}
+    payment = Jason.decode!(payment.body)
+
+    case payment["status"] do
+      "CANCELLED" ->
+        try do
+          raise payment["cancellationDetails"]["description"]
+        rescue
+          e in _ -> {:errorPayment, e.message}
+        end
+      _ -> {:ok, payment}
     end
   end
 
@@ -126,8 +133,20 @@ defmodule Tecnovix.PedidosDeVendaModel do
      }}
   end
 
-  def create_pedido(items, cliente, order) do
-    case pedido_params(items, cliente, order) do
+  def create_pedido(items, cliente, order, parcela) do
+    case pedido_params(items, cliente, order, parcela) do
+      {:ok, pedido} ->
+        %PedidosDeVendaSchema{}
+        |> PedidosDeVendaSchema.changeset(pedido)
+        |> Repo.insert()
+
+      _ ->
+        {:error, :pedido_failed}
+    end
+  end
+
+  def create_pedido(items, cliente, parcela) do
+    case pedido_params(items, cliente, parcela) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -175,11 +194,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pedido_params(items, cliente, order) do
+  def pedido_params(items, cliente, order, parcela) do
     pedido = %{
       "client_id" => cliente.id,
       "tipo_pagamento" => "CREDIT_CARD",
-      "parcela" => 1,
+      "parcela" => parcela,
       "order_id" => verify_type("A", order),
       "filial" => "",
       "numero" => "",
@@ -225,6 +244,58 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     {:ok, pedido}
   end
+
+  def pedido_params(items, cliente, parcela) do #BOLETO
+    pedido = %{
+      "client_id" => cliente.id,
+      "tipo_pagamento" => "BOLETO",
+      "parcela" => parcela,
+      "order_id" => nil,
+      "filial" => "",
+      "numero" => "",
+      "loja" => cliente.loja,
+      "cliente" => cliente.codigo,
+      "pd_correios" => "",
+      "vendedor_1" => "",
+      "items" =>
+        Enum.reduce(items, [], fn map, acc ->
+          array =
+            Enum.flat_map(map["items"], fn items ->
+              cond do
+                map["olho_direito"] != nil ->
+                  [olho_direito(items, map)]
+
+                map["olho_esquerdo"] != nil ->
+                  [olho_esquerdo(items, map)]
+
+                map["olho_ambos"] != nil ->
+                  codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
+
+                  [
+                    olho_direito(input_codigo(items, codigo), map),
+                    olho_esquerdo(input_codigo(items, codigo), map)
+                  ]
+
+                map["olho_diferentes"] != nil ->
+                  codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
+
+                  [
+                    olho_diferentes_D(input_codigo(items, codigo), map),
+                    olho_diferentes_E(input_codigo(items, codigo), map)
+                  ]
+
+                map["type"] == "C" ->
+                  [credito_items(items, map)]
+              end
+            end)
+
+          array ++ acc
+        end)
+    }
+
+    {:ok, pedido}
+  end
+
 
   def input_codigo(map, codigo) do
     Map.put(map, "codigo_item", codigo)

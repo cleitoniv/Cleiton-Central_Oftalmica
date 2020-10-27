@@ -24,7 +24,32 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
+  def create_boleto(conn, %{"items" => items, "parcela" => parcela}) do #boleto
+    {:ok, usuario} = usuario_auth(conn.private.auth_user)
+    {:ok, cliente} =
+      case conn.private.auth do
+        {:ok, %ClientesSchema{} = cliente} ->
+          {:ok, cliente}
+
+        {:ok, %UsuariosClienteSchema{} = usuario} ->
+          PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
+      end
+
+      ip =
+        conn.remote_ip
+        |> Tuple.to_list()
+        |> Enum.join()
+
+      with {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, parcela),
+           {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Pedido solicitado com boleto feito com sucesso.") do
+         conn
+         |> put_status(200)
+         |> put_resp_content_type("application/json")
+         |> render("pedido.json", %{item: pedido})
+      end
+  end
+
+  def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do #credit_card
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
     {:ok, cliente} =
@@ -45,17 +70,14 @@ defmodule TecnovixWeb.PedidosDeVendaController do
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <-
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order, 1),
          {:ok, _logs} <-
-           LogsClienteModel.create(ip, usuario, cliente, "Pedido criado com sucesso."),
+           LogsClienteModel.create(ip, usuario, cliente, "Pedido feito com o cartão de crédito com sucesso."),
          {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
-
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("pedido.json", %{item: pedido})
-    else
-      _ -> {:error, :order_not_created}
     end
   end
 

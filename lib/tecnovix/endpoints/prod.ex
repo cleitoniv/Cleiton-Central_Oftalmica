@@ -53,6 +53,19 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
   @impl true
   def generate_boleto(_params) do
+    boleto = [
+      %{
+        "parcela" => 1
+      },
+      %{
+        "parcela" => 3
+      },
+      %{
+        "parcela" => 5
+      }
+    ]
+
+  {:ok, boleto}
   end
 
   @impl true

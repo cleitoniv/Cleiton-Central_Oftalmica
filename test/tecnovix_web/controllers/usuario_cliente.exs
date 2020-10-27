@@ -55,7 +55,6 @@ defmodule TecnovixWeb.UsersTest do
       |> post("/api/cliente/card", %{"param" => card})
       |> json_response(200)
 
-
     user_client =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
@@ -70,7 +69,6 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(usuarioAuth["idToken"])
     |> get("/api/cliente/cards")
     |> json_response(200)
-
   end
 
   test "Mostrando todos usuarios cliente" do
@@ -96,7 +94,6 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/usuarios_cliente?page=1&page_size=20")
     |> json_response(200)
-
   end
 
   test "Deletando um usuario cliente" do
@@ -161,6 +158,5 @@ defmodule TecnovixWeb.UsersTest do
       "idToken" => usuarioAuth["idToken"]
     })
     |> json_response(200)
-
   end
 end

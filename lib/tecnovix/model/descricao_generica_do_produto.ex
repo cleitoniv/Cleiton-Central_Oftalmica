@@ -40,7 +40,8 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         fn
           {"cor", nil}, acc ->
             dynamic([p], ^acc and is_nil(p.cor))
-
+          {"cor", value}, acc ->
+            dynamic([p], ^acc and p.cor == ^value)
           {"group", value}, acc ->
             dynamic([p], ^acc and p.grupo == ^value)
 

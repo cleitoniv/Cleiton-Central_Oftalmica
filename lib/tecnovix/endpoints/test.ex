@@ -91,6 +91,19 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
   @impl true
   def generate_boleto(_params) do
+    boleto = [
+      %{
+        "parcela" => 1
+      },
+      %{
+        "parcela" => 3
+      },
+      %{
+        "parcela" => 5
+      }
+    ]
+
+  {:ok, boleto}
   end
 
   def organize_cliente(http) do

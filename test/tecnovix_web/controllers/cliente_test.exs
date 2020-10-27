@@ -72,7 +72,6 @@ defmodule TecnovixWeb.UsersTest do
     })
     |> json_response(200)
 
-
     {:ok, register} = Tecnovix.UsuariosClienteModel.search_register_email(user_client["email"])
 
     assert register.email == user_client["email"]
@@ -120,7 +119,6 @@ defmodule TecnovixWeb.UsersTest do
     |> recycle()
     |> post("/api/cliente/atend_pref", %{"horario" => "Manha"})
     |> json_response(200)
-
   end
 
   test "show cliente/usuario and atendimento preferencial cliente" do
@@ -354,7 +352,6 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/get_endereco_by_cep?cep=29027445")
     |> json_response(200)
-
   end
 
   test "Acessando com o primeiro acesso e depois cadastrando o complemento" do
@@ -380,7 +377,6 @@ defmodule TecnovixWeb.UsersTest do
     |> recycle()
     # entrando para cadastrar denovo com o mesmo email
     |> post("/api/cliente/first_access", %{"param" => update_first_access})
-
     |> recycle()
     # completando  o cadastro
     |> post("/api/cliente", %{"param" => user_param})

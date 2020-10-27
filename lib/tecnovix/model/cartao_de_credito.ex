@@ -14,8 +14,9 @@ defmodule Tecnovix.CartaoDeCreditoModel do
           |> Repo.update_all([])
 
         {:ok, cartao}
+
       _ ->
-       {:error, :not_found}
+        {:error, :not_found}
     end
   end
 
