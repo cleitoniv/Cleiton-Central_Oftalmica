@@ -103,7 +103,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
       }
     ]
 
-  {:ok, boleto}
+    {:ok, boleto}
   end
 
   def organize_cliente(http) do

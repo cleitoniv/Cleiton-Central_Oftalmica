@@ -65,7 +65,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
       }
     ]
 
-  {:ok, boleto}
+    {:ok, boleto}
   end
 
   @impl true

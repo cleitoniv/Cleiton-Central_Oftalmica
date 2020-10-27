@@ -6,6 +6,13 @@ defmodule Tecnovix.Services.Order do
   alias Tecnovix.Repo
   import Ecto.Query
 
+  # Legenda de Pedidos
+  #
+  # "S" -> Sim foi pago.
+  # "N" -> Não foi pago.
+  # "R" -> Reembolsado.
+  # "P" -> Pendente de pagamento.
+
   def verify_pedidos(pedidos) do
     verify =
       Enum.map(pedidos, fn map ->
@@ -14,7 +21,13 @@ defmodule Tecnovix.Services.Order do
 
         case order["status"] do
           "PAID" ->
-            PedidosDeVendaModel.update_order(map)
+            PedidosDeVendaModel.update_order(map, "S")
+
+          "NOT_PAID" ->
+            PedidosDeVendaModel.update_order(map, "N")
+
+          "REVERTED" ->
+            PedidosDeVendaModel.update_order(map, "R")
 
           _ ->
             []
@@ -31,7 +44,7 @@ defmodule Tecnovix.Services.Order do
   def init(_) do
     pedidos =
       PedidosDeVendaSchema
-      |> where([p], p.status_ped == 0 and p.pago == "N")
+      |> where([p], p.status_ped == 0 and p.pago == "P")
       |> Repo.all()
       |> verify_pedidos()
 

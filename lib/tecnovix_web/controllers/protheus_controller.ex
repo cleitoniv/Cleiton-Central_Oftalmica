@@ -28,9 +28,9 @@ defmodule TecnovixWeb.ProtheusController do
 
     with {:ok, _auth} <- Auth.token(),
          {:ok, boleto} <- protheus.generate_boleto(cliente) do
-           conn
-           |> put_resp_content_type("application/json")
-           |> send_resp(200, Jason.encode!(%{success: true, data: boleto}))
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: boleto}))
     end
   end
 end

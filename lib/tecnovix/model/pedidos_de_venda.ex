@@ -71,9 +71,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def update_order(changeset) do
+  def update_order(changeset, status) do
     changeset
-    |> Ecto.Changeset.change(pago: "S")
+    |> Ecto.Changeset.change(pago: status)
     |> Repo.update()
   end
 
@@ -97,7 +97,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
         rescue
           e in _ -> {:errorPayment, e.message}
         end
-      _ -> {:ok, payment}
+
+      _ ->
+        {:ok, payment}
     end
   end
 
@@ -245,10 +247,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
     {:ok, pedido}
   end
 
-  def pedido_params(items, cliente, parcela) do #BOLETO
+  # BOLETO
+  def pedido_params(items, cliente, parcela) do
     pedido = %{
       "client_id" => cliente.id,
       "tipo_pagamento" => "BOLETO",
+      "status_ped" => "B",
       "parcela" => parcela,
       "order_id" => nil,
       "filial" => "",
@@ -295,7 +299,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     {:ok, pedido}
   end
-
 
   def input_codigo(map, codigo) do
     Map.put(map, "codigo_item", codigo)

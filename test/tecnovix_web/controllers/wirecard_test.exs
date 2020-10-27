@@ -74,7 +74,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
   end
 
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // USUARIO_CLIENTE" do
@@ -527,6 +527,6 @@ defmodule Tecnovix.Test.Wirecard do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/pedido_boleto", %{"items" => items, "parcela" => 1})
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
   end
 end

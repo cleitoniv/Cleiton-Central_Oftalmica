@@ -19,7 +19,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :frete, :integer, default: 0
     field :tipo_pagamento, :string
     field :parcela, :integer
-    field :pago, :string, default: "N"
+    field :pago, :string, default: "P"
     has_one :contrato_de_parceria, Tecnovix.ContratoDeParceriaSchema
 
     has_many :items, ItensDosPedidosDeVendaSchema,
