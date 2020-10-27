@@ -20,6 +20,14 @@ defmodule Tecnovix.CartaoDeCreditoModel do
     end
   end
 
+  def delete_card(id, cliente) do
+    CartaoSchema
+    |> where([c], c.id ==^id and ^cliente.id == c.cliente_id)
+    |> first()
+    |> Repo.one()
+    |> Repo.delete()
+  end
+
   def get_cc(%{"cliente_id" => cliente_id}) do
     query =
       from c in CartaoSchema,

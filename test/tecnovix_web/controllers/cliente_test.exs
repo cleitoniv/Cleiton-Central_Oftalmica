@@ -189,10 +189,17 @@ defmodule TecnovixWeb.UsersTest do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/card", %{"param" => params_card})
       |> json_response(200)
+      |> Map.get("data")
 
-    # IO.inspect Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema)
+    IO.inspect Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema)
 
-    assert card["success"] == true
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> delete("/api/cliente/card_delete/#{card["id"]}")
+    |> json_response(200)
+    |> IO.inspect
+    IO.inspect Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema)
+
   end
 
   test "Testando o GenServer de pre devolucao" do
