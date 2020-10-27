@@ -19,6 +19,7 @@ defmodule TecnovixWeb.PedidosDeVendaView do
         pd_correios: item.pd_correios,
         vendedor_1: item.vendedor_1,
         status_ped: item.status_ped,
+        pago: item.pago,
         inserted_at: item.inserted_at,
         updated_at: item.updated_at,
         items:
