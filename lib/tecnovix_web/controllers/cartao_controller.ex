@@ -41,6 +41,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
+    end
   end
 
   def select_card(conn, %{"id" => id}) do
