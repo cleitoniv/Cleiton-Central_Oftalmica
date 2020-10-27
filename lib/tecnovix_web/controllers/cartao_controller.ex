@@ -40,9 +40,8 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
     with {:ok, _delete_card} <- CartaoModel.delete_card(id, cliente) |> IO.inspect(),
          {:ok, card_select} <- CartaoModel.select_card_after_delete(cliente) |> IO.inspect() do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> render("show.json", %{item: card_select})
+      |> send_resp(200, Jason.encode!(%{success: true}))
     end
   end
 
