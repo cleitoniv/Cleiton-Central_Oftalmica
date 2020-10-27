@@ -31,7 +31,7 @@ defmodule Tecnovix.Services.Order do
   def init(_) do
     pedidos =
       PedidosDeVendaSchema
-      |> where([p], p.status_ped == 0)
+      |> where([p], p.status_ped == 0 and p.pago == "N")
       |> Repo.all()
       |> verify_pedidos()
 

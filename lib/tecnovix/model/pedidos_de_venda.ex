@@ -73,7 +73,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def update_order(changeset) do
     changeset
-    |> Ecto.Changeset.change(status_ped: 1)
+    |> Ecto.Changeset.change(pago: "S")
     |> Repo.update()
   end
 
