@@ -22,10 +22,28 @@ defmodule Tecnovix.CartaoDeCreditoModel do
 
   def delete_card(id, cliente) do
     CartaoSchema
-    |> where([c], c.id ==^id and ^cliente.id == c.cliente_id)
+    |> where([c], c.id == ^id and ^cliente.id == c.cliente_id)
     |> first()
     |> Repo.one()
     |> Repo.delete()
+  end
+
+  def select_card_after_delete(cliente) do
+    card =
+      CartaoSchema
+      |> where([c], c.cliente_id == ^cliente.id and c.status == 0)
+      |> first()
+      |> Repo.one()
+
+    {:ok, select_card} =
+      case card do
+        nil -> []
+        card ->
+          CartaoSchema.changeset(Map.put(card, :status, 1))
+          |> Repo.update()
+      end
+
+    {:ok, select_card}
   end
 
   def get_cc(%{"cliente_id" => cliente_id}) do
