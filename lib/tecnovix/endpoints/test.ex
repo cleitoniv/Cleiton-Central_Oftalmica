@@ -6,19 +6,10 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   @header [{"Content-Type", "application/x-www-form-urlencoded"}]
 
   @impl true
-  def token(_params) do
-    resp =
-      Jason.encode!(%{
-        "access_token" =>
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUT1RWUy1BRFZQTC1GV0pXVCIsInN1YiI6IlRFQ05PVklYIiwiaWF0IjoxNTk3MjYwNTA0LCJ1c2VyaWQiOiIwMDAxMTQiLCJleHAiOjE1OTcyNjQxMDR9.6ni2m9MUyYEYkStQe56aQzZBAZbXQJvIB+08zosmhCE=",
-        "refresh_token" =>
-          "A0YbiO0RLVis8if0YXPwZnOa.GFcY-fcAWT-xziu-c3GRB26IOc7IUGVbPp-bVvcLdOnrujegcNiSzIAddkulPxBeLRqb17UOZ2mMsUwMAkvZyHLHxllqYHZ6UI1IKJHGsurYHO81No4egKlnPQ==.1orFb2GA3kREkBjhQSG3dF3ug3C/DZFTnIns357umzg=",
-        "scope" => "default",
-        "token_type" => "Bearer",
-        "expires_in" => 3600
-      })
-
-    {:ok, %{status_code: 201, body: resp}}
+  def token(params) do
+    params = Map.put(params, :grant_type, "password")
+    url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
+    HTTPoison.post(url, [], @header)
   end
 
   @impl true
@@ -90,20 +81,31 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   @impl true
-  def generate_boleto(_params) do
-    boleto = [
-      %{
-        "parcela" => 1
-      },
-      %{
-        "parcela" => 3
-      },
-      %{
-        "parcela" => 5
-      }
-    ]
+  def generate_boleto(token) do
+    header = Protheus.authenticate(@header, token)
 
-    {:ok, boleto}
+    url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SE4REST"
+
+    HTTPoison.get(url, header)
+  end
+
+  def organize_boleto(boleto) do
+    boleto = Jason.decode!(boleto.body)
+
+    organize_boleto =
+      Enum.flat_map(boleto["resources"], fn resources ->
+        Enum.map(resources["models"], fn models ->
+          Enum.reduce(models["fields"], %{}, fn fields, acc ->
+            case fields["id"] do
+              "E4_CODIGO" ->  Map.put(acc, "parcela", fields["value"])
+               "E4_COND" -> Map.put(acc, "dias_por_mes", fields["value"])
+               _ -> fields["id"]
+            end
+          end)
+        end)
+      end)
+
+    {:ok, organize_boleto}
   end
 
   def organize_cliente(http) do

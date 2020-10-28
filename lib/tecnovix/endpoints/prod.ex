@@ -52,21 +52,33 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   @impl true
-  def generate_boleto(_params) do
-    boleto = [
-      %{
-        "parcela" => 1
-      },
-      %{
-        "parcela" => 3
-      },
-      %{
-        "parcela" => 5
-      }
-    ]
+  def generate_boleto(token) do
+    header = Protheus.authenticate(@header, token)
 
-    {:ok, boleto}
+    url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SE4REST"
+
+    HTTPoison.get(url, header)
   end
+
+  def organize_boleto(boleto) do
+    boleto = Jason.decode!(boleto.body)
+
+    organize_boleto =
+      Enum.flat_map(boleto["resources"], fn resources ->
+        Enum.map(resources["models"], fn models ->
+          Enum.reduce(models["fields"], %{}, fn fields, acc ->
+            case fields["id"] do
+              "E4_CODIGO" ->  Map.put(acc, "parcela", fields["value"])
+               "E4_COND" -> Map.put(acc, "cond", fields["value"])
+               _ -> fields["id"]
+            end
+          end)
+        end)
+      end)
+
+    {:ok, organize_boleto}
+  end
+
 
   @impl true
   def refresh_token(%{refresh_token: _token} = params) do

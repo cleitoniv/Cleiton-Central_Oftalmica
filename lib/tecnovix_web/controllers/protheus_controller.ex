@@ -26,11 +26,16 @@ defmodule TecnovixWeb.ProtheusController do
 
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, _auth} <- Auth.token(),
-         {:ok, boleto} <- protheus.generate_boleto(cliente) do
+    with {:ok, auth} <- Auth.token(),
+         {:ok, boleto = %{status_code: 200}} <- protheus.generate_boleto(auth["access_token"]),
+         {:ok, resp} <- protheus.organize_boleto(boleto) do
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: boleto}))
+      |> send_resp(200, Jason.encode!(%{success: true, data: resp}))
+
+    else
+      {:ok, %{status_code: 401}} -> {:error, :not_authorized}
+      _ -> {:error, :not_found}
     end
   end
 end

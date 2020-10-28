@@ -12,6 +12,8 @@ defmodule Tecnovix.ClientesSchema do
     field :nome, :string
     field :nome_empresarial, :string
     field :email, :string
+    field :email_fiscal, :string
+    field :email_protheus, :string
     field :endereco, :string
     field :numero, :string
     field :complemento, :string
@@ -44,6 +46,8 @@ defmodule Tecnovix.ClientesSchema do
       :loja,
       :fisica_jurid,
       :cnpj_cpf,
+      :email_fiscal,
+      :email_protheus,
       :data_nascimento,
       :nome,
       :nome_empresarial,
@@ -84,6 +88,7 @@ defmodule Tecnovix.ClientesSchema do
     |> cast(params, [
       :nome,
       :email,
+      :email_fiscal,
       :telefone,
       :cadastrado
     ])
@@ -120,6 +125,8 @@ defmodule Tecnovix.ClientesSchema do
           [
             :nome,
             :email,
+            :email_fiscal,
+            :email_protheus,
             :ddd,
             :telefone,
             :data_nascimento,
@@ -152,6 +159,8 @@ defmodule Tecnovix.ClientesSchema do
           [
             :nome,
             :email,
+            :email_fiscal,
+            :email_protheus,
             :ddd,
             :telefone,
             :data_nascimento,
