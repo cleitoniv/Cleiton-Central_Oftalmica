@@ -14,6 +14,34 @@ defmodule TecnovixWeb.ClientesController do
   alias TecnovixWeb.Auth.Firebase
   action_fallback Tecnovix.Resources.Fallback
 
+  def send_sms(conn, %{"phone_number" => phone_number} = params) do
+    code_sms = Enum.random(1_000..9_999)
+
+    params =
+      Map.put(params, "code_sms", code_sms)
+      |> Map.put("telefone", ClientesModel.formatting_phone_number(phone_number))
+
+    with {:ok, %{"codigo" => "000"}} <- ClientesModel.send_sms(%{phone_number: phone_number}, code_sms),
+         {:ok, _} <- ClientesModel.confirmation_sms(params) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: code_sms}))
+    else
+      {:ok, %{"codigo" => "500"}} ->
+        {:error, :not_authorized}
+      _ -> {:error, :not_found}
+    end
+  end
+
+  def confirmation_code(conn, %{"code_sms" => code_sms, "phone_number" => phone_number}) do
+    with {:ok, cliente} <- ClientesModel.confirmation_code(code_sms, phone_number) do
+
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: cliente}))
+    end
+  end
+
   def insert_or_update(conn, params) do
     with {:ok, cliente} <- ClientesModel.insert_or_update(params) do
       conn

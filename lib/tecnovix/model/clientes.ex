@@ -7,6 +7,9 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Changeset
   import Ecto.Query
 
+  @sms_token "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuZGlyZWN0Y2FsbHNvZnQuY29tIiwiYXVkIjoiMTkyLjE2OC4xNS4yNyIsImlhdCI6MTYwMzk5MjAwMCwibmJmIjoxNjAzOTkyMDAwLCJleHAiOjE2MDM5OTU2MDAsImRjdCI6IjMzMDI3NzQwMCIsImNsaWVudF9vYXV0aF9pZCI6IjM3NjA0OSJ9.B4gF3wAeOUkE9GNZSZCHBa8h_6touKQlrXebQrOocpw"
+  @header [{"Content-Type", "application/x-www-form-urlencoded"}]
+
   def create_first_access(params) do
     case Repo.get_by(ClientesSchema, email: params["email"]) do
       %{cadastrado: false} = cliente ->
@@ -172,6 +175,51 @@ defmodule Tecnovix.ClientesModel do
     case cliente.cadastrado do
       true -> {:ok, true}
       false -> {:ok, false}
+    end
+  end
+
+  def send_sms(%{phone_number: phone_number} = params, code_sms) do
+    text = "Central Oftálmica - Seu Código de Verificação é: #{code_sms}"
+
+    params =
+      Map.put(params, :texto, text)
+      |> Map.put(:origem, 5527996211804)
+      |> Map.put(:destino, 5527996211804)
+      |> Map.put(:access_token, @sms_token)
+
+    uri = URI.encode_query(params)
+
+    url = "https://api.directcallsoft.com/sms/send"
+
+    {:ok, resp} = HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}]) |> IO.inspect
+
+    {:ok, Jason.decode!(resp.body)}
+  end
+
+  def confirmation_sms(params) do
+    %ClientesSchema{}
+    |> ClientesSchema.sms(params)
+    |> Repo.insert()
+  end
+
+  def formatting_phone_number(phone_number) do
+    phone_number =
+      Integer.to_string(phone_number)
+      |> String.slice(4..12)
+  end
+
+  def confirmation_code(code_sms, phone_number) do
+    phone_number = String.slice(phone_number, 4..12)
+
+    cliente =
+      ClientesSchema
+      |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
+      |> first()
+      |> Repo.one()
+
+    case cliente do
+      nil -> {:error, :invalid_code_sms}
+      cliente -> {:ok, cliente}
     end
   end
 end
