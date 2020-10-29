@@ -222,7 +222,6 @@ defmodule Tecnovix.ClientesModel do
         |> ClientesSchema.sms(params)
         |> formatting_telefone()
         |> Repo.insert()
-        |> IO.inspect()
 
       changeset ->
         update_telefone(changeset, params)
@@ -249,11 +248,17 @@ defmodule Tecnovix.ClientesModel do
       |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
       |> first()
       |> Repo.one()
-      |> IO.inspect()
 
     case cliente do
       nil -> {:error, :invalid_code_sms}
-      cliente -> {:ok, cliente}
+      cliente ->
+        cliente =
+          ClientesSchema
+          |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
+          |> update([u], inc: [confirmation_sms: 1])
+          |> Repo.update_all([])
+
+        {:ok, cliente}
     end
   end
 end
