@@ -5,7 +5,7 @@ defmodule Tecnovix.ClientesSchema do
   schema "clientes" do
     field :uid, :string
     field :codigo, :string
-    field :code_sms, :string
+    field :code_sms, :integer
     field :confirmation_sms, :integer, default: 0
     field :loja, :string
     field :fisica_jurid, :string

@@ -178,14 +178,28 @@ defmodule Tecnovix.ClientesModel do
     end
   end
 
+  def get_token_sms() do
+    url = "https://api.directcallsoft.com/request_token"
+
+    params =
+    Map.put(Map.new(), "client_id", "suporte@centraloftalmica.com")
+    |> Map.put("client_secret", "0754943")
+
+    uri = URI.encode_query(params)
+
+    {:ok, resp} = HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
+
+    {:ok, Jason.decode!(resp.body)}
+  end
+
   def send_sms(%{phone_number: phone_number} = params, code_sms) do
     text = "Central Oftálmica - Seu Código de Verificação é: #{code_sms}"
-
+    {:ok, token} = get_token_sms()
     params =
       Map.put(params, :texto, text)
       |> Map.put(:origem, 5527996211804)
       |> Map.put(:destino, phone_number)
-      |> Map.put(:access_token, @sms_token)
+      |> Map.put(:access_token, token["access_token"])
 
     uri = URI.encode_query(params)
 
@@ -197,9 +211,21 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def confirmation_sms(params) do
-    %ClientesSchema{}
+    case Repo.get_by(ClientesSchema, telefone: params["telefone"]) do
+      nil ->
+      %ClientesSchema{}
+      |> ClientesSchema.sms(params)
+      |> Repo.insert()
+
+      changeset ->
+        update_telefone(changeset, params)
+    end
+  end
+
+  def update_telefone(changeset, params) do
+    changeset
     |> ClientesSchema.sms(params)
-    |> Repo.insert()
+    |> Repo.update()
   end
 
   def formatting_phone_number(phone_number) do

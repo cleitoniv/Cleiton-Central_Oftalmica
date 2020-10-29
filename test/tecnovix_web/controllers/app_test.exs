@@ -325,18 +325,22 @@ defmodule Tecnovix.Test.App do
     |> IO.inspect()
   end
 
-  # test "Envio de SMS" do
-  #   phone_number = 5527996211804
-  #
-  #   codigo =
-  #     build_conn()
-  #     |> post("/api/send_sms", %{"phone_number" => phone_number})
-  #     |> json_response(200)
-  #     |> Map.get("data")
-  #
-  #   build_conn()
-  #   |> get("/api/confirmation_code", %{"code_sms" => codigo, "phone_number" => phone_number})
-  #   |> json_response(200)
-  #   |> IO.inspect
-  # end
+  test "Envio de SMS" do
+    phone_number = 5527996211804
+
+    codigo =
+      build_conn()
+      |> post("/api/send_sms", %{"phone_number" => phone_number})
+      |> json_response(200)
+      |> Map.get("data")
+
+    build_conn()
+    |> get("/api/confirmation_code", %{"code_sms" => codigo, "phone_number" => phone_number})
+    |> json_response(200)
+    |> IO.inspect
+  end
+
+  test "Testando API AUTH" do
+    IO.inspect Tecnovix.ClientesModel.get_token_sms()
+  end
 end
