@@ -222,6 +222,7 @@ defmodule Tecnovix.ClientesModel do
         |> ClientesSchema.sms(params)
         |> formatting_telefone()
         |> Repo.insert()
+        |> IO.inspect()
 
       changeset ->
         update_telefone(changeset, params)
@@ -239,14 +240,14 @@ defmodule Tecnovix.ClientesModel do
     phone_number =
       Integer.to_string(phone_number)
       |> String.slice(4..12)
+      |> IO.inspect()
   end
 
   def confirmation_code(code_sms, phone_number) do
     phone_number =
       String.slice(phone_number, 4..12)
-      |> String.replace(["-", " "])
       |> IO.inspect()
-      
+
     cliente =
       ClientesSchema
       |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
