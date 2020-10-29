@@ -339,4 +339,8 @@ defmodule Tecnovix.Test.App do
   #   |> json_response(200)
   #   |> IO.inspect
   # end
+
+  test 'test' do
+    Tecnovix.ClientesModel.confirmation_code(1234, 5527996211804) |> IO.inspect
+  end
 end

@@ -240,13 +240,10 @@ defmodule Tecnovix.ClientesModel do
     phone_number =
       Integer.to_string(phone_number)
       |> String.slice(4..12)
-      |> IO.inspect()
   end
 
   def confirmation_code(code_sms, phone_number) do
-    phone_number =
-      String.slice(phone_number, 4..12)
-      |> IO.inspect()
+    phone_number = formatting_phone_number(phone_number)
 
     cliente =
       ClientesSchema
