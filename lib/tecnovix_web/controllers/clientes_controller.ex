@@ -15,6 +15,8 @@ defmodule TecnovixWeb.ClientesController do
   action_fallback Tecnovix.Resources.Fallback
 
   def send_sms(conn, %{"phone_number" => phone_number} = params) do
+    IO.inspect phone_number
+
     code_sms = Enum.random(1_000..9_999)
 
     params =
@@ -22,7 +24,7 @@ defmodule TecnovixWeb.ClientesController do
       |> Map.put("telefone", ClientesModel.formatting_phone_number(phone_number))
 
     with {:ok, %{"codigo" => "000"}} <-
-           ClientesModel.send_sms(%{phone_number: phone_number}, code_sms),
+           ClientesModel.send_sms(%{phone_number: phone_number}, code_sms) |> IO.inspect,
          {:ok, _} <- ClientesModel.confirmation_sms(params) |> IO.inspect() do
       conn
       |> put_resp_content_type("application/json")
