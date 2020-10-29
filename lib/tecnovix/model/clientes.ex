@@ -238,8 +238,7 @@ defmodule Tecnovix.ClientesModel do
 
   def formatting_phone_number(phone_number) do
     phone_number =
-      Integer.to_string(phone_number)
-      |> String.slice(4..12)
+      |> String.slice(phone_number, 4..12)
   end
 
   def confirmation_code(code_sms, phone_number) do
