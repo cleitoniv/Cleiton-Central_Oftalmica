@@ -37,7 +37,7 @@ defmodule TecnovixWeb.Router do
 
     post "/user_sync/login", TecnovixWeb.SyncUsersController, :login
     get "/verify_field_cadastrado", TecnovixWeb.ClientesController, :verify_field_cadastrado
-    post "/send_sms", TecnovixWeb.ClientesController, :send_sms
+    get "/send_sms", TecnovixWeb.ClientesController, :send_sms
     get "/confirmation_code", TecnovixWeb.ClientesController, :confirmation_code
 
     scope "/sync" do
