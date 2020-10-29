@@ -26,12 +26,14 @@ defmodule Tecnovix.ClientesModel do
       _ ->
         %ClientesSchema{}
         |> ClientesSchema.first_access(params)
+        |> formatting_telefone()
         |> Repo.insert()
     end
   end
 
   defp update_first_access(cliente, params) do
     ClientesSchema.first_access(cliente, params)
+    |> formatting_telefone()
     |> Repo.update()
   end
 
