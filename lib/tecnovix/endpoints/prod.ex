@@ -68,9 +68,9 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         Enum.map(resources["models"], fn models ->
           Enum.reduce(models["fields"], %{}, fn fields, acc ->
             case fields["id"] do
-              "E4_CODIGO" ->  Map.put(acc, "parcela", fields["value"])
-               "E4_COND" -> Map.put(acc, "cond", fields["value"])
-               _ -> fields["id"]
+              "E4_CODIGO" -> Map.put(acc, "parcela", fields["value"])
+              "E4_COND" -> Map.put(acc, "cond", fields["value"])
+              _ -> fields["id"]
             end
           end)
         end)
@@ -78,7 +78,6 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
     {:ok, organize_boleto}
   end
-
 
   @impl true
   def refresh_token(%{refresh_token: _token} = params) do

@@ -33,7 +33,6 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> render("show.json", %{item: card})
     else
       {:error, %Ecto.Changeset{}} = error -> error
-      
       _ -> {:error, :card_not_created}
     end
   end

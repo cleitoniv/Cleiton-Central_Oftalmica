@@ -184,12 +184,13 @@ defmodule Tecnovix.ClientesModel do
     url = "https://api.directcallsoft.com/request_token"
 
     params =
-    Map.put(Map.new(), "client_id", "suporte@centraloftalmica.com")
-    |> Map.put("client_secret", "0754943")
+      Map.put(Map.new(), "client_id", "suporte@centraloftalmica.com")
+      |> Map.put("client_secret", "0754943")
 
     uri = URI.encode_query(params)
 
-    {:ok, resp} = HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
+    {:ok, resp} =
+      HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
 
     {:ok, Jason.decode!(resp.body)}
   end
@@ -197,9 +198,10 @@ defmodule Tecnovix.ClientesModel do
   def send_sms(%{phone_number: phone_number} = params, code_sms) do
     text = "Central Oftálmica - Seu Código de Verificação é: #{code_sms}"
     {:ok, token} = get_token_sms()
+
     params =
       Map.put(params, :texto, text)
-      |> Map.put(:origem, 5527996211804)
+      |> Map.put(:origem, 5_527_996_211_804)
       |> Map.put(:destino, phone_number)
       |> Map.put(:access_token, token["access_token"])
 
@@ -207,7 +209,8 @@ defmodule Tecnovix.ClientesModel do
 
     url = "https://api.directcallsoft.com/sms/send"
 
-    {:ok, resp} = HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
+    {:ok, resp} =
+      HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
 
     {:ok, Jason.decode!(resp.body)}
   end
@@ -215,9 +218,10 @@ defmodule Tecnovix.ClientesModel do
   def confirmation_sms(params) do
     case Repo.get_by(ClientesSchema, telefone: params["telefone"]) do
       nil ->
-      %ClientesSchema{}
-      |> ClientesSchema.sms(params)
-      |> Repo.insert()
+        %ClientesSchema{}
+        |> ClientesSchema.sms(params)
+        |> formatting_telefone()
+        |> Repo.insert()
 
       changeset ->
         update_telefone(changeset, params)
@@ -227,6 +231,7 @@ defmodule Tecnovix.ClientesModel do
   def update_telefone(changeset, params) do
     changeset
     |> ClientesSchema.sms(params)
+    |> formatting_telefone()
     |> Repo.update()
   end
 

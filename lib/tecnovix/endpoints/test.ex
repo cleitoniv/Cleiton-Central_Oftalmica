@@ -97,9 +97,9 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         Enum.map(resources["models"], fn models ->
           Enum.reduce(models["fields"], %{}, fn fields, acc ->
             case fields["id"] do
-              "E4_CODIGO" ->  Map.put(acc, "parcela", fields["value"])
-               "E4_COND" -> Map.put(acc, "dias_por_mes", fields["value"])
-               _ -> fields["id"]
+              "E4_CODIGO" -> Map.put(acc, "parcela", fields["value"])
+              "E4_COND" -> Map.put(acc, "dias_por_mes", fields["value"])
+              _ -> fields["id"]
             end
           end)
         end)

@@ -19,7 +19,6 @@ defmodule Tecnovix.TestHelp do
     |> Jason.decode!()
   end
 
-
   def cliente() do
     File.read!("test/support/protheus/cliente.json")
     |> Jason.decode!()

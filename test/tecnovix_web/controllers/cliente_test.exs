@@ -206,7 +206,7 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> delete("/api/cliente/card_delete/#{card["id"]}")
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
 
     # IO.inspect(Tecnovix.Repo.all(Tecnovix.CartaoCreditoClienteSchema))
   end
