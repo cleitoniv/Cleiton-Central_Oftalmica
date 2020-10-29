@@ -184,14 +184,14 @@ defmodule Tecnovix.ClientesModel do
     params =
       Map.put(params, :texto, text)
       |> Map.put(:origem, 5527996211804)
-      |> Map.put(:destino, 5527996211804)
+      |> Map.put(:destino, phone_number)
       |> Map.put(:access_token, @sms_token)
 
     uri = URI.encode_query(params)
 
     url = "https://api.directcallsoft.com/sms/send"
 
-    {:ok, resp} = HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}]) |> IO.inspect
+    {:ok, resp} = HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
 
     {:ok, Jason.decode!(resp.body)}
   end
