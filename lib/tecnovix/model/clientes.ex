@@ -242,13 +242,17 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def confirmation_code(code_sms, phone_number) do
-    phone_number = String.slice(phone_number, 4..12)
-
+    phone_number =
+      String.slice(phone_number, 4..12)
+      |> String.replace(["-", " "])
+      |> IO.inspect()
+      
     cliente =
       ClientesSchema
       |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
       |> first()
       |> Repo.one()
+      |> IO.inspect()
 
     case cliente do
       nil -> {:error, :invalid_code_sms}
