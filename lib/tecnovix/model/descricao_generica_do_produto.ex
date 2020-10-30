@@ -79,13 +79,11 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
         {key, value}
       end)
+      |> Enum.filter(fn {key, value} -> value != nil  end)
       |> Map.new()
       |> Enum.reduce(
         dynamic(true),
         fn
-          {"cor", nil}, acc ->
-            dynamic([p], ^acc and is_nil(p.cor))
-
           {"cor", value}, acc ->
             dynamic([p], ^acc and p.cor == ^value)
 
