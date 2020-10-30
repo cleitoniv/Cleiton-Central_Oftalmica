@@ -23,7 +23,7 @@ defmodule Tecnovix.Services.ConfirmationSMS do
   end
 
   def handle_info({:ok, code_sms, phone_number}, state) do
-    Process.send_after(self(), {:ok, delete_code(code_sms, phone_number)}, 60000)
+     delete_code(code_sms, phone_number)
     {:noreply, state}
   end
 
