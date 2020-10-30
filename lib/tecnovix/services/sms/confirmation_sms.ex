@@ -8,7 +8,7 @@ defmodule Tecnovix.Services.ConfirmationSMS do
       phone_number = Tecnovix.ClientesModel.formatting_phone_number(phone_number)
 
       ClientesSchema
-      |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
+      |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone and c.confirmation_sms == 0)
       |> first()
       |> Repo.one()
       |> Repo.delete()

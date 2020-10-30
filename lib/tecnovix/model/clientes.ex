@@ -288,7 +288,7 @@ defmodule Tecnovix.ClientesModel do
         {cont, confirmation} =
           ClientesSchema
           |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
-          |> update([u], inc: [confirmation_sms: 1])
+          |> update([u], set: [confirmation_sms: 1])
           |> select([s], %{confirmation_sms: s.confirmation_sms})
           |> Repo.update_all([])
 
