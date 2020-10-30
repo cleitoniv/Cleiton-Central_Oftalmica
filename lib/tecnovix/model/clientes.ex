@@ -98,6 +98,8 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create(params) do
+    params = Map.put(params, "sit_app", "N")
+
     %ClientesSchema{}
     |> ClientesSchema.changeset(params)
     |> formatting_telefone()

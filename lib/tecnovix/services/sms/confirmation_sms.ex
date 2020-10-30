@@ -12,7 +12,6 @@ defmodule Tecnovix.Services.ConfirmationSMS do
       |> first()
       |> Repo.one()
       |> Repo.delete()
-      |> IO.inspect()
   end
 
   def start_link(_) do
@@ -23,8 +22,13 @@ defmodule Tecnovix.Services.ConfirmationSMS do
     {:ok, :state}
   end
 
+  def handle_info({:ok, code_sms, phone_number}, state) do
+    Process.send_after(self(), delete_code(code_sms, phone_number), 10000)
+    {:noreply, state}
+  end
+
   def handle_call({:confirmation, code_sms, phone_number}, _from, state) do
-    Process.send_after(self(), {:ok, delete_code(code_sms, phone_number)}, 5000)
+    Process.send_after(self(), {:ok, code_sms, phone_number}, 10000)
 
     {:reply, {:ok, state}, state}
   end
