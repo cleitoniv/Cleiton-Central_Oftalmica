@@ -98,6 +98,8 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def insert_or_update_first(%{"email" => email} = params) do
+    params = Map.put(params, "sit_app", "N")
+
     with nil <- Repo.get_by(ClientesSchema, email: email, cadastrado: false) do
       __MODULE__.create(params)
     else
@@ -107,8 +109,6 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create(params) do
-    params = Map.put(params, "sit_app", "N")
-
     %ClientesSchema{}
     |> ClientesSchema.changeset(params)
     |> formatting_telefone()
@@ -262,7 +262,6 @@ defmodule Tecnovix.ClientesModel do
         |> ClientesSchema.sms(params)
         |> formatting_telefone()
         |> Repo.insert()
-        |> IO.inspect
 
       changeset ->
         update_telefone(changeset, params)

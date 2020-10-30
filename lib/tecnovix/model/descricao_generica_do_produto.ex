@@ -12,6 +12,21 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     end
   end
 
+  def cont_keys(map) do
+    count_keys =
+      Map.keys(map)
+      |> Enum.count()
+
+    case count_keys > 1 do
+      false -> product_not_parameters()
+      true -> verify_graus(map)
+    end
+  end
+
+  def product_not_parameters() do
+    {:ok, false}
+  end
+
   def verify_graus(params) do
     params =
       Enum.map(params, fn {key, value} ->
