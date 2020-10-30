@@ -466,7 +466,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       },
       "items" => items,
       "customers" => %{
-        "ownId" => cliente.codigo,
+        "ownId" => Ecto.UUID.autogenerate(),
         "fullname" => cliente.nome,
         "email" => cliente.email,
         "birthDate" => cliente.data_nascimento,
