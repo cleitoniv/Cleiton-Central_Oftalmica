@@ -45,6 +45,7 @@ defmodule TecnovixWeb.Support.Generator do
   def user_param() do
     %{
       "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
+      "email_fiscal" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
       "fisica_jurid" => "F",
       "cnpj_cpf" => String.slice(Float.to_string(:rand.uniform()), 2..12),
       "sit_app" => "A",

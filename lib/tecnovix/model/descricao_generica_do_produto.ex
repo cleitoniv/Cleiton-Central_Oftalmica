@@ -13,38 +13,26 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   end
 
   def verify_eyes(params) do
-    case Map.keys(params) do
-      ["direito", "esquerdo"] ->
-        Enum.map(params, fn map ->
-          case cont_keys(map["direito"]) do
-            {:ok, true} ->
-            case cont_keys(map["esquerdo"]) do
-              {:ok, true} -> {:ok, true}
-              {:ok, false} -> {:ok, false}
-            end
-            {:ok, false} -> {:ok, false}
-          end
-        end)
-      ["esquerdo", "direito"] ->
-        Enum.map(params, fn map ->
-          case cont_keys(map["direito"]) do
-            {:ok, true} ->
-            case cont_keys(map["esquerdo"]) do
-              {:ok, true} -> {:ok, true}
-              {:ok, false} -> {:ok, false}
-            end
-            {:ok, false} -> {:ok, false}
-          end
-        end)
-      _ -> cont_keys(params)
+      result =
+        case Map.keys(params) do
+          ["direito", "esquerdo"] ->
+            Enum.map(params, fn {key, value} ->
+              case cont_keys(value) do
+                {:ok, true} -> true
+                {:ok, false} -> false
+              end
+            end)
+          _ -> cont_keys(params)
+        end
+        |> Enum.uniq()
+
+      {:ok, result}
     end
-  end
 
   def cont_keys(map) do
     count_keys =
       Map.keys(map)
       |> Enum.count()
-      |> IO.inspect()
 
     case count_keys <= 2 do
       true -> product_not_parameters()
