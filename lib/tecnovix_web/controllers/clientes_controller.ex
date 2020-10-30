@@ -7,7 +7,8 @@ defmodule TecnovixWeb.ClientesController do
     UsuariosClienteModel,
     AtendPrefClienteModel,
     UsuariosClienteSchema,
-    ClientesSchema
+    ClientesSchema,
+    Services.ConfirmationSMS
   }
 
   alias Tecnovix.{App.Screens, Services.Devolucao, Services.Auth, Endpoints.Protheus}
@@ -37,11 +38,11 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def confirmation_code(conn, %{"code_sms" => code_sms, "phone_number" => phone_number}) do
-    with {_, confirmation} <-
+    with {:ok, confirmation} <-
            ClientesModel.confirmation_code(code_sms, phone_number) do
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{sucess: true, data: confirmation}))
+      |> send_resp(200, Jason.encode!(%{success: true, data: confirmation}))
     end
   end
 
