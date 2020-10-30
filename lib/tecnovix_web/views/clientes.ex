@@ -12,6 +12,7 @@ defmodule TecnovixWeb.ClientesView do
       cadastrado: item.cadastrado,
       fisica_jurid: item.fisica_jurid,
       cnpj_cpf: item.cnpj_cpf,
+      confirmation_sms: item.confirmation_sms,
       nome: item.nome,
       email: item.email,
       data_nascimento: item.data_nascimento,
