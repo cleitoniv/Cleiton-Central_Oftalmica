@@ -330,17 +330,17 @@ defmodule Tecnovix.Test.App do
 
     codigo =
       build_conn()
-      |> post("/api/send_sms", %{"phone_number" => phone_number})
+      |> get("/api/send_sms", %{"phone_number" => phone_number})
       |> json_response(200)
       |> Map.get("data")
 
     build_conn()
     |> get("/api/confirmation_code", %{"code_sms" => codigo, "phone_number" => phone_number})
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 
   test 'test' do
-    Tecnovix.ClientesModel.confirmation_code(1234, 5527996211804) |> IO.inspect
+    Tecnovix.ClientesModel.confirmation_code(1234, 5_527_996_211_804) |> IO.inspect()
   end
 end

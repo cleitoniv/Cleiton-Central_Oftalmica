@@ -212,7 +212,20 @@ defmodule Tecnovix.ClientesModel do
     {:ok, resp} =
       HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
 
-    {:ok, Jason.decode!(resp.body)}
+    {:ok, Jason.decode!(resp.body)}]
+    # {:ok,
+    #  %{
+    #    "api" => "sms",
+    #    "callerid" => "15120358907882",
+    #    "codigo" => "000",
+    #    "destino" => ["5527996211804"],
+    #    "detalhe" => [
+    #      %{"destino" => "5527996211804", "id_mensagem" => 15_120_358_907_972}
+    #    ],
+    #    "modulo" => "enviar",
+    #    "msg" => "001 - Mensagem enviada com sucessso - CALLER-ID: 15120358907882",
+    #    "status" => "ok"
+    #  }}
   end
 
   def confirmation_sms(params) do
@@ -236,8 +249,7 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def formatting_phone_number(phone_number) do
-    phone_number =
-      String.slice(phone_number, 4..12)
+    phone_number = String.slice(phone_number, 4..12)
   end
 
   def confirmation_code(code_sms, phone_number) do
@@ -250,15 +262,18 @@ defmodule Tecnovix.ClientesModel do
       |> Repo.one()
 
     case cliente do
-      nil -> {:error, :invalid_code_sms}
+      nil ->
+        {:error, :invalid_code_sms}
+
       cliente ->
-        cliente =
+        {cont, confirmation} =
           ClientesSchema
           |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
           |> update([u], inc: [confirmation_sms: 1])
+          |> select([s], %{confirmation_sms: s.confirmation_sms})
           |> Repo.update_all([])
 
-        {:ok, cliente}
+        {:ok, hd(confirmation)}
     end
   end
 end
