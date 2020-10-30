@@ -26,7 +26,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   end
 
   def product_not_parameters() do
-    {:ok, false}
+    {:ok, true}
   end
 
   def verify_graus(params) do
