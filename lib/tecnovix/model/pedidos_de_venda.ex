@@ -246,13 +246,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     {:ok, pedido}
   end
-
-  # def two_eyes() do
-  #   Enum.map(params, fn {key, value} ->
-  #
-  #   end)
-  # end
-
+  
   # BOLETO
   def pedido_params(items, cliente, parcela) do
     pedido = %{
