@@ -20,6 +20,7 @@ defmodule TecnovixWeb.ClientesController do
 
     params =
       Map.put(params, "code_sms", code_sms)
+      |> Map.put("ddd", ClientesModel.get_ddd(phone_number))
       |> Map.put("telefone", ClientesModel.formatting_phone_number(phone_number))
 
     with {:ok, %{"codigo" => "000"}} <-

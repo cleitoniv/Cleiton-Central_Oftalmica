@@ -87,7 +87,7 @@ defmodule Tecnovix.ClientesSchema do
 
   def sms(changeset, params \\ %{}) do
     changeset
-    |> cast(params, [:code_sms, :confirmation_sms, :telefone])
+    |> cast(params, [:code_sms, :confirmation_sms, :telefone, :ddd])
     |> validate_required([:telefone, :code_sms])
     |> unique_constraint([:telefone], message: "Esse número de telefone já existe")
   end

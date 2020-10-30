@@ -207,36 +207,43 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def send_sms(%{phone_number: phone_number} = params, code_sms) do
-    text = "Central Oftálmica - Seu Código de Verificação é: #{code_sms}"
-    {:ok, token} = get_token_sms()
+    # text = "Central Oftálmica - Seu Código de Verificação é: #{code_sms}"
+    # {:ok, token} = get_token_sms()
+    #
+    # params =
+    #   Map.put(params, :texto, text)
+    #   |> Map.put(:origem, 5_527_996_211_804)
+    #   |> Map.put(:destino, phone_number)
+    #   |> Map.put(:access_token, token["access_token"])
+    #
+    # uri = URI.encode_query(params)
+    #
+    # url = "https://api.directcallsoft.com/sms/send"
+    #
+    # {:ok, resp} =
+    #   HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
+    #
+    # {:ok, Jason.decode!(resp.body)}
+    {:ok,
+     %{
+       "api" => "sms",
+       "callerid" => "15120358907882",
+       "codigo" => "000",
+       "destino" => ["5527996211804"],
+       "detalhe" => [
+         %{"destino" => "5527996211804", "id_mensagem" => 15_120_358_907_972}
+       ],
+       "modulo" => "enviar",
+       "msg" => "001 - Mensagem enviada com sucessso - CALLER-ID: 15120358907882",
+       "status" => "ok"
+     }}
+  end
 
-    params =
-      Map.put(params, :texto, text)
-      |> Map.put(:origem, 5_527_996_211_804)
-      |> Map.put(:destino, phone_number)
-      |> Map.put(:access_token, token["access_token"])
-
-    uri = URI.encode_query(params)
-
-    url = "https://api.directcallsoft.com/sms/send"
-
-    {:ok, resp} =
-      HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
-
-    {:ok, Jason.decode!(resp.body)}
-    # {:ok,
-    #  %{
-    #    "api" => "sms",
-    #    "callerid" => "15120358907882",
-    #    "codigo" => "000",
-    #    "destino" => ["5527996211804"],
-    #    "detalhe" => [
-    #      %{"destino" => "5527996211804", "id_mensagem" => 15_120_358_907_972}
-    #    ],
-    #    "modulo" => "enviar",
-    #    "msg" => "001 - Mensagem enviada com sucessso - CALLER-ID: 15120358907882",
-    #    "status" => "ok"
-    #  }}
+  def get_ddd(phone_number) do
+    case phone_number do
+      nil -> phone_number
+      phone_number -> String.slice(phone_number, 2..3)
+    end
   end
 
   def confirmation_sms(params) do
@@ -246,6 +253,7 @@ defmodule Tecnovix.ClientesModel do
         |> ClientesSchema.sms(params)
         |> formatting_telefone()
         |> Repo.insert()
+        |> IO.inspect
 
       changeset ->
         update_telefone(changeset, params)
