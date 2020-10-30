@@ -88,6 +88,15 @@ defmodule Tecnovix.ClientesModel do
     {:error, :invalid_parameter}
   end
 
+  def update(changeset, params) do
+    changeset
+    |> ClientesSchema.changeset(params)
+    |> formatting_telefone()
+    |> formatting_cnpj_cpf()
+    |> formatting_cep()
+    |> Repo.update()
+  end
+
   def insert_or_update_first(%{"email" => email} = params) do
     with nil <- Repo.get_by(ClientesSchema, email: email, cadastrado: false) do
       __MODULE__.create(params)
