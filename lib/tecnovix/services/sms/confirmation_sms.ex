@@ -9,9 +9,8 @@ defmodule Tecnovix.Services.ConfirmationSMS do
 
       ClientesSchema
       |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone and c.confirmation_sms == 0)
-      |> first()
-      |> Repo.one()
-      |> Repo.delete()
+      |> update([c], set: [code_sms: nil])
+      |> Repo.update_all([])
   end
 
   def start_link(_) do
