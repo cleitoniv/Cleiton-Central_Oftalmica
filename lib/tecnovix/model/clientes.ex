@@ -198,36 +198,36 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def send_sms(%{phone_number: phone_number} = params, code_sms) do
-    # text = "Central Oftálmica - Seu Código de Verificação é: #{code_sms}"
-    # {:ok, token} = get_token_sms()
-    #
-    # params =
-    #   Map.put(params, :texto, text)
-    #   |> Map.put(:origem, 5_527_996_211_804)
-    #   |> Map.put(:destino, phone_number)
-    #   |> Map.put(:access_token, token["access_token"])
-    #
-    # uri = URI.encode_query(params)
-    #
-    # url = "https://api.directcallsoft.com/sms/send"
-    #
-    # {:ok, resp} =
-    #   HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
-    #
-    # {:ok, Jason.decode!(resp.body)}
-    {:ok,
-     %{
-       "api" => "sms",
-       "callerid" => "15120358907882",
-       "codigo" => "000",
-       "destino" => ["5527996211804"],
-       "detalhe" => [
-         %{"destino" => "5527996211804", "id_mensagem" => 15_120_358_907_972}
-       ],
-       "modulo" => "enviar",
-       "msg" => "001 - Mensagem enviada com sucessso - CALLER-ID: 15120358907882",
-       "status" => "ok"
-     }}
+    text = "Central Oftálmica - Seu Código de Verificação é: #{code_sms}"
+    {:ok, token} = get_token_sms()
+
+    params =
+      Map.put(params, :texto, text)
+      |> Map.put(:origem, 5_527_996_211_804)
+      |> Map.put(:destino, phone_number)
+      |> Map.put(:access_token, token["access_token"])
+
+    uri = URI.encode_query(params)
+
+    url = "https://api.directcallsoft.com/sms/send"
+
+    {:ok, resp} =
+      HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
+
+    {:ok, Jason.decode!(resp.body)}
+    # {:ok,
+    #  %{
+    #    "api" => "sms",
+    #    "callerid" => "15120358907882",
+    #    "codigo" => "000",
+    #    "destino" => ["5527996211804"],
+    #    "detalhe" => [
+    #      %{"destino" => "5527996211804", "id_mensagem" => 15_120_358_907_972}
+    #    ],
+    #    "modulo" => "enviar",
+    #    "msg" => "001 - Mensagem enviada com sucessso - CALLER-ID: 15120358907882",
+    #    "status" => "ok"
+    #  }}
   end
 
   def confirmation_sms(params) do
