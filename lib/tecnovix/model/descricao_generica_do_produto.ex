@@ -18,14 +18,12 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
           ["direito", "esquerdo"] ->
             Enum.map(params, fn {key, value} ->
               case cont_keys(value) do
-                {:ok, true} -> true
-                {:ok, false} -> false
+                {:ok, true} -> {:ok, true}
+                {:ok, false} -> {:ok, false}
               end
             end)
           _ -> cont_keys(params)
         end
-        |> IO.inspect()
-      {:ok, result}
     end
 
   def cont_keys(map) do
