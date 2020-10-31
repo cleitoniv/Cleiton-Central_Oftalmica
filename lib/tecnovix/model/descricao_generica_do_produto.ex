@@ -24,7 +24,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
             end)
           _ -> cont_keys(params)
         end
-        |> Enum.uniq()
         |> IO.inspect()
       {:ok, result}
     end
