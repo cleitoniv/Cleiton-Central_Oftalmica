@@ -150,7 +150,9 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         graus_adicao: d.adicao,
         cor: d.cor
       })
+      |> distinct(true)
       |> Repo.all()
+      |> IO.inspect
 
     parse_fields({graus, %{}}, :graus_esferico)
     |> parse_fields(:graus_cilindrico)

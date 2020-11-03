@@ -317,12 +317,12 @@ defmodule TecnovixWeb.UsersTest do
       |> json_response(201)
       |> Map.get("data")
 
-    # {:ok, _desc} =
-    #   Tecnovix.DescricaoGenericaDoProdutoModel.create(Map.put(desc_param, "esferico", -2.5))
-    #
-    # for _ <- 1..40000 do
-    #   Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
-    # end
+    {:ok, _desc} =
+      Tecnovix.DescricaoGenericaDoProdutoModel.create(Map.put(desc_param, "esferico", -2.5))
+
+    for _ <- 1..40000 do
+      Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
+    end
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
