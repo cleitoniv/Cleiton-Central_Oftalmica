@@ -159,7 +159,8 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
   def parse_fields({list, acc}, field) do
     fields =
-      Enum.map(list, fn map -> verify_field(map, field) end)
+      Enum.map(list, fn map ->
+          verify_field(map, field) end)
       |> Enum.uniq()
       |> Enum.sort(:desc)
 

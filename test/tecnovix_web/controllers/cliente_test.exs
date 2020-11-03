@@ -317,17 +317,18 @@ defmodule TecnovixWeb.UsersTest do
       |> json_response(201)
       |> Map.get("data")
 
-    {:ok, _desc} =
-      Tecnovix.DescricaoGenericaDoProdutoModel.create(Map.put(desc_param, "esferico", -2.5))
-
-    for _ <- 1..40000 do
-      Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
-    end
+    # {:ok, _desc} =
+    #   Tecnovix.DescricaoGenericaDoProdutoModel.create(Map.put(desc_param, "esferico", -2.5))
+    #
+    # for _ <- 1..40000 do
+    #   Tecnovix.DescricaoGenericaDoProdutoModel.create(desc_param)
+    # end
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/get_graus?grupo=010C")
     |> json_response(200)
+    |> IO.inspect
   end
 
   test "Testando o socket de open notifications" do
