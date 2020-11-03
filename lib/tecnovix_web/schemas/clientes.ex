@@ -89,7 +89,7 @@ defmodule Tecnovix.ClientesSchema do
     changeset
     |> cast(params, [:code_sms, :confirmation_sms, :telefone, :ddd])
     |> validate_required([:telefone, :code_sms])
-    |> unique_constraint([:telefone, :cnpj_cpf], message: "Esse número de telefone já está cadastrado.", name: :telefone_unico)
+    |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
   end
 
   def first_access(changeset, params \\ %{}) do
@@ -109,7 +109,7 @@ defmodule Tecnovix.ClientesSchema do
     |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
     |> unique_constraint([:email], message: "Esse email já existe")
     |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
-    |> unique_constraint([:telefone, :cnpj_cpf], message: "Esse número de telefone já está cadastrado.", name: :telefone_unico)
+    |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
   end
 
   def validate_ramo_fisica(changeset, params \\ %{}) do
@@ -188,7 +188,7 @@ defmodule Tecnovix.ClientesSchema do
         )
         |> unique_constraint([:email], message: "Esse email já existe")
         |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
-        |> unique_constraint([:telefone, :cnpj_cpf], message: "Esse número de telefone já está cadastrado.", name: :telefone_unico)
+        |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
 
       _ ->
         changeset
