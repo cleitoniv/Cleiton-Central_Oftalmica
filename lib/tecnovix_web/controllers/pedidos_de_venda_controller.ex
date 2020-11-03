@@ -97,6 +97,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
+  def create(conn, %{"items" => items, "id_cartao" => id_cartao, "ccv" => ""}) do
+    {:error, :order_not_created}
+  end
+
   defp usuario_auth(auth) do
     case auth do
       nil -> ""
