@@ -280,11 +280,7 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def confirmation_code(code_sms, phone_number) do
-    IO.inspect phone_number
-
     phone_number = formatting_phone_number(phone_number)
-
-    IO.inspect phone_number
 
     cliente =
       ClientesSchema
