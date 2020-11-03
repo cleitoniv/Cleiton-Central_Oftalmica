@@ -97,7 +97,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def create(conn, _) do
+  def create(conn, params) do
+    IO.inspect params
     {:error, :order_not_created}
   end
 
