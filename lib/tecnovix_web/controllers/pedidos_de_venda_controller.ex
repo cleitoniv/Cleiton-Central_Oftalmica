@@ -94,6 +94,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> render("pedido.json", %{item: pedido})
     else
       _ -> {:error, :order_not_created}
+    end
   end
 
   defp usuario_auth(auth) do
