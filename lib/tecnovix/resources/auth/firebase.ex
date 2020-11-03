@@ -121,7 +121,7 @@ defmodule TecnovixWeb.Auth.Firebase do
     end
   end
 
-  def user_cliente_auth(conn) do
+  def user_cliente_auth(conn, _opts) do
     with {:ok, token} <- get_token(conn),
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
          {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]),
