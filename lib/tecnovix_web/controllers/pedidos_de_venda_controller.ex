@@ -58,7 +58,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   # credit_card
-  def create(conn, %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv}) do
+  def create(conn, %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv}) when ccv != "" do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
     {:ok, cliente} =

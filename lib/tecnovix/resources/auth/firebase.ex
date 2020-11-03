@@ -117,7 +117,7 @@ defmodule TecnovixWeb.Auth.Firebase do
 
       _ ->
         conn
-        |> user_cliente_auth()
+        |> user_cliente_auth(nil)
     end
   end
 
