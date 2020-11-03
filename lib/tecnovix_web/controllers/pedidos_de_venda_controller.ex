@@ -92,7 +92,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("pedido.json", %{item: pedido})
-    end
+    else
+      _ -> {:error, :order_not_created}
   end
 
   defp usuario_auth(auth) do

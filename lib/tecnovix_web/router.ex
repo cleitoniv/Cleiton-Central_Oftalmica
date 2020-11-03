@@ -23,6 +23,10 @@ defmodule TecnovixWeb.Router do
     plug :cliente_auth
   end
 
+  pipepline :usuario_cliente do
+    plug :user_cliente_auth
+  end
+
   pipeline :guest do
     plug :firebase_auth
   end
@@ -69,7 +73,7 @@ defmodule TecnovixWeb.Router do
     end
 
     scope "/atend_pref_cliente" do
-      pipe_through :cliente
+      pipe_through :usuario_cliente
       get "/:cod_cliente", TecnovixWeb.AtendPrefClienteController, :get_by_cod_cliente
     end
 
