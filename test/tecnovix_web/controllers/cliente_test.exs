@@ -393,8 +393,6 @@ defmodule TecnovixWeb.UsersTest do
     # criando o cliente no primeiro acesso e saindo
     |> post("/api/cliente/first_access", %{"param" => user_first_access})
     |> recycle()
-    |> post("/api/cliente/first_access", %{"param" => user_first_access})
-    |> recycle()
     # entrando para cadastrar denovo com o mesmo email
     |> post("/api/cliente/first_access", %{"param" => update_first_access})
     |> recycle()
