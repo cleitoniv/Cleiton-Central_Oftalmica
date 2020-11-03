@@ -81,7 +81,10 @@ defmodule Tecnovix.ClientesSchema do
     |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
     |> unique_constraint([:email], message: "Esse email já existe")
     |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
-    |> unique_constraint([:telefone, :cnpj_cpf], message: "Esse número de telefone já está cadastrado.", name: :telefone_unico)
+    |> unique_constraint([:telefone, :cnpj_cpf],
+      message: "Esse número de telefone já está cadastrado.",
+      name: :telefone_unico
+    )
     |> validations_fisic_jurid(params)
   end
 

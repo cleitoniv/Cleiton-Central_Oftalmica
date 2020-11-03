@@ -5,12 +5,15 @@ defmodule Tecnovix.Services.ConfirmationSMS do
   alias Tecnovix.ClientesSchema
 
   def delete_code(code_sms, phone_number) do
-      phone_number = Tecnovix.ClientesModel.formatting_phone_number(phone_number)
+    phone_number = Tecnovix.ClientesModel.formatting_phone_number(phone_number)
 
-      ClientesSchema
-      |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone and c.confirmation_sms == 0)
-      |> update([c], set: [code_sms: nil])
-      |> Repo.update_all([])
+    ClientesSchema
+    |> where(
+      [c],
+      c.code_sms == ^code_sms and ^phone_number == c.telefone and c.confirmation_sms == 0
+    )
+    |> update([c], set: [code_sms: nil])
+    |> Repo.update_all([])
   end
 
   def start_link(_) do
@@ -22,7 +25,7 @@ defmodule Tecnovix.Services.ConfirmationSMS do
   end
 
   def handle_info({:ok, code_sms, phone_number}, state) do
-     delete_code(code_sms, phone_number)
+    delete_code(code_sms, phone_number)
     {:noreply, state}
   end
 

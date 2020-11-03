@@ -133,15 +133,17 @@ defmodule Tecnovix.ClientesModel do
   end
 
   defp formatting_telefone(changeset) do
-    update_change(changeset, :telefone,
-      fn "5527" <> telefone ->
+    update_change(changeset, :telefone, fn
+      "5527" <> telefone ->
         String.replace(telefone, "-", "")
         |> String.replace(".", "")
         |> String.replace(" ", "")
+
       "27" <> telefone ->
         String.replace(telefone, "-", "")
         |> String.replace(".", "")
         |> String.replace(" ", "")
+
       telefone ->
         String.replace(telefone, "-", "")
         |> String.replace(".", "")

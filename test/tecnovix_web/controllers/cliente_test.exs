@@ -328,7 +328,7 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/get_graus?grupo=010C")
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 
   test "Testando o socket de open notifications" do

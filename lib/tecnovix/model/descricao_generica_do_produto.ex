@@ -13,18 +13,20 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   end
 
   def verify_eyes(params) do
-      result =
-        case Map.keys(params) do
-          ["direito", "esquerdo"] ->
-            Enum.map(params, fn {key, value} ->
-              case cont_keys(value) do
-                {:ok, true} -> {:ok, true}
-                {:ok, false} -> {:ok, false}
-              end
-            end)
-          _ -> cont_keys(params)
-        end
-    end
+    result =
+      case Map.keys(params) do
+        ["direito", "esquerdo"] ->
+          Enum.map(params, fn {key, value} ->
+            case cont_keys(value) do
+              {:ok, true} -> {:ok, true}
+              {:ok, false} -> {:ok, false}
+            end
+          end)
+
+        _ ->
+          cont_keys(params)
+      end
+  end
 
   def cont_keys(map) do
     count_keys =
@@ -64,7 +66,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
         {key, value}
       end)
-      |> Enum.filter(fn {key, value} -> value != nil  end)
+      |> Enum.filter(fn {key, value} -> value != nil end)
       |> Map.new()
       |> Enum.reduce(
         dynamic(true),
@@ -160,7 +162,8 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
   def parse_fields({list, acc}, field) do
     fields =
       Enum.map(list, fn map ->
-          verify_field(map, field) end)
+        verify_field(map, field)
+      end)
       |> Enum.uniq()
       |> Enum.sort(:desc)
 

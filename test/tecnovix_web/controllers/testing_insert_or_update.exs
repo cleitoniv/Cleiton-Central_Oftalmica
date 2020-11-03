@@ -8,6 +8,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
     %{"access_token" => token} = Generator.sync_user("thiagoboeker", "123456")
 
     single_param = TestHelp.single_json("single_clientes.json")
+
     multi_param = TestHelp.multi_json("multi_clientes.json")
     multi_param = %{"data" => multi_param}
     # single insert

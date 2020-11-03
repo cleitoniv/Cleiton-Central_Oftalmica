@@ -58,7 +58,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   # credit_card
-  def create(conn, %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv} = params) when is_nil(ccv) == false and is_nil(id_cartao) == false do
+  def create(conn, %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv} = params)
+      when is_nil(ccv) == false and is_nil(id_cartao) == false do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
     {:ok, cliente} =
@@ -98,7 +99,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   def create(conn, params) do
-    IO.inspect params
+    IO.inspect(params)
     {:error, :order_not_created}
   end
 
