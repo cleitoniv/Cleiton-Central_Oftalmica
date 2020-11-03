@@ -10,7 +10,7 @@ defmodule Tecnovix.ClientesModel do
   @sms_token "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuZGlyZWN0Y2FsbHNvZnQuY29tIiwiYXVkIjoiMTkyLjE2OC4xNS4yNyIsImlhdCI6MTYwMzk5MjAwMCwibmJmIjoxNjAzOTkyMDAwLCJleHAiOjE2MDM5OTU2MDAsImRjdCI6IjMzMDI3NzQwMCIsImNsaWVudF9vYXV0aF9pZCI6IjM3NjA0OSJ9.B4gF3wAeOUkE9GNZSZCHBa8h_6touKQlrXebQrOocpw"
   @header [{"Content-Type", "application/x-www-form-urlencoded"}]
 
-  def create_first_access(params) do
+  defp verify_email(params) do
     case Repo.get_by(ClientesSchema, email: params["email"]) do
       %{cadastrado: false} = cliente ->
         update_first_access(cliente, params)
@@ -28,6 +28,34 @@ defmodule Tecnovix.ClientesModel do
         |> ClientesSchema.first_access(params)
         |> formatting_telefone()
         |> Repo.insert()
+    end
+  end
+
+  defp verify_telefone(params) do
+    case Repo.get_by(ClientesSchema, telefone: params["telefone"]) do
+      %{cadastrado: false} = cliente ->
+        update_first_access(cliente, params)
+
+      %{cadastrado: true} ->
+        error =
+          %ClientesSchema{}
+          |> change(%{})
+          |> add_error(:telefone, "Já existe um cliente com esse telefone.")
+
+        {:error, error}
+
+      _ ->
+        %ClientesSchema{}
+        |> ClientesSchema.first_access(params)
+        |> formatting_telefone()
+        |> Repo.insert()
+    end
+  end
+
+  def create_first_access(params) do
+    with {:ok, _cliente} <- verify_email(params),
+         {:ok, cliente} <- verify_telefone(params) do
+        {:ok, cliente}
     end
   end
 

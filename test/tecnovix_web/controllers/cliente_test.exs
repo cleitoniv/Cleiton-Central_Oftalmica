@@ -379,7 +379,7 @@ defmodule TecnovixWeb.UsersTest do
     user_first_access = %{
       "nome" => "Victor",
       "email" => user_firebase["email"],
-      "telefone" => "99999999"
+      "telefone" => "5527996211804"
     }
 
     update_first_access = %{
@@ -391,6 +391,8 @@ defmodule TecnovixWeb.UsersTest do
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     # criando o cliente no primeiro acesso e saindo
+    |> post("/api/cliente/first_access", %{"param" => user_first_access})
+    |> recycle()
     |> post("/api/cliente/first_access", %{"param" => user_first_access})
     |> recycle()
     # entrando para cadastrar denovo com o mesmo email
