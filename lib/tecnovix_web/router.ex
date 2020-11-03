@@ -23,7 +23,7 @@ defmodule TecnovixWeb.Router do
     plug :cliente_auth
   end
 
-  pipepline :usuario_cliente do
+  pipeline :usuario_cliente do
     plug :user_cliente_auth
   end
 
