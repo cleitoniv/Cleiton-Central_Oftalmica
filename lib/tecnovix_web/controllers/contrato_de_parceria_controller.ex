@@ -30,7 +30,7 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
 
     with {:ok, items_order} <- ContratoDeParceriaModel.items_order(items),
          {:ok, order} <- ContratoDeParceriaModel.order(cliente, items_order),
-         {:ok, _payment} <- ContratoDeParceriaModel.payment(id_cartao, order, ccv),
+         {:ok, _payment} <- ContratoDeParceriaModel.payment(id_cartao, order, Integer.to_string(ccv)),
          {:ok, contrato} <- ContratoDeParceriaModel.create_contrato(cliente, items, order),
          {:ok, _notifications} <-
            NotificacoesClienteModel.credit_product_adquired(contrato, cliente) do
