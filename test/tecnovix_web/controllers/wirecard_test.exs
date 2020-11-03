@@ -72,7 +72,7 @@ defmodule Tecnovix.Test.Wirecard do
     pedido =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
+      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"], "ccv" => "123"})
       |> json_response(200)
       |> IO.inspect()
   end

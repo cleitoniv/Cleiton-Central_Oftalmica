@@ -58,7 +58,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   # credit_card
-  def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
+  def create(conn, %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv}) do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
     {:ok, cliente} =
@@ -78,7 +78,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
          {:ok, payment} <-
-           PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
+           PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order, ccv),
          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order, 1),
          {:ok, _logs} <-
            LogsClienteModel.create(

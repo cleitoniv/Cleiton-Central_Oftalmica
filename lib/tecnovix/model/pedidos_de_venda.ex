@@ -77,14 +77,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
     |> Repo.update()
   end
 
-  def payment(%{"id_cartao" => cartao_id}, order) do
+  def payment(%{"id_cartao" => cartao_id}, order, ccv) do
     order = Jason.decode!(order.body)
     order_id = order["id"]
 
     {:ok, payment} =
       cartao_id
       |> PedidosDeVendaModel.get_cartao_cliente()
-      |> PedidosDeVendaModel.payment_params()
+      |> PedidosDeVendaModel.payment_params(ccv)
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
 
@@ -246,7 +246,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     {:ok, pedido}
   end
-  
+
   # BOLETO
   def pedido_params(items, cliente, parcela) do
     pedido = %{
@@ -499,7 +499,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     __MODULE__.order_params(usuario_cliente.cliente, items)
   end
 
-  def payment_params({:ok, cartao = %CartaoSchema{}}) do
+  def payment_params({:ok, cartao = %CartaoSchema{}}, ccv) do
     %{
       "installmentCount" => 1,
       "statementDescriptor" => "central",
@@ -509,7 +509,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           "expirationYear" => String.slice(cartao.ano_validade, 2..3),
           "expirationMonth" => cartao.mes_validade,
           "number" => cartao.cartao_number,
-          "cvc" => "123",
+          "cvc" => ccv,
           "holder" => %{
             "fullname" => cartao.nome_titular,
             "birthdate" => Date.to_string(cartao.data_nascimento_titular),
