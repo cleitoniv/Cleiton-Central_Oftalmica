@@ -24,9 +24,9 @@ defmodule TecnovixWeb.ClientesController do
       |> Map.put("telefone", ClientesModel.formatting_phone_number(phone_number))
 
     with {:ok, %{"codigo" => "000"}} <-
-           ClientesModel.send_sms(%{phone_number: phone_number}, code_sms) |> IO.inspect,
-         {:ok, _} <- ClientesModel.confirmation_sms(params) |> IO.inspect,
-         {:ok, _} <- ConfirmationSMS.deleting_coding(code_sms, phone_number) |> IO.inspect do
+           ClientesModel.send_sms(%{phone_number: phone_number}, code_sms),
+         {:ok, _} <- ClientesModel.confirmation_sms(params),
+         {:ok, _} <- ConfirmationSMS.deleting_coding(code_sms, phone_number) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: code_sms}))
@@ -41,7 +41,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def confirmation_code(conn, %{"code_sms" => code_sms, "phone_number" => phone_number}) do
     with {:ok, confirmation} <-
-           ClientesModel.confirmation_code(code_sms, phone_number) do
+           ClientesModel.confirmation_code(code_sms, phone_number) |> IO.inspect do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: confirmation}))
