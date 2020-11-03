@@ -70,7 +70,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
     end
   end
 
-  def delete_users(conn, %{"id" => id, "idToken" => idToken} = params) do
+  def delete_users(conn, %{"id" => id} = params) do
     id = String.to_integer(id)
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
@@ -80,8 +80,9 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
-         {:ok, _user_firebase} <- Firebase.delete_user_firebase(%{idToken: idToken}),
+    with {:ok, token} <- Firebase.get_token(conn),
+         {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
+         {:ok, _user_firebase} <- Firebase.delete_user_firebase(%{idToken: token}),
          {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario cliente deletado") do
       conn
       |> put_resp_content_type("application/json")
