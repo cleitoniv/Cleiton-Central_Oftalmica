@@ -58,16 +58,18 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
+    IO.inspect data
     {:ok,
      Enum.map(params["data"], fn cliente ->
+       IO.inspect cliente
        cliente = Map.put(cliente, "sit_app", "A")
 
-       with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
+       with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) |> IO.inspect do
          {:ok, create} = create(cliente)
          create
        else
          changeset ->
-           {:ok, update} = __MODULE__.update(changeset, cliente)
+           {:ok, update} = update(changeset, cliente) |> IO.inspect
            update
        end
      end)}
