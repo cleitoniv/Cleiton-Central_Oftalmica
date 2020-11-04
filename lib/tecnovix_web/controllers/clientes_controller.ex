@@ -57,6 +57,7 @@ defmodule TecnovixWeb.ClientesController do
     else
       v -> IO.inspect v
         {:error, :invalid_parameter}
+    end
   end
 
   def first_access(conn, %{"param" => params}) do
