@@ -28,7 +28,6 @@ defmodule TecnovixWeb.UsersTest do
       |> recycle()
       |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
       |> json_response(201)
-      |> IO.inspect()
 
     # Motrando a Logs
     Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)

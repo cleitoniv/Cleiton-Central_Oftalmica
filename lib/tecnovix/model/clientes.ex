@@ -78,10 +78,10 @@ defmodule Tecnovix.ClientesModel do
     params = Map.put(params, "sit_app", "A")
 
     with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cnpj_cpf) do
-      __MODULE__.create(params)
+      __MODULE__.create(params) |> IO.inspect()
     else
       cliente ->
-        __MODULE__.update(cliente, params)
+        __MODULE__.update(cliente, params) |> IO.inspect()
     end
   end
 

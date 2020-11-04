@@ -16,17 +16,19 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
     with {:ok, %{status_code: 200}} <-
            Firebase.create_user(%{email: params["email"], password: params["password"]}),
-         {:ok, user} <- UsuariosClienteModel.create(params) do
-
+         {:ok, user} <- UsuariosClienteModel.create(params),
+          {_, %{status_code: code}} when code == 200 or code == 202 <-
+           Email.send_email({user.nome, user.email}, params["password"], params["nome"]),
+          {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario Cliente Cadastrado.") do
       UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
-
+      
       conn
       |> put_status(:created)
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: user})
     else
       {:ok, %{status_code: 400} = resp} ->
-        body = Jason.decode!(resp.body) |> IO.inspect()
+        body = Jason.decode!(resp.body)
 
         case body["error"]["message"] do
           "EMAIL_EXISTS" -> {:error, :email_invalid}
