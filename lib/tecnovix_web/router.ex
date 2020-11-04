@@ -128,7 +128,11 @@ defmodule TecnovixWeb.Router do
       get "/get_graus", TecnovixWeb.ClientesController, :get_graus
       put "/read_notification/:id", TecnovixWeb.NotificacoesController, :read_notification
       get "/verify_graus", TecnovixWeb.DescricaoGenericaDoProdutoController, :verify_graus
-      post "/verify_graus", TecnovixWeb.DescricaoGenericaDoProdutoController, :verify_graus_olhos_diferentes
+
+      post "/verify_graus",
+           TecnovixWeb.DescricaoGenericaDoProdutoController,
+           :verify_graus_olhos_diferentes
+
       put "/select_card/:id", TecnovixWeb.CartaoCreditoClienteController, :select_card
       post "/pedido_boleto", TecnovixWeb.PedidosDeVendaController, :create_boleto
       get "/generate_boleto", TecnovixWeb.ProtheusController, :generate_boleto

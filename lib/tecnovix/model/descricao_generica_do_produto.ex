@@ -60,7 +60,9 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
                 "cor" -> String.downcase(value)
                 "group" -> value
                 "axis" -> nil_or_numeric(String.to_integer(value))
-                _ -> nil_or_numeric(String.to_float(value))
+                "cylinder" when is_float(value) -> nil_or_numeric(String.to_float(value))
+                "degree" when is_float(value) -> nil_or_numeric(String.to_float(value))
+                _ -> value
               end
           end
 

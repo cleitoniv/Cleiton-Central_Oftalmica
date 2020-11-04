@@ -55,8 +55,8 @@ defmodule TecnovixWeb.ClientesController do
       |> put_resp_content_type("application/json")
       |> render("clientes.json", %{item: cliente})
     else
-      v -> IO.inspect v
-        {:error, :invalid_parameter}
+      {:error, %Ecto.Changeset{} = error} -> {:error, error}
+      _ -> {:error, :invalid_parameter}
     end
   end
 

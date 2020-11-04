@@ -394,10 +394,15 @@ defmodule Tecnovix.Test.Wirecard do
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/verify_graus", %{
-      "direito" => %{"axis" => 2.76},
-      "esquerdo" => %{"axis" => 2.4}
+      "adicao" => "",
+      "axis" => "100",
+      "cor" => "",
+      "cylinder" => -0.75,
+      "degree" => 6.0,
+      "lenses" => ""
     })
     |> json_response(200)
+    |> IO.inspect()
   end
 
   test "Cancelamento de pedido pela wirecard" do
