@@ -7,9 +7,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
   action_fallback Tecnovix.Resources.Fallback
 
   def create(conn, %{"param" => params}) do
-    with {:ok, user} <- UsuariosClienteModel.create(params) |> IO.inspect(),
-         {:ok, %{status_code: 200}} <-
-           Firebase.create_user(%{email: user.email, password: user.password}) |> IO.inspect() do
+    with {:ok, %{status_code: 200}} <- Firebase.create_user(%{email: params["email"], password: params["password"]}),
+         {:ok, user} <- UsuariosClienteModel.create(params) do
       # verificando se o email foi enviado com sucesso
       case Email.send_email({user.nome, user.email}, params["password"], params["nome"]) do
         {_send, {:delivered_email, _email}} ->
