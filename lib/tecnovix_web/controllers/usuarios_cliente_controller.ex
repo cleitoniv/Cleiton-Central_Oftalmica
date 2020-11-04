@@ -7,35 +7,23 @@ defmodule TecnovixWeb.UsuariosClienteController do
   action_fallback Tecnovix.Resources.Fallback
 
   def create(conn, %{"param" => params}) do
-    with {:ok, %{status_code: 200}} <- Firebase.create_user(%{email: params["email"], password: params["password"]}),
-         {:ok, user} <- UsuariosClienteModel.create(params) do
-      # verificando se o email foi enviado com sucesso
-      case Email.send_email({user.nome, user.email}, params["password"], params["nome"]) do
-        {_send, {:delivered_email, _email}} ->
-          # atualizando o campo senha_enviada para 1(indicando que o email foi enviado)
-          UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
+    {:ok, cliente} = conn.private.auth
 
-        {:ok, %{status_code: 400}} -> {:error, :email_invalid}
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
 
-        _ -> {:error, :invalid_parameter}
-      end
+    with {:ok, %{status_code: 200}} <-
+           Firebase.create_user(%{email: params["email"], password: params["password"]}) |> IO.inspect(),
+         {:ok, user} <- UsuariosClienteModel.create(params) |> IO.inspect(),
+         {_send, {:delivered_email, _email}} <-
+           Email.send_email({user.nome, user.email}, params["password"], params["nome"]) |> IO.inspect(),
+         {:ok, _logs} <-
+           LogsClienteModel.create(ip, nil, cliente, "Usuario Cliente #{user.nome} cadastrado.") |> IO.inspect() do
 
-      {:ok, cliente} = conn.private.auth
+      UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
-      ip =
-        conn.remote_ip
-        |> Tuple.to_list()
-        |> Enum.join()
-
-      LogsClienteModel.create(%{
-        "cliente_id" => cliente.id,
-        "data" => DateTime.utc_now(),
-        "ip" => ip,
-        "dispositivo" => "Samsung A30S",
-        "acao_realizada" => "Usuario Cliente #{user.nome} cadastrado."
-      })
-
-      # registrando a acao na tabela logs_cliente
       conn
       |> put_status(:created)
       |> put_resp_content_type("application/json")

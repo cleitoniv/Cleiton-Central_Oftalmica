@@ -60,7 +60,7 @@ defmodule Tecnovix.ClientesModel do
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(params["data"], fn cliente ->
-       IO.inspect cliente
+       IO.inspect(cliente)
        cliente = Map.put(cliente, "sit_app", "A")
 
        with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
