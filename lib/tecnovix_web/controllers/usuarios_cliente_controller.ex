@@ -30,7 +30,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
     else
       {:ok, %{status_code: 400} = resp} ->
         body = Jason.decode!(resp.body)
-
+        |> IO.inspect()
         case body["message"] do
           "EMAIL_EXISTS" -> {:error, :email_invalid}
           _ -> {:error, :register_error}
@@ -87,8 +87,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def create_user(conn, %{"param" => params}) do
     params = Map.put(params, "password", String.slice(Tecnovix.Repo.generate_event_id(), 6..11))
-    |> IO.inspect()
-    
+
     case conn.private.auth do
       {:ok, %ClientesSchema{} = user} ->
         params = Map.put(params, "cliente_id", user.id)
