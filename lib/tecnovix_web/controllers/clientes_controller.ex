@@ -54,7 +54,9 @@ defmodule TecnovixWeb.ClientesController do
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("clientes.json", %{item: cliente})
-    end
+    else
+      v -> IO.inspect v
+        {:error, :invalid_parameter}
   end
 
   def first_access(conn, %{"param" => params}) do
