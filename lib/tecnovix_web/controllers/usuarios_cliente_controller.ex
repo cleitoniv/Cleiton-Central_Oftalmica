@@ -16,8 +16,9 @@ defmodule TecnovixWeb.UsuariosClienteController do
           # atualizando o campo senha_enviada para 1(indicando que o email foi enviado)
           UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
-        v -> IO.inspect v
-           {:error, :invalid_parameter}
+        v ->
+          IO.inspect(v)
+          {:error, :invalid_parameter}
       end
 
       {:ok, cliente} = conn.private.auth
