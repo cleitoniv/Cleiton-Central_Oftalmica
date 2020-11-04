@@ -18,9 +18,10 @@ defmodule TecnovixWeb.UsuariosClienteController do
            Firebase.create_user(%{email: params["email"], password: params["password"]}),
          {:ok, user} <- UsuariosClienteModel.create(params),
          {_send, {:delivered_email, _email}} <-
-           Email.send_email({user.nome, user.email}, params["password"], params["nome"]) do
+           Email.send_email({user.nome, user.email}, params["password"], params["nome"]),
+          {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario Cliente Cadastrado.") do
 
-      # UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
+      UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
       conn
       |> put_status(:created)
@@ -85,8 +86,9 @@ defmodule TecnovixWeb.UsuariosClienteController do
   end
 
   def create_user(conn, %{"param" => params}) do
-    params = Map.put(params, "password", String.slice(Tecnovix.Repo.generate_event_id(), 6..12))
-
+    params = Map.put(params, "password", String.slice(Tecnovix.Repo.generate_event_id(), 6..11))
+    |> IO.inspect()
+    
     case conn.private.auth do
       {:ok, %ClientesSchema{} = user} ->
         params = Map.put(params, "cliente_id", user.id)

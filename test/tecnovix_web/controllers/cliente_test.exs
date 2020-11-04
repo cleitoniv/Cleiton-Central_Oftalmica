@@ -19,7 +19,6 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente", %{"param" => user_param})
     |> json_response(201)
-    |> IO.inspect()
 
     # criando o usuario cliente
     user_client =
@@ -27,6 +26,7 @@ defmodule TecnovixWeb.UsersTest do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
       |> json_response(201)
+      |> IO.inspect()
 
     # Motrando a Logs
     Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)
