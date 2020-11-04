@@ -15,12 +15,12 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Enum.join()
 
     with {:ok, %{status_code: 200}} <-
-           Firebase.create_user(%{email: params["email"], password: params["password"]}) |> IO.inspect(),
-         {:ok, user} <- UsuariosClienteModel.create(params) |> IO.inspect(),
+           Firebase.create_user(%{email: params["email"], password: params["password"]}),
+         {:ok, user} <- UsuariosClienteModel.create(params),
          {_send, {:delivered_email, _email}} <-
-           Email.send_email({user.nome, user.email}, params["password"], params["nome"]) |> IO.inspect() do
+           Email.send_email({user.nome, user.email}, params["password"], params["nome"]) do
 
-      UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
+      # UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
       conn
       |> put_status(:created)
