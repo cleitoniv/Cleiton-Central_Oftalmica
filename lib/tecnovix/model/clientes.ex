@@ -64,11 +64,11 @@ defmodule Tecnovix.ClientesModel do
        cliente = Map.put(cliente, "sit_app", "A")
 
        with nil <- Repo.get_by(ClientesSchema, cnpj_cpf: cliente["cnpj_cpf"]) do
-         {:ok, create} = create(cliente)
+         {:ok, create} = create(cliente) |> IO.inspect()
          create
        else
          changeset ->
-           {:ok, update} = __MODULE__.update(changeset, cliente)
+           {:ok, update} = __MODULE__.update(changeset, cliente) |> IO.inspect()
            update
        end
      end)}
