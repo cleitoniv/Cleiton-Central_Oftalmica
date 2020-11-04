@@ -25,8 +25,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
             end
           end)
 
-        _ ->
-          cont_keys(params)
+        _ ->[ cont_keys(params)]
       end
 
     case Enum.any?(result,

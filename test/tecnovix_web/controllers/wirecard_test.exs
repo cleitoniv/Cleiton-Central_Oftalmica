@@ -393,22 +393,7 @@ defmodule Tecnovix.Test.Wirecard do
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente/verify_graus", %{"param" => %{"data" => %{"direito" => %{
-      "adicao" => "",
-      "axis" => "100",
-      "cor" => "",
-      "cylinder" => -0.75,
-      "degree" => 6.0,
-      "lenses" => ""
-    }, "esquerdo" => %{
-      "adicao" => "",
-      "axis" => "100",
-      "cor" => "",
-      "cylinder" => -0.75,
-      "degree" => 6.0,
-      "lenses" => ""
-    }, "group" => "010C"
-    }}})
+    |> get("/api/cliente/verify_graus", %{"axis" => 2.76})
     |> json_response(200)
     |> IO.inspect()
   end
