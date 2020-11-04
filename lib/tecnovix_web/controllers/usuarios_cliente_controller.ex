@@ -18,9 +18,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
            Firebase.create_user(%{email: params["email"], password: params["password"]}) |> IO.inspect(),
          {:ok, user} <- UsuariosClienteModel.create(params) |> IO.inspect(),
          {_send, {:delivered_email, _email}} <-
-           Email.send_email({user.nome, user.email}, params["password"], params["nome"]) |> IO.inspect(),
-         {:ok, _logs} <-
-           LogsClienteModel.create(ip, nil, cliente, "Usuario Cliente cadastrado.") |> IO.inspect() do
+           Email.send_email({user.nome, user.email}, params["password"], params["nome"]) |> IO.inspect() do
 
       UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
