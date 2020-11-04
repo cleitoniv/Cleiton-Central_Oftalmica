@@ -29,7 +29,13 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: user})
     else
-      _ -> {:error, :register_error}
+      {:ok, %{status_code: 400} = resp} ->
+        body = Jason.decode!(resp.body)
+
+        case body["message"] do
+          "EMAIL_EXISTS" -> {:error, :email_invalid}
+          _ -> {:error, :register_error}
+        end
     end
   end
 
