@@ -29,7 +29,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> render("show.json", %{item: user})
     else
       {:ok, %{status_code: 400} = resp} ->
-        body = Jason.decode!(resp.body)
+        body = Jason.decode!(resp.body) |> IO.inspect()
 
         case body["error"]["message"] do
           "EMAIL_EXISTS" -> {:error, :email_invalid}
