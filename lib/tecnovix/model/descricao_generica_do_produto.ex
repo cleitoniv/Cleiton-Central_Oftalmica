@@ -18,14 +18,23 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         ["direito", "esquerdo"] ->
           Enum.map(params, fn {key, value} ->
             case cont_keys(value) do
-              {:ok, true} -> {:ok, true}
-              {:ok, false} -> {:ok, false}
+              {:ok, true} -> {:ok, true, key}
+              {:ok, false} -> {:ok, false, key}
             end
           end)
 
         _ ->
           cont_keys(params)
       end
+
+    case Enum.any?(result, fn {:ok, boolean, olho} -> boolean end) do
+      true -> {:ok, true}
+      false -> {:error, Enum.reduce(result, [],
+      fn {_, false, olho}, acc -> acc ++ ["Produto do olho #{olho} indisponivel"]
+         {_, true, olho}, acc -> acc
+      end
+        )}
+    end
   end
 
   def cont_keys(map) do
@@ -36,7 +45,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     case count_keys <= 2 do
       true -> product_not_parameters()
       false -> verify_graus(map)
-      _ -> {:ok, false}
+      _ -> {:ok, false, "sem_olho"}
     end
   end
 
@@ -60,8 +69,8 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
                 "cor" -> String.downcase(value)
                 "group" -> value
                 "axis" -> nil_or_numeric(String.to_integer(value))
-                "cylinder" when is_float(value) -> nil_or_numeric(String.to_float(value))
-                "degree" when is_float(value) -> nil_or_numeric(String.to_float(value))
+                "cylinder" when is_float(value) == false -> nil_or_numeric(String.to_float(value))
+                "degree" when is_float(value) == false -> nil_or_numeric(String.to_float(value))
                 _ -> value
               end
           end

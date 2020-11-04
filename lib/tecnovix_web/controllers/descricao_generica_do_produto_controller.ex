@@ -27,14 +27,17 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
   end
 
   def verify_graus_olhos_diferentes(conn, %{
-        "param" => %{"data" => data, "allowed_params" => allowed_params} = params
+        "param" => %{"data" => data} = params
       }) do
     with {:ok, boolean} <- DescricaoModel.verify_eyes(data) |> IO.inspect() do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: boolean}))
     else
-      _ -> {:error, :not_found}
+      {:error, erros} ->
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(400, Jason.encode!(%{success: false, data: %{errors: %{produto: erros}}}))
     end
   end
 end
