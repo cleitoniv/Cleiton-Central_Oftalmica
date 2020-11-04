@@ -126,7 +126,7 @@ defmodule TecnovixWeb.Auth.Firebase do
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
          {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]),
          true <- user.status == 1 do
-      # user = Tecnovix.Repo.preload(user, :cliente)
+      user = Tecnovix.Repo.preload(user, :cliente)
 
       put_private(conn, :auth, {:ok, user.cliente})
       |> put_private(:auth_user, {:ok, user})

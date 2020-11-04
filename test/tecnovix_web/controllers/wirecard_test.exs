@@ -407,7 +407,7 @@ defmodule Tecnovix.Test.Wirecard do
       "cylinder" => -0.75,
       "degree" => 6.0,
       "lenses" => ""
-    }
+    }, "group" => "010C"
     }}})
     |> json_response(200)
     |> IO.inspect()

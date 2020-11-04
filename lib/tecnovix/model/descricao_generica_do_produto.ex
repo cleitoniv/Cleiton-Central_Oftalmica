@@ -14,12 +14,14 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
   def verify_eyes(params) do
     result =
-      case Map.keys(params) do
-        ["direito", "esquerdo"] ->
-          Enum.map(params, fn {key, value} ->
+      case Map.has_key?(params, "direito") and Map.has_key?(params, "esquerdo") do
+        true ->
+          Enum.flat_map(params,
+          fn {"group", _} -> []
+             {key, value} ->
             case cont_keys(value) do
-              {:ok, true} -> {:ok, true, key}
-              {:ok, false} -> {:ok, false, key}
+              {:ok, true} -> [{:ok, true, key}]
+              {:ok, false} -> [{:ok, false, key}]
             end
           end)
 
