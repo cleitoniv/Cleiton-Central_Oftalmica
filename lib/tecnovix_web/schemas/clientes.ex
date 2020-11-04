@@ -15,7 +15,6 @@ defmodule Tecnovix.ClientesSchema do
     field :nome_empresarial, :string
     field :email, :string
     field :email_fiscal, :string
-    field :email_protheus, :string
     field :endereco, :string
     field :numero, :string
     field :complemento, :string
@@ -49,7 +48,6 @@ defmodule Tecnovix.ClientesSchema do
       :fisica_jurid,
       :cnpj_cpf,
       :email_fiscal,
-      :email_protheus,
       :data_nascimento,
       :nome,
       :nome_empresarial,
