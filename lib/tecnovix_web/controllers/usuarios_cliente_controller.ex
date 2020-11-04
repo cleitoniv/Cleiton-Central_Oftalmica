@@ -30,8 +30,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
     else
       {:ok, %{status_code: 400} = resp} ->
         body = Jason.decode!(resp.body)
-        |> IO.inspect()
-        case body["message"] do
+
+        case body["error"]["message"] do
           "EMAIL_EXISTS" -> {:error, :email_invalid}
           _ -> {:error, :register_error}
         end
