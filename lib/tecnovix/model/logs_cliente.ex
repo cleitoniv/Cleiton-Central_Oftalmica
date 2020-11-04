@@ -4,6 +4,7 @@ defmodule Tecnovix.LogsClienteModel do
   alias Tecnovix.Repo
 
   def create(ip, usuario, cliente, msg) do
+    IO.inspect "oi 1"
     logs =
       case usuario do
         nil ->
@@ -25,8 +26,15 @@ defmodule Tecnovix.LogsClienteModel do
           }
       end
 
+      IO.inspect "oi 2"
+
+
     %LogsClienteSchema{}
     |> LogsClienteSchema.changeset(logs)
     |> Repo.insert()
+    |> IO.inspect()
+
+    IO.inspect "oi 3"
+
   end
 end

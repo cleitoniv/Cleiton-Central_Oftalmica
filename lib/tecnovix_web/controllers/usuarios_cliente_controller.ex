@@ -20,7 +20,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
          {_send, {:delivered_email, _email}} <-
            Email.send_email({user.nome, user.email}, params["password"], params["nome"]) |> IO.inspect(),
          {:ok, _logs} <-
-           LogsClienteModel.create(ip, nil, cliente, "Usuario Cliente #{user.nome} cadastrado.") |> IO.inspect() do
+           LogsClienteModel.create(ip, nil, cliente, "Usuario Cliente cadastrado.") |> IO.inspect() do
 
       UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
