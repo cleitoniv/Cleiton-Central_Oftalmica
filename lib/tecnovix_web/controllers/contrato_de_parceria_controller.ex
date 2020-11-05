@@ -25,7 +25,12 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
     end
   end
 
-  def create(conn, %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv, "installment" => installment}) do
+  def create(conn, %{
+        "items" => items,
+        "id_cartao" => id_cartao,
+        "ccv" => ccv,
+        "installment" => installment
+      }) do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, items_order} <- ContratoDeParceriaModel.items_order(items),

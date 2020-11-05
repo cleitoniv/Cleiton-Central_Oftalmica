@@ -13,6 +13,14 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   action_fallback Tecnovix.Resources.Fallback
 
+  def taxa(conn, %{"valor" => valor}) do
+    with {:ok, valores} <- PedidosDeVendaModel.taxa(valor) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: valores}))
+    end
+  end
+
   def insert_or_update(conn, params) do
     with {:ok, pedido} <- PedidosDeVendaModel.insert_or_update(params) do
       conn
@@ -58,7 +66,11 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   # credit_card
-  def create(conn, %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv, "installment" => installment} = params)
+  def create(
+        conn,
+        %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv, "installment" => installment} =
+          params
+      )
       when is_nil(ccv) == false and is_nil(id_cartao) == false do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 

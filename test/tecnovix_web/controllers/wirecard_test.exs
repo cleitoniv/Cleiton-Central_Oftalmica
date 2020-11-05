@@ -75,7 +75,8 @@ defmodule Tecnovix.Test.Wirecard do
       |> post("/api/cliente/pedidos", %{
         "items" => items,
         "id_cartao" => cartao["id"],
-        "ccv" => 123
+        "ccv" => "123",
+        "installment" => 2
       })
       |> json_response(200)
       |> IO.inspect()
@@ -533,5 +534,23 @@ defmodule Tecnovix.Test.Wirecard do
       |> post("/api/cliente/pedido_boleto", %{"items" => items, "parcela" => 1})
       |> json_response(200)
       |> IO.inspect()
+  end
+
+  test "Valor em cima das taxas" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente/taxa", %{"valor" => 100})
+    |> json_response(200)
+    |> IO.inspect()
   end
 end

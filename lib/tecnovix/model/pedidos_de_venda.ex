@@ -461,7 +461,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "amount" => %{
         "currency" => "BRL",
         "subtotals" => %{
-          "shipping" => 0
+          "shipping" => 0,
+          "addition" => 4500
         }
       },
       "items" => items,
@@ -633,5 +634,33 @@ defmodule Tecnovix.PedidosDeVendaModel do
       [] -> {:error, :not_found}
       pedidos -> {:ok, pedidos}
     end
+  end
+
+  def taxa(valor) do
+    list_taxa = [
+      {2, 4.5},
+      {3, 5.0},
+      {4, 5.5},
+      {5, 6.5},
+      {6, 7.5},
+      {7, 8.5},
+      {8, 9.5},
+      {9, 10.5},
+      {10, 11.5},
+      {11, 12.0},
+      {12, 12.5}
+    ]
+
+    resp =
+      Enum.map(list_taxa, fn {parcela, taxa} ->
+        result =
+          (valor * (taxa / 100) + valor * 0.0549 + 0.69)
+          |> Float.ceil(2)
+
+        {parcela, result}
+      end)
+      |> Map.new()
+
+    {:ok, resp}
   end
 end

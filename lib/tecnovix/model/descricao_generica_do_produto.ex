@@ -16,27 +16,40 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     result =
       case Map.has_key?(params, "direito") and Map.has_key?(params, "esquerdo") do
         true ->
-          Enum.flat_map(params,
-          fn {"group", _} -> []
-             {key, value} ->
-            case cont_keys(value) do
-              {:ok, true} -> [{:ok, true, key}]
-              {:ok, false} -> [{:ok, false, key}]
+          Enum.flat_map(
+            params,
+            fn
+              {"group", _} ->
+                []
+
+              {key, value} ->
+                case cont_keys(value) do
+                  {:ok, true} -> [{:ok, true, key}]
+                  {:ok, false} -> [{:ok, false, key}]
+                end
             end
-          end)
+          )
 
-        _ ->[ cont_keys(params)]
+        _ ->
+          [cont_keys(params)]
       end
 
-    case Enum.any?(result,
-    fn {:ok, boolean} -> boolean
-       {:ok, boolean, olho} -> boolean end) do
-      true -> {:ok, true}
-      false -> {:error, Enum.reduce(result, [],
-      fn {_, false, olho}, acc -> acc ++ ["Produto do olho #{olho} indisponivel"]
-         {_, true, olho}, acc -> acc
-      end
-        )}
+    case Enum.any?(
+           result,
+           fn
+             {:ok, boolean} -> boolean
+             {:ok, boolean, olho} -> boolean
+           end
+         ) do
+      true ->
+        {:ok, true}
+
+      false ->
+        {:error,
+         Enum.reduce(result, [], fn
+           {_, false, olho}, acc -> acc ++ ["Produto do olho #{olho} indisponivel"]
+           {_, true, olho}, acc -> acc
+         end)}
     end
   end
 
@@ -113,12 +126,14 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       |> where(^params)
       |> first()
       |> Repo.one()
+      |> IO.inspect()
 
     cond do
       query == nil -> {:ok, false}
       query.blo_de_tela == 1 -> {:ok, false}
       true -> {:ok, true}
     end
+    |> IO.inspect()
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
