@@ -79,7 +79,6 @@ defmodule Tecnovix.Test.Wirecard do
         "installment" => 2
       })
       |> json_response(200)
-      |> IO.inspect()
   end
 
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // USUARIO_CLIENTE" do

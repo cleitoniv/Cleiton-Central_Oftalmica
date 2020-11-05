@@ -23,7 +23,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   def taxa(conn, %{"valor" => valor}) do
     valor = String.to_integer(valor)
-    
+
     with {:ok, parcelas} <- PedidosDeVendaModel.parcelas(),
          {:ok, valores} <- PedidosDeVendaModel.taxa(valor, parcelas) do
       conn
@@ -112,6 +112,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              "Pedido feito com o cartão de crédito com sucesso."
            ),
          {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
+           # IO.inspect Jason.decode!(order.body)
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
