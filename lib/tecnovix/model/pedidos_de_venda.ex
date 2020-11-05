@@ -77,14 +77,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
     |> Repo.update()
   end
 
-  def payment(%{"id_cartao" => cartao_id}, order, ccv) do
+  def payment(%{"id_cartao" => cartao_id}, order, ccv, installment) do
     order = Jason.decode!(order.body)
     order_id = order["id"]
 
     {:ok, payment} =
       cartao_id
       |> PedidosDeVendaModel.get_cartao_cliente()
-      |> PedidosDeVendaModel.payment_params(ccv)
+      |> PedidosDeVendaModel.payment_params(ccv, installment)
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
 
@@ -499,9 +499,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
     __MODULE__.order_params(usuario_cliente.cliente, items)
   end
 
-  def payment_params({:ok, cartao = %CartaoSchema{}}, ccv) do
+  def payment_params({:ok, cartao = %CartaoSchema{}}, ccv, installment) do
     %{
-      "installmentCount" => 1,
+      "installmentCount" => installment,
       "statementDescriptor" => "central",
       "fundingInstrument" => %{
         "method" => "CREDIT_CARD",

@@ -164,14 +164,14 @@ defmodule Tecnovix.ContratoDeParceriaModel do
     }
   end
 
-  def payment(cartao_id, order, ccv) do
+  def payment(cartao_id, order, ccv, installment) do
     order = Jason.decode!(order.body)
     order_id = order["id"]
 
     payment =
       cartao_id
       |> PedidosDeVendaModel.get_cartao_cliente()
-      |> PedidosDeVendaModel.payment_params(ccv)
+      |> PedidosDeVendaModel.payment_params(ccv, installment)
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
 
