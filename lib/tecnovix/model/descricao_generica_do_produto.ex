@@ -131,6 +131,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     cond do
       query == nil -> {:ok, false}
       query.blo_de_tela == 1 -> {:ok, false}
+      query.blo_de_tela == "1" -> {:ok, false}
       true -> {:ok, true}
     end
     |> IO.inspect()
