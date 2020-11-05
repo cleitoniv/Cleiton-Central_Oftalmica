@@ -33,8 +33,12 @@ defmodule TecnovixWeb.ProtheusController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: resp}))
     else
-      {:ok, %{status_code: 401}} -> {:error, :not_authorized}
-      _ -> {:error, :not_found}
+      {:ok, %{status_code: 401}} ->
+        {:error, :not_authorized}
+
+      v ->
+        IO.inspect(v)
+        {:error, :not_found}
     end
   end
 end
