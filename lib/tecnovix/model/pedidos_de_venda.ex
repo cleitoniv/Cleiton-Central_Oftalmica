@@ -657,6 +657,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       {12, 12.5}
     ]
     |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelas end)
+
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
         result =
@@ -665,7 +666,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
         %{"parcela" => "#{parcela}x #{result}"}
         |> Map.put("numParcela", parcela)
-        |> Map.put("total", result * 100)
+        |> Map.put("total", (result * 100) * parcela)
       end)
 
     {:ok, resp}
