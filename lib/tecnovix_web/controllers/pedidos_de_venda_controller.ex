@@ -22,7 +22,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   def taxa(conn, %{"valor" => valor}) do
-    with {:ok, valores} <- PedidosDeVendaModel.taxa(valor) do
+    with {:ok, parcelas} <- PedidosDeVendaModel.parcelas(),
+         {:ok, valores} <- PedidosDeVendaModel.taxa(valor, parcelas) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: valores}))
