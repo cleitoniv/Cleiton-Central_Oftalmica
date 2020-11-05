@@ -13,6 +13,14 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   action_fallback Tecnovix.Resources.Fallback
 
+  def taxa_entrega(conn, _params) do
+    with {:ok, taxa_entrega} <- PedidosDeVendaModel.taxa_entrega() do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: taxa_entrega}))
+    end
+  end
+
   def taxa(conn, %{"valor" => valor}) do
     with {:ok, valores} <- PedidosDeVendaModel.taxa(valor) do
       conn

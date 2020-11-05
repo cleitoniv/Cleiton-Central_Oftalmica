@@ -13,6 +13,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
   import Ecto.Query
 
+  def taxa_entrega() do
+    %{
+      valor: 10
+    }
+  end
+
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(params["data"], fn pedidos ->
@@ -654,7 +660,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
         result =
-          (valor * (taxa / 100) + valor * 0.0549 + 0.69)
+          ((valor * (taxa / 100) + valor * 0.0549 + 0.69) + valor) / parcela
           |> Float.ceil(2)
 
         {parcela, result}

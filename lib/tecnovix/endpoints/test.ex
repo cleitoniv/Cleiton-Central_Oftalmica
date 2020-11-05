@@ -89,6 +89,12 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
     HTTPoison.get(url, header)
   end
 
+  defp string_to_integer(string) do
+    string
+    |> String.replace("X", "")
+    |> String.to_integer()
+  end
+
   def organize_boleto(boleto) do
     boleto = Jason.decode!(boleto.body)
 
@@ -97,12 +103,15 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         Enum.map(resources["models"], fn models ->
           Enum.reduce(models["fields"], %{}, fn fields, acc ->
             case fields["id"] do
-              "E4_CODIGO" -> Map.put(acc, "parcela", fields["value"])
-              "E4_COND" -> Map.put(acc, "dias_por_mes", fields["value"])
-              _ -> fields["id"]
+              "E4_CODIGO" ->
+                Map.put(acc, "parcela#{string_to_integer(fields["value"])}", string_to_integer(fields["value"]))
+              _ -> acc
             end
           end)
         end)
+      end)
+      |> Enum.reduce(%{}, fn map, acc ->
+        Map.merge(map, acc)
       end)
 
     {:ok, organize_boleto}
