@@ -137,7 +137,7 @@ defmodule TecnovixWeb.Router do
       post "/pedido_boleto", TecnovixWeb.PedidosDeVendaController, :create_boleto
       get "/generate_boleto", TecnovixWeb.ProtheusController, :generate_boleto
       delete "/card_delete/:id", TecnovixWeb.CartaoCreditoClienteController, :delete_card
-      post "/taxa", TecnovixWeb.PedidosDeVendaController, :taxa
+      get "/taxa", TecnovixWeb.PedidosDeVendaController, :taxa
       post "/taxa_entrega", TecnovixWeb.PedidosDeVendaController, :taxa_entrega
     end
 

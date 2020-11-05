@@ -22,6 +22,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   def taxa(conn, %{"valor" => valor}) do
+    valor = String.to_integer(valor)
+    
     with {:ok, parcelas} <- PedidosDeVendaModel.parcelas(),
          {:ok, valores} <- PedidosDeVendaModel.taxa(valor, parcelas) do
       conn
