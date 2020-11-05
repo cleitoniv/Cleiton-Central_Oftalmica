@@ -37,14 +37,14 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     case Enum.any?(
            result,
            fn
-             {:ok, boolean} -> boolean
-             {:ok, boolean, olho} -> boolean
+             {:ok, boolean} -> !boolean
+             {:ok, boolean, olho} -> !boolean
            end
          ) do
-      true ->
+      false ->
         {:ok, true}
 
-      false ->
+      true ->
         {:error,
          Enum.reduce(result, [], fn
            {_, false, olho}, acc -> acc ++ ["Produto do olho #{olho} indisponivel"]
