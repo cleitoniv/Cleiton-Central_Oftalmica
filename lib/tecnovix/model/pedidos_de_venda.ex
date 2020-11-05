@@ -668,9 +668,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
         case parcela do
           1 ->
             valorParcelado = valor / 100
-            %{"parcela" => "#{parcela}x #{valorParcelado}"}
+            %{"parcela" => "#{parcela}x de #{valorParcelado}0"}
             _ ->
-            %{"parcela" => "#{parcela}x #{result}"}
+            %{"parcela" => "#{parcela}x de #{result}"}
         end
       end)
 
