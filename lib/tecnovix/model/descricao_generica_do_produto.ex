@@ -132,7 +132,9 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       query == nil -> {:ok, false}
       query.blo_de_tela == 1 -> {:ok, false}
       query.blo_de_tela == "1" -> {:ok, false}
-      true -> {:ok, true}
+      query.blo_de_tela == 2 -> {:ok, true}
+      query.blo_de_tela == "2" -> {:ok, true}
+      true -> {:ok, false}
     end
     |> IO.inspect()
   end
