@@ -662,18 +662,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
         result =
-          ((valor * (taxa / 100) + valor * 0.0549 + 0.69) + valor) / parcela
+          (((valor * (taxa / 100) + valor * 0.0549 + 0.69) + valor) / parcela) / 100
           |> Float.ceil(2)
 
         case parcela do
           1 ->
-            %{"parcela" => "#{parcela}x #{valor}"}
-            |> Map.put("numParcela", parcela)
-            |> Map.put("total", (valor * 100) * parcela)
+            valorParcelado = valor / 100
+            %{"parcela" => "#{parcela}x #{valorParcelado}"}
             _ ->
             %{"parcela" => "#{parcela}x #{result}"}
-            |> Map.put("numParcela", parcela)
-            |> Map.put("total", (result * 100) * parcela |> Kernel.trunc())
         end
       end)
 
@@ -681,7 +678,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def parcelas() do
-    parcelas = 6
+    parcelas = 12
 
     {:ok, parcelas}
   end

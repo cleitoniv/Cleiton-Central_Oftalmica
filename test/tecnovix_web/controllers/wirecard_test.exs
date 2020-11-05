@@ -548,7 +548,7 @@ defmodule Tecnovix.Test.Wirecard do
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
-    |> get("/api/cliente/taxa?valor=#{100}")
+    |> get("/api/cliente/taxa?valor=#{15156}")
     |> json_response(200)
     |> IO.inspect()
   end
