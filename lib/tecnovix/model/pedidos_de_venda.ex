@@ -663,7 +663,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           ((valor * (taxa / 100) + valor * 0.0549 + 0.69) + valor) / parcela
           |> Float.ceil(2)
 
-        {String.to_atom(parcela), result}
+        {parcela, result}
       end)
       |> Map.new()
 
