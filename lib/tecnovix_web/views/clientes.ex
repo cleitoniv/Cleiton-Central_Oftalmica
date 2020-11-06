@@ -7,6 +7,7 @@ defmodule TecnovixWeb.ClientesView do
     %{
       id: item.id,
       uid: item.uid,
+      role: item.role,
       codigo: item.codigo,
       loja: item.loja,
       cadastrado: item.cadastrado,
@@ -50,6 +51,7 @@ defmodule TecnovixWeb.ClientesView do
       data: %{
         id: item.id,
         uid: item.uid,
+        role: item.role,
         codigo: item.codigo,
         cadastrado: item.cadastrado,
         loja: item.loja,
@@ -112,6 +114,7 @@ defmodule TecnovixWeb.ClientesView do
           id: item.cliente.id,
           uid: item.cliente.uid,
           codigo: item.cliente.codigo,
+          role: item.role,
           loja: item.cliente.loja,
           fisica_jurid: item.cliente.fisica_jurid,
           cnpj_cpf: item.cliente.cnpj_cpf,
@@ -171,6 +174,7 @@ defmodule TecnovixWeb.ClientesView do
         uid: item.uid,
         codigo: item.codigo,
         cadastrado: item.cadastrado,
+        role: item.role,
         loja: item.loja,
         fisica_jurid: item.fisica_jurid,
         cnpj_cpf: item.cnpj_cpf,

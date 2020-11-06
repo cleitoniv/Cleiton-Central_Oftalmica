@@ -35,6 +35,7 @@ defmodule Tecnovix.ClientesSchema do
     field :wirecard_cliente_id, :string
     field :fcm_token, :string
     field :cadastrado, :boolean, default: false
+    field :role, :string, default: "CLIENTE"
 
     timestamps(type: :utc_datetime)
   end
@@ -42,6 +43,7 @@ defmodule Tecnovix.ClientesSchema do
   def changeset(struct, params \\ {}) do
     struct
     |> cast(params, [
+      :role,
       :uid,
       :codigo,
       :loja,
@@ -96,6 +98,7 @@ defmodule Tecnovix.ClientesSchema do
   def first_access(changeset, params \\ %{}) do
     changeset
     |> cast(params, [
+      :role,
       :nome,
       :email,
       :email_fiscal,
