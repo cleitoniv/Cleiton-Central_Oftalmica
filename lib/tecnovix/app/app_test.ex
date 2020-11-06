@@ -508,6 +508,39 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
+  defp taxa(valor, parcelas) do
+    list_taxa =
+      [
+        {1, 1.0},
+        {2, 4.5},
+        {3, 5.0},
+        {4, 5.5},
+        {5, 6.5},
+        {6, 7.5},
+        {7, 8.5},
+        {8, 9.5},
+        {9, 10.5},
+        {10, 11.5},
+        {11, 12.0},
+        {12, 12.5}
+      ]
+      |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelas end)
+
+    resp =
+      Enum.map(list_taxa, fn {parcela, taxa} ->
+        result =
+          ((valor * (taxa / 100) + valor * 0.0549 + 0.69 + valor) / parcela / 100)
+          |> Float.ceil(2)
+
+        case parcela do
+          3 -> %{"parcela#{parcela}" => result}
+          _ -> %{"parcela" => result}
+        end
+      end)
+
+    {:ok, resp}
+  end
+
   @impl true
   def get_detail_order(cliente, filtro) do
     detail =
@@ -515,13 +548,21 @@ defmodule Tecnovix.App.ScreensTest do
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
         fn map ->
           resp = %{
-            valor:
-            valor =
-              (Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) +
-                 map.taxa_entrega) |> Kernel.trunc(),
+            valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
+
+          {:ok, taxa} = taxa(resp.valor, map.taxa_entrega)
+          taxa =
+            Enum.reduce(taxa, 0, fn reduce, acc ->
+              case Map.has_key?(reduce, "parcela#{map.parcela}") do
+                true -> reduce["parcela#{map.parcela}"]
+                false -> acc
+              end
+            end)
+
+          Map.put(resp, :valor, resp.valor + taxa + map.taxa_entrega)
         end
         )
 
