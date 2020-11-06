@@ -20,6 +20,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
     field :tipo_pagamento, :string
     field :parcela, :integer
     field :pago, :string, default: "P"
+    field :taxa_entrega, :integer, default: 0
     has_one :contrato_de_parceria, Tecnovix.ContratoDeParceriaSchema
 
     has_many :items, ItensDosPedidosDeVendaSchema,
@@ -32,6 +33,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :taxa_entrega,
       :pago,
       :tipo_pagamento,
       :parcela,
@@ -57,6 +59,7 @@ defmodule Tecnovix.PedidosDeVendaSchema do
   def changeset_sync(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :taxa_entrega,
       :pago,
       :tipo_pagamento,
       :parcela,
