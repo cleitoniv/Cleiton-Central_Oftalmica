@@ -202,8 +202,7 @@ defmodule TecnovixWeb.ClientesController do
           notifications: notifications,
           dia_remessa: dia_remessa
         })
-    else
-      {:error, :cliente_desativado} -> {:error, :cliente_desativado}
+    end
   end
 
   def verify_auth({:ok, cliente}) do
