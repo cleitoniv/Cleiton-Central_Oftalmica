@@ -516,14 +516,14 @@ defmodule Tecnovix.App.ScreensTest do
         fn map ->
           %{
             valor:
-              ((Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) +
-                  map.taxa_entrega) / map.parcela)
-              |> Float.ceil(2),
+            valor =
+              (Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) +
+                 map.taxa_entrega) / map.parcela |> Float.ceil(2),
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
         end
-      )
+        )
 
     {:ok, detail}
   end
