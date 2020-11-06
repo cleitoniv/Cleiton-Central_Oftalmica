@@ -484,7 +484,7 @@ defmodule Tecnovix.App.ScreensProd do
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
         fn map ->
           %{
-            valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+            valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) + map.taxa_entrega,
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
