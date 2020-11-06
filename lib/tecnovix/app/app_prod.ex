@@ -642,8 +642,7 @@ defmodule Tecnovix.App.ScreensProd do
         num_pedido: pedido.id,
         valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         frete: pedido.frete,
-        valor_total:
-          pedido.frete + Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end) + pedido.taxa_entrega,
+        valor_total: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end) + pedido.taxa_entrega,
         previsao_entrega: pedido.previsao_entrega,
         taxa_entrega: pedido.taxa_entrega,
         items:
