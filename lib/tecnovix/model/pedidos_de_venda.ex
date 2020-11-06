@@ -668,9 +668,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
         case parcela do
           1 ->
             valorParcelado = valor / 100
-            %{"parcela" => "#{parcela}x de #{valorParcelado}0"}
+            %{"parcela" => "#{parcela}x de #{valorParcelado}"}
             _ ->
             %{"parcela" => "#{parcela}x de #{result}"}
+        end
+      end)
+      |> Enum.map(fn map ->
+        [antes, depois] = String.split(map["parcela"], ".")
+        case String.length(depois) < 2 do
+          true -> %{"parcela" => map["parcela"] <> "0"}
+          false -> %{"parcela" => map["parcela"]}
         end
       end)
 
