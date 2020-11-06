@@ -44,7 +44,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   # boleto
-  def create_boleto(conn, %{"items" => items, "installment" => installment}) do
+  def create_boleto(conn, %{"items" => items, "installment" => installment, "taxa_entrega" => taxa_entrega}) do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
     {:ok, cliente} =
@@ -61,7 +61,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, installment),
+    with {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, installment, taxa_entrega),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
@@ -79,7 +79,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   # credit_card
   def create(
         conn,
-        %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv, "installment" => installment} =
+        %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv, "installment" => installment, "taxa_entrega" => taxa_entrega} =
           params
       )
       when is_nil(ccv) == false and is_nil(id_cartao) == false do
@@ -100,10 +100,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Enum.join()
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
-         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
+         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente, taxa_entrega),
          {:ok, payment} <-
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order, ccv, installment),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order, installment),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order, installment, taxa_entrega),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,

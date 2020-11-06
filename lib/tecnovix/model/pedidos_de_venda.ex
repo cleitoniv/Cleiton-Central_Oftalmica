@@ -64,12 +64,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
     |> Repo.insert()
   end
 
-  def order(items, cliente) do
+  def order(items, cliente, taxa_entrega) do
     order =
       cliente
       |> PedidosDeVendaModel.order_params(items)
-      |> PedidosDeVendaModel.wirecard_order()
+      |> PedidosDeVendaModel.wirecard_order(taxa_entrega)
       |> Wirecard.create_order()
+      |> IO.inspect
 
     case order do
       {:ok, %{status_code: 201}} -> order
@@ -109,14 +110,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def wirecard_order(params) do
+  def wirecard_order(params, taxa_entrega) do
     {:ok,
      %{
        "ownId" => params["ownId"],
        "amount" => %{
          "currency" => "BRL",
          "subtotals" => %{
-           "shipping" => 1000
+           "shipping" => taxa_entrega
          }
        },
        "items" => params["items"],
@@ -141,8 +142,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
      }}
   end
 
-  def create_pedido(items, cliente, order, parcela) do
-    case pedido_params(items, cliente, order, parcela) do
+  def create_pedido(items, cliente, order, parcela, taxa_entrega) do
+    case pedido_params(items, cliente, order, parcela, taxa_entrega) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -153,8 +154,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def create_pedido(items, cliente, parcela) do
-    case pedido_params(items, cliente, parcela) do
+  def create_pedido(items, cliente, parcela, taxa_entrega) do
+    case pedido_params(items, cliente, parcela, taxa_entrega) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -202,7 +203,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pedido_params(items, cliente, order, parcela) do
+  def pedido_params(items, cliente, order, parcela, taxa_entrega) do
     pedido = %{
       "client_id" => cliente.id,
       "tipo_pagamento" => "CREDIT_CARD",
@@ -210,6 +211,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "order_id" => verify_type("A", order),
       "filial" => "",
       "numero" => "",
+      "taxa_entrega" => taxa_entrega,
       "loja" => cliente.loja,
       "cliente" => cliente.codigo,
       "pd_correios" => "",
@@ -254,12 +256,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   # BOLETO
-  def pedido_params(items, cliente, parcela) do
+  def pedido_params(items, cliente, parcela, taxa_entrega) do
     pedido = %{
       "client_id" => cliente.id,
       "tipo_pagamento" => "BOLETO",
       "status_ped" => 0,
       "parcela" => parcela,
+      "taxa_entrega" => taxa_entrega,
       "order_id" => nil,
       "filial" => "",
       "numero" => "",
@@ -590,7 +593,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
-    case pedido_params(items, cliente, "") do
+    case pedido_params(items, cliente, "", 0) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
