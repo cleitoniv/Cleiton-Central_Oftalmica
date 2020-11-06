@@ -21,14 +21,14 @@ defmodule TecnovixWeb.ProtheusController do
     end
   end
 
-  def generate_boleto(conn, _params) do
+  def generate_boleto(conn, %{"valor" => valor}) do
     protheus = Protheus.stub()
 
     {:ok, cliente} = conn.private.auth
 
     with {:ok, auth} <- Auth.token(),
          {:ok, boleto = %{status_code: 200}} <- protheus.generate_boleto(auth["access_token"]),
-         {:ok, resp} <- protheus.organize_boleto(boleto) do
+         {:ok, resp} <- protheus.organize_boleto(boleto, valor) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: resp}))

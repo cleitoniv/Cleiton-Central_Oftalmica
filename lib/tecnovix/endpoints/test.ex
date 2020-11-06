@@ -95,23 +95,29 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
     |> String.to_integer()
   end
 
-  def organize_boleto(boleto) do
+  def organize_boleto(boleto, valor) do
+    valor = String.to_integer(valor)
+
     boleto = Jason.decode!(boleto.body)
 
     organize_boleto =
       Enum.flat_map(boleto["resources"], fn resources ->
-        Enum.map(resources["models"], fn models ->
-          Enum.reduce(models["fields"], %{}, fn fields, acc ->
-            case fields["id"] do
-              "E4_CODIGO" ->
-                Map.put(acc, "parcela#{string_to_integer(fields["value"])}", string_to_integer(fields["value"]))
-              _ -> acc
+        Enum.flat_map(resources["models"], fn models ->
+          Enum.map(models["fields"], fn field ->
+            case field["id"] do
+              "E4_CODIGO" -> %{"parcela" => "#{string_to_integer(field["value"])}x de #{(valor / 100) / string_to_integer(field["value"]) |> Float.ceil(2)}"}
+              _ -> %{}
             end
           end)
         end)
       end)
-      |> Enum.reduce(%{}, fn map, acc ->
-        Map.merge(map, acc)
+      |> Enum.filter(fn map -> map != %{} end)
+      |> Enum.map(fn map ->
+        [antes, depois] = String.split(map["parcela"], ".")
+        case String.length(depois) < 2 do
+          true -> %{"parcela" => map["parcela"] <> "0"}
+          false -> %{"parcela" => map["parcela"]}
+        end
       end)
 
     {:ok, organize_boleto}

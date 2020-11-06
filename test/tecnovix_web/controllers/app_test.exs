@@ -320,7 +320,7 @@ defmodule Tecnovix.Test.App do
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
-    |> get("/api/cliente/generate_boleto")
+    |> get("/api/cliente/generate_boleto?valor=15100")
     |> json_response(200)
     |> IO.inspect()
   end
