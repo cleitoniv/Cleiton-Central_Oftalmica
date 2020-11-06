@@ -113,8 +113,10 @@ defmodule TecnovixWeb.Auth.Firebase do
       |> put_private(:auth_user, {:ok, nil})
     else
       false ->
-        {:error, :cliente_desativado}
-
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Cliente desativado."}))
+        |> halt()
       _ ->
         conn
         |> user_cliente_auth(nil)
