@@ -518,17 +518,10 @@ defmodule Tecnovix.App.ScreensTest do
             valor:
             valor =
               (Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) +
-                 map.taxa_entrega) / map.parcela |> Float.ceil(2) |> Float.to_string(),
+                 map.taxa_entrega) / map.parcela |> Float.ceil(2) |> Kernel.trunc(),
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
-
-          [antes, depois] = String.split(resp.valor, ".")
-
-          case String.length(depois) < 2 do
-            true -> Map.put(resp, :valor, resp.valor <> "0")
-            false -> resp
-          end
         end
         )
 

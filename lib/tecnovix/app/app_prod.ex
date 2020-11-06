@@ -487,7 +487,7 @@ defmodule Tecnovix.App.ScreensProd do
             valor:
             valor =
               (Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) +
-                 map.taxa_entrega) / map.parcela |> Float.ceil(2),
+                 map.taxa_entrega) / map.parcela |> Float.ceil(2) |> Kernel.trunc(),
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
