@@ -9,7 +9,8 @@ defmodule TecnovixWeb.UsuariosClienteView do
       email: item.email,
       cargo: item.cargo,
       status: item.status,
-      password: item.password
+      password: item.password,
+      role: item.role
     }
   end
 

@@ -12,13 +12,14 @@ defmodule Tecnovix.UsuariosClienteSchema do
     field :cargo, :string
     field :status, :integer, default: 1
     field :senha_enviada, :integer, default: 0
+    field :role, :string, default: "USUARIO"
 
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:cliente_id, :uid, :nome, :email, :cargo, :status, :password])
+    |> cast(params, [:cliente_id, :uid, :nome, :email, :cargo, :status, :password, :role])
     |> validate_required([:cliente_id, :nome, :email, :status, :password])
     |> unique_constraint(:email, message: "Email já cadastrado.")
   end
