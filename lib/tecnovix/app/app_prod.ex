@@ -515,7 +515,7 @@ defmodule Tecnovix.App.ScreensProd do
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
         fn map ->
           resp = %{
-            valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) |> Float.ceil(2) |> Kernel.trunc(),
+            valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
@@ -529,7 +529,7 @@ defmodule Tecnovix.App.ScreensProd do
               end
             end)
 
-          Map.put(resp, :valor, resp.valor + taxa + map.taxa_entrega)
+          Map.put(resp, :valor, resp.valor + taxa + map.taxa_entrega |> Kernel.trunc())
         end
         )
 

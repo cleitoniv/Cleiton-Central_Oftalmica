@@ -561,7 +561,7 @@ defmodule Tecnovix.App.ScreensTest do
               end
             end)
 
-          Map.put(resp, :valor, resp.valor + taxa + map.taxa_entrega)
+          Map.put(resp, :valor, resp.valor + taxa + map.taxa_entrega |> Kernel.trunc())
         end
         )
 
