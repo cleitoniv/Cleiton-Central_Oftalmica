@@ -44,7 +44,11 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   # boleto
-  def create_boleto(conn, %{"items" => items, "installment" => installment, "taxa_entrega" => taxa_entrega}) do
+  def create_boleto(conn, %{
+        "items" => items,
+        "installment" => installment,
+        "taxa_entrega" => taxa_entrega
+      }) do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
     {:ok, cliente} =
@@ -61,7 +65,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, installment, taxa_entrega),
+    with {:ok, pedido} <-
+           PedidosDeVendaModel.create_pedido(items, cliente, installment, taxa_entrega),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
@@ -79,8 +84,13 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   # credit_card
   def create(
         conn,
-        %{"items" => items, "id_cartao" => id_cartao, "ccv" => ccv, "installment" => installment, "taxa_entrega" => taxa_entrega} =
-          params
+        %{
+          "items" => items,
+          "id_cartao" => id_cartao,
+          "ccv" => ccv,
+          "installment" => installment,
+          "taxa_entrega" => taxa_entrega
+        } = params
       )
       when is_nil(ccv) == false and is_nil(id_cartao) == false do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
@@ -103,7 +113,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
          {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente, taxa_entrega),
          {:ok, payment} <-
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order, ccv, installment),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order, installment, taxa_entrega),
+         {:ok, pedido} <-
+           PedidosDeVendaModel.create_pedido(items, cliente, order, installment, taxa_entrega),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
@@ -112,7 +123,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              "Pedido feito com o cartão de crédito com sucesso."
            ),
          {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
-           # IO.inspect Jason.decode!(order.body)
+      # IO.inspect Jason.decode!(order.body)
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

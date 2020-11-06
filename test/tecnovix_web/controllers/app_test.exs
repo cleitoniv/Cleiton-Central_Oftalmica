@@ -140,7 +140,7 @@ defmodule Tecnovix.Test.App do
         "id_cartao" => cartao["id"],
         "ccv" => "123",
         "installment" => 2,
-        "taxa_entrega" => 200
+        "taxa_entrega" => 100
       })
       |> json_response(200)
       |> Map.get("data")

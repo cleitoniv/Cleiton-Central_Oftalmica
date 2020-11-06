@@ -484,12 +484,15 @@ defmodule Tecnovix.App.ScreensProd do
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
         fn map ->
           %{
-            valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) + map.taxa_entrega,
+            valor:
+            valor =
+              (Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) +
+                 map.taxa_entrega) / map.parcela |> Float.ceil(2),
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
         end
-      )
+        )
 
     {:ok, detail}
   end
@@ -642,7 +645,9 @@ defmodule Tecnovix.App.ScreensProd do
         num_pedido: pedido.id,
         valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         frete: pedido.frete,
-        valor_total: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end) + pedido.taxa_entrega,
+        valor_total:
+          Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end) +
+            pedido.taxa_entrega,
         previsao_entrega: pedido.previsao_entrega,
         taxa_entrega: pedido.taxa_entrega,
         items:

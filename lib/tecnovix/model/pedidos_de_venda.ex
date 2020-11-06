@@ -645,38 +645,41 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def taxa(valor, parcelas) do
-    list_taxa = [
-      {1, 1.0},
-      {2, 4.5},
-      {3, 5.0},
-      {4, 5.5},
-      {5, 6.5},
-      {6, 7.5},
-      {7, 8.5},
-      {8, 9.5},
-      {9, 10.5},
-      {10, 11.5},
-      {11, 12.0},
-      {12, 12.5}
-    ]
-    |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelas end)
+    list_taxa =
+      [
+        {1, 1.0},
+        {2, 4.5},
+        {3, 5.0},
+        {4, 5.5},
+        {5, 6.5},
+        {6, 7.5},
+        {7, 8.5},
+        {8, 9.5},
+        {9, 10.5},
+        {10, 11.5},
+        {11, 12.0},
+        {12, 12.5}
+      ]
+      |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelas end)
 
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
         result =
-          (((valor * (taxa / 100) + valor * 0.0549 + 0.69) + valor) / parcela) / 100
+          ((valor * (taxa / 100) + valor * 0.0549 + 0.69 + valor) / parcela / 100)
           |> Float.ceil(2)
 
         case parcela do
           1 ->
             valorParcelado = valor / 100
             %{"parcela" => "#{parcela}x de #{valorParcelado}"}
-            _ ->
+
+          _ ->
             %{"parcela" => "#{parcela}x de #{result}"}
         end
       end)
       |> Enum.map(fn map ->
         [antes, depois] = String.split(map["parcela"], ".")
+
         case String.length(depois) < 2 do
           true -> %{"parcela" => map["parcela"] <> "0"}
           false -> %{"parcela" => map["parcela"]}

@@ -105,8 +105,16 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         Enum.flat_map(resources["models"], fn models ->
           Enum.map(models["fields"], fn field ->
             case field["id"] do
-              "E4_CODIGO" -> %{"parcela" => "#{string_to_integer(field["value"])}x de #{(valor / 100) / string_to_integer(field["value"]) |> Float.ceil(2)}"}
-              _ -> %{}
+              "E4_CODIGO" ->
+                %{
+                  "parcela" =>
+                    "#{string_to_integer(field["value"])}x de #{
+                      (valor / 100 / string_to_integer(field["value"])) |> Float.ceil(2)
+                    }"
+                }
+
+              _ ->
+                %{}
             end
           end)
         end)
@@ -114,6 +122,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
       |> Enum.filter(fn map -> map != %{} end)
       |> Enum.map(fn map ->
         [antes, depois] = String.split(map["parcela"], ".")
+
         case String.length(depois) < 2 do
           true -> %{"parcela" => map["parcela"] <> "0"}
           false -> %{"parcela" => map["parcela"]}

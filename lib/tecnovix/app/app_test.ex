@@ -515,7 +515,10 @@ defmodule Tecnovix.App.ScreensTest do
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
         fn map ->
           %{
-            valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end)  + map.taxa_entrega,
+            valor:
+              ((Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end) +
+                  map.taxa_entrega) / map.parcela)
+              |> Float.ceil(2),
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
