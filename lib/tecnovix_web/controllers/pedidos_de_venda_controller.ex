@@ -44,7 +44,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   # boleto
-  def create_boleto(conn, %{"items" => items, "parcela" => parcela}) do
+  def create_boleto(conn, %{"items" => items, "installment" => installment}) do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
     {:ok, cliente} =
@@ -61,7 +61,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, parcela),
+    with {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, installment),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
