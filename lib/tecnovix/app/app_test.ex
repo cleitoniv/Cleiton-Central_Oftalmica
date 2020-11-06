@@ -532,9 +532,9 @@ defmodule Tecnovix.App.ScreensTest do
           ((valor * (taxa / 100) + valor * 0.0549 + 0.69 + valor) / parcela / 100)
           |> Float.ceil(2)
 
-          case parcela do
-            _ -> %{"parcela#{parcela}" => result}
-          end
+        case parcela do
+          _ -> %{"parcela#{parcela}" => result}
+        end
       end)
 
     {:ok, resp}
@@ -553,6 +553,7 @@ defmodule Tecnovix.App.ScreensTest do
           }
 
           {:ok, taxa} = taxa(resp.valor, map.taxa_entrega)
+
           taxa =
             Enum.reduce(taxa, 0, fn reduce, acc ->
               case Map.has_key?(reduce, "parcela#{map.parcela}") do
@@ -561,9 +562,9 @@ defmodule Tecnovix.App.ScreensTest do
               end
             end)
 
-          Map.put(resp, :valor, resp.valor + taxa + map.taxa_entrega |> Kernel.trunc())
+          Map.put(resp, :valor, (resp.valor + taxa + map.taxa_entrega) |> Kernel.trunc())
         end
-        )
+      )
 
     {:ok, detail}
   end

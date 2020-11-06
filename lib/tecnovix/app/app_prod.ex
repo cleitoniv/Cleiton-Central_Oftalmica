@@ -476,6 +476,7 @@ defmodule Tecnovix.App.ScreensProd do
       product -> {:ok, product}
     end
   end
+
   defp taxa(valor, parcelas) do
     list_taxa =
       [
@@ -521,6 +522,7 @@ defmodule Tecnovix.App.ScreensProd do
           }
 
           {:ok, taxa} = taxa(resp.valor, map.taxa_entrega)
+
           taxa =
             Enum.reduce(taxa, 0, fn reduce, acc ->
               case Map.has_key?(reduce, "parcela#{map.parcela}") do
@@ -529,9 +531,9 @@ defmodule Tecnovix.App.ScreensProd do
               end
             end)
 
-          Map.put(resp, :valor, resp.valor + taxa + map.taxa_entrega |> Kernel.trunc())
+          Map.put(resp, :valor, (resp.valor + taxa + map.taxa_entrega) |> Kernel.trunc())
         end
-        )
+      )
 
     {:ok, detail}
   end
