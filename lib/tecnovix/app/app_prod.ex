@@ -501,8 +501,7 @@ defmodule Tecnovix.App.ScreensProd do
           |> Float.ceil(2)
 
         case parcela do
-          3 -> %{"parcela#{parcela}" => result}
-          _ -> %{"parcela" => result}
+          _ -> %{"parcela#{parcela}" => result}
         end
       end)
 

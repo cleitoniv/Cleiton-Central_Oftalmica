@@ -532,10 +532,9 @@ defmodule Tecnovix.App.ScreensTest do
           ((valor * (taxa / 100) + valor * 0.0549 + 0.69 + valor) / parcela / 100)
           |> Float.ceil(2)
 
-        case parcela do
-          3 -> %{"parcela#{parcela}" => result}
-          _ -> %{"parcela" => result}
-        end
+          case parcela do
+            _ -> %{"parcela#{parcela}" => result}
+          end
       end)
 
     {:ok, resp}
