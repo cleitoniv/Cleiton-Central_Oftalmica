@@ -671,11 +671,12 @@ defmodule Tecnovix.App.ScreensTest do
       pedido = %{
         data_inclusao: pedido.inserted_at,
         num_pedido: pedido.id,
-        valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
+        valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end) + pedido.taxa_entrega,
         frete: pedido.frete,
         valor_total:
           pedido.frete + Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         previsao_entrega: pedido.previsao_entrega,
+        taxa_entrega: pedido.taxa_entrega,
         items:
           Enum.map(
             pedido.items,

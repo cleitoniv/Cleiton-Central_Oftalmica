@@ -135,14 +135,13 @@ defmodule Tecnovix.Test.App do
     pedido =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
-      |> recycle()
       |> post("/api/cliente/pedidos", %{
-        "items" => Enum.map(items, fn map -> Map.put(map, "status_ped", 1) end),
-        "id_cartao" => cartao["id"]
+        "items" => items,
+        "id_cartao" => cartao["id"],
+        "ccv" => "123",
+        "installment" => 2,
+        "taxa_entrega" => 200
       })
-      |> recycle()
-      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
       |> Map.get("data")
 
@@ -200,6 +199,7 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/pedido/#{pedido["id"]}")
       |> json_response(200)
+      |> IO.inspect()
 
     payments =
       build_conn()
@@ -231,7 +231,7 @@ defmodule Tecnovix.Test.App do
       |> put("/api/cliente/read_notification/#{249}")
       |> json_response(200)
 
-    IO.inspect(Tecnovix.Repo.all(Tecnovix.NotificacoesClienteSchema))
+    # IO.inspect(Tecnovix.Repo.all(Tecnovix.NotificacoesClienteSchema))
 
     product_serie =
       build_conn()
