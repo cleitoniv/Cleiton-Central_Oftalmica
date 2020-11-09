@@ -508,7 +508,7 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
-  defp taxa(valor, parcelas) do
+  defp taxa(valor, parcelado) do
     list_taxa =
       [
         {1, 1.0},
@@ -524,7 +524,7 @@ defmodule Tecnovix.App.ScreensTest do
         {11, 12.0},
         {12, 12.5}
       ]
-      |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelas end)
+      |> Enum.filter(fn {parcela, taxa} -> parcela == parcelado end)
 
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
@@ -559,11 +559,8 @@ defmodule Tecnovix.App.ScreensTest do
                 false -> acc
               end
             end)
-            IO.inspect resp.valor
-            IO.inspect taxa
-            IO.inspect map.taxa_entrega
 
-          Map.put(resp, :valor, (resp.valor + taxa + (map.taxa_entrega / 100)) |> Kernel.trunc())
+          Map.put(resp, :valor, (resp.valor + taxa))
         end
       )
 

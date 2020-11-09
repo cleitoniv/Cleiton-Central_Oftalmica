@@ -645,9 +645,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def calculo_taxa(valor, taxa) do
-    taxa_cartao = valor * (5.49 / 100)
-    taxa_parcelamento = valor * (taxa / 100)
-    total_taxas = 0.69 + taxa_cartao + taxa_parcelamento
+    taxa_cartao = (valor * 0.0549) + (0.69 * 100) |> IO.inspect()
+    taxa_parcelamento = valor * (taxa / 100)  |> IO.inspect()
+    total_taxas = taxa_cartao + taxa_parcelamento
   end
 
   def taxa(valor, parcelado) do
@@ -673,7 +673,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
         result =
            ((calculo_taxa(valor, taxa) / 100) + (valor / 100)) / parcela
           |> Float.ceil(2)
-
         case parcela do
           1 ->
             valorParcelado = valor / 100
@@ -683,7 +682,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
             %{"parcela" => "#{parcela}x de #{result}"}
         end
       end)
-      |> IO.inspect()
       |> Enum.map(fn map ->
         [antes, depois] = String.split(map["parcela"], ".")
 
