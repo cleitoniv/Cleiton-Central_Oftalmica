@@ -36,7 +36,8 @@ defmodule TecnovixWeb.ProtheusController do
       {:ok, %{status_code: 401}} ->
         {:error, :not_authorized}
 
-      _ -> {:error, :not_found}
+      _ ->
+        {:error, :not_found}
     end
   end
 end

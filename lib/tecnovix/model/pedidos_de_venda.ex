@@ -116,7 +116,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
        "amount" => %{
          "currency" => "BRL",
          "subtotals" => %{
-           "shipping" => taxa_entrega
+           "shipping" => taxa_entrega,
+           "addition" => 4500
          }
        },
        "items" => params["items"],
@@ -469,8 +470,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "amount" => %{
         "currency" => "BRL",
         "subtotals" => %{
-          "shipping" => 0,
-          "addition" => 4500
+          "shipping" => 0
         }
       },
       "items" => items,
@@ -645,7 +645,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def calculo_taxa(valor, taxa) do
-    taxa_cartao = (valor * 0.0549) + (0.69 * 100)
+    taxa_cartao = valor * 0.0549 + 0.69 * 100
     taxa_parcelamento = valor * (taxa / 100)
     total_taxas = taxa_cartao + taxa_parcelamento
   end
@@ -671,8 +671,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
         result =
-           ((calculo_taxa(valor, taxa) / 100) + (valor / 100)) / parcela
+          ((calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela)
           |> Float.ceil(2)
+
         case parcela do
           1 ->
             valorParcelado = valor / 100
