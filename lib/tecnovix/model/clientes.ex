@@ -95,6 +95,7 @@ defmodule Tecnovix.ClientesModel do
   def insert_or_update_first(%{"email" => email} = params) do
     params =
       Map.put(params, "sit_app", "N")
+      |> Map.put("telefone", String.slice(params["telefone"], 3..12))
 
     with nil <- Repo.get_by(ClientesSchema, telefone: update_telefone(params["telefone"]), cadastrado: false) do
       __MODULE__.create(params)
@@ -129,12 +130,10 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def update_telefone(telefone) do
-    case telefone do
-      "27" <> telefone ->
+      telefone ->
         String.replace(telefone, "-", "")
         |> String.replace(".", "")
         |> String.replace(" ", "")
-    end
   end
 
   defp formatting_telefone(changeset \\ %ClientesSchema{}) do
