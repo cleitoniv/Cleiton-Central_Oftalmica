@@ -528,7 +528,8 @@ defmodule Tecnovix.App.ScreensProd do
                 false -> acc
               end
             end)
-          Map.put(resp, :valor, (resp.valor + taxa + (map.taxa_entrega / 100)) |> Kernel.trunc())
+
+          Map.put(resp, :valor, (resp.valor + taxa))
         end
       )
 
