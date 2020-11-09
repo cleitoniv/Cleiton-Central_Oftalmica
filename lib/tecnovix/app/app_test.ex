@@ -570,10 +570,11 @@ defmodule Tecnovix.App.ScreensTest do
                 end)
 
               Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
-    end
-  end
-)
-{:ok, detail}
+          end
+        end
+      )
+
+    {:ok, detail}
   end
 
   @impl true
