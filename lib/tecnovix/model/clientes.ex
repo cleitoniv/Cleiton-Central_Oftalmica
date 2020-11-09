@@ -96,8 +96,12 @@ defmodule Tecnovix.ClientesModel do
     params =
       Map.put(params, "sit_app", "N")
 
-
-    __MODULE__.update(cliente, params) |> IO.inspect()
+    with nil <- Repo.get_by(ClientesSchema, telefone: formatting_telefone(params["telefone"]), cadastrado: false) do
+      __MODULE__.create(params)
+    else
+      cliente ->
+        __MODULE__.update(cliente, params) |> IO.inspect()
+    end
   end
 
   def create(params) do
@@ -124,7 +128,7 @@ defmodule Tecnovix.ClientesModel do
     end
   end
 
-  defp formatting_telefone(changeset) do
+  defp formatting_telefone(changeset \\ %ClientesSchema{}) do
     update_change(changeset, :telefone, fn
       "5527" <> telefone ->
         String.replace(telefone, "-", "")
