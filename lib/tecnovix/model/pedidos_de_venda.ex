@@ -650,7 +650,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     total_taxas = 0.69 + taxa_cartao + taxa_parcelamento
   end
 
-  def taxa(valor, parcelas) do
+  def taxa(valor, parcelado) do
     list_taxa =
       [
         {1, 1.0},
@@ -666,12 +666,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
         {11, 12.0},
         {12, 12.5}
       ]
-      |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelas end)
+      |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelado end)
 
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
         result =
-           calculo_taxa(valor, taxa) / parcela / 100
+           ((calculo_taxa(valor, taxa) / 100) + (valor / 100)) / parcela
           |> Float.ceil(2)
 
         case parcela do
@@ -680,7 +680,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             %{"parcela" => "#{parcela}x de #{valorParcelado}"}
 
           _ ->
-            %{"parcela" => "#{parcela}x de #{result + (valor / 100)}"}
+            %{"parcela" => "#{parcela}x de #{result}"}
         end
       end)
       |> Enum.map(fn map ->
