@@ -43,6 +43,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     {:ok, get} = HTTPoison.get(url, header)
 
     {:ok, Jason.decode!(get.body)}
+    |> IO.inspect()
   end
 
   @impl true
