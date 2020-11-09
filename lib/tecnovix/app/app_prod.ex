@@ -513,27 +513,36 @@ defmodule Tecnovix.App.ScreensProd do
       Enum.map(
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
         fn map ->
-          resp = %{
-            valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
-            data_inclusao: map.inserted_at,
-            num_pedido: map.id
-          }
+          case map.tipo_pagamento do
+            "BOLETO" ->
+              resp = %{
+                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                data_inclusao: map.inserted_at,
+                num_pedido: map.id
+              }
 
-          {:ok, taxa} = taxa(resp.valor, map.parcela)
+            "CREDIT_CARD" ->
+              resp = %{
+                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                data_inclusao: map.inserted_at,
+                num_pedido: map.id
+              }
 
-          taxa =
-            Enum.reduce(taxa, 0, fn reduce, acc ->
-              case Map.has_key?(reduce, "parcela#{map.parcela}") do
-                true -> reduce["parcela#{map.parcela}"]
-                false -> acc
-              end
-            end)
+              {:ok, taxa} = taxa(resp.valor, map.parcela)
 
-          Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
-        end
-      )
+              taxa =
+                Enum.reduce(taxa, 0, fn reduce, acc ->
+                  case Map.has_key?(reduce, "parcela#{map.parcela}") do
+                    true -> reduce["parcela#{map.parcela}"]
+                    false -> acc
+                  end
+                end)
 
-    {:ok, detail}
+              Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
+    end
+  end
+)
+{:ok, detail}
   end
 
   @impl true
