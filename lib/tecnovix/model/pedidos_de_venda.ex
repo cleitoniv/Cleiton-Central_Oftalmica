@@ -683,6 +683,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             %{"parcela" => "#{parcela}x de #{result}"}
         end
       end)
+      |> IO.inspect()
       |> Enum.map(fn map ->
         [antes, depois] = String.split(map["parcela"], ".")
 

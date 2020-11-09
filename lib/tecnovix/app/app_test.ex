@@ -549,9 +549,8 @@ defmodule Tecnovix.App.ScreensTest do
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
-          |> IO.inspect()
 
-          {:ok, taxa} = taxa(resp.valor, map.parcela) |> IO.inspect()
+          {:ok, taxa} = taxa(resp.valor, map.parcela)
 
           taxa =
             Enum.reduce(taxa, 0, fn reduce, acc ->
@@ -560,8 +559,11 @@ defmodule Tecnovix.App.ScreensTest do
                 false -> acc
               end
             end)
+            IO.inspect resp.valor
+            IO.inspect taxa
+            IO.inspect map.taxa_entrega
 
-          Map.put(resp, :valor, (resp.valor + taxa + map.taxa_entrega) |> Kernel.trunc())
+          Map.put(resp, :valor, (resp.valor + taxa + (map.taxa_entrega / 100)) |> Kernel.trunc())
         end
       )
 
