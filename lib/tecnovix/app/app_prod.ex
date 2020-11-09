@@ -477,7 +477,7 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  defp taxa(valor, parcelas) do
+  defp taxa(valor, parcelado) do
     list_taxa =
       [
         {1, 1.0},
@@ -493,7 +493,7 @@ defmodule Tecnovix.App.ScreensProd do
         {11, 12.0},
         {12, 12.5}
       ]
-      |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelas end)
+      |> Enum.filter(fn {parcela, taxa} -> parcela == parcelado end)
 
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
