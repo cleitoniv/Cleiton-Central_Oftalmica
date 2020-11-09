@@ -94,15 +94,10 @@ defmodule Tecnovix.ClientesModel do
 
   def insert_or_update_first(%{"email" => email} = params) do
     params =
-    Map.put(params, "sit_app", "N")
-    |> Map.put("telefone", formatting_telefone(params["telefone"]))
+      Map.put(params, "sit_app", "N")
 
-    with nil <- Repo.get_by(ClientesSchema, telefone: params["telefone"], cadastrado: false) do
-      __MODULE__.create(params) |> IO.inspect
-    else
-      cliente ->
-        __MODULE__.update(cliente, params) |> IO.inspect()
-    end
+
+    __MODULE__.update(cliente, params) |> IO.inspect()
   end
 
   def create(params) do
