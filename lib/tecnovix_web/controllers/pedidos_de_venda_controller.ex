@@ -72,7 +72,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              ip,
              usuario,
              cliente,
-             "Pedido solicitado com boleto feito com sucesso."
+             "Pedido feito em #{intallment}x e com R$ #{taxa_entrega / 100} de pagamento no frete, no boleto."
            ) do
       conn
       |> put_status(200)
@@ -120,7 +120,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              ip,
              usuario,
              cliente,
-             "Pedido feito com o cartão de crédito com sucesso."
+             "Pedido feito em #{intallment}x e com R$ #{taxa_entrega / 100} de pagamento no frete, no crédito."
            ),
          {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
       # IO.inspect Jason.decode!(order.body)
@@ -144,29 +144,29 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def credito_financeiro(conn, %{"items" => items}) do
-    {:ok, cliente} =
-      case conn.private.auth do
-        {:ok, %ClientesSchema{} = cliente} ->
-          {:ok, cliente}
-
-        {:ok, %UsuariosClienteSchema{} = usuario} ->
-          PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
-      end
-
-    with {:ok, pedido} <-
-           PedidosDeVendaModel.create_credito_financeiro(items, cliente, %{
-             "type" => "A",
-             "operation" => "Remessa"
-           }) do
-      conn
-      |> put_status(200)
-      |> put_resp_content_type("application/json")
-      |> render("pedido.json", %{item: pedido})
-    else
-      _ -> {:error, :order_not_created}
-    end
-  end
+  # def credito_financeiro(conn, %{"items" => items}) do
+  #   {:ok, cliente} =
+  #     case conn.private.auth do
+  #       {:ok, %ClientesSchema{} = cliente} ->
+  #         {:ok, cliente}
+  #
+  #       {:ok, %UsuariosClienteSchema{} = usuario} ->
+  #         PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
+  #     end
+  #
+  #   with {:ok, pedido} <-
+  #          PedidosDeVendaModel.create_credito_financeiro(items, cliente, %{
+  #            "type" => "A",
+  #            "operation" => "Remessa"
+  #          }) do
+  #     conn
+  #     |> put_status(200)
+  #     |> put_resp_content_type("application/json")
+  #     |> render("pedido.json", %{item: pedido})
+  #   else
+  #     _ -> {:error, :order_not_created}
+  #   end
+  # end
 
   def detail_order_id(conn, %{"id" => pedido_id}) do
     stub = Screens.stub()
