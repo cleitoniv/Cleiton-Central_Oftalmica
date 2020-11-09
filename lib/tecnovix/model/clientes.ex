@@ -96,7 +96,7 @@ defmodule Tecnovix.ClientesModel do
     IO.inspect params
     params = Map.put(params, "sit_app", "N")
 
-    with nil <- Repo.get_by(ClientesSchema, telefone: params["telefone"], cadastrado: false) do
+    with nil <- Repo.get_by(ClientesSchema, telefone: String.slice(params["telefone"], 3..12), cadastrado: false) do
       __MODULE__.create(params) |> IO.inspect
     else
       cliente ->

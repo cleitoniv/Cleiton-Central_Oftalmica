@@ -161,7 +161,7 @@ defmodule Tecnovix.ClientesSchema do
         )
         |> unique_constraint([:email], message: "Esse email já existe")
         |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
-        |> unique_constraint([:telefone], message: "Esse número de telefone já existe")
+        |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
 
       "J" ->
         changeset
