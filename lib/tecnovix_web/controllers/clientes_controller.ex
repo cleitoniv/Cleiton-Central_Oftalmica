@@ -41,7 +41,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def confirmation_code(conn, %{"code_sms" => code_sms, "phone_number" => phone_number}) do
     with {:ok, confirmation} <-
-           ClientesModel.confirmation_code(code_sms, phone_number) |> IO.inspect() do
+           ClientesModel.confirmation_code(code_sms, phone_number) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: confirmation}))

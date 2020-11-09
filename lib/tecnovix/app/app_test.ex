@@ -528,9 +528,7 @@ defmodule Tecnovix.App.ScreensTest do
 
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
-        result =
-          ((valor * (taxa / 100) + valor * 0.0549 + 0.69 + valor) / parcela / 100)
-          |> Float.ceil(2)
+        result = PedidosDeVendaModel.calculo_taxa(valor, taxa)
 
         case parcela do
           _ -> %{"parcela#{parcela}" => result}
@@ -551,8 +549,9 @@ defmodule Tecnovix.App.ScreensTest do
             data_inclusao: map.inserted_at,
             num_pedido: map.id
           }
+          |> IO.inspect()
 
-          {:ok, taxa} = taxa(resp.valor, map.taxa_entrega)
+          {:ok, taxa} = taxa(resp.valor, map.parcela) |> IO.inspect()
 
           taxa =
             Enum.reduce(taxa, 0, fn reduce, acc ->

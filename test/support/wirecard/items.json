@@ -38,19 +38,5 @@
       "tests": "Sim"
       }
     ]
-  },
-  {
-    "operation": "Remessa",
-    "type": "C",
-    "items": [
-      {
-        "tests": "Não",
-        "grupo": "010C",
-        "quantidade": 2,
-        "prc_unitario": 14000,
-        "produto": "Bioview Torica",
-        "codigo": "12313131"
-      }
-    ]
   }
 ]

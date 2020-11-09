@@ -139,7 +139,7 @@ defmodule Tecnovix.Test.App do
         "items" => items,
         "id_cartao" => cartao["id"],
         "ccv" => "123",
-        "installment" => 3,
+        "installment" => 4,
         "taxa_entrega" => 100
       })
       |> json_response(200)
@@ -322,7 +322,6 @@ defmodule Tecnovix.Test.App do
     |> Generator.put_auth(user_firebase["idToken"])
     |> get("/api/cliente/generate_boleto?valor=15100")
     |> json_response(200)
-    |> IO.inspect()
   end
 
   test "Envio de SMS" do
@@ -341,6 +340,6 @@ defmodule Tecnovix.Test.App do
   end
 
   test 'test' do
-    Tecnovix.ClientesModel.confirmation_code(1234, 5_527_996_211_804) |> IO.inspect()
+    Tecnovix.ClientesModel.confirmation_code(1234, 5_527_996_211_804)
   end
 end

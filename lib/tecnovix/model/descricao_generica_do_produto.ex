@@ -126,7 +126,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       |> where(^params)
       |> first()
       |> Repo.one()
-      |> IO.inspect()
 
     cond do
       query == nil -> {:ok, false}
@@ -136,7 +135,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       query.blo_de_tela == "2" -> {:ok, true}
       true -> {:ok, false}
     end
-    |> IO.inspect()
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
