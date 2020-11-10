@@ -130,7 +130,7 @@ defmodule Tecnovix.ClientesModel do
 
   def update_telefone(telefone) do
     telefone
-    String.replace("-", "")
+    |> String.replace("-", "")
     |> String.replace(" ", "")
     |> String.slice(2..11)
   end
