@@ -706,11 +706,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
         result =
           ((calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela)
           |> Float.ceil(2)
+          |> IO.inspect
 
         case parcela do
           1 ->
-            valorParcelado = valor / 100
-            %{"parcela" => "#{parcela}x de #{valorParcelado}"}
+            %{"parcela" => "#{parcela}x de #{result}"}
 
           _ ->
             %{"parcela" => "#{parcela}x de #{result}"}
