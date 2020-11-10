@@ -92,9 +92,18 @@ defmodule Tecnovix.ClientesModel do
     |> Repo.update()
   end
 
+  def parse_ramo(cliente) do
+    case cliente["ramo"] do
+      "1" -> "2"
+      "2" -> "1"
+      "3" -> "4"
+    end
+  end
+
   def insert_or_update_first(%{"email" => email} = params) do
     params =
       Map.put(params, "sit_app", "N")
+      |> Map.put("ramo", parse_ramo(params))
 
     with nil <- Repo.get_by(ClientesSchema, telefone: update_telefone(params["telefone"]), cadastrado: false) do
       __MODULE__.create(params)
