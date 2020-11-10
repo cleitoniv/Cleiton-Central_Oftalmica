@@ -553,14 +553,14 @@ defmodule Tecnovix.App.ScreensTest do
               }
 
             "CREDIT_CARD" ->
+              IO.inspect map
               resp = %{
                 valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
                 data_inclusao: map.inserted_at,
                 num_pedido: map.id
               }
-              |> IO.inspect
 
-              {:ok, taxa} = taxa(resp.valor, map.parcela) |> IO.inspect
+              {:ok, taxa} = taxa(resp.valor, map.parcela)
 
               taxa =
                 Enum.reduce(taxa, 0, fn reduce, acc ->
@@ -569,7 +569,6 @@ defmodule Tecnovix.App.ScreensTest do
                     false -> acc
                   end
                 end)
-                |> IO.inspect
 
               Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
           end
@@ -726,7 +725,6 @@ defmodule Tecnovix.App.ScreensTest do
         data_inclusao: pedido.inserted_at,
         num_pedido: pedido.id,
         valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
-        frete: pedido.frete,
         valor_total: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         previsao_entrega: pedido.previsao_entrega,
         taxa_entrega: pedido.taxa_entrega,

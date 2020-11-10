@@ -25,7 +25,6 @@ defmodule Tecnovix.Test.App do
         |> Generator.put_auth(token)
         |> get("/api/cliente/protheus/#{"00288590732"}")
         |> json_response(200)
-        |> IO.inspect()
 
       param = Generator.user_param()
 
@@ -60,7 +59,7 @@ defmodule Tecnovix.Test.App do
     user_param = Generator.user_param()
     params = TestHelp.single_json("single_descricao_generica_do_produto.json")
     {:ok, descricao} = DescricaoModel.create(params)
-    {:ok, items_json} = TestHelp.items("items.json")
+    {:ok, items_json} = TestHelp.items("olhos_diferentes.json")
 
     Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{
       "valor" => 2500,
@@ -96,42 +95,26 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
       |> Map.get("data")
 
-    items =
-      Enum.flat_map(
-        items_json,
-        fn map ->
-          Enum.map(
-            map["items"],
-            fn items ->
-              Map.put(items, "descricao_generica_do_produto_id", descricao.id)
-            end
-          )
-        end
-      )
-
-    items =
-      Enum.map(
-        items_json,
-        fn map ->
-          case map["type"] do
-            "A" ->
-              item =
-                Enum.filter(items, fn item ->
-                  item["codigo"] == "123132213123"
-                end)
-
-              Map.put(map, "items", item)
-
-            "C" ->
-              item =
-                Enum.filter(items, fn item ->
-                  item["codigo"] == "12313131"
-                end)
-
-              Map.put(map, "items", item)
+      items =
+        Enum.flat_map(
+          items_json,
+          fn map ->
+            Enum.map(
+              map["items"],
+              fn items ->
+                Map.put(items, "descricao_generica_do_produto_id", descricao.id)
+              end
+            )
           end
-        end
-      )
+        )
+
+      items =
+        Enum.map(
+          items_json,
+          fn map ->
+            Map.put(map, "items", items)
+          end
+        )
 
     pedido =
       build_conn()

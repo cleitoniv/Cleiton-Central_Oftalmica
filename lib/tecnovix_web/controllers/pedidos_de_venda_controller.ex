@@ -114,7 +114,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
          {:ok, payment} <-
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order, ccv, installment),
          {:ok, pedido} <-
-           PedidosDeVendaModel.create_pedido(items, cliente, order, installment, taxa_entrega) |> IO.inspect,
+           PedidosDeVendaModel.create_pedido(items, cliente, order, installment, taxa_entrega),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
