@@ -137,6 +137,10 @@ defmodule Tecnovix.ClientesModel do
 
   defp formatting_telefone(changeset \\ %ClientesSchema{}) do
     update_change(changeset, :telefone, fn
+      "55" <> telefone ->
+        String.replace(telefone, "-", "")
+        |> String.replace(" ", "")
+        |> String.slice(2..11)
       telefone ->
         String.replace(telefone, "-", "")
         |> String.replace(" ", "")
@@ -228,19 +232,6 @@ defmodule Tecnovix.ClientesModel do
       HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
 
     {:ok, Jason.decode!(resp.body)}
-    # {:ok,
-    #  %{
-    #    "api" => "sms",
-    #    "callerid" => "15120358907882",
-    #    "codigo" => "000",
-    #    "destino" => ["5527996211804"],
-    #    "detalhe" => [
-    #      %{"destino" => "5527996211804", "id_mensagem" => 15_120_358_907_972}
-    #    ],
-    #    "modulo" => "enviar",
-    #    "msg" => "001 - Mensagem enviada com sucessso - CALLER-ID: 15120358907882",
-    #    "status" => "ok"
-    #  }}
   end
 
   def get_ddd(phone_number) do
