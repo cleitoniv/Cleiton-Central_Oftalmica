@@ -133,24 +133,14 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   def organize_cliente(http) do
-    cliente = Jason.decode!(http.body)
+    cliente = Jason.decode!(http.body) |> IO.inspect
 
     organize =
       Enum.flat_map(cliente["resources"], fn resource ->
         Enum.flat_map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn field, acc ->
             case Map.has_key?(acc, field["id"]) do
-              false ->
-                case field["id"] == "A1_END" do
-                  true ->
-                    [endereco, num] = String.split(field["value"], [", ", ","])
-
-                    Map.put(acc, field_crm_cnae(field), field["value"])
-                    |> Map.put("A1_NUM", num)
-
-                  false ->
-                    Map.put(acc, field_crm_cnae(field), field["value"])
-                end
+              false -> Map.put(acc, field_crm_cnae(field, acc), field["value"])
 
               true ->
                 acc
@@ -159,13 +149,13 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         end)
       end)
       |> Map.new()
+      |> IO.inspect
 
     {:ok, organize}
   end
 
-  def field_crm_cnae(field) do
+  def field_crm_cnae(field, acc) do
     case field["id"] do
-      "A1_YCRM" -> "A1_YCRM_CNAE"
       "A1_CNAE" -> "A1_YCRM_CNAE"
       _ -> field["id"]
     end

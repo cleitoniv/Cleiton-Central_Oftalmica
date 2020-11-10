@@ -23,7 +23,7 @@ defmodule Tecnovix.Test.App do
       resp =
         build_conn()
         |> Generator.put_auth(token)
-        |> get("/api/cliente/protheus/#{"00288590732"}")
+        |> get("/api/cliente/protheus/#{"34238864000168"}")
         |> json_response(200)
 
       param = Generator.user_param()
