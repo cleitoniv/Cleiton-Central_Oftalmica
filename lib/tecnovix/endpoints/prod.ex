@@ -117,7 +117,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   def organize_cliente(http) do
-    cliente = Jason.decode!(http.body)
+    cliente = Jason.decode!(http.body) |> IO.inspect
 
     organize =
       Enum.flat_map(cliente["resources"], fn resource ->
