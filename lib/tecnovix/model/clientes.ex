@@ -100,7 +100,7 @@ defmodule Tecnovix.ClientesModel do
       __MODULE__.create(params)
     else
       cliente ->
-        __MODULE__.update(cliente, params) |> IO.inspect()
+        __MODULE__.update(cliente, params)
     end
   end
 
@@ -129,30 +129,18 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def update_telefone(telefone) do
-    case telefone do
-      "27" <> telefone ->
-        String.replace(telefone, "-", "")
-        |> String.replace(".", "")
-        |> String.replace(" ", "")
-    end
+    telefone
+    String.replace("-", "")
+    |> String.replace(" ", "")
+    |> String.slice(2..11)
   end
 
   defp formatting_telefone(changeset \\ %ClientesSchema{}) do
     update_change(changeset, :telefone, fn
-      "5527" <> telefone ->
-        String.replace(telefone, "-", "")
-        |> String.replace(".", "")
-        |> String.replace(" ", "")
-
-      "27" <> telefone ->
-        String.replace(telefone, "-", "")
-        |> String.replace(".", "")
-        |> String.replace(" ", "")
-
       telefone ->
         String.replace(telefone, "-", "")
-        |> String.replace(".", "")
         |> String.replace(" ", "")
+        |> String.slice(2..11)
     end)
   end
 
