@@ -51,6 +51,7 @@ defmodule Tecnovix.App.ScreensProd do
       "HASCURVA" -> "has_curva"
       "HASDIAMET" -> "has_diametro"
       "HASRAIO" -> "has_raio"
+      "HASTESTE" -> "has_teste"
       "DSTRATAM" -> "type"
       "GRUPO" -> "group"
       "SUCESS" -> "success"
@@ -168,6 +169,7 @@ defmodule Tecnovix.App.ScreensProd do
           )
         end)
       end)
+      |> IO.inspect
 
     list = ["boxes", "tests", "value", "value_produto", "value_finan"]
 
