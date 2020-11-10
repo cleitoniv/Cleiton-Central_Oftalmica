@@ -87,7 +87,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         |> Kernel.trunc()
       "2" ->
         {:ok, items} = items_order(items)
-        
+
         somando_items(items)
         |> calculo_taxa(installment)
         |> Kernel.trunc()
@@ -436,7 +436,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "codigo" => items["codigo"],
       "tests" => formatting_test(items["tests"]),
       "produto" => items["produto"],
-      "quantidade" => items["quantidade"],
+      "quantidade" => items["quantity_for_eye"]["direito"],
       "paciente" => map["paciente"]["nome"],
       "num_pac" => map["paciente"]["numero"],
       "dt_nas_pac" => map["paciente"]["data_nascimento"],
@@ -469,7 +469,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],
       "tests" => formatting_test(items["tests"]),
-      "quantidade" => items["quantidade"],
+      "quantidade" => items["quantity_for_eye"]["esquerdo"],
       "paciente" => map["paciente"]["nome"],
       "num_pac" => map["paciente"]["numero"],
       "dt_nas_pac" => map["paciente"]["data_nascimento"],
