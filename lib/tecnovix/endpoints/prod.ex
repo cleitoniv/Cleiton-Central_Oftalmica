@@ -124,31 +124,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         Enum.flat_map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn field, acc ->
             case Map.has_key?(acc, field["id"]) do
-              false ->
-                case field["id"] == "A1_END" do
-                  true ->
-                    case String.split(field["value"], [", ", ","]) do
-                      [endereco, num] ->
-                        Map.put(acc, field_crm_cnae(field), field["value"])
-                        |> Map.put("A1_NUM", num)
-
-                      [endereco] ->
-                        Map.put(acc, field_crm_cnae(field), field["value"])
-                    end
-
-                  false ->
-                    case field["id"] == "A1_DTNASC" do
-                      true ->
-                        ano = String.slice(field["value"], 0..3)
-                        mes = String.slice(field["value"], 4..5)
-                        dia = String.slice(field["value"], 6..7)
-
-                        Map.put(acc, field_crm_cnae(field), "#{dia}-#{mes}-#{ano}")
-
-                      false ->
-                        Map.put(acc, field_crm_cnae(field), field["value"])
-                    end
-                end
+              false -> Map.put(acc, field_crm_cnae(field, acc), field["value"])
 
               true ->
                 acc
@@ -157,14 +133,13 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         end)
       end)
       |> Map.new()
-      |> IO.inspect()
+      |> IO.inspect
 
     {:ok, organize}
   end
 
-  def field_crm_cnae(field) do
+  def field_crm_cnae(field, acc) do
     case field["id"] do
-      "A1_YCRM" -> "A1_YCRM_CNAE"
       "A1_CNAE" -> "A1_YCRM_CNAE"
       _ -> field["id"]
     end
