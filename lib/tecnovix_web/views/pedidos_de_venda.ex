@@ -21,6 +21,7 @@ defmodule TecnovixWeb.PedidosDeVendaView do
         status_ped: item.status_ped,
         pago: item.pago,
         taxa_entrega: item.taxa_entrega,
+        taxa_wirecard: item.taxa_wirecard,
         inserted_at: item.inserted_at,
         updated_at: item.updated_at,
         items:

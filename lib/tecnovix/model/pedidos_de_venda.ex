@@ -64,11 +64,43 @@ defmodule Tecnovix.PedidosDeVendaModel do
     |> Repo.insert()
   end
 
-  def order(items, cliente, taxa_entrega) do
+  def somando_items(items) do
+    Enum.reduce(items, 0, fn item, acc ->
+      map =
+        Enum.reduce(item, %{}, fn {key, value}, acc ->
+          case key do
+            "price" -> Map.put(acc, "price", value)
+            "quantity" -> Map.put(acc, "quantidade", value)
+            _ -> acc
+          end
+         end)
+
+      acc + (map["price"] * map["quantidade"])
+    end)
+  end
+
+  def taxa_wirecard(items, installment, passo) do
+    case passo do
+      "1" ->
+        somando_items(items)
+        |> calculo_taxa(installment)
+        |> Kernel.trunc()
+      "2" ->
+        {:ok, items} = items_order(items)
+        
+        somando_items(items)
+        |> calculo_taxa(installment)
+        |> Kernel.trunc()
+    end
+  end
+
+  def order(items, cliente, taxa_entrega, installment) do
+    taxa = taxa_wirecard(items, installment, "1")
+
     order =
       cliente
       |> PedidosDeVendaModel.order_params(items)
-      |> PedidosDeVendaModel.wirecard_order(taxa_entrega)
+      |> PedidosDeVendaModel.wirecard_order(taxa_entrega, taxa)
       |> Wirecard.create_order()
 
     case order do
@@ -109,7 +141,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def wirecard_order(params, taxa_entrega) do
+  def wirecard_order(params, taxa_entrega, taxa) do
     {:ok,
      %{
        "ownId" => params["ownId"],
@@ -117,7 +149,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
          "currency" => "BRL",
          "subtotals" => %{
            "shipping" => taxa_entrega,
-           "addition" => 4500
+           "addition" => taxa
          }
        },
        "items" => params["items"],
@@ -203,12 +235,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def pedido_params(items, cliente, order, parcela, taxa_entrega) do
+  def pedido_params(items, cliente, order, installment, taxa_entrega) do
     pedido = %{
       "client_id" => cliente.id,
       "tipo_pagamento" => "CREDIT_CARD",
-      "parcela" => parcela,
+      "parcela" => installment,
       "order_id" => verify_type("A", order),
+      "taxa_wirecard" => taxa_wirecard(items, installment, "2"),
       "filial" => "",
       "numero" => "",
       "taxa_entrega" => taxa_entrega,

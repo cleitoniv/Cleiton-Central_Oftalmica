@@ -36,7 +36,29 @@
       "serie_nf": "123",
       "num_pedido": "123456",
       "tests": "Sim"
-      }
+    },
+    {
+    "grupo": "011C",
+    "filial": "teste",
+    "codigo": "123132213123",
+    "nocontrato": "teste",
+    "produto": "Lente",
+    "quantidade": 3,
+    "prc_unitario": 15100,
+    "paciente": "Gabriel",
+    "num_pac": "123654",
+    "dt_nas_pac": "12345678",
+    "esferico": 1.5,
+    "cilindrico": 0.5,
+    "eixo": 1,
+    "cor": "teste",
+    "adc_padrao": "teste",
+    "adicao": 1.5,
+    "nota_fiscal": "123456789",
+    "serie_nf": "123",
+    "num_pedido": "123456",
+    "tests": "Sim"
+    }
     ]
   }
 ]

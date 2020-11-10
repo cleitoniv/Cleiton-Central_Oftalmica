@@ -110,11 +110,11 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Enum.join()
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
-         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente, taxa_entrega),
+         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente, taxa_entrega, installment),
          {:ok, payment} <-
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order, ccv, installment),
          {:ok, pedido} <-
-           PedidosDeVendaModel.create_pedido(items, cliente, order, installment, taxa_entrega),
+           PedidosDeVendaModel.create_pedido(items, cliente, order, installment, taxa_entrega) |> IO.inspect,
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
