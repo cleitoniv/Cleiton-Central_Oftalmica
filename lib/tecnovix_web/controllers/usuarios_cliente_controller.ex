@@ -14,7 +14,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, %{status_code: 200}} <-
+    with {:ok, authorized} <- UsuariosClienteModel.unique_email(params["email"]),
+         {:ok, %{status_code: 200}} <-
            Firebase.create_user(%{email: params["email"], password: params["password"]}),
          {:ok, user} <- UsuariosClienteModel.create(params),
          {_, %{status_code: code}} when code == 200 or code == 202 <-

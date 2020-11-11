@@ -4,6 +4,21 @@ defmodule Tecnovix.UsuariosClienteModel do
   alias Tecnovix.Repo
   import Ecto.Query
 
+  def unique_email(email) do
+    with nil <- Repo.get_by(UsuariosClienteSchema, email: email),
+         nil <- Repo.get_by(ClientesSchema, email: email),
+         {:ok, email}
+    else
+      _ ->
+      error =
+        %UsuariosClienteSchema{}
+        change(%{})
+        |> add_error(:email, "Esse email já esta cadastrado.")
+        
+      {:error, error}
+    end
+  end
+
   def show_users() do
     UsuariosClienteSchema
     |> Repo.all()
