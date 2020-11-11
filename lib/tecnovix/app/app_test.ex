@@ -854,6 +854,10 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
+  def formatting_date(date) do
+    "#{date.day}/#{date.month}/#{date.year}" |> IO.inspect
+  end
+
   def get_extrato_finan(cliente) do
     {:ok, creditos} =
       case CreditoFinanceiroModel.get_creditos_by_cliente(cliente.id) do
@@ -868,12 +872,13 @@ defmodule Tecnovix.App.ScreensTest do
         Enum.map(creditos, fn credito ->
             %{
               id: credito.id,
-              date: NaiveDateTime.to_date(credito.inserted_at),
+              date_filter: NaiveDateTime.to_date(credito.inserted_at),
+              date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
               pedido: credito.id,
               valor: credito.valor |> Kernel.trunc()
             }
         end)
-        |> Enum.filter(fn filter -> filter.date < Date.end_of_month(data_hoje) end)
+        |> Enum.filter(fn filter -> filter.date_filter < Date.end_of_month(data_hoje) end)
     }
 
     extratos = Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))

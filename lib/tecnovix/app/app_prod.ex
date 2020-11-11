@@ -834,6 +834,10 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
+  def formatting_date(date) do
+    "#{date.day}/#{date.month}/#{date.year}"
+  end
+
   def get_extrato_finan(cliente) do
     {:ok, creditos} =
       case CreditoFinanceiroModel.get_creditos_by_cliente(cliente.id) do
@@ -848,7 +852,7 @@ defmodule Tecnovix.App.ScreensProd do
         Enum.map(creditos, fn credito ->
             %{
               id: credito.id,
-              date: NaiveDateTime.to_date(credito.inserted_at),
+              date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
               pedido: credito.id,
               valor: credito.valor |> Kernel.trunc()
             }
