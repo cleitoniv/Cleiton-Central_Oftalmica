@@ -1,6 +1,7 @@
 defmodule Tecnovix.UsuariosClienteModel do
   use Tecnovix.DAO, schema: Tecnovix.UsuariosClienteSchema
   alias Tecnovix.UsuariosClienteSchema
+  alias Tecnovix.ClientesSchema
   alias Tecnovix.Repo
   import Ecto.Query
 
