@@ -28,6 +28,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: user})
     else
+      {:error, %Ecto.Changeset{} = error} -> {:error, error}
       {:ok, %{status_code: 400} = resp} ->
         body = Jason.decode!(resp.body)
 
