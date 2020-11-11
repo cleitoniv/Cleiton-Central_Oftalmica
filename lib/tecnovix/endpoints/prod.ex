@@ -140,6 +140,14 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
   def parse_field(field, acc) do
     case field["id"] do
+      "A1_DTNASC" ->
+        ano = String.slice(field["value"], 0..3)
+        mes = String.slice(field["value"], 4..5)
+        dia = String.slice(field["value"], 6..7)
+        data_nascimento = "#{dia}#{mes}#{ano}"
+
+        Map.put(acc, "A1_DTNASC", data_nascimento)
+        
       "A1_CNAE" ->
         case Map.has_key?(acc, "A1_YCRM_CNAE") do
           true -> acc
