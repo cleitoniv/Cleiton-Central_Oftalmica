@@ -48,6 +48,7 @@ defmodule Tecnovix.App.ScreensTest do
       "HASGRAU" -> "has_esferico"
       "HASCILIND" -> "has_cilindrico"
       "HASADICAO" -> "has_adicao"
+      "HASTEST" -> "has_teste"
       "HASCOLOR" -> "has_cor"
       "HASCURVA" -> "has_curva"
       "HASDIAMET" -> "has_diametro"
@@ -65,6 +66,12 @@ defmodule Tecnovix.App.ScreensTest do
   def organize_value(map) do
     case map["id"] do
       "HASEIXO" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASTEST" ->
         case map["value"] do
           "0" -> false
           "1" -> true
@@ -855,7 +862,7 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   def formatting_date(date) do
-    "#{date.day}/#{date.month}/#{date.year}" |> IO.inspect
+    "#{date.day}/#{date.month}/#{date.year}"
   end
 
   def get_extrato_finan(cliente) do
@@ -886,7 +893,25 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, extratos}
   end
 
-  def get_extrato_prod(_cliente) do
+  def get_extrato_prod(cliente) do
+     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id) |> IO.inspect
+
+     Enum.map(items_pedido, fn item ->
+       %{
+         id: item.id,
+         saldo: 0,
+         produto: item.produto,
+         items: [
+           %{
+             date: formatting_date(NaiveDateTime.to_date(item.inserted_at)),
+             pedido: item.id,
+             quantidade: item.quantidade
+           }
+         ]
+       }
+     end)
+     |> IO.inspect
+
     extrato = [
       %{
         id: 0,

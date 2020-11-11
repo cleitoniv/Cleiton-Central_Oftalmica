@@ -43,6 +43,7 @@ defmodule TecnovixWeb.Router do
     get "/verify_field_cadastrado", TecnovixWeb.ClientesController, :verify_field_cadastrado
     get "/send_sms", TecnovixWeb.ClientesController, :send_sms
     get "/confirmation_code", TecnovixWeb.ClientesController, :confirmation_code
+    get "/termo_responsabilidade", TecnovixWeb.ClientesController, :termo_responsabilidade
 
     scope "/sync" do
       pipe_through :user_sync

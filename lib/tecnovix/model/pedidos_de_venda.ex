@@ -706,7 +706,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
         result =
           ((calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela)
           |> Float.ceil(2)
-          |> IO.inspect
 
         case parcela do
           1 ->
@@ -732,5 +731,19 @@ defmodule Tecnovix.PedidosDeVendaModel do
     parcelas = 12
 
     {:ok, parcelas}
+  end
+
+  def get_order_contrato(cliente_id) do
+    pedidos =
+      PedidosDeVendaSchema
+      |> where([p], p.client_id == ^cliente_id)
+      |> preload([i], :items)
+      |> Repo.all()
+      |> Enum.flat_map(fn pedido ->
+          Enum.filter(pedido.items, fn filter ->
+            filter.tipo_venda == "C" end)
+      end)
+
+    {:ok, pedidos}
   end
 end

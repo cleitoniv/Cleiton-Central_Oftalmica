@@ -15,6 +15,14 @@ defmodule TecnovixWeb.ClientesController do
   alias TecnovixWeb.Auth.Firebase
   action_fallback Tecnovix.Resources.Fallback
 
+  def termo_responsabilidade(conn, _params) do
+    with {:ok, termo} <- ClientesModel.termo_responsabilidade() do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: termo}))
+    end
+  end
+
   def send_sms(conn, %{"phone_number" => phone_number} = params) do
     code_sms = Enum.random(1_000..9_999)
 

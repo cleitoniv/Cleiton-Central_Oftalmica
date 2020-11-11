@@ -26,6 +26,10 @@
               "value": "1"
             },
             {
+              "id": "HASTEST",
+              "value": "1"
+            },
+            {
               "id": "HASRAIO",
               "value": "0"
             },
@@ -115,6 +119,10 @@
             {
               "id": "HASGRAU",
               "value": "1"
+            },
+            {
+              "id": "HASTEST",
+              "value": "0"
             },
             {
               "id": "HASEIXO",
