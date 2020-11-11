@@ -105,8 +105,12 @@ defmodule Tecnovix.ClientesModel do
       Map.put(params, "sit_app", "N")
       |> Map.put("ramo", parse_ramo(params))
 
-
-    __MODULE__.update(%ClientesSchema{}, params)
+    with nil <- Repo.get_by(ClientesSchema, email: email, cadastrado: false) do
+      __MODULE__.create(params)
+    else
+      cliente ->
+        __MODULE__.update(cliente, params)
+    end
   end
 
   def create(params) do
