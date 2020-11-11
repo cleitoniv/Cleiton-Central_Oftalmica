@@ -124,7 +124,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         Enum.flat_map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn field, acc ->
             case Map.has_key?(acc, field["id"]) do
-              false -> Map.put(acc, field_crm_cnae(field, acc), field["value"])
+              false -> parse_field(field, acc)
 
               true ->
                 acc
@@ -138,10 +138,21 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     {:ok, organize}
   end
 
-  def field_crm_cnae(field, acc) do
+  def parse_field(field, acc) do
     case field["id"] do
-      "A1_CNAE" -> "A1_YCRM_CNAE"
-      _ -> field["id"]
+      "A1_CNAE" ->
+        case Map.has_key?(acc, "A1_YCRM_CNAE") do
+          true -> acc
+          false -> Map.put(acc, "A1_YCRM_CNAE", field["value"])
+        end
+
+      "A1_YCRM" ->
+        case Map.has_key?(acc, "A1_YCRM_CNAE") do
+          true -> acc
+          false -> Map.put(acc, "A1_YCRM_CNAE", field["value"])
+        end
+
+      _ -> Map.put(acc, field["id"], field["value"])
     end
   end
 end

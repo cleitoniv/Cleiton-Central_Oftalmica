@@ -23,7 +23,7 @@ defmodule Tecnovix.Test.App do
       resp =
         build_conn()
         |> Generator.put_auth(token)
-        |> get("/api/cliente/protheus/#{"34238864000168"}")
+        |> get("/api/cliente/protheus/#{"16793973703"}")
         |> json_response(200)
 
       param = Generator.user_param()
@@ -47,7 +47,7 @@ defmodule Tecnovix.Test.App do
       resp =
         build_conn()
         |> Generator.put_auth(token)
-        |> get("/api/cliente/protheus/#{"16793973703"}")
+        |> get("/api/cliente/protheus/#{"036012857201"}")
         |> json_response(200)
 
       assert resp["status"] == "NOT_FOUND"
