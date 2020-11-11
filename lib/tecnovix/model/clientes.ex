@@ -101,9 +101,12 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def insert_or_update_first(%{"email" => email} = params) do
+    IO.inspect params
+
     params =
       Map.put(params, "sit_app", "N")
       |> Map.put("ramo", parse_ramo(params))
+      |> IO.inspect
 
     with nil <- Repo.get_by(ClientesSchema, email: email, cadastrado: false) do
       __MODULE__.create(params)
