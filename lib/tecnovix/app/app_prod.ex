@@ -876,6 +876,7 @@ defmodule Tecnovix.App.ScreensProd do
            produto: item.produto,
            items: Enum.map(items_pedido, fn pedido ->
              %{
+               produto: pedido.produto,
                date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
                pedido: pedido.id,
                quantidade: pedido.quantidade
@@ -884,11 +885,15 @@ defmodule Tecnovix.App.ScreensProd do
          }
        end)
        |> Enum.uniq_by(fn uniq -> uniq.produto end)
-       |> IO.inspect
+
+       extrato =
+         Enum.map(extrato, fn map ->
+           Map.put(map, :items, Enum.filter(map.items, fn filter -> map.produto == filter.produto end))
+          end)
 
     {:ok, extrato}
   end
-  
+
   @impl true
   def get_and_send_email_dev(email) do
     case Tecnovix.Email.send_email_dev(email) do
