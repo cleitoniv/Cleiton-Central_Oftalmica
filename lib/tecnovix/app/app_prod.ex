@@ -850,12 +850,11 @@ defmodule Tecnovix.App.ScreensProd do
               id: credito.id,
               date: NaiveDateTime.to_date(credito.inserted_at),
               pedido: credito.id,
-              valor: credito.valor / 100 |> Kernel.trunc()
+              valor: credito.valor |> Kernel.trunc()
             }
         end)
         |> Enum.filter(fn filter -> filter.date < Date.end_of_month(data_hoje) end)
     }
-    |> IO.inspect()
 
     extratos = Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))
 
