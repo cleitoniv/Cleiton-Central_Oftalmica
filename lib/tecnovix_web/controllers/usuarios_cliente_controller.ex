@@ -8,13 +8,13 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def create(conn, %{"param" => params}) do
     {:ok, cliente} = conn.private.auth
-    IO.inspect params
+    
     ip =
       conn.remote_ip
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, authorized} <- UsuariosClienteModel.unique_email(params["email"]) |> IO.inspect,
+    with {:ok, authorized} <- UsuariosClienteModel.unique_email(params["email"]),
          {:ok, %{status_code: 200}} <-
            Firebase.create_user(%{email: params["email"], password: params["password"]}),
          {:ok, user} <- UsuariosClienteModel.create(params),
