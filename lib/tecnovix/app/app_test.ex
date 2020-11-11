@@ -5,7 +5,8 @@ defmodule Tecnovix.App.ScreensTest do
     PedidosDeVendaModel,
     Repo,
     ClientesSchema,
-    NotificacoesClienteModel
+    NotificacoesClienteModel,
+    CreditoFinanceiroModel
   }
 
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
@@ -553,7 +554,6 @@ defmodule Tecnovix.App.ScreensTest do
               }
 
             "CREDIT_CARD" ->
-              IO.inspect map
               resp = %{
                 valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
                 data_inclusao: map.inserted_at,
@@ -837,32 +837,48 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, product}
   end
 
-  def get_extrato_finan(_cliente) do
-    extrato = %{
-      data: [
-        %{
-          id: 0,
-          date: "10/02/2020",
-          pedido: 23441,
-          valor: 2000
-        },
-        %{
-          id: 1,
-          date: "07/02/2020",
-          pedido: 213_545,
-          valor: -2000
-        },
-        %{
-          id: 2,
-          date: "10/02/2020",
-          pedido: 23441,
-          valor: +3600
-        }
-      ],
-      date: "Fevereiro/2020"
+  defp parse_month(date) do
+    case date.month do
+      1 -> "Janeiro/"
+      2 -> "Fevereiro/"
+      3 -> "Março/"
+      4 -> "Abril/"
+      5 -> "Maio/"
+      6 -> "Junho/"
+      7 -> "Julho/"
+      8 -> "Agosto/"
+      9 -> "Setembro/"
+      10 -> "Outubro/"
+      11 -> "Novembro/"
+      12 -> "Dezembro/"
+    end
+  end
+
+  def get_extrato_finan(cliente) do
+    {:ok, creditos} =
+      case CreditoFinanceiroModel.get_creditos_by_cliente(cliente.id) do
+        [] -> {:ok, []}
+        credito -> {:ok, credito}
+      end
+
+    data_hoje = Date.utc_today()
+
+    extratos =%{
+      data:
+        Enum.map(creditos, fn credito ->
+            %{
+              id: credito.id,
+              date: NaiveDateTime.to_date(credito.inserted_at),
+              pedido: credito.id,
+              valor: credito.valor / 100 |> Kernel.trunc()
+            }
+        end)
+        |> Enum.filter(fn filter -> filter.date < Date.end_of_month(data_hoje) end)
     }
 
-    {:ok, extrato}
+    extratos = Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))
+
+    {:ok, extratos}
   end
 
   def get_extrato_prod(_cliente) do

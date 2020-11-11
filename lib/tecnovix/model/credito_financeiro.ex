@@ -79,8 +79,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       |> CreditoFinanceiroModel.payment_params(params)
       |> CreditoFinanceiroModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
-      |> IO.inspect()
-      
+
     case payment do
       {:ok, %{status_code: 201}} -> payment
       _ -> {:error, :payment_not_created}
@@ -217,5 +216,13 @@ defmodule Tecnovix.CreditoFinanceiroModel do
     |> Enum.reduce(0, fn credit, acc ->
       credit.valor + acc
     end)
+  end
+
+  def get_creditos_by_cliente(cliente_id) do
+    credito =
+      Credito
+      |> where([c], c.cliente_id == ^cliente_id)
+      |> Repo.all()
+      |> IO.inspect()
   end
 end

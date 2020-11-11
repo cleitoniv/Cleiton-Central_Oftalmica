@@ -60,6 +60,7 @@ defmodule Tecnovix.Test.App do
     params = TestHelp.single_json("single_descricao_generica_do_produto.json")
     {:ok, descricao} = DescricaoModel.create(params)
     {:ok, items_json} = TestHelp.items("olhos_diferentes.json")
+    {:ok, items_credito} = TestHelp.items("items_credito.json")
 
     Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{
       "valor" => 2500,
@@ -129,6 +130,19 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
       |> Map.get("data")
 
+        build_conn()
+        |> Generator.put_auth(user_firebase["idToken"])
+        |> post("/api/cliente/pedido/credito_financeiro", %{
+          "items" => items_credito,
+          "id_cartao" => cartao["id"]
+        })
+        |> recycle()
+        |> post("/api/cliente/pedido/credito_financeiro", %{
+          "items" => items_credito,
+          "id_cartao" => cartao["id"]
+        })
+        |> json_response(200)
+
     current_user =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
@@ -175,7 +189,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/detail_order?filtro=0")
       |> json_response(200)
-      |> IO.inspect()
 
     assert detail_order["success"] == true
 
@@ -217,17 +230,18 @@ defmodule Tecnovix.Test.App do
 
     # IO.inspect(Tecnovix.Repo.all(Tecnovix.NotificacoesClienteSchema))
 
-    product_serie =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/product_serie/010C37281")
-      |> json_response(200)
+    # product_serie =
+    #   build_conn()
+    #   |> Generator.put_auth(user_firebase["idToken"])
+    #   |> get("/api/cliente/product_serie/010C37281")
+    #   |> json_response(200)
 
     extrato_finan =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/extrato_finan")
       |> json_response(200)
+      |> IO.inspect
 
     extrato_prod =
       build_conn()
