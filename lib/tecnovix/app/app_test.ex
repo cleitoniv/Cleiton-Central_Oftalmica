@@ -896,59 +896,23 @@ defmodule Tecnovix.App.ScreensTest do
   def get_extrato_prod(cliente) do
      {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
 
-     Enum.map(items_pedido, fn item ->
-       %{
-         id: item.id,
-         saldo: 0,
-         produto: item.produto,
-         items: Enum.map(items_pedido, fn pedido ->
-           %{
-             date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
-             pedido: pedido.id,
-             quantidade: pedido.quantidade
-           }
-         end)
-       }
-     end)
-     |> Enum.uniq_by(fn uniq -> uniq.produto end)
-     |> IO.inspect
-
-    extrato = [
-      %{
-        id: 0,
-        saldo: 1,
-        produto: "Biosoft SIHY 45 CX3",
-        items: [
-          %{
-            date: "2020/01/10",
-            pedido: "23441",
-            quantidade: 1
-          },
-          %{
-            date: "2020/07/02",
-            pedido: "213545",
-            quantidade: -100
-          }
-        ]
-      },
-      %{
-        id: 0,
-        saldo: 1,
-        produto: "Biosoft SIHY 45 CX3",
-        items: [
-          %{
-            date: "2020/01/10",
-            pedido: "23441",
-            quantidade: 1
-          },
-          %{
-            date: "2020/07/02",
-            pedido: "213545",
-            quantidade: -100
-          }
-        ]
-      }
-    ]
+     extrato =
+       Enum.map(items_pedido, fn item ->
+         %{
+           id: item.id,
+           saldo: 0,
+           produto: item.produto,
+           items: Enum.map(items_pedido, fn pedido ->
+             %{
+               date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
+               pedido: pedido.id,
+               quantidade: pedido.quantidade
+             }
+           end)
+         }
+       end)
+       |> Enum.uniq_by(fn uniq -> uniq.produto end)
+       |> IO.inspect
 
     {:ok, extrato}
   end
