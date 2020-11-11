@@ -432,11 +432,22 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def get_extrato_prod(conn, _params) do
+    protheus = Protheus.stub()
     stub = Screens.stub()
 
     {:ok, cliente} = verify_auth(conn.private.auth)
 
-    with {:ok, prod} <- stub.get_extrato_prod(cliente) do
+    with {:ok, auth} <- Auth.token(),
+         {:ok, products} <-
+           protheus.get_client_products(%{
+             cliente: cliente.codigo,
+             loja: cliente.loja,
+             count: 50,
+             token: auth["access_token"]
+           }),
+         {:ok, grid, filters} <- stub.get_product_grid(products, cliente, "Todos"),
+         {:ok, prod} <- stub.get_extrato_prod(cliente, grid) do
+
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: prod}))

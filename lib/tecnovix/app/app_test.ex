@@ -893,7 +893,16 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, extratos}
   end
 
-  def get_extrato_prod(cliente) do
+  def get_saldo(produtos, item) do
+    Enum.reduce(produtos, 0, fn produto, acc ->
+        case produto["title"] == item.produto do
+          true -> produto["boxes"]
+          false -> acc
+        end
+    end)
+  end
+
+  def get_extrato_prod(cliente, produtos) do
      {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
 
      extrato =
@@ -901,7 +910,7 @@ defmodule Tecnovix.App.ScreensTest do
          %{
            id: item.id,
            saldo: 0,
-           produto: item.produto,
+           produto: get_saldo(produtos, item),
            items: Enum.map(items_pedido, fn pedido ->
              %{
                produto: pedido.produto,
@@ -918,7 +927,7 @@ defmodule Tecnovix.App.ScreensTest do
          Enum.map(extrato, fn map ->
            Map.put(map, :items, Enum.filter(map.items, fn filter -> map.produto == filter.produto end))
           end)
-          
+
     {:ok, extrato}
   end
 
