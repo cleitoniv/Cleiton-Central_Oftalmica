@@ -870,7 +870,7 @@ defmodule Tecnovix.App.ScreensTest do
               id: credito.id,
               date: NaiveDateTime.to_date(credito.inserted_at),
               pedido: credito.id,
-              valor: credito.valor / 100 |> Kernel.trunc()
+              valor: credito.valor |> Kernel.trunc()
             }
         end)
         |> Enum.filter(fn filter -> filter.date < Date.end_of_month(data_hoje) end)
