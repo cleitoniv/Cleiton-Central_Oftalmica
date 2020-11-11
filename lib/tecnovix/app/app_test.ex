@@ -894,22 +894,23 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   def get_extrato_prod(cliente) do
-     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id) |> IO.inspect
+     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
 
      Enum.map(items_pedido, fn item ->
        %{
          id: item.id,
          saldo: 0,
          produto: item.produto,
-         items: [
+         items: Enum.map(items_pedido, fn pedido ->
            %{
-             date: formatting_date(NaiveDateTime.to_date(item.inserted_at)),
-             pedido: item.id,
-             quantidade: item.quantidade
+             date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
+             pedido: pedido.id,
+             quantidade: pedido.quantidade
            }
-         ]
+         end)
        }
      end)
+     |> Enum.uniq_by(fn uniq -> uniq.produto end)
      |> IO.inspect
 
     extrato = [
