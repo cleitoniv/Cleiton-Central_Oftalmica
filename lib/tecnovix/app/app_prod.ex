@@ -5,7 +5,8 @@ defmodule Tecnovix.App.ScreensProd do
     PedidosDeVendaModel,
     Repo,
     ClientesSchema,
-    NotificacoesClienteModel
+    NotificacoesClienteModel,
+    CreditoFinanceiroModel
   }
 
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
