@@ -223,6 +223,5 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       Credito
       |> where([c], c.cliente_id == ^cliente_id)
       |> Repo.all()
-      |> IO.inspect()
   end
 end

@@ -855,6 +855,7 @@ defmodule Tecnovix.App.ScreensProd do
         end)
         |> Enum.filter(fn filter -> filter.date < Date.end_of_month(data_hoje) end)
     }
+    |> IO.inspect()
 
     extratos = Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))
 
