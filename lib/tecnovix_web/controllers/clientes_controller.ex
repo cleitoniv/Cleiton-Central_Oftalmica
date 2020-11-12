@@ -43,8 +43,7 @@ defmodule TecnovixWeb.ClientesController do
       {:ok, %{"codigo" => "500"}} ->
         {:error, :not_authorized}
 
-      v -> IO.inspect v
-        {:error, :not_found}
+      _ -> {:error, :not_found}
     end
   end
 
