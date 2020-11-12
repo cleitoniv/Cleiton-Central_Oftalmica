@@ -108,6 +108,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       conn.remote_ip
       |> Tuple.to_list()
       |> Enum.join()
+      
       taxa_entrega =
         case taxa_entrega do
           nil -> 0
