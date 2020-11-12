@@ -103,12 +103,13 @@ defmodule TecnovixWeb.PedidosDeVendaController do
         {:ok, %UsuariosClienteSchema{} = usuario} ->
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
+      IO.inspect items
 
     ip =
       conn.remote_ip
       |> Tuple.to_list()
       |> Enum.join()
-      
+
       taxa_entrega =
         case taxa_entrega do
           nil -> 0

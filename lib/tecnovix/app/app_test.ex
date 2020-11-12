@@ -59,6 +59,7 @@ defmodule Tecnovix.App.ScreensTest do
       "DOC" -> "NF"
       "DESCSTAT" -> "mensagem"
       "PRDDESC" -> "title"
+      "TRATAM" -> "duracao"
       v -> v
     end
   end
@@ -177,6 +178,7 @@ defmodule Tecnovix.App.ScreensTest do
           )
         end)
       end)
+      |> IO.inspect
 
     list = ["boxes", "tests", "value", "value_produto", "value_finan"]
 
