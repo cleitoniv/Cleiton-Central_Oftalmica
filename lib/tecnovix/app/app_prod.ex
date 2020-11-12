@@ -676,21 +676,27 @@ defmodule Tecnovix.App.ScreensProd do
         %{
           esferico_d: item.esferico,
           eixo_d: item.eixo,
-          cilindro_d: item.cilindro
+          cilindro_d: item.cilindro,
+          adicao_d: item.adicao,
+          cor_d: item.cor
         }
 
       "E" ->
         %{
           esferico_e: item.esferico,
           eixo_e: item.eixo,
-          cilindro_e: item.cilindro
+          cilindro_e: item.cilindro,
+          adicao_e: item.adicao,
+          cor_e: item.cor
         }
 
       _ ->
         %{
           esferico_e: nil,
           eixo_e: nil,
-          cilindro_e: nil
+          cilindro_e: nil,
+          adicao_e: nil,
+          cor_e: nil
         }
     end
   end
@@ -721,6 +727,8 @@ defmodule Tecnovix.App.ScreensProd do
                 quantidade: item.quantidade,
                 valor_total: item.virtotal,
                 olho: item.olho,
+                quantidade: item.quantidade,
+                valor_total: item.virtotal,
                 esferico: item.esferico,
                 eixo: item.eixo,
                 cilindro: item.cilindrico,
