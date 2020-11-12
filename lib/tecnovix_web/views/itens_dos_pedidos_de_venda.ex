@@ -28,6 +28,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       adicao: item.adicao,
       nota_fiscal: item.nota_fiscal,
       serie_nf: item.serie_nf,
+      duracao: item.duracao,
       grupo: item.grupo,
       num_pedido: item.num_pedido,
       inserted_at: item.inserted_at,

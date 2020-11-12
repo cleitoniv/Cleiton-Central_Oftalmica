@@ -689,7 +689,7 @@ defmodule Tecnovix.App.ScreensTest do
               )
               |> Map.put(:codigo_item, codigo_item.codigo_item)
               |> Map.put(:nome_produto, codigo_item.nome_produto)
-              |> Map.put(:duracao, "1 Ano")
+              |> Map.put(:duracao, codigo_item.duracao)
               |> Map.put(:grupo, codigo_item.grupo)
               |> Map.put(:type, codigo_item.type)
               |> Map.put(:operation, codigo_item.operation)
@@ -765,7 +765,7 @@ defmodule Tecnovix.App.ScreensTest do
                 grupo: item.grupo,
                 url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
                 codigo_item: item.codigo_item,
-                duracao: "1 ano"
+                duracao: item.duracao
               }
             end
           )
