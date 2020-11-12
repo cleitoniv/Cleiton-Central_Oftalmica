@@ -331,10 +331,10 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
       |> Map.get("data")
 
-    build_conn()
-    |> get("/api/confirmation_code", %{"code_sms" => codigo, "phone_number" => phone_number})
-    |> json_response(200)
-    |> IO.inspect()
+      build_conn()
+      |> get("/api/confirmation_code", %{"code_sms" => codigo, "phone_number" => phone_number})
+      |> json_response(200)
+      |> IO.inspect()
   end
 
   test 'test' do

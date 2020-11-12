@@ -6,6 +6,7 @@ defmodule Tecnovix.Application do
   use Application
 
   def start(_type, _args) do
+    {:ok, _kvset} = ETS.KeyValueSet.new(name: :code_confirmation, protection: :public)
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
