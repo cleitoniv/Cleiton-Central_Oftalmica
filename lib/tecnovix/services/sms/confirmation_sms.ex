@@ -39,7 +39,7 @@ defmodule Tecnovix.Services.ConfirmationSMS do
   end
 
   def handle_call({:confirmation, code_sms, phone_number}, _from, state) do
-    Process.send_after(self(), {:ok, code_sms, phone_number}, 60000)
+    Process.send_after(self(), {:ok, code_sms, phone_number}, 60000 * 5)
 
     {:reply, {:ok, state}, state}
   end
