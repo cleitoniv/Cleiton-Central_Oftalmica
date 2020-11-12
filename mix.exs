@@ -53,7 +53,8 @@ defmodule Tecnovix.MixProject do
       {:bamboo, "~> 1.5"},
       {:cors_plug, "~> 1.5"},
       {:tesla, "~> 1.3.0"},
-      {:decimal, "~> 2.0", override: true}
+      {:decimal, "~> 2.0", override: true},
+      {:ets, "~> 0.8.1"}
     ]
   end
 

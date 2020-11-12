@@ -22,7 +22,7 @@ defmodule TecnovixWeb.ClientesController do
       |> send_resp(200, Jason.encode!(%{success: true, data: termo}))
     end
   end
-
+  # clicou em submit -> envia o sms -> guarda o codigo do sms na memoria -> depois de 120 apaga o codigo
   def send_sms(conn, %{"phone_number" => phone_number} = params) do
     code_sms = Enum.random(1_000..9_999)
 
@@ -31,10 +31,11 @@ defmodule TecnovixWeb.ClientesController do
       |> Map.put("ddd", ClientesModel.get_ddd(phone_number))
       |> Map.put("telefone", ClientesModel.formatting_phone_number(phone_number))
 
-    with {:ok, %{"codigo" => "000"}} <-
+    with {:ok, _telefone} <- ClientesModel.phone_number_existing?(params["telefone"]),
+         {:ok, %{"codigo" => "000"}} <-
            ClientesModel.send_sms(%{phone_number: phone_number}, code_sms),
          {:ok, _} <- ClientesModel.confirmation_sms(params),
-         {:ok, _} <- ConfirmationSMS.deleting_coding(code_sms, phone_number) do
+         {:ok, _} <- ConfirmationSMS.deleting_coding(code_sms, params["ddd"] <> params["telefone"]) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: code_sms}))
@@ -42,7 +43,7 @@ defmodule TecnovixWeb.ClientesController do
       {:ok, %{"codigo" => "500"}} ->
         {:error, :not_authorized}
 
-      _ ->
+      v -> IO.inspect v
         {:error, :not_found}
     end
   end

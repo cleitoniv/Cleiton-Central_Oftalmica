@@ -5,15 +5,24 @@ defmodule Tecnovix.Services.ConfirmationSMS do
   alias Tecnovix.ClientesSchema
 
   def delete_code(code_sms, phone_number) do
-    phone_number = Tecnovix.ClientesModel.formatting_phone_number(phone_number)
+      {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
-    ClientesSchema
-    |> where(
-      [c],
-      c.code_sms == ^code_sms and ^phone_number == c.telefone and c.confirmation_sms == 0
-    )
-    |> update([c], set: [code_sms: nil])
-    |> Repo.update_all([])
+      {:ok, telefone} = ETS.KeyValueSet.get(kvset, :telefone)
+      {:ok, confirmation_sms} = ETS.KeyValueSet.get(kvset, :confirmation_sms)
+      {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, :code_sms)
+
+      case telefone == phone_number and code_sms == code_sms_memory and confirmation_sms == 0  do
+        true -> ETS.KeyValueSet.delete_all(kvset)
+        false -> kvset
+      end
+
+    # ClientesSchema
+    # |> where(
+    #   [c],
+    #   c.code_sms == ^code_sms and ^phone_number == c.telefone and c.confirmation_sms == 0
+    # )
+    # |> update([c], set: [code_sms: nil])
+    # |> Repo.update_all([])
   end
 
   def start_link(_) do

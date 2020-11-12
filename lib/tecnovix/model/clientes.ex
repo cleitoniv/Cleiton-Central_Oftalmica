@@ -227,23 +227,44 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def send_sms(%{phone_number: phone_number} = params, code_sms) do
-    text = "Central Oftálmica - Seu Código de Verificação é: #{code_sms}"
-    {:ok, token} = get_token_sms()
+    # text = "Central Oftálmica - Seu Código de Verificação é: #{code_sms}"
+    # {:ok, token} = get_token_sms()
+    #
+    # params =
+    #   Map.put(params, :texto, text)
+    #   |> Map.put(:origem, 5_527_996_211_804)
+    #   |> Map.put(:destino, phone_number)
+    #   |> Map.put(:access_token, token["access_token"])
+    #
+    # uri = URI.encode_query(params)
+    #
+    # url = "https://api.directcallsoft.com/sms/send"
+    #
+    # {:ok, resp} =
+    #   HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
+    #
+    # {:ok, Jason.decode!(resp.body)}
 
-    params =
-      Map.put(params, :texto, text)
-      |> Map.put(:origem, 5_527_996_211_804)
-      |> Map.put(:destino, phone_number)
-      |> Map.put(:access_token, token["access_token"])
+    {:ok,
+     %{
+       "api" => "sms",
+       "callerid" => "16245239335948",
+       "codigo" => "000",
+       "destino" => ["5527996211804"],
+       "detalhe" => [
+         %{"destino" => "5527996211804", "id_mensagem" => 16245239336055}
+       ],
+       "modulo" => "enviar",
+       "msg" => "001 - Mensagem enviada com sucessso - CALLER-ID: 16245239335948",
+       "status" => "ok"
+     }}
+  end
 
-    uri = URI.encode_query(params)
-
-    url = "https://api.directcallsoft.com/sms/send"
-
-    {:ok, resp} =
-      HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
-
-    {:ok, Jason.decode!(resp.body)}
+  def phone_number_existing?(phone_number) do
+    case Repo.get_by(ClientesSchema, telefone: phone_number) do
+      nil -> {:ok, phone_number}
+      existing -> {:error, :number_found}
+    end
   end
 
   def get_ddd(phone_number) do
@@ -254,16 +275,25 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def confirmation_sms(params) do
-    case Repo.get_by(ClientesSchema, telefone: params["telefone"]) do
-      nil ->
-        %ClientesSchema{}
-        |> ClientesSchema.sms(params)
-        |> formatting_telefone()
-        |> Repo.insert()
+    {:ok, kvset} = ETS.KeyValueSet.new(name: :code_confirmation)
 
-      changeset ->
-        update_telefone(changeset, params)
-    end
+    kvset
+    |> ETS.KeyValueSet.put!(:telefone, params["ddd"] <> params["telefone"])
+    |> ETS.KeyValueSet.put!(:code_sms, params["code_sms"])
+    |> ETS.KeyValueSet.put!(:confirmation_sms, 0)
+
+    {:ok, kvset}
+
+    # case Repo.get_by(ClientesSchema, telefone: params["telefone"]) do
+    #   nil ->
+    #     %ClientesSchema{}
+    #     |> ClientesSchema.sms(params)
+    #     |> formatting_telefone()
+    #     |> Repo.insert()
+    #
+    #   changeset ->
+    #     update_telefone(changeset, params)
+    # end
   end
 
   def update_telefone(changeset, params) do
@@ -278,28 +308,46 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def confirmation_code(code_sms, phone_number) do
-    phone_number = formatting_phone_number(phone_number)
+    phone_number =
+      String.replace(phone_number, "-", "")
+      |> String.replace(" ", "")
+      |> String.slice(2..13)
 
-    cliente =
-      ClientesSchema
-      |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
-      |> first()
-      |> Repo.one()
+    code_sms = String.to_integer(code_sms)
 
-    case cliente do
-      nil ->
-        {:error, :invalid_code_sms}
+    {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
-      cliente ->
-        {cont, confirmation} =
-          ClientesSchema
-          |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
-          |> update([u], set: [confirmation_sms: 1])
-          |> select([s], %{confirmation_sms: s.confirmation_sms})
-          |> Repo.update_all([])
+    {:ok, telefone} = ETS.KeyValueSet.get(kvset, :telefone) |> IO.inspect
+    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, :code_sms) |> IO.inspect
 
-        {:ok, hd(confirmation)}
+    case code_sms == code_sms_memory and telefone == phone_number do
+      true ->
+        ETS.KeyValueSet.put(kvset, :confirmation_sms, 1)
+        {:ok, 1}
+      false -> {:error, :invalid_code_sms}
     end
+
+
+    # cliente =
+    #   ClientesSchema
+    #   |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
+    #   |> first()
+    #   |> Repo.one()
+    #
+    # case cliente do
+    #   nil ->
+    #     {:error, :invalid_code_sms}
+    #
+    #   cliente ->
+    #     {cont, confirmation} =
+    #       ClientesSchema
+    #       |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
+    #       |> update([u], set: [confirmation_sms: 1])
+    #       |> select([s], %{confirmation_sms: s.confirmation_sms})
+    #       |> Repo.update_all([])
+    #
+    #     {:ok, hd(confirmation)}
+    # end
   end
 
   def termo_responsabilidade() do
