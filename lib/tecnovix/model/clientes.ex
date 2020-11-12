@@ -101,7 +101,24 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def insert_or_update_first(%{"email" => email} = params) do
-    IO.inspect params
+    params =
+      case params["cdmunicipio"] do
+        nil ->
+          {:ok, endereco} = get_endereco_by_cep(params["cep"])
+          endereco = Jason.decode!(endereco.body)
+
+          params
+          |> Map.put("cdmunicipio", String.slice(endereco["ibge"], 2..7))
+
+        "" ->
+          {:ok, endereco} = get_endereco_by_cep(params["cep"])
+          endereco = Jason.decode!(endereco.body)
+
+          params
+          |> Map.put("cdmunicipio", String.slice(endereco["ibge"], 2..7))
+
+        _ -> params
+      end
 
     params =
       Map.put(params, "sit_app", "N")

@@ -97,7 +97,6 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def create_user(conn, %{"param" => params}) do
-    IO.inspect params
     params =
       Map.put(
         params,
