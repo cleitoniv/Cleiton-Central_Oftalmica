@@ -123,7 +123,6 @@ defmodule Tecnovix.ClientesModel do
     params =
       Map.put(params, "sit_app", "N")
       |> Map.put("ramo", parse_ramo(params))
-      |> IO.inspect
 
     with nil <- Repo.get_by(ClientesSchema, email: email, cadastrado: false) do
       __MODULE__.create(params)
@@ -332,7 +331,7 @@ defmodule Tecnovix.ClientesModel do
 
     code_sms = String.to_integer(code_sms)
 
-    {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation) |> IO.inspect()
+    {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
     {:ok, telefone} = ETS.KeyValueSet.get(kvset, :telefone)
     {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, :code_sms)
