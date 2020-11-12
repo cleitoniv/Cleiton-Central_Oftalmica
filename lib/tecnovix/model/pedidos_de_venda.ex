@@ -624,6 +624,31 @@ defmodule Tecnovix.PedidosDeVendaModel do
     |> Repo.all()
   end
 
+  # def get_pacientes_revisao(cliente_id) do
+  #   pedidos =
+  #     PedidosDeVendaSchema
+  #     |> preload(:items)
+  #     |> where([p], p.client_id == ^cliente_id)
+  #     |> order_by([p], desc: p.inserted_at)
+  #     |> Repo.all()
+  #
+  #   case pedidos do
+  #     [] -> {:ok, []}
+  #     pedido -> {:ok, pedido.items}
+  #   end
+  # end
+  #
+  # def parse_pedidos_to_revisao(items) do
+  #   pedido_com_paciente =
+  #     Enum.filter(items, fn item -> item.paciente != nil end)
+  #
+  #   data_hoje = Date.utc_today()
+  #
+  #   Enum.filter(pedido_com_paciente, fn pedido ->
+  #     NaiveDateTime.to_date(pedido.inserted_at) < Date.add(data_hoje, 30)
+  #   end)
+  # end
+
   def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
     case pedido_params(items, cliente, "", 0) do
       {:ok, pedido} ->
