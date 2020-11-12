@@ -105,7 +105,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     case order do
       {:ok, %{status_code: 201}} -> order
-      _ -> {:error, :order_not_created}
+      v -> IO.inspect v
+      {:error, :order_not_created}
     end
   end
 
@@ -379,12 +380,21 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => map[olho]["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
-      "duracao" => items["duracao"],
+      "duracao" => formatting_duracao(items["duracao"]),
       "num_pedido" => items["num_pedido"],
       "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
       "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10)
     }
+  end
+
+  defp formatting_duracao(duracao) do
+    IO.inspect duracao
+    duracao =
+      String.to_float(duracao)
+      |> Kernel.trunc()
+
+      "#{duracao} dias"
   end
 
   def olho_esquerdo(items, map) do
@@ -415,7 +425,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "cilindrico" => map[olho]["cylinder"],
       "eixo" => map[olho]["axis"],
       "cor" => map[olho]["cor"],
-      "duracao" => items["duracao"],
+      "duracao" => formatting_duracao(items["duracao"]),
       "adc_padrao" => items["adc_padrao"],
       "adicao" => map[olho]["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
@@ -438,7 +448,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "codigo" => items["codigo"],
       "tests" => formatting_test(items["tests"]),
       "produto" => items["produto"],
-      "duracao" => items["duracao"],
+      "duracao" => formatting_duracao(items["duracao"]),
       "quantidade" => items["quantity_for_eye"]["direito"],
       "paciente" => map["paciente"]["nome"],
       "num_pac" => map["paciente"]["numero"],
@@ -468,7 +478,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
       "operation" => map["operation"],
-      "duracao" => items["duracao"],
+      "duracao" => formatting_duracao(items["duracao"]),
       "codigo" => items["codigo"],
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],

@@ -33,7 +33,8 @@
       "prc_unitario": 15100,
       "nota_fiscal": "123456789",
       "serie_nf": "123",
-      "num_pedido": "123456"
+      "num_pedido": "123456",
+      "duracao": "180.00000"
     }
   ]
   }

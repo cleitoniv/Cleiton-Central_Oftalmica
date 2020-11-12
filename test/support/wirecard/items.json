@@ -35,7 +35,8 @@
       "nota_fiscal": "123456789",
       "serie_nf": "123",
       "num_pedido": "123456",
-      "tests": "Sim"
+      "tests": "Sim",
+      "duracao": "180.00000"
     },
     {
     "grupo": "011C",
@@ -44,6 +45,7 @@
     "nocontrato": "teste",
     "produto": "Lente",
     "quantidade": 3,
+    "duracao": "180.00000",
     "prc_unitario": 15100,
     "paciente": "Gabriel",
     "num_pac": "123654",
