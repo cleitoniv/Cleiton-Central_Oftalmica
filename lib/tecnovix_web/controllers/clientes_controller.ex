@@ -44,7 +44,7 @@ defmodule TecnovixWeb.ClientesController do
         {:error, :not_authorized}
 
       {:error, :number_found} -> {:error, :number_found}
-      
+
       _ -> {:error, :not_found}
     end
   end
@@ -71,6 +71,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def first_access(conn, %{"param" => params}) do
+    IO.inspect params
     with {:ok, cliente} <- ClientesModel.create_first_access(params) do
       conn
       |> put_status(201)
@@ -96,6 +97,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def create_user(conn, %{"param" => params}) do
+    IO.inspect params
     params =
       Map.put(
         params,
