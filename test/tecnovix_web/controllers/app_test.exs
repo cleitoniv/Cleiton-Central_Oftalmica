@@ -198,7 +198,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/pedido/#{pedido["id"]}")
       |> json_response(200)
-      |> IO.inspect
 
     payments =
       build_conn()
@@ -249,7 +248,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/extrato_prod")
       |> json_response(200)
-      |> IO.inspect
 
     email = "victorasilva0707@gmail.com"
 
@@ -336,7 +334,6 @@ defmodule Tecnovix.Test.App do
       build_conn()
       |> get("/api/confirmation_code", %{"code_sms" => codigo, "phone_number" => phone_number})
       |> json_response(200)
-      |> IO.inspect()
   end
 
   test 'test' do

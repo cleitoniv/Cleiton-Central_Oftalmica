@@ -629,8 +629,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
+
     case filtro do
+      "2" -> get_pacientes_revisao(cliente_id)
+      
       2 -> get_pacientes_revisao(cliente_id)
+
       _ ->
         PedidosDeVendaSchema
         |> preload(:items)
@@ -684,10 +688,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
             |> String.to_integer()
 
           count_range =
-            Date.range(duracao_mais_data_insercao(pedido, duracao), Date.add(data_hoje, 30))
+            Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
             |> Enum.count()
+            |> IO.inspect()
 
-          count_range >=30
+          count_range <= 30
         end)
   end
 

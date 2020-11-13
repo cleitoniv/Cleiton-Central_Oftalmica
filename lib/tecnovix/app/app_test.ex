@@ -178,7 +178,6 @@ defmodule Tecnovix.App.ScreensTest do
           )
         end)
       end)
-      |> IO.inspect
 
     list = ["boxes", "tests", "value", "value_produto", "value_finan"]
 
@@ -655,7 +654,6 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   defp parse_items(items) do
-    IO.inspect items
     Enum.map(items, fn item ->
       %{
         num_pac: item.num_pac,
