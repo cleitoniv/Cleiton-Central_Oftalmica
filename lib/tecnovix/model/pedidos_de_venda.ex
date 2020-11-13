@@ -656,7 +656,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def parse_pedidos_to_revisao(pedidos) do
-    Enum.flat_map(pedidos, )
+    Enum.flat_map(pedidos, fn pedido ->
+      Enum.map(pedido.items, fn item ->
+        Map.put(pedido, :items, [item])
+      end)
+    end)
+    |> IO.inspect
   end
 
   def duracao_mais_data_insercao(pedido, duracao) do

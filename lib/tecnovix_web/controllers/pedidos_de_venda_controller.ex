@@ -18,8 +18,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
     with {:ok, revisao} <- PedidosDeVendaModel.get_pacientes_revisao(cliente.id) do
       conn
+      |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: revisao}))
+      |> render("pedido.json", %{item: revisao})
     end
   end
 
