@@ -631,9 +631,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def get_pedidos(cliente_id, filtro) do
 
     case filtro do
-      "2" -> get_pacientes_revisao(cliente_id)
+      "2" -> get_pacientes_revisao(cliente_id) |> IO.inspect
 
-      2 -> get_pacientes_revisao(cliente_id)
+      2 -> get_pacientes_revisao(cliente_id) |> IO.inspect
 
       _ ->
         PedidosDeVendaSchema
@@ -653,7 +653,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Repo.all()
 
     case pedidos do
-      [] -> [] 
+      [] -> []
       pedido -> parse_pedidos_to_revisao(pedido)
     end
   end
@@ -692,7 +692,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             |> Enum.count()
             |> IO.inspect()
 
-          count_range <= 30
+          count_range >= 30
         end)
   end
 
