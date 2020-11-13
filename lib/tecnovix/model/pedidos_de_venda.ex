@@ -714,28 +714,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def get(pedidos) do
-    Enum.filter(pedidos, fn pedido ->
-        duracao =
-          Enum.map(pedido.items, fn item ->
-            item.duracao
-          end)
-
-      data_hoje = Date.utc_today()
-
-      duracao =
-        String.replace(hd(duracao), ~r/[^\d]/, "")
-        |> String.to_integer()
-
-      count_range =
-        Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
-        |> Enum.count()
-
-      count_range <= 30
-    end)
-  end
-
   def get_pedido_id(pedido_id, cliente_id, item_pedido) do
+    item_pedido = String.to_integer(item_pedido)
+    IO.inspect "oi"
     case item_pedido do
       nil ->
         case Repo.get(PedidosDeVendaSchema, pedido_id) do
@@ -753,18 +734,21 @@ defmodule Tecnovix.PedidosDeVendaModel do
             {:error, :not_found}
 
           pedido ->
-            pedido = Repo.preload(pedido, :items)
+            pedidos = Repo.preload(pedido, :items)
 
-            Enum.filter([pedido], fn map ->
-              id_item =
-                Enum.map(map.items, fn item ->
-                  item.id
+            pedido =
+              Enum.flat_map([pedidos], fn pedido ->
+                    Enum.map(pedido.items, fn item ->
+                      case item.id == item_pedido do
+                        true -> Map.put(pedido, :items, [item])
+                        false -> %{}
+                      end
+                    end)
                 end)
+                |> Enum.filter(fn filter -> filter != %{} end)
+                |> IO.inspect
 
-              id_item == item_pedido
-            end)
-
-            {:ok, pedido}
+            {:ok, hd(pedido)}
         end
     end
   end

@@ -193,7 +193,6 @@ defmodule Tecnovix.Test.App do
       |> Enum.map(fn detail ->
           detail["item_pedido"]
       end)
-      |> IO.inspect
 
 
     pedido_por_id =
