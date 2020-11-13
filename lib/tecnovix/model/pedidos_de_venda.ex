@@ -388,16 +388,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   defp formatting_duracao(duracao) do
-    case duracao do
-      nil -> "0 dias"
-      _ ->
-      duracao =
-        String.to_float(duracao)
-        |> Kernel.trunc()
+    duracao =
+      String.to_float(duracao)
+      |> Kernel.trunc()
 
-        "#{duracao} dias"
-    end
-
+      "#{duracao} dias"
   end
 
   def olho_esquerdo(items, map) do
@@ -651,21 +646,49 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     case pedidos do
       [] -> {:ok, []}
-      pedidos -> {:ok, parse_pedidos_to_revisao(pedidos)}
+      pedido -> {:ok, parse_pedidos_to_revisao(pedido)}
     end
   end
 
   def parse_pedidos_to_revisao(pedidos) do
+    pedidos =
     Enum.flat_map(pedidos, fn pedido ->
-      Enum.map(pedido.items, fn item ->
-        Map.put(pedido, :items, [item])
+        Enum.map(pedido.items, fn item ->
+          Map.put(pedido, :items, [item])
+        end)
       end)
-    end)
-    |> IO.inspect
+
+      pedido_com_paciente =
+        Enum.filter(pedidos, fn item ->
+          paciente =
+          Enum.map(item.items, fn items ->
+            items.paciente
+          end)
+
+          paciente != nil
+        end)
+        |> Enum.filter(fn pedido ->
+            duracao =
+              Enum.map(pedido.items, fn item ->
+                item.duracao
+              end)
+
+          data_hoje = Date.utc_today()
+
+          duracao =
+            String.replace(hd(duracao), ~r/[^\d]/, "")
+            |> String.to_integer()
+
+          count_range =
+            Date.range(duracao_mais_data_insercao(pedido, duracao), Date.add(data_hoje, 30))
+            |> Enum.count()
+
+          count_range >=30
+        end)
   end
 
-  def duracao_mais_data_insercao(pedido, duracao) do
-    Date.add(NaiveDateTime.to_date(pedido.inserted_at), duracao)
+  def duracao_mais_data_insercao(item, duracao) do
+    Date.add(NaiveDateTime.to_date(item.inserted_at), duracao)
   end
 
   def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
