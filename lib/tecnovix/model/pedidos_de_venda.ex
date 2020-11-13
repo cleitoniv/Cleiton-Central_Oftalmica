@@ -632,7 +632,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     case filtro do
       "2" -> get_pacientes_revisao(cliente_id)
-      
+
       2 -> get_pacientes_revisao(cliente_id)
 
       _ ->
@@ -653,8 +653,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Repo.all()
 
     case pedidos do
-      [] -> {:ok, []}
-      pedido -> {:ok, parse_pedidos_to_revisao(pedido)}
+      [] -> [] 
+      pedido -> parse_pedidos_to_revisao(pedido)
     end
   end
 
