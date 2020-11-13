@@ -629,11 +629,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
-    PedidosDeVendaSchema
-    |> preload(:items)
-    |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
-    |> order_by([p], desc: p.inserted_at)
-    |> Repo.all()
+    case filtro do
+      2 -> get_pacientes_revisao(cliente_id)
+      _ ->
+        PedidosDeVendaSchema
+        |> preload(:items)
+        |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
+        |> order_by([p], desc: p.inserted_at)
+        |> Repo.all()
+    end
   end
 
   def get_pacientes_revisao(cliente_id) do
