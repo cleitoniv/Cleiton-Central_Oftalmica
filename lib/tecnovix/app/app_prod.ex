@@ -527,14 +527,16 @@ defmodule Tecnovix.App.ScreensProd do
               resp = %{
                 valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
                 data_inclusao: map.inserted_at,
-                num_pedido: map.id
+                num_pedido: map.id,
+                item_pedido: map.item_pedido
               }
 
             "CREDIT_CARD" ->
               resp = %{
                 valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
                 data_inclusao: map.inserted_at,
-                num_pedido: map.id
+                num_pedido: map.id,
+                item_pedido: map.item_pedido
               }
 
               {:ok, taxa} = taxa(resp.valor, map.parcela)
