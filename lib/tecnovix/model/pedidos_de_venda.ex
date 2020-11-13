@@ -712,9 +712,29 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def get_pedido_id(pedido_id, cliente_id) do
-    pedido_id = String.to_integer(pedido_id)
+  def get(pedidos) do
+    Enum.filter(pedidos, fn pedido ->
+        duracao =
+          Enum.map(pedido.items, fn item ->
+            item.duracao
+          end)
 
+      data_hoje = Date.utc_today()
+
+      duracao =
+        String.replace(hd(duracao), ~r/[^\d]/, "")
+        |> String.to_integer()
+
+      count_range =
+        Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
+        |> Enum.count()
+        |> IO.inspect()
+
+      count_range <= 30
+    end)
+  end
+
+  def get_pedido_id(pedido_id, cliente_id) do
     case Repo.get(PedidosDeVendaSchema, pedido_id) do
       nil ->
         {:error, :not_found}
