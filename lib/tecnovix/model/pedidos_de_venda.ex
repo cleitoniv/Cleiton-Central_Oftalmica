@@ -105,8 +105,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     case order do
       {:ok, %{status_code: 201}} -> order
-      v -> IO.inspect v
-      {:error, :order_not_created}
+      _ -> {:error, :order_not_created}
     end
   end
 
@@ -389,12 +388,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   defp formatting_duracao(duracao) do
-    IO.inspect duracao
-    duracao =
-      String.to_float(duracao)
-      |> Kernel.trunc()
+    case duracao do
+      nil -> "0 dias"
+      _ ->
+      duracao =
+        String.to_float(duracao)
+        |> Kernel.trunc()
 
-      "#{duracao} dias"
+        "#{duracao} dias"
+    end
+
   end
 
   def olho_esquerdo(items, map) do
@@ -648,22 +651,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     case pedidos do
       [] -> {:ok, []}
-      pedido -> {:ok, pedido.items}
+      pedidos -> {:ok, parse_pedidos_to_revisao(pedidos)}
     end
   end
 
-  def parse_pedidos_to_revisao(items) do
-    pedido_com_paciente =
-      Enum.filter(items, fn item -> item.paciente != nil end)
+  def parse_pedidos_to_revisao(pedidos) do
+    Enum.flat_map(pedidos, )
+  end
 
-    data_hoje = Date.utc_today()
-
-    Enum.filter(pedido_com_paciente, fn pedido ->
-      count_range =
-        Date.range(NaiveDateTime.to_date(pedido.inserted_at), Date.add(data_hoje, 30))
-        |> Enum.count()
-      count_range <=30
-    end)
+  def duracao_mais_data_insercao(pedido, duracao) do
+    Date.add(NaiveDateTime.to_date(pedido.inserted_at), duracao)
   end
 
   def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do

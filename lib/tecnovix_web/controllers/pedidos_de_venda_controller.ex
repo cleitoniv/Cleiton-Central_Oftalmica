@@ -13,6 +13,16 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   action_fallback Tecnovix.Resources.Fallback
 
+  def pacientes_revisao(conn, _params) do
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, revisao} <- PedidosDeVendaModel.get_pacientes_revisao(cliente.id) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: revisao}))
+    end
+  end
+
   def taxa_entrega(conn, _params) do
     with {:ok, taxa_entrega} <- PedidosDeVendaModel.taxa_entrega() do
       conn

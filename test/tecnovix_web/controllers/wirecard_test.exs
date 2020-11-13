@@ -80,6 +80,11 @@ defmodule Tecnovix.Test.Wirecard do
         "taxa_entrega" => 200
       })
       |> json_response(200)
+
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/revisao")
+      |> json_response(200)
       |> IO.inspect
   end
 
