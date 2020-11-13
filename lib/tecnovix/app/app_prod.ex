@@ -702,15 +702,13 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  def get_pedido_id(cliente_id, pedido_id) do
-    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
+  def get_pedido_id(cliente_id, pedido_id, item_pedido) do
+    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id, item_pedido) do
       pedido = %{
         data_inclusao: pedido.inserted_at,
         num_pedido: pedido.id,
         valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
-        valor_total:
-          Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end) +
-            pedido.taxa_entrega,
+        valor_total: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         previsao_entrega: pedido.previsao_entrega,
         taxa_entrega: pedido.taxa_entrega,
         items:

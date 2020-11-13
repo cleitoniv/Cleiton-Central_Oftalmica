@@ -694,6 +694,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
           count_range >= 30
         end)
+        |> Enum.map(fn map ->
+          Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
+        end)
   end
 
   def duracao_mais_data_insercao(item, duracao) do
@@ -734,14 +737,37 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end)
   end
 
-  def get_pedido_id(pedido_id, cliente_id) do
-    case Repo.get(PedidosDeVendaSchema, pedido_id) do
+  def get_pedido_id(pedido_id, cliente_id, item_pedido) do
+    case item_pedido do
       nil ->
-        {:error, :not_found}
+        case Repo.get(PedidosDeVendaSchema, pedido_id) do
+          nil ->
+            {:error, :not_found}
 
-      pedido ->
-        pedido = Repo.preload(pedido, :items)
-        {:ok, pedido}
+          pedido ->
+            pedido = Repo.preload(pedido, :items)
+            {:ok, pedido}
+        end
+
+      item_pedido ->
+        case Repo.get(PedidosDeVendaSchema, pedido_id) do
+          nil ->
+            {:error, :not_found}
+
+          pedido ->
+            pedido = Repo.preload(pedido, :items)
+
+            Enum.filter([pedido], fn map ->
+              id_item =
+                Enum.map(map.items, fn item ->
+                  item.id
+                end)
+
+              id_item == item_pedido
+            end)
+
+            {:ok, pedido}
+        end
     end
   end
 

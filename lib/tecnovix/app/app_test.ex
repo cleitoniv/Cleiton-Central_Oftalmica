@@ -558,14 +558,16 @@ defmodule Tecnovix.App.ScreensTest do
               resp = %{
                 valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
                 data_inclusao: map.inserted_at,
-                num_pedido: map.id
+                num_pedido: map.id,
+                item_pedido: map.item_pedido
               }
 
             "CREDIT_CARD" ->
               resp = %{
                 valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
                 data_inclusao: map.inserted_at,
-                num_pedido: map.id
+                num_pedido: map.id,
+                item_pedido: map.item_pedido
               }
 
               {:ok, taxa} = taxa(resp.valor, map.parcela)
@@ -733,8 +735,8 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
-  def get_pedido_id(cliente_id, pedido_id) do
-    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
+  def get_pedido_id(cliente_id, pedido_id, item_pedido) do
+    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id, item_pedido) do
       pedido = %{
         data_inclusao: pedido.inserted_at,
         num_pedido: pedido.id,
