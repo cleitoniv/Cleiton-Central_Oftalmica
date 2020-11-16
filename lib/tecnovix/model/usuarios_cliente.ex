@@ -19,9 +19,9 @@ defmodule Tecnovix.UsuariosClienteModel do
               |> update([u], set: [status: 1])
               |> Repo.update_all([])
 
-            {:ok, usuario}
+            {:ativo, usuario}
 
-          false -> {:ok, usuario}
+          false -> {:ativo, usuario}
         end
 
       _ ->

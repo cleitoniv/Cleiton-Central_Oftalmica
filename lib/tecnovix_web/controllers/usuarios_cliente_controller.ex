@@ -30,6 +30,13 @@ defmodule TecnovixWeb.UsuariosClienteController do
     else
       {:error, %Ecto.Changeset{} = error} ->
         {:error, error}
+
+      {:ativo, user} ->
+        conn
+        |> put_status(:created)
+        |> put_resp_content_type("application/json")
+        |> render("show.json", %{item: user})
+
     end
   end
 
