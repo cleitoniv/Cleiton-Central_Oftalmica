@@ -499,7 +499,7 @@ defmodule Tecnovix.App.ScreensTest do
         desenho: "Asférico",
         diametro: "14.4",
         curva_base: 21,
-        esferico: "+8.00 a -10.00"
+        esferico: "+8.00 a -10.00 "
       }
     ]
 
