@@ -11,7 +11,7 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
     field :wirecard_pedido_id, :string
     field :wirecard_pagamento_id, :string
     field :wirecard_reembolso_id, :string
-    field :status, default: 0
+    field :status, :integer, default: 0
 
     timestamps()
   end
