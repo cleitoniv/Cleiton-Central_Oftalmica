@@ -35,7 +35,13 @@ defmodule TecnovixWeb.UsuariosClienteController do
         body = Jason.decode!(resp.body)
 
         case body["error"]["message"] do
-          "EMAIL_EXISTS" -> {:error, :email_invalid}
+          "EMAIL_EXISTS" ->
+            error =
+            %Tecnovix.UsuariosClienteSchema{}
+            |> Ecto.Changeset.change(%{})
+            |> Ecto.Changeset.add_error(:email, "Esse email já esta cadastrado.")
+
+          {:error, error}
           _ -> {:error, :register_error}
         end
     end
@@ -78,7 +84,6 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
     with {:ok, token} <- Firebase.get_token(conn),
          {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
-         {:ok, _user_firebase} <- Firebase.delete_user_firebase(%{idToken: token}),
          {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario cliente deletado") do
       conn
       |> put_resp_content_type("application/json")

@@ -65,8 +65,9 @@ defmodule Tecnovix.UsuariosClienteModel do
     usuarios =
       UsuariosClienteSchema
       |> where([u], u.cliente_id == ^cliente.id and u.id == ^id)
-      |> first()
-      |> Repo.one()
-      |> Repo.delete()
+      |> update([u], set: [status: 0])
+      |> Repo.update_all([])
+
+    {:ok, usuarios}
   end
 end
