@@ -10,7 +10,34 @@ defmodule Tecnovix.UsuariosClienteModel do
          nil <- Repo.get_by(ClientesSchema, email: email) do
       {:ok, email}
     else
-      _ -> {:ok, email}
+      usuario ->
+        case usuario.status == 0 and usuario.email == email do
+          true ->
+            usuario =
+              UsuariosClienteSchema
+              |> where([u], u.email == ^email)
+              |> update([u], set: [status: 1])
+              |> Repo.update_all([])
+
+            {:ok, usuario}
+
+          false ->
+            {:ok, usuario}
+        end
+
+      _ ->
+        error =
+        %Tecnovix.UsuariosClienteSchema{}
+        |> Ecto.Changeset.change(%{})
+        |> Ecto.Changeset.add_error(:erro, "Error ao finalizar o cadastro.")
+
+      {:error, error}
+    end
+  end
+
+  def create_user(params) do
+    with {:ok, email} <- unique_email(params["email"]) do
+
     end
   end
 
@@ -25,6 +52,10 @@ defmodule Tecnovix.UsuariosClienteModel do
 
   def cliente_id_filter(params) do
     dynamic([a], a.cliente_id == ^params["cliente_id"])
+  end
+
+  def status_filter(params) do
+    dynamic([u], u.status == ^params["status"])
   end
 
   def update(user, params) do

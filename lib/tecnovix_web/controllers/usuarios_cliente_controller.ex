@@ -108,13 +108,10 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def cliente_index(conn, params) do
     {:ok, cliente} = conn.private.auth
-    params = Map.put(params, "cliente_id", cliente.id)
+    params =
+    Map.put(params, "cliente_id", cliente.id)
+    |> Map.put("status", 1)
 
-    with {:ok, users} <- UsuariosClienteModel.show_users(cliente.id) do
-      conn
-      |> put_status(200)
-      |> put_resp_content_type("application/json")
-      |> render("users.json", %{item: users})
-    end
+    __MODULE__.index(conn, params)
   end
 end
