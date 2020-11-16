@@ -1,9 +1,15 @@
 defmodule TecnovixWeb.PedidosDeVendaController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.PedidosDeVendaModel
-  alias Tecnovix.PedidosDeVendaModel
-  alias Tecnovix.ClientesSchema
-  alias Tecnovix.UsuariosClienteSchema
+
+  alias Tecnovix.{
+    PedidosDeVendaModel,
+    ClientesSchema,
+    UsuariosClienteSchema,
+    App.Screens,
+    LogsClienteModel,
+    NotificacoesClienteModel
+  }
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -12,11 +18,15 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> render("pedidos.json", %{item: pedido})
+      |> render("pedido.json", %{item: pedido})
+    else
+      _ -> {:error, :order_not_created}
     end
   end
 
-  def create(conn, %{"items" => items, "paciente" => paciente, "id_cartao" => id_cartao}) do
+  def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
+    {:ok, usuario} = usuario_auth(conn.private.auth_user)
+
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
@@ -26,40 +36,94 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
-    items_order = items_order(items)
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
 
-    with {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, paciente, cliente, order),
-         {:ok, payment} <- PedidosDeVendaModel.payment(id_cartao, order) do
-      IO.inspect(pedido)
+    with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
+         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente),
+         {:ok, payment} <-
+           PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, order),
+         {:ok, _logs} <-
+           LogsClienteModel.create(ip, usuario, cliente, "Pedido criado com sucesso."),
+         {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
 
+           IO.inspect notificacao
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{sucess: true, data: Jason.decode!(payment.body)}))
+      |> render("pedido.json", %{item: pedido})
     else
-      _ ->
-        {:error, :order_not_created}
+      _ -> {:error, :order_not_created}
     end
   end
 
-  def items_order(items) do
-    Enum.map(items, fn order ->
-      %{
-        "product" => order["produto"],
-        "category" => "OTHER_CATEGORIES",
-        "quantity" => order["quantidade"],
-        "detail" => "Mais info...",
-        "price" =>
-          convert_price(
-            String.to_float(order["prc_unitario"]) * 100 * String.to_integer(order["quantidade"])
-          )
-      }
-    end)
+  defp usuario_auth(auth) do
+    case auth do
+      nil -> ""
+      usuario -> usuario
+    end
   end
 
-  def convert_price(price) do
-    price
-    |> Kernel.trunc()
+  def credito_financeiro(conn, %{"items" => items}) do
+    {:ok, cliente} =
+      case conn.private.auth do
+        {:ok, %ClientesSchema{} = cliente} ->
+          {:ok, cliente}
+
+        {:ok, %UsuariosClienteSchema{} = usuario} ->
+          PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
+      end
+
+    with {:ok, pedido} <-
+           PedidosDeVendaModel.create_credito_financeiro(items, cliente, %{
+             "type" => "A",
+             "operation" => "Remessa"
+           }) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedido.json", %{item: pedido})
+    else
+      _ -> {:error, :order_not_created}
+    end
+  end
+
+  def detail_order_id(conn, %{"id" => pedido_id}) do
+    stub = Screens.stub()
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, pedido} <- stub.get_pedido_id(pedido_id, cliente.id) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: pedido}))
+    else
+      _ -> {:error, :not_found}
+    end
+  end
+
+  def get_pedidos(conn, %{"filtro" => filtro, "nao_integrado" => nao_integrado}) do
+    with {:ok, pedidos} <- PedidosDeVendaModel.get_pedidos_protheus(filtro, nao_integrado) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedidos_protheus.json", %{item: pedidos})
+    else
+      _ -> {:error, :not_found}
+    end
+  end
+
+  def get_pedidos(conn, %{"filtro" => filtro}) do
+    with {:ok, pedidos} <- PedidosDeVendaModel.get_pedidos_protheus(filtro, nil) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedidos_protheus.json", %{item: pedidos})
+    else
+      _ -> {:error, :not_found}
+    end
   end
 end

@@ -15,17 +15,40 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :product_serial_error}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "Error na serie do produto."})
+    )
+    |> halt()
+  end
+
+  def call(conn, {:error, :num_serie_invalid}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Número de série inválido."}))
+    |> halt()
+  end
+
   def call(conn, {:error, :not_authorized}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(401, Jason.encode!(%{"success" => false, "data" => "Cliente não autorizado."}))
+    |> send_resp(401, Jason.encode!(%{"success" => false, "data" => "Não autorizado."}))
     |> halt()
   end
 
   def call(conn, {:error, :protheus_not_found}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(%{"status" => "NOT_FOUND"}))
+    |> send_resp(200, Jason.encode!(%{"success" => false, "status" => "NOT_FOUND"}))
+  end
+
+  def call(conn, {:error, :card_not_created}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Cartão não criado."}))
   end
 
   def call(conn, {:error, :order_not_created}) do
@@ -38,7 +61,7 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :not_found}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(404, Jason.encode!(%{"success" => false, "data" => "Recurso não encontrado."}))
+    |> send_resp(404, Jason.encode!(%{"success" => false, "data" => "Não encontrado."}))
     |> halt()
   end
 
@@ -86,6 +109,26 @@ defmodule Tecnovix.Resources.Fallback do
     |> send_resp(
       400,
       Jason.encode!(%{"success" => false, "data" => "Não foi possível listar os usuários."})
+    )
+    |> halt()
+  end
+
+  def call(conn, {:error, :cartao_not_found}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "Cartão não encontrado."})
+    )
+    |> halt()
+  end
+
+  def call(conn, {:error, :pedido_failed}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "Falha na criação do pedido."})
     )
     |> halt()
   end

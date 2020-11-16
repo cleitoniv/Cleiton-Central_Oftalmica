@@ -1,4 +1,53 @@
-{
+[
+  {
+  "tipo_pre_dev": "0",
+  "filial": "1234",
+  "items": [
+      {
+        "pre_devolucao_id": 1,
+        "descricao_generica_do_produto_id": 1,
+        "sub_descricao_generica_do_produto_id": 1,
+        "filial": "123",
+        "cod_pre_dev": "teste",
+        "item": "2",
+        "filial_orig": "1231",
+        "num_de_serie": "45498798421",
+        "produto": "Lente",
+        "quant": "1.54",
+        "prod_subs": "teste",
+        "descricao": "Estou escrevendo isso somente para testar!",
+        "doc_devol": "teste",
+        "serie": "123",
+        "doc_saida": "teste",
+        "serie_saida": "123",
+        "item_doc": "32",
+        "contrato": "teste",
+        "tipo": "123"
+      },
+      {
+        "pre_devolucao_id": 1,
+        "descricao_generica_do_produto_id": 1,
+        "sub_descricao_generica_do_produto_id": 1,
+        "filial": "123",
+        "cod_pre_dev": "teste",
+        "item": "5",
+        "filial_orig": "1231",
+        "num_de_serie": "45498798421",
+        "produto": "Lente",
+        "quant": "1.54",
+        "prod_subs": "teste",
+        "descricao": "Estou escrevendo isso somente para testar!",
+        "doc_devol": "teste",
+        "serie": "321",
+        "doc_saida": "teste",
+        "serie_saida": "321",
+        "item_doc": "25",
+        "contrato": "teste",
+        "tipo": "321"
+      }
+    ]
+  },
+  {
   "tipo_pre_dev": "0",
   "filial": "1234",
   "items": [
@@ -22,6 +71,28 @@
       "item_doc": "32",
       "contrato": "teste",
       "tipo": "123"
+    },
+    {
+      "pre_devolucao_id": 1,
+      "descricao_generica_do_produto_id": 1,
+      "sub_descricao_generica_do_produto_id": 1,
+      "filial": "123",
+      "cod_pre_dev": "teste",
+      "item": "5",
+      "filial_orig": "1231",
+      "num_de_serie": "45498798421",
+      "produto": "Lente",
+      "quant": "1.54",
+      "prod_subs": "teste",
+      "descricao": "Estou escrevendo isso somente para testar!",
+      "doc_devol": "teste",
+      "serie": "321",
+      "doc_saida": "teste",
+      "serie_saida": "321",
+      "item_doc": "25",
+      "contrato": "teste",
+      "tipo": "321"
     }
   ]
 }
+]

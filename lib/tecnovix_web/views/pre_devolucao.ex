@@ -12,11 +12,18 @@ defmodule TecnovixWeb.PreDevolucaoView do
       cliente: item.cliente,
       loja: item.loja,
       status: item.status,
-      items: render_many(item.items, TecnovixWeb.ItensPreDevolucaoView, "itens_devolucao.json", as: :item)
+      items:
+        render_many(item.items, TecnovixWeb.ItensPreDevolucaoView, "itens_devolucao.json",
+          as: :item
+        )
     }
   end
 
   multi_parser("devolucao.json", [:filial, :cliente_id])
+
+  def render("devolucoes.json", %{item: items}) do
+    render_many(items, __MODULE__, "devolucao.json", as: :item)
+  end
 
   def render("devolucao.json", %{item: item}) do
     __MODULE__.build(%{item: item})

@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :tecnovix, Tecnovix.Repo,
   username: "postgres",
-  password: "q1w2e3",
+  password: "vitinho01",
   database: "tecnovix_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
@@ -55,6 +55,7 @@ config :tecnovix, TecnovixWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
+
 config :tecnovix, TecnovixWeb.Endpoint,
   live_reload: [
     patterns: [
@@ -98,5 +99,7 @@ config :tecnovix, :protheus_username, "TECNOVIX"
 config :tecnovix, :protheus_password, "TecnoVix200505"
 
 config :tecnovix, Tecnovix.Mailer,
-  adapter: Bamboo.LocalAdapter,
-  api_key: "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"
+  adapter: Bamboo.SendGridAdapter,
+  api_key: "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"
+
+config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"

@@ -1,0 +1,11 @@
+{
+  "type": "C",
+  "items": [
+    {
+      "produto": "Bioview Torica"
+      "codigo": "23131231",
+      "quantidade": 2,
+      "prc_unitario": 140000
+    }
+  ]
+}

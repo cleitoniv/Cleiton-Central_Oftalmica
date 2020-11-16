@@ -2,8 +2,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.UsuariosClienteModel
   alias Tecnovix.{Email, UsuariosClienteModel, ClientesSchema, LogsClienteModel}
-  alias TecnovixWeb.Auth.Firebase
-  alias TecnovixWeb.LogsClienteController
+  alias TecnovixWeb.{Auth.Firebase, LogsClienteController}
+
   action_fallback Tecnovix.Resources.Fallback
 
   def create(conn, %{"param" => params}) do
@@ -11,7 +11,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
          {:ok, %{status_code: 200}} <-
            Firebase.create_user(%{email: user.email, password: user.password}) do
       # verificando se o email foi enviado com sucesso
-      case Email.send_email({user.nome, user.email}) do
+      case Email.send_email({user.nome, user.email}, params["password"], params["nome"]) do
         {_send, {:delivered_email, _email}} ->
           # atualizando o campo senha_enviada para 1(indicando que o email foi enviado)
           UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
@@ -22,12 +22,17 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
       {:ok, cliente} = conn.private.auth
 
+      ip =
+        conn.remote_ip
+        |> Tuple.to_list()
+        |> Enum.join()
+
       LogsClienteModel.create(%{
         "cliente_id" => cliente.id,
         "data" => DateTime.utc_now(),
-        "ip" => "teste",
-        "dispositivo" => "teste",
-        "acao_realizada" => "Realizou o cadastro"
+        "ip" => ip,
+        "dispositivo" => "Samsung A30S",
+        "acao_realizada" => "Usuario Cliente #{user.nome} cadastrado."
       })
 
       # registrando a acao na tabela logs_cliente
@@ -36,8 +41,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: user})
     else
-      _ ->
-        {:error, :register_error}
+      _ -> {:error, :register_error}
     end
   end
 
@@ -89,6 +93,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
   end
 
   def create_user(conn, %{"param" => params}) do
+    params = Map.put(params, "password", String.slice(Tecnovix.Repo.generate_event_id(), 6..12))
+
     case conn.private.auth do
       {:ok, %ClientesSchema{} = user} ->
         params = Map.put(params, "cliente_id", user.id)

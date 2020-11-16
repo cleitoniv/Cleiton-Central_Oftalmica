@@ -20,7 +20,15 @@ defmodule TecnovixWeb.ItensPreDevolucaoView do
       serie_saida: item.serie_saida,
       item_doc: item.item_doc,
       contrato: item.contrato,
-      tipo: item.tipo
+      tipo: item.tipo,
+      cor: item.cor,
+      adicao: item.adicao,
+      esferico: item.esferico,
+      eixo: item.eixo,
+      cilindrico: item.cilindrico,
+      paciente: item.paciente,
+      dt_nas_pac: item.dt_nas_pac,
+      numero: item.numero
     }
   end
 

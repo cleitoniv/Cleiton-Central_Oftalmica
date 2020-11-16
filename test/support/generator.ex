@@ -23,15 +23,34 @@ defmodule TecnovixWeb.Support.Generator do
     }
   end
 
+  def desc_generica() do
+    %{
+      "grupo" => "010C",
+      "codigo" => "005678",
+      "descricao" => "Testando",
+      "esferico" => 1.25,
+      "cilindrico" => 1.50,
+      "eixo" => 1,
+      "cor" => "Azul",
+      "diametro" => 1.0,
+      "curva_base" => 1.5,
+      "adic_padrao" => "1",
+      "adicao" => 1,
+      "raio_curva" => "1.5",
+      "link_am_app" => "http",
+      "blo_de_tela" => "1"
+    }
+  end
+
   def user_param() do
     %{
       "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
       "fisica_jurid" => "F",
-      "cnpj_cpf" => String.slice(Ecto.UUID.autogenerate(), 1..12),
+      "cnpj_cpf" => String.slice(Float.to_string(:rand.uniform()), 2..12),
       "sit_app" => "A",
       "nome" => "Victor",
       "ddd" => "27",
-      "telefone" => "5527996211804",
+      "telefone" => "27 996211804",
       "data_nascimento" => "2020-07-07",
       "ramo" => "1",
       "endereco" => "Rua Benedito Barcelos",
@@ -42,7 +61,8 @@ defmodule TecnovixWeb.Support.Generator do
       "municipio" => "Serra",
       "crm_medico" => "teste",
       "cod_cliente" => "nil",
-      "loja_cliente" => "12",
+      "dia_remessa" => "3",
+      "loja_cliente" => "01",
       "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
       "complemento" => "Casa"
     }
@@ -86,7 +106,6 @@ defmodule TecnovixWeb.Support.Generator do
       "ano_validade" => "2022",
       "cartao_number" => "5555666677778884",
       "bandeira" => "Mastercard",
-      "status" => "1",
       "wirecard_cartao_credito_id" => "12",
       "wirecard_cartao_credito_hash" => "1232131231",
       "cep_endereco_cobranca" => "29027445",

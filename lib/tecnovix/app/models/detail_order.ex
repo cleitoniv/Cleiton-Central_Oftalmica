@@ -15,7 +15,25 @@ defmodule Tecnovix.App.DetailOrderModel do
 
   def changeset(changeset, params \\ %{}) do
     changeset
-    |> cast(params, [:paciente, :cliente, :data_nascimento, :olhos, :grau, :cilindro, :eixo, :quantidade])
-    |> validate_required([:paciente, :cliente, :data_nascimento, :olhos, :grau, :cilindro, :eixo, :quantidade])
+    |> cast(params, [
+      :paciente,
+      :cliente,
+      :data_nascimento,
+      :olhos,
+      :grau,
+      :cilindro,
+      :eixo,
+      :quantidade
+    ])
+    |> validate_required([
+      :paciente,
+      :cliente,
+      :data_nascimento,
+      :olhos,
+      :grau,
+      :cilindro,
+      :eixo,
+      :quantidade
+    ])
   end
 end

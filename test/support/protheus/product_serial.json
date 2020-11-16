@@ -1,0 +1,54 @@
+{
+  "total": 1,
+  "count": 1,
+  "startindex": 1,
+  "resources": [
+      {
+        "id": "WSAPPNUMSER",
+        "operation": 1,
+        "pk": "ICAgICAgICAgICAgICAgICAgICA=",
+        "models": [
+            {
+                "id": "MFSER",
+                "modeltype": "FIELDS",
+                "fields": [
+                    {
+                        "id": "DOC",
+                        "order": 1,
+                        "value": "000047421"
+                    },
+                    {
+                        "id": "SERIE",
+                        "order": 2,
+                        "value": "1"
+                    },
+                    {
+                        "id": "GRUPO",
+                        "order": 3,
+                        "value": "011C"
+                    },
+                    {
+                        "id": "NUMSERI",
+                        "order": 4
+                    },
+                    {
+                        "id": "DESCSTAT",
+                        "order": 5,
+                        "value": "Série S03006503 encontra-se em Devolução/Troca Concluída Nr. 000013."
+                    },
+                    {
+                      "id": "PRDDESC",
+                      "order": 7,
+                      "value": "BIOVIEW TORICA CX6"
+                    },
+                    {
+                        "id": "SUCESS",
+                        "order": 6,
+                        "value": "FALSE"
+                    }
+                ]
+            }
+        ]
+    }
+  ]
+}

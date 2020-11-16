@@ -1,0 +1,955 @@
+{
+  "total": 14,
+  "count": 10,
+  "startindex": 1,
+  "resources": [
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDEwQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "010C"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "1"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "1"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2,
+              "value": "010T"
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "BIOVIEW TORICA CX6"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "150.00000000"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "1715.00000000"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "151.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDExQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "011C"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2,
+              "value": "011T"
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "BIOVIEW ASFERICA CX6"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "0"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "770.00000000"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "82.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDEzQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "013C"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2,
+              "value": "013T"
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "BIOVIEW MULTIFOCAL CX6"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "0"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "0"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "184.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDIwQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "020C"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2,
+              "value": "010T"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "BIOSOFT TORICA CX3"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "455.00000000"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "1715.00000000"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "91.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDIxQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "021C"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2,
+              "value": "011T"
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "BIOSOFT ASFERICA CX3"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "1320.00000000"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "770.00000000"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "50.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDMwQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "030C"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2,
+              "value": "030T"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "SILIDROGEL SIHY CX6"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "0"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "0"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "110.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDMyQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "032C"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2,
+              "value": "030T"
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "BIOSOFT SIHY 45 CX3"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "28.00000000"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "0"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "51.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDMzQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "033C"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2,
+              "value": "033T"
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "SILIDROGEL TORICA CX6"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "0"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "0"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "166.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDUxQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "051C"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "LC 1-DIA BIOSOFT 1-DAY CX10"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "46.00000000"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "0"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "36.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WSAPPPROUTOS",
+      "operation": 1,
+      "pk": "MDYwQw==",
+      "models": [
+        {
+          "id": "MFEST",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "BM_GRUPO",
+              "order": 1,
+              "value": "060C"
+            },
+            {
+              "id": "HASGRAU",
+              "value": "1"
+            },
+            {
+              "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASRAIO",
+              "value": "0"
+            },
+            {
+              "id": "HASCOLOR",
+              "value": "0"
+            },
+            {
+              "id": "HASCURVA",
+              "value": "1"
+            },
+            {
+              "id": "HASADICAO",
+              "value": "0"
+            },
+            {
+              "id": "HASCILIND",
+              "value": "1"
+            },
+            {
+              "id": "HASDIAMET",
+              "value": "0"
+            },
+            {
+              "id": "BM_YGRPTES",
+              "order": 2
+            },
+            {
+              "id": "TPPROD",
+              "order": 3,
+              "value": "C"
+            },
+            {
+              "id": "BM_DESC",
+              "order": 4,
+              "value": "BIOSOFT COLOR 38 CX2"
+            },
+            {
+              "id": "B1_UM",
+              "order": 5,
+              "value": "CX"
+            },
+            {
+              "id": "SALDO",
+              "order": 6,
+              "value": "0"
+            },
+            {
+              "id": "SALDOTESTE",
+              "order": 7,
+              "value": "0"
+            },
+            {
+              "id": "VALORA",
+              "order": 8,
+              "value": "36.00000000"
+            },
+            {
+              "id": "VALORC",
+              "order": 9,
+              "value": "0"
+            },
+            {
+              "id": "VALORE",
+              "order": 10,
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -5,10 +5,12 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   alias Tecnovix.Resource.Wirecard.Actions, as: Wirecard
   alias Tecnovix.ClientesSchema
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
+  alias Tecnovix.CreditoFinanceiroSchema, as: Credito
+  import Ecto.Query
 
   def insert(params, order, payment, cliente_id) do
-    case __MODULE__.credito_params(params, order, payment, cliente_id) do
-      {:ok, credito_params} -> __MODULE__.create(credito_params)
+    case credito_params(params, order, payment, cliente_id) do
+      {:ok, credito_params} -> create(credito_params)
       _ -> {:error, :payment_credit_fail}
     end
   end
@@ -19,8 +21,9 @@ defmodule Tecnovix.CreditoFinanceiroModel do
 
     params = %{
       "cliente_id" => cliente_id,
-      "valor" => payment_body["amount"]["total"],
-      "desconto" => "",
+      "valor" => Enum.reduce(params, 0, fn map, _acc -> map["valor"] end),
+      "desconto" => Enum.reduce(params, 0, fn map, _acc -> map["desconto"] end),
+      "prestacoes" => Enum.reduce(params, 0, fn map, _acc -> map["prestacoes"] end),
       "tipo_pagamento" => payment_body["fundingInstrument"]["method"],
       "wirecard_pedido_id" => order_body["id"],
       "wirecard_pagamento_id" => payment_body["id"],
@@ -66,14 +69,14 @@ defmodule Tecnovix.CreditoFinanceiroModel do
      }}
   end
 
-  def payment(id_cartao, order) do
+  def payment(id_cartao, order, params) do
     order = Jason.decode!(order.body)
     order_id = order["id"]
 
     payment =
       id_cartao
       |> CreditoFinanceiroModel.get_cartao_cliente()
-      |> CreditoFinanceiroModel.payment_params()
+      |> CreditoFinanceiroModel.payment_params(params)
       |> CreditoFinanceiroModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
 
@@ -136,9 +139,9 @@ defmodule Tecnovix.CreditoFinanceiroModel do
     }
   end
 
-  def payment_params({:ok, cartao = %CartaoSchema{}}) do
+  def payment_params({:ok, cartao = %CartaoSchema{}}, params) do
     %{
-      "installmentCount" => 6,
+      "installmentCount" => Enum.reduce(params, 0, fn map, _acc -> map["prestacoes"] end),
       "statementDescriptor" => "central",
       "fundingInstrument" => %{
         "method" => "CREDIT_CARD",
@@ -189,5 +192,29 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       nil -> :error
       cliente -> {:ok, cliente}
     end
+  end
+
+  def items_order(items) do
+    order =
+      Enum.map(items, fn map ->
+        %{
+          "product" => "Credito",
+          "category" => "OTHER_CATEGORIES",
+          "quantity" => 1,
+          "detail" => "Compra de credito financeiro.",
+          "price" => map["valor"]
+        }
+      end)
+
+    {:ok, order}
+  end
+
+  def sum_credits(cliente) do
+    Credito
+    |> where([c], ^cliente.id == c.cliente_id)
+    |> Repo.all()
+    |> Enum.reduce(0, fn credit, acc ->
+      credit.valor + acc
+    end)
   end
 end

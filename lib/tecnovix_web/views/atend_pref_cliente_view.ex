@@ -18,7 +18,8 @@ defmodule TecnovixWeb.AtendPrefClienteView do
       sex_manha: item.sex_manha,
       sex_tarde: item.sex_tarde,
       sab_manha: item.sab_manha,
-      sab_tarde: item.sab_tarde
+      sab_tarde: item.sab_tarde,
+      success: true
     }
   end
 

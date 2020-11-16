@@ -1,0 +1,20 @@
+{
+  "filial": "1234",
+  "type": "C",
+  "contrato_n": "123456",
+  "docto_orig": "123456789",
+  "cliente": "123456",
+  "loja": "ES",
+  "items": [
+    {
+      "contrato_de_parceria_id": 1,
+      "filial": "1234",
+      "contrato_n": "123456",
+      "item": "12",
+      "quantidade": 2,
+      "produto": "Lente",
+      "preco_venda": 14000,
+      "total": 20000
+    }
+  ]
+}

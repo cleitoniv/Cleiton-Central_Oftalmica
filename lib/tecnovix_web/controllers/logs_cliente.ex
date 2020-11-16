@@ -1,8 +1,7 @@
 defmodule TecnovixWeb.LogsClienteController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.LogsClienteModel
-  alias Tecnovix.ClientesSchema
-  alias Tecnovix.UsuariosClienteSchema
+  alias Tecnovix.{ClientesSchema, UsuariosClienteSchema}
 
   action_fallback Tecnovix.Resources.Fallback
 

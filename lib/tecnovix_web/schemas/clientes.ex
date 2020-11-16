@@ -21,7 +21,7 @@ defmodule Tecnovix.ClientesSchema do
     field :municipio, :string
     field :ddd, :string
     field :telefone, :string
-    field :bloqueado, :string
+    field :bloqueado, :string, default: "2"
     field :sit_app, :string, default: "E"
     field :cod_cnae, :string
     field :ramo, :string

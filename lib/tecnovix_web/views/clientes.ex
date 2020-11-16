@@ -21,6 +21,7 @@ defmodule TecnovixWeb.ClientesView do
       bairro: item.bairro,
       cep: item.cep,
       cdmunicipio: item.cdmunicipio,
+      municipio: item.municipio,
       ddd: item.ddd,
       telefone: item.telefone,
       bloqueado: item.bloqueado,
@@ -187,11 +188,17 @@ defmodule TecnovixWeb.ClientesView do
     }
   end
 
-  def render("current_user.json", %{item: item, credits: credits, notifications: notifications}) do
+  def render("current_user.json", %{
+        item: item,
+        credits: credits,
+        notifications: notifications,
+        dia_remessa: dia_remessa
+      }) do
     __MODULE__.build(%{item: item})
     |> Map.put(:points, credits.points)
     |> Map.put(:money, credits.money)
     |> Map.put(:notifications, notifications)
+    |> Map.put(:dia_remessa, dia_remessa)
   end
 
   multi_parser("clientes.json", [:loja, :codigo, :cnpj_cpf])

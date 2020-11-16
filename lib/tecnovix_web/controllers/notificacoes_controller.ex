@@ -2,15 +2,26 @@ defmodule TecnovixWeb.NotificacoesController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.NotificacoesClienteModel
   alias Tecnovix.NotificacoesClienteModel
+  alias Tecnovix.UsuariosClienteSchema
 
-  def lido(conn, %{"param" => params}) do
-    {:ok, cliente} = conn.private.auth
+  def verify_auth({:ok, cliente}) do
+    case cliente do
+      %UsuariosClienteSchema{} ->
+        user = Tecnovix.Repo.preload(cliente, :cliente)
+        {:ok, user.cliente}
 
-    with {:ok, notificacao} <- NotificacoesClienteModel.lido(cliente.id, params) do
+      cliente ->
+        {:ok, cliente}
+    end
+  end
+
+  def read_notification(conn, %{"id" => id}) do
+    {:ok, cliente} = verify_auth(conn.private.auth)
+
+    with {:ok, _} <- NotificacoesClienteModel.read_notification(id, cliente) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> render("show.json", %{item: notificacao})
+      |> send_resp(200, Jason.encode!(%{success: true}))
     end
   end
 end

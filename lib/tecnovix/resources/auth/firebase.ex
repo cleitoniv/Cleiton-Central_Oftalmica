@@ -110,6 +110,7 @@ defmodule TecnovixWeb.Auth.Firebase do
          {:ok, user} <- Tecnovix.ClientesModel.search_register_email(jwt.fields["email"]),
          true <- user.sit_app != "D" do
       put_private(conn, :auth, {:ok, user})
+      |> put_private(:auth_user, {:ok, nil})
     else
       false ->
         {:error, :cliente_desativado}
@@ -125,7 +126,10 @@ defmodule TecnovixWeb.Auth.Firebase do
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
          {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]),
          true <- user.status == 1 do
-      put_private(conn, :auth, {:ok, user})
+      user = Tecnovix.Repo.preload(user, :cliente)
+
+      put_private(conn, :auth, {:ok, user.cliente})
+      |> put_private(:auth_user, {:ok, user})
     else
       false ->
         {:error, :inatived}
@@ -157,6 +161,14 @@ defmodule TecnovixWeb.Auth.Firebase do
   def update_profile(%{idToken: _idToken, displayName: _displayName} = params) do
     params = Map.put(params, :returnSecureToken, true)
     url = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" <> @firebase_api_key
+    HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
+  end
+
+  def update_password(%{idToken: _idToken, password: _password} = params) do
+    params = Map.put(params, :returnSecureToken, true)
+
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" <> @firebase_api_key
+
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
   end
 end

@@ -3,6 +3,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   alias Tecnovix.Repo
   alias Tecnovix.PreDevolucaoSchema
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
+  alias Tecnovix.ClientesSchema
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
@@ -34,28 +35,61 @@ defmodule Tecnovix.PreDevolucaoModel do
     {:error, :invalid_parameter}
   end
 
+  def create(cliente, params, tipo) do
+    devolucao = pre_devolucao(cliente, params, tipo)
+
+    {:ok, item} =
+      %PreDevolucaoSchema{}
+      |> PreDevolucaoSchema.changeset(devolucao)
+      |> Repo.insert()
+
+    {:ok, item}
+  end
+
   def create(cliente, params) do
     devolucao =
-      cliente
-      |> pre_devolucao(params)
-      |> itens_pre_devolucao()
+      Enum.map(params, fn param ->
+        devolucao =
+          cliente
+          |> pre_devolucao(param)
+          |> itens_pre_devolucao()
 
-    %PreDevolucaoSchema{}
-    |> PreDevolucaoSchema.changeset(devolucao)
-    |> Repo.insert()
+        {:ok, item} =
+          %PreDevolucaoSchema{}
+          |> PreDevolucaoSchema.changeset(devolucao)
+          |> Repo.insert()
+
+        item
+      end)
+
+    {:ok, devolucao}
   end
 
-  #Ajeitando o mapa da tabela PRE DEVOLUCAO
+  # Ajeitando o mapa da tabela PRE DEVOLUCAO
+  def pre_devolucao(cliente, params, tipo) do
+    %{
+      "client_id" => cliente.id,
+      "filial" => "N",
+      "tipo_pre_dev" => tipo,
+      "cod_pre_dev" => String.slice(Ecto.UUID.autogenerate(), 0..5),
+      "loja" => cliente.loja,
+      "cliente" => cliente.codigo,
+      "items" => params
+    }
+  end
+
   def pre_devolucao(cliente, params) do
-    params
-    |> Map.put("client_id", cliente.id)
-    |> Map.put("filial", params["filial"])
-    |> Map.put("cod_pre_dev", String.slice(Ecto.UUID.autogenerate(), 0..5))
-    |> Map.put("loja", cliente.loja)
-    |> Map.put("cliente", cliente.codigo)
+    %{
+      "cliente_id" => cliente.id,
+      "filial" => "N",
+      "tipo_pre_dev" => "N",
+      "cod_pre_dev" => String.slice(Ecto.UUID.autogenerate(), 0..5),
+      "loja" => cliente.loja,
+      "cliente" => cliente.codigo
+    }
   end
 
-  #Ajeitando o mapa da tabela dos Itens
+  # Ajeitando o mapa da tabela dos Itens
   def itens_pre_devolucao(params) do
     params
     |> Map.put("filial", params["filial"])
@@ -64,13 +98,14 @@ defmodule Tecnovix.PreDevolucaoModel do
     |> old_product()
   end
 
-  #Incluindo no mapa de itens, campos e valores sobre o produto novo
+  # Incluindo no mapa de itens, campos e valores sobre o produto novo
   def new_product(params) do
     params
     |> Map.put("prod_subs", params["prod_subs"])
+    |> Map.put("olho", params["olho"])
   end
 
-  #Incluindo no mapa de itens, campos e valores sobre o produto velho
+  # Incluindo no mapa de itens, campos e valores sobre o produto velho
   def old_product(params) do
     params
     |> Map.put("num_serie", params["num_serie"])
@@ -83,5 +118,15 @@ defmodule Tecnovix.PreDevolucaoModel do
       nil -> {:error, :not_found}
       contrato -> {:ok, contrato}
     end
+  end
+
+  def insert_pre_devolucao(cliente_id, %{
+        groups: groups,
+        devolutions: devolutions,
+        products: products,
+        tipo: tipo
+      }) do
+    cliente = Repo.get(ClientesSchema, cliente_id)
+    create(cliente, devolutions, tipo)
   end
 end

@@ -1,6 +1,7 @@
 [
   {
-  "valor": 200.0,
-  "desconto": 10
-}
+  "valor": 2500,
+  "desconto": 10,
+  "prestacoes": 5
+  }
 ]

@@ -1,6 +1,8 @@
 defmodule Tecnovix.ClientesModel do
   use Tecnovix.DAO, schema: Tecnovix.ClientesSchema
+  alias Tecnovix.CartaoCreditoClienteSchema, as: Cartao
   alias Tecnovix.Repo
+  import Ecto.Query
   alias Tecnovix.ClientesSchema
   import Ecto.Changeset
   import Ecto.Query
@@ -9,18 +11,38 @@ defmodule Tecnovix.ClientesModel do
     dynamic([c], c.sit_app == ^params["ystapp"])
   end
 
+  def get_cards(cliente) do
+    query =
+      from c in Cartao,
+        where: c.cliente_id == ^cliente.id
+
+    Repo.all(query)
+  end
+
   def create_first_acess(params) do
     %ClientesSchema{}
     |> ClientesSchema.first_acess(params)
     |> Repo.insert()
   end
 
-  def get_clientes_app(filtro) do
-    query =
-      from c in ClientesSchema,
-        where: c.sit_app == ^filtro
+  def get_cliente(id) do
+    case Repo.get_by(ClientesSchema, id: id) do
+      nil -> {:error, :not_found}
+      cliente -> {:ok, cliente}
+    end
+  end
 
-    {:ok, Repo.all(query)}
+  def get_clientes_app(filtro) do
+    clientes =
+      ClientesSchema
+      |> where([c], c.sit_app == ^filtro)
+      |> order_by([c], desc: c.inserted_at)
+      |> Repo.all()
+
+    case clientes do
+      [] -> {:error, :not_found}
+      clientes -> {:ok, clientes}
+    end
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
@@ -75,8 +97,9 @@ defmodule Tecnovix.ClientesModel do
 
   defp formatting_telefone(changeset) do
     update_change(changeset, :telefone, fn telefone ->
-      String.replace(telefone, "-", "")
+      String.replace("55" <> telefone, "-", "")
       |> String.replace(".", "")
+      |> String.replace(" ", "")
     end)
   end
 

@@ -63,6 +63,7 @@ defmodule TecnovixWeb.Router do
       post "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :insert_or_update
       post "/vendedores", TecnovixWeb.VendedoresController, :insert_or_update
       get "/clientes", TecnovixWeb.ClientesController, :get_clientes_app
+      get "/pedidos", TecnovixWeb.PedidosDeVendaController, :get_pedidos
     end
 
     scope "/atend_pref_cliente" do
@@ -81,9 +82,11 @@ defmodule TecnovixWeb.Router do
     scope "/cliente" do
       pipe_through :guest
       post "/", TecnovixWeb.ClientesController, :create_user
+      get "/protheus/products", TecnovixWeb.ProtheusController, :get_product
       get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
       pipe_through :cliente
       get "/current_user", TecnovixWeb.ClientesController, :current_user
+      post "/update_password", TecnovixWeb.ClientesController, :update_password
       get "/", TecnovixWeb.ClientesController, :show
       post "/cliente_user", TecnovixWeb.UsuariosClienteController, :create_user
       post "/pedidos", TecnovixWeb.PedidosDeVendaController, :create
@@ -95,7 +98,27 @@ defmodule TecnovixWeb.Router do
       get "/cart", TecnovixWeb.ClientesController, :cart
       get "/product/:id", TecnovixWeb.ClientesController, :info_product
       get "/detail_order", TecnovixWeb.ClientesController, :detail_order
+      get "/cards", TecnovixWeb.ClientesController, :get_cards
       post "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :create
+      post "/card", TecnovixWeb.CartaoCreditoClienteController, :create
+      get "/pedido/:id", TecnovixWeb.PedidosDeVendaController, :detail_order_id
+      post "/contrato_de_parceria", TecnovixWeb.ContratoDeParceriaController, :create
+      get "/payments", TecnovixWeb.ClientesController, :get_payments
+      get "/points", TecnovixWeb.ClientesController, :get_mypoints
+      get "/notifications", TecnovixWeb.ClientesController, :get_notifications
+      get "/product_serie/:num_serie", TecnovixWeb.ClientesController, :get_product_serie
+      post "/devolution_continue", TecnovixWeb.ClientesController, :devolution_continue
+      post "/next_step", TecnovixWeb.ClientesController, :next_step
+      get "/extrato_finan", TecnovixWeb.ClientesController, :get_extrato_finan
+      get "/extrato_prod", TecnovixWeb.ClientesController, :get_extrato_prod
+      get "/send_email_dev", TecnovixWeb.ClientesController, :get_and_send_email_dev
+      post "/add_points", TecnovixWeb.PointsController, :add_points
+      get "/convert_points", TecnovixWeb.ClientesController, :convert_points
+      post "/rescue_points", TecnovixWeb.RescuePointsController, :rescue_points
+      post "/atend_pref", TecnovixWeb.AtendPrefClienteController, :get_and_crud_atendimento
+      get "/endereco_entrega", TecnovixWeb.ClientesController, :get_endereco_entrega
+      get "/get_graus", TecnovixWeb.ClientesController, :get_graus
+      put "/read_notification/:id", TecnovixWeb.NotificacoesController, :read_notification
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

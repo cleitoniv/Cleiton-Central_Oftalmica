@@ -92,9 +92,10 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/descricao_generica_do_produto", single_param)
     |> recycle()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/descricao_generica_do_produto", multi_param)
+    |> post("/api/sync/descricao_generica_do_produto", Map.put(single_param, "grupo", "dsa"))
     |> json_response(200)
+
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.DescricaoGenericaDoProdutoSchema))
   end
 
   test "insert or update of the table ITENS_DO_CONTRATO_DE_PARCERIA" do
@@ -148,8 +149,8 @@ defmodule TecnovixWeb.InsertOrUpdate do
   test "insert or update of the table PEDIDOS_DE_VENDA" do
     %{"access_token" => token} = Generator.sync_user("thiagoboeker", "123456")
 
-    single_param = TestHelp.single_json("single_pedidos_de_venda.json")
-    multi_param = TestHelp.multi_json("multi_pedidos_de_venda.json")
+    single_param = TestHelp.single_json("single_pedidos_and_items.json")
+    multi_param = TestHelp.multi_json("multi_pedidos_and_items.json")
     multi_param = %{"data" => multi_param}
 
     build_conn()

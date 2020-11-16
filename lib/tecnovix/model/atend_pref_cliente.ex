@@ -29,7 +29,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
       create(params)
     else
       atend_pref ->
-        {:ok, atend_pref}
+        __MODULE__.update(atend_pref, params)
     end
   end
 
@@ -37,10 +37,45 @@ defmodule Tecnovix.AtendPrefClienteModel do
     {:error, :invalid_parameter}
   end
 
-  def create(params, cliente_id) do
-    case __MODULE__.get_by(cliente_id: cliente_id) do
-      nil -> __MODULE__.create(params)
-      atend_pref -> __MODULE__.update(atend_pref, params)
+  def formatting_atend(params, cliente) do
+    dia_remessa =
+      case cliente.dia_remessa do
+        nil -> "-"
+        "1" -> "segunda-feira"
+        "2" -> "terça-feira"
+        "3" -> "quarta-feira"
+        "4" -> "quinta-feira"
+        "5" -> "sexta-feira"
+      end
+
+    horario = String.downcase(params["horario"])
+    {dia, _} = String.split_at(dia_remessa, 3)
+
+    horario_new = "#{dia}_#{horario}"
+
+    atend =
+      Map.new()
+      |> Map.put(horario_new, 1)
+      |> Map.put("cod_cliente", cliente.codigo)
+      |> Map.put("loja_cliente", cliente.loja)
+      |> Map.put("cliente_id", cliente.id)
+
+    case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
+      nil ->
+        create(atend) |> IO.inspect()
+
+      changeset ->
+        previous =
+          Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
+            case value == 1 do
+              true -> [key]
+              false -> []
+            end
+          end)
+          |> Enum.at(0)
+
+        atend = Map.put(atend, "#{previous}", 0)
+        update(changeset, atend) |> IO.inspect()
     end
   end
 end
