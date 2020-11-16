@@ -20,16 +20,14 @@ defmodule Tecnovix.UsuariosClienteModel do
 
             {:ativo, usuario}
 
-          false -> {:ativo, usuario}
+          false ->
+            error =
+              %Tecnovix.UsuariosClienteSchema{}
+              |> Ecto.Changeset.change(%{})
+              |> Ecto.Changeset.add_error(:erro, "Esse email já esta cadastrado.")
+
+            {:error, error}
         end
-
-      _ ->
-        error =
-        %Tecnovix.UsuariosClienteSchema{}
-        |> Ecto.Changeset.change(%{})
-        |> Ecto.Changeset.add_error(:erro, "Error ao finalizar o cadastro.")
-
-      {:error, error}
     end
   end
 
