@@ -524,39 +524,71 @@ defmodule Tecnovix.App.ScreensProd do
         fn map ->
           case map.tipo_pagamento do
             "BOLETO" ->
-              resp = %{
-                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
-                data_inclusao: map.inserted_at,
-                num_pedido: map.id,
-                item_pedido: map.item_pedido
-              }
+              case filtro do
+                2 ->
+                  resp = %{
+                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id,
+                    item_pedido: map.item_pedido
+                  }
+
+                _ ->
+                  resp = %{
+                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id
+                  }
+              end
 
             "CREDIT_CARD" ->
-              resp = %{
-                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
-                data_inclusao: map.inserted_at,
-                num_pedido: map.id,
-                item_pedido: map.item_pedido
-              }
+              case filtro do
+                2 ->
+                  resp = %{
+                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id,
+                    item_pedido: map.item_pedido
+                  }
 
-              {:ok, taxa} = taxa(resp.valor, map.parcela)
+                  {:ok, taxa} = taxa(resp.valor, map.parcela)
 
-              taxa =
-                Enum.reduce(taxa, 0, fn reduce, acc ->
-                  case Map.has_key?(reduce, "parcela#{map.parcela}") do
-                    true -> reduce["parcela#{map.parcela}"]
-                    false -> acc
-                  end
-                end)
+                  taxa =
+                    Enum.reduce(taxa, 0, fn reduce, acc ->
+                      case Map.has_key?(reduce, "parcela#{map.parcela}") do
+                        true -> reduce["parcela#{map.parcela}"]
+                        false -> acc
+                      end
+                    end)
 
-              Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
+                  Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
+
+                _ ->
+                  resp = %{
+                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id
+                  }
+
+                  {:ok, taxa} = taxa(resp.valor, map.parcela)
+
+                  taxa =
+                    Enum.reduce(taxa, 0, fn reduce, acc ->
+                      case Map.has_key?(reduce, "parcela#{map.parcela}") do
+                        true -> reduce["parcela#{map.parcela}"]
+                        false -> acc
+                      end
+                    end)
+
+                  Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
+              end
           end
         end
       )
 
     {:ok, detail}
   end
-
+  
   @impl true
   def get_cards(cliente) do
     case ClientesModel.get_cards(cliente) do
