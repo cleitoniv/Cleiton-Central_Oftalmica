@@ -5,7 +5,7 @@ defmodule Tecnovix.UsuariosClienteModel do
   alias Tecnovix.Repo
   import Ecto.Query
 
-  def unique_email(email) do
+  def unique_email(%{"email" => email} = params) do
     with nil <- Repo.get_by(UsuariosClienteSchema, email: email),
          nil <- Repo.get_by(ClientesSchema, email: email) do
       {:ok, email}
@@ -15,7 +15,7 @@ defmodule Tecnovix.UsuariosClienteModel do
           true ->
               UsuariosClienteSchema
               |> where([u], u.email == ^email)
-              |> update([u], set: [status: 1])
+              |> update([u], set: [status: 1, cargo: ^params["cargo"], nome: ^params["nome"]])
               |> Repo.update_all([])
 
             {:ativo, usuario}
