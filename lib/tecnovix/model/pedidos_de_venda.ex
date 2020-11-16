@@ -700,7 +700,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
           |> Enum.count()
 
-        count_range >= 30
+        count_range <= 30
       end)
       |> Enum.map(fn map ->
         Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
@@ -724,6 +724,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedido_id(pedido_id, cliente_id, item_pedido) do
+    IO.inspect item_pedido
     item_pedido =
       case item_pedido do
         "" -> nil
