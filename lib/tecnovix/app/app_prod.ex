@@ -774,6 +774,7 @@ defmodule Tecnovix.App.ScreensProd do
           )
           |> parse_items()
       }
+      |> IO.inspect()
 
       {:ok, pedido}
     end
