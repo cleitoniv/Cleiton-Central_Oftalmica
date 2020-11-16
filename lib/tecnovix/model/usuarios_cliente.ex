@@ -22,6 +22,7 @@ defmodule Tecnovix.UsuariosClienteModel do
 
   def show_users() do
     UsuariosClienteSchema
+    |> where([u], u.status == 1)
     |> Repo.all()
   end
 

@@ -75,8 +75,6 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def first_access(conn, %{"param" => params}) do
-    IO.inspect(params)
-
     with {:ok, cliente} <- ClientesModel.create_first_access(params) do
       conn
       |> put_status(201)
