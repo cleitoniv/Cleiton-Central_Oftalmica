@@ -95,7 +95,7 @@ defmodule Tecnovix.DAO do
     try do
       schema
       |> select([u], u)
-      |> where(^build_fragments(filters))
+      |> where([u], ^build_fragments(filters))
       |> Repo.paginate(params)
     rescue
       _ -> {:error, :invalid_parameters}

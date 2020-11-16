@@ -390,8 +390,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   defp formatting_duracao(duracao) do
     duracao =
-      String.to_float(duracao)
-      |> Kernel.trunc()
+      case duracao do
+        nil -> 0
+
+        "0" -> 0
+
+        duracao ->
+          String.to_float(duracao)
+          |> Kernel.trunc()
+      end
 
     "#{duracao} dias"
   end
