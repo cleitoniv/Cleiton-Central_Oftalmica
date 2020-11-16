@@ -117,7 +117,8 @@ defmodule Tecnovix.ClientesModel do
           params
           |> Map.put("cdmunicipio", String.slice(endereco["ibge"], 2..7))
 
-        _ -> params
+        _ ->
+          params
       end
 
     params =
@@ -169,6 +170,7 @@ defmodule Tecnovix.ClientesModel do
         String.replace(telefone, "-", "")
         |> String.replace(" ", "")
         |> String.slice(2..11)
+
       telefone ->
         String.replace(telefone, "-", "")
         |> String.replace(" ", "")
@@ -340,9 +342,10 @@ defmodule Tecnovix.ClientesModel do
       true ->
         ETS.KeyValueSet.put(kvset, :confirmation_sms, 1)
         {:ok, 1}
-      false -> {:error, :invalid_code_sms}
-    end
 
+      false ->
+        {:error, :invalid_code_sms}
+    end
 
     # cliente =
     #   ClientesSchema

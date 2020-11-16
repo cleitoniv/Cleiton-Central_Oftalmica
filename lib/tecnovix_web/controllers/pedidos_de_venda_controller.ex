@@ -120,14 +120,15 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-      taxa_entrega =
-        case taxa_entrega do
-          nil -> 0
-          taxa_entrega -> taxa_entrega
-        end
+    taxa_entrega =
+      case taxa_entrega do
+        nil -> 0
+        taxa_entrega -> taxa_entrega
+      end
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
-         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente, taxa_entrega, installment),
+         {:ok, order} <-
+           PedidosDeVendaModel.order(items_order, cliente, taxa_entrega, installment),
          {:ok, payment} <-
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order, ccv, installment),
          {:ok, pedido} <-

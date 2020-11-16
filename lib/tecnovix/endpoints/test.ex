@@ -133,14 +133,15 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   def organize_cliente(http) do
-    cliente = Jason.decode!(http.body) |> IO.inspect
+    cliente = Jason.decode!(http.body) |> IO.inspect()
 
     organize =
       Enum.flat_map(cliente["resources"], fn resource ->
         Enum.flat_map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn field, acc ->
             case Map.has_key?(acc, field["id"]) do
-              false -> parse_field(field, acc)
+              false ->
+                parse_field(field, acc)
 
               true ->
                 acc
@@ -149,7 +150,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         end)
       end)
       |> Map.new()
-      |> IO.inspect
+      |> IO.inspect()
 
     {:ok, organize}
   end
@@ -163,6 +164,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         data_nascimento = "#{dia}#{mes}#{ano}"
 
         Map.put(acc, "A1_DTNASC", data_nascimento)
+
       "A1_CNAE" ->
         case Map.has_key?(acc, "A1_YCRM_CNAE") do
           true -> acc
@@ -175,7 +177,8 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
           false -> Map.put(acc, "A1_YCRM_CNAE", field["value"])
         end
 
-      _ -> Map.put(acc, field["id"], field["value"])
+      _ ->
+        Map.put(acc, field["id"], field["value"])
     end
   end
 end

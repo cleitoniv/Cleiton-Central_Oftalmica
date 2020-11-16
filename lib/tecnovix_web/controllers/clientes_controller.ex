@@ -22,6 +22,7 @@ defmodule TecnovixWeb.ClientesController do
       |> send_resp(200, Jason.encode!(%{success: true, data: termo}))
     end
   end
+
   # clicou em submit -> envia o sms -> guarda o codigo do sms na memoria -> depois de 120 apaga o codigo
   def send_sms(conn, %{"phone_number" => phone_number} = params) do
     code_sms = Enum.random(1_000..9_999)
@@ -35,7 +36,8 @@ defmodule TecnovixWeb.ClientesController do
          {:ok, %{"codigo" => "000"}} <-
            ClientesModel.send_sms(%{phone_number: phone_number}, code_sms),
          {:ok, _} <- ClientesModel.confirmation_sms(params),
-         {:ok, _} <- ConfirmationSMS.deleting_coding(code_sms, params["ddd"] <> params["telefone"]) do
+         {:ok, _} <-
+           ConfirmationSMS.deleting_coding(code_sms, params["ddd"] <> params["telefone"]) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: code_sms}))
@@ -43,9 +45,11 @@ defmodule TecnovixWeb.ClientesController do
       {:ok, %{"codigo" => "500"}} ->
         {:error, :not_authorized}
 
-      {:error, :number_found} -> {:error, :number_found}
+      {:error, :number_found} ->
+        {:error, :number_found}
 
-      _ -> {:error, :not_found}
+      _ ->
+        {:error, :not_found}
     end
   end
 
@@ -71,7 +75,8 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def first_access(conn, %{"param" => params}) do
-    IO.inspect params
+    IO.inspect(params)
+
     with {:ok, cliente} <- ClientesModel.create_first_access(params) do
       conn
       |> put_status(201)
@@ -450,7 +455,6 @@ defmodule TecnovixWeb.ClientesController do
            }),
          {:ok, grid, filters} <- stub.get_product_grid(products, cliente, "Todos"),
          {:ok, prod} <- stub.get_extrato_prod(cliente, grid) do
-
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: prod}))

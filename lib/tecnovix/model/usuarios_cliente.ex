@@ -8,15 +8,15 @@ defmodule Tecnovix.UsuariosClienteModel do
   def unique_email(email) do
     with nil <- Repo.get_by(UsuariosClienteSchema, email: email),
          nil <- Repo.get_by(ClientesSchema, email: email) do
-         {:ok, email}
+      {:ok, email}
     else
       _ ->
-      error =
-        %UsuariosClienteSchema{}
-        |> Ecto.Changeset.change(%{})
-        |> Ecto.Changeset.add_error(:email, "Esse email já esta cadastrado.")
+        error =
+          %UsuariosClienteSchema{}
+          |> Ecto.Changeset.change(%{})
+          |> Ecto.Changeset.add_error(:email, "Esse email já esta cadastrado.")
 
-      {:error, error}
+        {:error, error}
     end
   end
 

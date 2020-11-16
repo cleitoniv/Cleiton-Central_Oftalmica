@@ -96,26 +96,26 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
       |> Map.get("data")
 
-      items =
-        Enum.flat_map(
-          items_json,
-          fn map ->
-            Enum.map(
-              map["items"],
-              fn items ->
-                Map.put(items, "descricao_generica_do_produto_id", descricao.id)
-              end
-            )
-          end
-        )
+    items =
+      Enum.flat_map(
+        items_json,
+        fn map ->
+          Enum.map(
+            map["items"],
+            fn items ->
+              Map.put(items, "descricao_generica_do_produto_id", descricao.id)
+            end
+          )
+        end
+      )
 
-      items =
-        Enum.map(
-          items_json,
-          fn map ->
-            Map.put(map, "items", items)
-          end
-        )
+    items =
+      Enum.map(
+        items_json,
+        fn map ->
+          Map.put(map, "items", items)
+        end
+      )
 
     pedido =
       build_conn()
@@ -130,18 +130,18 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
       |> Map.get("data")
 
-        build_conn()
-        |> Generator.put_auth(user_firebase["idToken"])
-        |> post("/api/cliente/pedido/credito_financeiro", %{
-          "items" => items_credito,
-          "id_cartao" => cartao["id"]
-        })
-        |> recycle()
-        |> post("/api/cliente/pedido/credito_financeiro", %{
-          "items" => items_credito,
-          "id_cartao" => cartao["id"]
-        })
-        |> json_response(200)
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente/pedido/credito_financeiro", %{
+      "items" => items_credito,
+      "id_cartao" => cartao["id"]
+    })
+    |> recycle()
+    |> post("/api/cliente/pedido/credito_financeiro", %{
+      "items" => items_credito,
+      "id_cartao" => cartao["id"]
+    })
+    |> json_response(200)
 
     current_user =
       build_conn()
@@ -191,9 +191,8 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
       |> Map.get("data")
       |> Enum.map(fn detail ->
-          detail["item_pedido"]
+        detail["item_pedido"]
       end)
-
 
     pedido_por_id =
       build_conn()
@@ -334,9 +333,9 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
       |> Map.get("data")
 
-      build_conn()
-      |> get("/api/confirmation_code", %{"code_sms" => codigo, "phone_number" => phone_number})
-      |> json_response(200)
+    build_conn()
+    |> get("/api/confirmation_code", %{"code_sms" => codigo, "phone_number" => phone_number})
+    |> json_response(200)
   end
 
   test 'test' do

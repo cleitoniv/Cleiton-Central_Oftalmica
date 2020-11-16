@@ -120,7 +120,13 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :register_error}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(400, Jason.encode!(%{"data" => %{"errors" => %{"REGISTRO" => ["Erro no registro."]}}, "success" => false}))
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "data" => %{"errors" => %{"REGISTRO" => ["Erro no registro."]}},
+        "success" => false
+      })
+    )
   end
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do

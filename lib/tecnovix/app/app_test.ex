@@ -555,32 +555,64 @@ defmodule Tecnovix.App.ScreensTest do
         fn map ->
           case map.tipo_pagamento do
             "BOLETO" ->
-              resp = %{
-                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
-                data_inclusao: map.inserted_at,
-                num_pedido: map.id,
-                item_pedido: map.item_pedido
-              }
+              case filtro do
+                2 ->
+                  resp = %{
+                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id,
+                    item_pedido: map.item_pedido
+                  }
+
+                _ ->
+                  resp = %{
+                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id
+                  }
+              end
 
             "CREDIT_CARD" ->
-              resp = %{
-                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
-                data_inclusao: map.inserted_at,
-                num_pedido: map.id,
-                item_pedido: map.item_pedido
-              }
+              case filtro do
+                2 ->
+                  resp = %{
+                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id,
+                    item_pedido: map.item_pedido
+                  }
 
-              {:ok, taxa} = taxa(resp.valor, map.parcela)
+                  {:ok, taxa} = taxa(resp.valor, map.parcela)
 
-              taxa =
-                Enum.reduce(taxa, 0, fn reduce, acc ->
-                  case Map.has_key?(reduce, "parcela#{map.parcela}") do
-                    true -> reduce["parcela#{map.parcela}"]
-                    false -> acc
-                  end
-                end)
+                  taxa =
+                    Enum.reduce(taxa, 0, fn reduce, acc ->
+                      case Map.has_key?(reduce, "parcela#{map.parcela}") do
+                        true -> reduce["parcela#{map.parcela}"]
+                        false -> acc
+                      end
+                    end)
 
-              Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
+                  Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
+
+                _ ->
+                  resp = %{
+                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id
+                  }
+
+                  {:ok, taxa} = taxa(resp.valor, map.parcela)
+
+                  taxa =
+                    Enum.reduce(taxa, 0, fn reduce, acc ->
+                      case Map.has_key?(reduce, "parcela#{map.parcela}") do
+                        true -> reduce["parcela#{map.parcela}"]
+                        false -> acc
+                      end
+                    end)
+
+                  Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
+              end
           end
         end
       )
@@ -885,59 +917,65 @@ defmodule Tecnovix.App.ScreensTest do
 
     data_hoje = Date.utc_today()
 
-    extratos =%{
+    extratos = %{
       data:
         Enum.map(creditos, fn credito ->
-            %{
-              id: credito.id,
-              date_filter: NaiveDateTime.to_date(credito.inserted_at),
-              date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
-              pedido: credito.id,
-              valor: credito.valor |> Kernel.trunc()
-            }
+          %{
+            id: credito.id,
+            date_filter: NaiveDateTime.to_date(credito.inserted_at),
+            date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
+            pedido: credito.id,
+            valor: credito.valor |> Kernel.trunc()
+          }
         end)
         |> Enum.filter(fn filter -> filter.date_filter < Date.end_of_month(data_hoje) end)
     }
 
-    extratos = Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))
+    extratos =
+      Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))
 
     {:ok, extratos}
   end
 
   def get_saldo(produtos, item) do
     Enum.reduce(produtos, 0, fn produto, acc ->
-        case produto["title"] == item.produto do
-          true -> produto["boxes"]
-          false -> acc
-        end
+      case produto["title"] == item.produto do
+        true -> produto["boxes"]
+        false -> acc
+      end
     end)
   end
 
   def get_extrato_prod(cliente, produtos) do
-     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
+    {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
 
-     extrato =
-       Enum.map(items_pedido, fn item ->
-         %{
-           id: item.id,
-           saldo: get_saldo(produtos, item),
-           produto: item.produto,
-           items: Enum.map(items_pedido, fn pedido ->
-             %{
-               produto: pedido.produto,
-               date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
-               pedido: pedido.id,
-               quantidade: pedido.quantidade
-             }
-           end)
-         }
-       end)
-       |> Enum.uniq_by(fn uniq -> uniq.produto end)
+    extrato =
+      Enum.map(items_pedido, fn item ->
+        %{
+          id: item.id,
+          saldo: get_saldo(produtos, item),
+          produto: item.produto,
+          items:
+            Enum.map(items_pedido, fn pedido ->
+              %{
+                produto: pedido.produto,
+                date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
+                pedido: pedido.id,
+                quantidade: pedido.quantidade
+              }
+            end)
+        }
+      end)
+      |> Enum.uniq_by(fn uniq -> uniq.produto end)
 
-       extrato =
-         Enum.map(extrato, fn map ->
-           Map.put(map, :items, Enum.filter(map.items, fn filter -> map.produto == filter.produto end))
-          end)
+    extrato =
+      Enum.map(extrato, fn map ->
+        Map.put(
+          map,
+          :items,
+          Enum.filter(map.items, fn filter -> map.produto == filter.produto end)
+        )
+      end)
 
     {:ok, extrato}
   end
