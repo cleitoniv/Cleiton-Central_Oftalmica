@@ -701,6 +701,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           |> Enum.count()
 
         count_range <= 30
+        
       end)
       |> Enum.map(fn map ->
         Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
