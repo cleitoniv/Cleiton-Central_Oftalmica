@@ -527,7 +527,12 @@ defmodule Tecnovix.App.ScreensProd do
               case filtro do
                 2 ->
                   resp = %{
-                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    valor: Enum.reduce(map.items, 0, fn item, acc ->
+                      case item.operation do
+                        "07" -> 0 + acc
+                        _ -> item.virtotal + acc
+                      end
+                    end),
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id,
                     item_pedido: map.item_pedido
@@ -535,7 +540,12 @@ defmodule Tecnovix.App.ScreensProd do
 
                 _ ->
                   resp = %{
-                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    valor: Enum.reduce(map.items, 0, fn item, acc ->
+                      case item.operation do
+                        "07" -> 0 + acc
+                        _ -> item.virtotal + acc
+                      end
+                    end),
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id
                   }
@@ -545,7 +555,12 @@ defmodule Tecnovix.App.ScreensProd do
               case filtro do
                 2 ->
                   resp = %{
-                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    valor: Enum.reduce(map.items, 0, fn item, acc ->
+                      case item.operation do
+                        "07" -> 0 + acc
+                        _ -> item.virtotal + acc
+                      end
+                    end),
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id,
                     item_pedido: map.item_pedido
@@ -565,7 +580,12 @@ defmodule Tecnovix.App.ScreensProd do
 
                 _ ->
                   resp = %{
-                    valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                    valor: Enum.reduce(map.items, 0, fn item, acc ->
+                      case item.operation do
+                        "07" -> 0 + acc
+                        _ -> item.virtotal + acc
+                      end
+                    end),
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id
                   }
