@@ -21,8 +21,7 @@ defmodule Tecnovix.UsuariosClienteModel do
 
             {:ok, usuario}
 
-          false ->
-            {:ok, usuario}
+          false -> {:ok, usuario}
         end
 
       _ ->

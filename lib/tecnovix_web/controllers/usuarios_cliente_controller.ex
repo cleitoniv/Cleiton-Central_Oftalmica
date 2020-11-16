@@ -30,20 +30,6 @@ defmodule TecnovixWeb.UsuariosClienteController do
     else
       {:error, %Ecto.Changeset{} = error} ->
         {:error, error}
-
-      {:ok, %{status_code: 400} = resp} ->
-        body = Jason.decode!(resp.body)
-
-        case body["error"]["message"] do
-          "EMAIL_EXISTS" ->
-            error =
-            %Tecnovix.UsuariosClienteSchema{}
-            |> Ecto.Changeset.change(%{})
-            |> Ecto.Changeset.add_error(:email, "Esse email já esta cadastrado.")
-
-          {:error, error}
-          _ -> {:error, :register_error}
-        end
     end
   end
 
