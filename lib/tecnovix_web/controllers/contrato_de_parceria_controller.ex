@@ -25,13 +25,18 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
     end
   end
 
-  def create(conn, %{"items" => items, "id_cartao" => id_cartao}) do
+  def create(conn, %{
+        "items" => items,
+        "id_cartao" => id_cartao,
+        "ccv" => ccv,
+        "installment" => installment
+      }) do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, items_order} <- ContratoDeParceriaModel.items_order(items),
          {:ok, order} <- ContratoDeParceriaModel.order(cliente, items_order),
-         {:ok, _payment} <- ContratoDeParceriaModel.payment(id_cartao, order),
-         {:ok, contrato} <- ContratoDeParceriaModel.create_contrato(cliente, items, order),
+         {:ok, _payment} <- ContratoDeParceriaModel.payment(id_cartao, order, ccv, installment),
+         {:ok, contrato} <- ContratoDeParceriaModel.create_contrato(cliente, items, order) |> IO.inspect(),
          {:ok, _notifications} <-
            NotificacoesClienteModel.credit_product_adquired(contrato, cliente) do
       conn
@@ -39,9 +44,7 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
       |> put_resp_content_type("application/json")
       |> render("contrato.json", %{item: contrato})
     else
-      v ->
-        IO.inspect(v)
-        {:error, :order_not_created}
+      _ -> {:error, :order_not_created}
     end
   end
 end

@@ -7,12 +7,56 @@ defmodule TecnovixWeb.ClientesController do
     UsuariosClienteModel,
     AtendPrefClienteModel,
     UsuariosClienteSchema,
-    ClientesSchema
+    ClientesSchema,
+    Services.ConfirmationSMS
   }
 
   alias Tecnovix.{App.Screens, Services.Devolucao, Services.Auth, Endpoints.Protheus}
   alias TecnovixWeb.Auth.Firebase
   action_fallback Tecnovix.Resources.Fallback
+
+  def termo_responsabilidade(conn, _params) do
+    with {:ok, termo} <- ClientesModel.termo_responsabilidade() do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: termo}))
+    end
+  end
+  # clicou em submit -> envia o sms -> guarda o codigo do sms na memoria -> depois de 120 apaga o codigo
+  def send_sms(conn, %{"phone_number" => phone_number} = params) do
+    code_sms = Enum.random(1_000..9_999)
+
+    params =
+      Map.put(params, "code_sms", code_sms)
+      |> Map.put("ddd", ClientesModel.get_ddd(phone_number))
+      |> Map.put("telefone", ClientesModel.formatting_phone_number(phone_number))
+
+    with {:ok, _telefone} <- ClientesModel.phone_number_existing?(params["telefone"]),
+         {:ok, %{"codigo" => "000"}} <-
+           ClientesModel.send_sms(%{phone_number: phone_number}, code_sms),
+         {:ok, _} <- ClientesModel.confirmation_sms(params),
+         {:ok, _} <- ConfirmationSMS.deleting_coding(code_sms, params["ddd"] <> params["telefone"]) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: code_sms}))
+    else
+      {:ok, %{"codigo" => "500"}} ->
+        {:error, :not_authorized}
+
+      {:error, :number_found} -> {:error, :number_found}
+
+      _ -> {:error, :not_found}
+    end
+  end
+
+  def confirmation_code(conn, %{"code_sms" => code_sms, "phone_number" => phone_number}) do
+    with {:ok, confirmation} <-
+           ClientesModel.confirmation_code(code_sms, phone_number) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: confirmation}))
+    end
+  end
 
   def insert_or_update(conn, params) do
     with {:ok, cliente} <- ClientesModel.insert_or_update(params) do
@@ -20,11 +64,15 @@ defmodule TecnovixWeb.ClientesController do
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("clientes.json", %{item: cliente})
+    else
+      {:error, %Ecto.Changeset{} = error} -> {:error, error}
+      _ -> {:error, :invalid_parameter}
     end
   end
 
-  def first_acess(conn, %{"param" => params}) do
-    with {:ok, cliente} <- ClientesModel.create_first_acess(params) do
+  def first_access(conn, %{"param" => params}) do
+    IO.inspect params
+    with {:ok, cliente} <- ClientesModel.create_first_access(params) do
       conn
       |> put_status(201)
       |> put_resp_content_type("application/json")
@@ -40,11 +88,33 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
+  def verify_field_cadastrado(conn, %{"email" => email}) do
+    with {:ok, result} <- ClientesModel.verify_field_cadastrado(email) do
+      conn
+      |> put_resp_content_type("applicaton/json")
+      |> send_resp(200, Jason.encode!(%{success: result}))
+    end
+  end
+
   def create_user(conn, %{"param" => params}) do
+    params =
+      Map.put(
+        params,
+        "data_nascimento",
+        ClientesModel.formatting_dtnasc(params["data_nascimento"])
+      )
+      |> Map.put("cadastrado", true)
+
     {:ok, jwt} = conn.private.auth
     params = Map.put(params, "email", jwt.fields["email"])
     params = Map.put(params, "uid", jwt.fields["user_id"])
-    __MODULE__.create(conn, %{"param" => params})
+
+    with {:ok, cliente} <- ClientesModel.insert_or_update_first(params) do
+      conn
+      |> put_status(201)
+      |> put_resp_content_type("application/json")
+      |> render("clientes.json", %{item: cliente})
+    end
   end
 
   def show(conn, _params) do
@@ -311,7 +381,6 @@ defmodule TecnovixWeb.ClientesController do
              token: auth["access_token"]
            }),
          {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie) do
-
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
@@ -366,11 +435,22 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def get_extrato_prod(conn, _params) do
+    protheus = Protheus.stub()
     stub = Screens.stub()
 
     {:ok, cliente} = verify_auth(conn.private.auth)
 
-    with {:ok, prod} <- stub.get_extrato_prod(cliente) do
+    with {:ok, auth} <- Auth.token(),
+         {:ok, products} <-
+           protheus.get_client_products(%{
+             cliente: cliente.codigo,
+             loja: cliente.loja,
+             count: 50,
+             token: auth["access_token"]
+           }),
+         {:ok, grid, filters} <- stub.get_product_grid(products, cliente, "Todos"),
+         {:ok, prod} <- stub.get_extrato_prod(cliente, grid) do
+
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: prod}))
@@ -398,5 +478,23 @@ defmodule TecnovixWeb.ClientesController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: graus}))
     end
+  end
+
+  def get_endereco_by_cep(conn, %{"cep" => cep}) do
+    with {:ok, %{status_code: 200} = endereco} <- ClientesModel.get_endereco_by_cep(cep) do
+      endereco = Jason.decode!(endereco.body)
+
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: formatting_endereco(endereco)}))
+    else
+      {:error, %{status_code: 401}} -> {:error, :not_authorized}
+      _ -> {:error, :not_found}
+    end
+  end
+
+  defp formatting_endereco(endereco) do
+    endereco
+    |> Map.put("ibge", String.slice(endereco["ibge"], 2..7))
   end
 end

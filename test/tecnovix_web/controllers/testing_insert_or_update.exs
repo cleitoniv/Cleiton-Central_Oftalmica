@@ -8,9 +8,9 @@ defmodule TecnovixWeb.InsertOrUpdate do
     %{"access_token" => token} = Generator.sync_user("thiagoboeker", "123456")
 
     single_param = TestHelp.single_json("single_clientes.json")
+
     multi_param = TestHelp.multi_json("multi_clientes.json")
     multi_param = %{"data" => multi_param}
-
     # single insert
     single =
       build_conn()
@@ -25,10 +25,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
       |> post("/api/sync/clientes", multi_param)
       |> json_response(200)
 
-    IO.inspect(Tecnovix.ClientesSchema |> Repo.all())
-
-    assert single["sucess"] == true
-    assert multi["sucess"] == true
+    assert single["success"] == true
   end
 
   test "insert or update of the table ATEND_PREF_CLIENTES" do

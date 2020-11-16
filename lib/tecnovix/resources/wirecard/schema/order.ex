@@ -63,7 +63,6 @@ defmodule Tecnovix.Resource.Wirecard.Order do
   defp subtotals_changeset(changeset, params) do
     changeset
     |> cast(params, [:shipping, :addition, :discount])
-    |> validate_number(:shipping, greater_than: 0)
     |> validate_number(:addition, greater_than: 0)
     |> validate_number(:discount, greater_than: 0)
   end

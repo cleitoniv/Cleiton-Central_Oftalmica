@@ -5,7 +5,8 @@ defmodule Tecnovix.App.ScreensTest do
     PedidosDeVendaModel,
     Repo,
     ClientesSchema,
-    NotificacoesClienteModel
+    NotificacoesClienteModel,
+    CreditoFinanceiroModel
   }
 
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
@@ -47,6 +48,7 @@ defmodule Tecnovix.App.ScreensTest do
       "HASGRAU" -> "has_esferico"
       "HASCILIND" -> "has_cilindrico"
       "HASADICAO" -> "has_adicao"
+      "HASTEST" -> "has_teste"
       "HASCOLOR" -> "has_cor"
       "HASCURVA" -> "has_curva"
       "HASDIAMET" -> "has_diametro"
@@ -57,6 +59,7 @@ defmodule Tecnovix.App.ScreensTest do
       "DOC" -> "NF"
       "DESCSTAT" -> "mensagem"
       "PRDDESC" -> "title"
+      "TRATAM" -> "duracao"
       v -> v
     end
   end
@@ -64,6 +67,12 @@ defmodule Tecnovix.App.ScreensTest do
   def organize_value(map) do
     case map["id"] do
       "HASEIXO" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASTEST" ->
         case map["value"] do
           "0" -> false
           "1" -> true
@@ -181,6 +190,12 @@ defmodule Tecnovix.App.ScreensTest do
             "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg"
           )
 
+        map =
+          case map["type"] do
+            "ACESSORIO" -> Map.put(map, "has_acessorio", true)
+            _ -> Map.put(map, "has_acessorio", false)
+          end
+
         Enum.reduce(list, map, fn key, acc ->
           cond do
             acc[key] == "0" -> Map.put(acc, key, 0)
@@ -190,13 +205,39 @@ defmodule Tecnovix.App.ScreensTest do
         end)
       end)
 
+    filters = organize_filters_grid(produtos)
+
     data =
       case filtro do
-        "all" -> produtos
-        _ -> Enum.filter(produtos, fn items -> items["type"] == filtro end)
+        "Todos" ->
+          produtos
+
+        _ ->
+          Enum.filter(produtos, fn items -> items["type"] != nil end)
+          |> Enum.filter(fn items -> String.downcase(items["type"]) == String.downcase(filtro) end)
       end
 
-    {:ok, data}
+    {:ok, data, filters}
+  end
+
+  defp organize_filters_grid(products) do
+    ["Todos"] ++
+      (products
+       |> Enum.map(fn product ->
+         case product["type"] do
+           nil ->
+             product["type"]
+
+           type ->
+             product["type"]
+             |> String.downcase()
+             |> String.capitalize()
+         end
+       end)
+       |> Enum.uniq()
+       |> Enum.filter(fn map ->
+         map != nil
+       end))
   end
 
   @impl true
@@ -247,11 +288,7 @@ defmodule Tecnovix.App.ScreensTest do
             data: notification.data,
             title: notification.titulo,
             mensagem: notification.descricao,
-            type: case notification.titulo do
-              "Crédito Financeiro Adquirido" -> "FINANCEIRO_ADQUIRIDO"
-              "Crédito de Produto Adquirido" -> "PRODUTO_ADQUIRIDO"
-              _ -> format_type(notification.titulo)
-            end
+            type: formatting_type(notification.titulo)
           }
         end)
     }
@@ -266,10 +303,25 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
-  defp format_type(titulo) do
-    titulo
-    |> String.upcase()
-    |> String.replace(" ", "_")
+  defp formatting_type(titulo) do
+    case titulo do
+      "Solicitação de Devolução" ->
+        "SOLICITACAO_DEV"
+
+      "Efetivação de Devolução" ->
+        "EFETIVACAO_DEV"
+
+      "Crédito Financeiro Adquirido" ->
+        "FINANCEIRO_ADQUIRIDO"
+
+      "Crédito de Produto Adquirido" ->
+        "PRODUTO_ADQUIRIDO"
+
+      _ ->
+        titulo
+        |> String.upcase()
+        |> String.replace(" ", "_")
+    end
   end
 
   @impl true
@@ -356,28 +408,6 @@ defmodule Tecnovix.App.ScreensTest do
 
     orders = Enum.filter(orders, fn x -> x.status == filtro end)
     {:ok, orders}
-  end
-
-  @impl true
-  def get_products_cart(_cliente) do
-    cart = [
-      %{
-        products: %{
-          id: 0,
-          title: "Bioview Asferica Cx 6",
-          produto: String.slice(Ecto.UUID.autogenerate(), 1..15),
-          value: 30000,
-          value_produto: 14100,
-          value_finan: 14100,
-          quantity: 2,
-          buy_type: "Avulso"
-        },
-        delivery_fee: 10000,
-        total: 40000
-      }
-    ]
-
-    {:ok, cart}
   end
 
   @impl true
@@ -487,17 +517,71 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
+  defp taxa(valor, parcelado) do
+    list_taxa =
+      [
+        {1, 1.0},
+        {2, 4.5},
+        {3, 5.0},
+        {4, 5.5},
+        {5, 6.5},
+        {6, 7.5},
+        {7, 8.5},
+        {8, 9.5},
+        {9, 10.5},
+        {10, 11.5},
+        {11, 12.0},
+        {12, 12.5}
+      ]
+      |> Enum.filter(fn {parcela, taxa} -> parcela == parcelado end)
+
+    resp =
+      Enum.map(list_taxa, fn {parcela, taxa} ->
+        result = PedidosDeVendaModel.calculo_taxa(valor, taxa)
+
+        case parcela do
+          _ -> %{"parcela#{parcela}" => result}
+        end
+      end)
+
+    {:ok, resp}
+  end
+
   @impl true
   def get_detail_order(cliente, filtro) do
     detail =
       Enum.map(
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
         fn map ->
-          %{
-            valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
-            data_inclusao: map.inserted_at,
-            num_pedido: map.id
-          }
+          case map.tipo_pagamento do
+            "BOLETO" ->
+              resp = %{
+                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                data_inclusao: map.inserted_at,
+                num_pedido: map.id,
+                item_pedido: map.item_pedido
+              }
+
+            "CREDIT_CARD" ->
+              resp = %{
+                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
+                data_inclusao: map.inserted_at,
+                num_pedido: map.id,
+                item_pedido: map.item_pedido
+              }
+
+              {:ok, taxa} = taxa(resp.valor, map.parcela)
+
+              taxa =
+                Enum.reduce(taxa, 0, fn reduce, acc ->
+                  case Map.has_key?(reduce, "parcela#{map.parcela}") do
+                    true -> reduce["parcela#{map.parcela}"]
+                    false -> acc
+                  end
+                end)
+
+              Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
+          end
         end
       )
 
@@ -607,7 +691,7 @@ defmodule Tecnovix.App.ScreensTest do
               )
               |> Map.put(:codigo_item, codigo_item.codigo_item)
               |> Map.put(:nome_produto, codigo_item.nome_produto)
-              |> Map.put(:duracao, "1 Ano")
+              |> Map.put(:duracao, codigo_item.duracao)
               |> Map.put(:grupo, codigo_item.grupo)
               |> Map.put(:type, codigo_item.type)
               |> Map.put(:operation, codigo_item.operation)
@@ -626,35 +710,40 @@ defmodule Tecnovix.App.ScreensTest do
         %{
           esferico_d: item.esferico,
           eixo_d: item.eixo,
-          cilindro_d: item.cilindro
+          cilindro_d: item.cilindro,
+          adicao_d: item.adicao,
+          cor_d: item.cor
         }
 
       "E" ->
         %{
           esferico_e: item.esferico,
           eixo_e: item.eixo,
-          cilindro_e: item.cilindro
+          cilindro_e: item.cilindro,
+          adicao_e: item.adicao,
+          cor_e: item.cor
         }
 
       _ ->
         %{
           esferico_e: nil,
           eixo_e: nil,
-          cilindro_e: nil
+          cilindro_e: nil,
+          adicao_e: nil,
+          cor_e: nil
         }
     end
   end
 
-  def get_pedido_id(cliente_id, pedido_id) do
-    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
+  def get_pedido_id(cliente_id, pedido_id, item_pedido) do
+    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id, item_pedido) do
       pedido = %{
         data_inclusao: pedido.inserted_at,
         num_pedido: pedido.id,
         valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
-        frete: pedido.frete,
-        valor_total:
-          pedido.frete + Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
+        valor_total: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
         previsao_entrega: pedido.previsao_entrega,
+        taxa_entrega: pedido.taxa_entrega,
         items:
           Enum.map(
             pedido.items,
@@ -670,13 +759,15 @@ defmodule Tecnovix.App.ScreensTest do
                 quantidade: item.quantidade,
                 valor_total: item.virtotal,
                 olho: item.olho,
+                adicao: item.adicao,
+                cor: item.cor,
                 esferico: item.esferico,
                 eixo: item.eixo,
                 cilindro: item.cilindrico,
                 grupo: item.grupo,
                 url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
                 codigo_item: item.codigo_item,
-                duracao: "1 ano"
+                duracao: item.duracao
               }
             end
           )
@@ -764,71 +855,89 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, product}
   end
 
-  def get_extrato_finan(_cliente) do
-    extrato = %{
-      data: [
-        %{
-          id: 0,
-          date: "10/02/2020",
-          pedido: 23441,
-          valor: 2000
-        },
-        %{
-          id: 1,
-          date: "07/02/2020",
-          pedido: 213_545,
-          valor: -2000
-        },
-        %{
-          id: 2,
-          date: "10/02/2020",
-          pedido: 23441,
-          valor: +3600
-        }
-      ],
-      date: "Fevereiro/2020"
-    }
-
-    {:ok, extrato}
+  defp parse_month(date) do
+    case date.month do
+      1 -> "Janeiro/"
+      2 -> "Fevereiro/"
+      3 -> "Março/"
+      4 -> "Abril/"
+      5 -> "Maio/"
+      6 -> "Junho/"
+      7 -> "Julho/"
+      8 -> "Agosto/"
+      9 -> "Setembro/"
+      10 -> "Outubro/"
+      11 -> "Novembro/"
+      12 -> "Dezembro/"
+    end
   end
 
-  def get_extrato_prod(_cliente) do
-    extrato = [
-      %{
-        id: 0,
-        saldo: 1,
-        produto: "Biosoft SIHY 45 CX3",
-        items: [
-          %{
-            date: "2020/01/10",
-            pedido: "23441",
-            quantidade: 1
-          },
-          %{
-            date: "2020/07/02",
-            pedido: "213545",
-            quantidade: -100
-          }
-        ]
-      },
-      %{
-        id: 0,
-        saldo: 1,
-        produto: "Biosoft SIHY 45 CX3",
-        items: [
-          %{
-            date: "2020/01/10",
-            pedido: "23441",
-            quantidade: 1
-          },
-          %{
-            date: "2020/07/02",
-            pedido: "213545",
-            quantidade: -100
-          }
-        ]
-      }
-    ]
+  def formatting_date(date) do
+    "#{date.day}/#{date.month}/#{date.year}"
+  end
+
+  def get_extrato_finan(cliente) do
+    {:ok, creditos} =
+      case CreditoFinanceiroModel.get_creditos_by_cliente(cliente.id) do
+        [] -> {:ok, []}
+        credito -> {:ok, credito}
+      end
+
+    data_hoje = Date.utc_today()
+
+    extratos =%{
+      data:
+        Enum.map(creditos, fn credito ->
+            %{
+              id: credito.id,
+              date_filter: NaiveDateTime.to_date(credito.inserted_at),
+              date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
+              pedido: credito.id,
+              valor: credito.valor |> Kernel.trunc()
+            }
+        end)
+        |> Enum.filter(fn filter -> filter.date_filter < Date.end_of_month(data_hoje) end)
+    }
+
+    extratos = Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))
+
+    {:ok, extratos}
+  end
+
+  def get_saldo(produtos, item) do
+    Enum.reduce(produtos, 0, fn produto, acc ->
+        case produto["title"] == item.produto do
+          true -> produto["boxes"]
+          false -> acc
+        end
+    end)
+  end
+
+  def get_extrato_prod(cliente, produtos) do
+     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
+
+     extrato =
+       Enum.map(items_pedido, fn item ->
+         %{
+           id: item.id,
+           saldo: get_saldo(produtos, item),
+           produto: item.produto,
+           items: Enum.map(items_pedido, fn pedido ->
+             %{
+               produto: pedido.produto,
+               date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
+               pedido: pedido.id,
+               quantidade: pedido.quantidade
+             }
+           end)
+         }
+       end)
+       |> Enum.uniq_by(fn uniq -> uniq.produto end)
+
+       extrato =
+         Enum.map(extrato, fn map ->
+           Map.put(map, :items, Enum.filter(map.items, fn filter -> map.produto == filter.produto end))
+          end)
 
     {:ok, extrato}
   end

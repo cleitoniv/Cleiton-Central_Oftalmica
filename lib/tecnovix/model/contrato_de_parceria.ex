@@ -69,9 +69,9 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           "number" => "12345678901"
         },
         "phone" => %{
-          "countryCode" => String.slice(cliente.telefone, 0..1),
+          "countryCode" => "55",
           "areaCode" => cliente.ddd,
-          "number" => String.slice(cliente.telefone, 4..13)
+          "number" => cliente.telefone
         },
         "shippingAddress" => %{
           "city" => "Serra",
@@ -164,14 +164,14 @@ defmodule Tecnovix.ContratoDeParceriaModel do
     }
   end
 
-  def payment(cartao_id, order) do
+  def payment(cartao_id, order, ccv, installment) do
     order = Jason.decode!(order.body)
     order_id = order["id"]
 
     payment =
       cartao_id
       |> PedidosDeVendaModel.get_cartao_cliente()
-      |> PedidosDeVendaModel.payment_params()
+      |> PedidosDeVendaModel.payment_params(ccv, installment)
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
 

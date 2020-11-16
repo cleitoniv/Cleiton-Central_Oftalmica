@@ -15,4 +15,29 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoController do
       _ -> {:error, :not_created}
     end
   end
+
+  def verify_graus(conn, params) do
+    with {:ok, boolean} <- DescricaoModel.verify_eyes(params) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: boolean}))
+    else
+      _ -> {:error, :not_found}
+    end
+  end
+
+  def verify_graus_olhos_diferentes(conn, %{
+        "param" => %{"data" => data} = params
+      }) do
+    with {:ok, boolean} <- DescricaoModel.verify_eyes(data) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: boolean}))
+    else
+      {:error, erros} ->
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(400, Jason.encode!(%{success: false, data: %{errors: %{produto: erros}}}))
+    end
+  end
 end

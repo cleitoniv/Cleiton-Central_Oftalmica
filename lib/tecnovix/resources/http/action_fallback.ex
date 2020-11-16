@@ -8,6 +8,34 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:errorPayment, mensagemError}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => mensagemError}))
+    |> halt()
+  end
+
+  def call(conn, {:error, :invalid_code_sms}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Código Inválido."}))
+    |> halt()
+  end
+
+  def call(conn, {:error, :invalid}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Get token invalido."}))
+    |> halt()
+  end
+
+  def call(conn, {:error, :email_invalid}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Email Existente."}))
+    |> halt()
+  end
+
   def call(conn, {:error, :cliente_desativado}) do
     conn
     |> put_resp_content_type("application/json")
@@ -92,10 +120,12 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :register_error}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Erro no registro."}))
+    |> send_resp(400, Jason.encode!(%{"data" => %{"errors" => %{"REGISTRO" => ["Erro no registro."]}}, "success" => false}))
   end
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
+    IO.inspect(changeset)
+
     conn
     |> put_resp_content_type("application/json")
     |> put_status(:bad_request)
@@ -129,6 +159,16 @@ defmodule Tecnovix.Resources.Fallback do
     |> send_resp(
       400,
       Jason.encode!(%{"success" => false, "data" => "Falha na criação do pedido."})
+    )
+    |> halt()
+  end
+
+  def call(conn, {:error, :number_found}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "Esse número de telefone já existe."})
     )
     |> halt()
   end

@@ -51,6 +51,8 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: credito})
+    else
+      _ -> {:error, :payment_not_created}
     end
   end
 end

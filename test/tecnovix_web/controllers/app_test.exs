@@ -23,10 +23,8 @@ defmodule Tecnovix.Test.App do
       resp =
         build_conn()
         |> Generator.put_auth(token)
-        |> get("/api/cliente/protheus/#{"03801285720"}")
+        |> get("/api/cliente/protheus/#{"16793973703"}")
         |> json_response(200)
-
-      assert resp["status"] == "FOUND"
 
       param = Generator.user_param()
 
@@ -61,7 +59,8 @@ defmodule Tecnovix.Test.App do
     user_param = Generator.user_param()
     params = TestHelp.single_json("single_descricao_generica_do_produto.json")
     {:ok, descricao} = DescricaoModel.create(params)
-    {:ok, items_json} = TestHelp.items("items.json")
+    {:ok, items_json} = TestHelp.items("olhos_diferentes.json")
+    {:ok, items_credito} = TestHelp.items("items_credito.json")
 
     Tecnovix.OpcoesCompraCreditoFinanceiroModel.create(%{
       "valor" => 2500,
@@ -97,56 +96,52 @@ defmodule Tecnovix.Test.App do
       |> json_response(200)
       |> Map.get("data")
 
-    items =
-      Enum.flat_map(
-        items_json,
-        fn map ->
-          Enum.map(
-            map["items"],
-            fn items ->
-              Map.put(items, "descricao_generica_do_produto_id", descricao.id)
-            end
-          )
-        end
-      )
-
-    items =
-      Enum.map(
-        items_json,
-        fn map ->
-          case map["type"] do
-            "A" ->
-              item =
-                Enum.filter(items, fn item ->
-                  item["codigo"] == "123132213123"
-                end)
-
-              Map.put(map, "items", item)
-
-            "C" ->
-              item =
-                Enum.filter(items, fn item ->
-                  item["codigo"] == "12313131"
-                end)
-
-              Map.put(map, "items", item)
+      items =
+        Enum.flat_map(
+          items_json,
+          fn map ->
+            Enum.map(
+              map["items"],
+              fn items ->
+                Map.put(items, "descricao_generica_do_produto_id", descricao.id)
+              end
+            )
           end
-        end
-      )
+        )
+
+      items =
+        Enum.map(
+          items_json,
+          fn map ->
+            Map.put(map, "items", items)
+          end
+        )
 
     pedido =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
-      |> recycle()
       |> post("/api/cliente/pedidos", %{
-        "items" => Enum.map(items, fn map -> Map.put(map, "status_ped", 1) end),
-        "id_cartao" => cartao["id"]
+        "items" => items,
+        "id_cartao" => cartao["id"],
+        "ccv" => "123",
+        "installment" => 1,
+        "taxa_entrega" => 100
       })
-      |> recycle()
-      |> post("/api/cliente/pedidos", %{"items" => items, "id_cartao" => cartao["id"]})
       |> json_response(200)
       |> Map.get("data")
+
+        build_conn()
+        |> Generator.put_auth(user_firebase["idToken"])
+        |> post("/api/cliente/pedido/credito_financeiro", %{
+          "items" => items_credito,
+          "id_cartao" => cartao["id"]
+        })
+        |> recycle()
+        |> post("/api/cliente/pedido/credito_financeiro", %{
+          "items" => items_credito,
+          "id_cartao" => cartao["id"]
+        })
+        |> json_response(200)
 
     current_user =
       build_conn()
@@ -156,16 +151,14 @@ defmodule Tecnovix.Test.App do
 
     assert current_user["money"] == 5500
     assert current_user["points"] == 100
-    # assert current_user["notifications"]["opens"] == 2
 
-    # product =
-    #   build_conn()
-    #   |> Generator.put_auth(user_firebase["idToken"])
-    #   |> get("/api/cliente/produtos?filtro=Todos")
-    #   |> json_response(200)
-    #   |> IO.inspect
+    product =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/produtos?filtro=Todos")
+      |> json_response(200)
 
-    # assert product["success"] == true
+    assert product["success"] == true
 
     offers =
       build_conn()
@@ -194,16 +187,20 @@ defmodule Tecnovix.Test.App do
     detail_order =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/detail_order?filtro=0")
+      |> get("/api/cliente/detail_order?filtro=2")
       |> json_response(200)
+      |> Map.get("data")
+      |> Enum.map(fn detail ->
+          detail["item_pedido"]
+      end)
 
-    assert detail_order["success"] == true
 
     pedido_por_id =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/pedido/#{pedido["id"]}")
+      |> get("/api/cliente/pedido/#{pedido["id"]}", %{"item_pedido" => hd(detail_order)})
       |> json_response(200)
+      |> IO.inspect()
 
     payments =
       build_conn()
@@ -226,7 +223,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/notifications")
       |> json_response(200)
-      |> IO.inspect()
 
     assert notifications["success"] == true
 
@@ -236,16 +232,13 @@ defmodule Tecnovix.Test.App do
       |> put("/api/cliente/read_notification/#{249}")
       |> json_response(200)
 
-      # IO.inspect Tecnovix.Repo.all(Tecnovix.NotificacoesClienteSchema)
+    # IO.inspect(Tecnovix.Repo.all(Tecnovix.NotificacoesClienteSchema))
 
-    product_serie =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/product_serie/010C37281")
-      |> json_response(200)
-      |> IO.inspect()
-
-    assert product_serie["success"] == true
+    # product_serie =
+    #   build_conn()
+    #   |> Generator.put_auth(user_firebase["idToken"])
+    #   |> get("/api/cliente/product_serie/010C37281")
+    #   |> json_response(200)
 
     extrato_finan =
       build_conn()
@@ -274,11 +267,11 @@ defmodule Tecnovix.Test.App do
       "num_serie" => "123123"
     }
 
-    # points =
-    #   build_conn()
-    #   |> Generator.put_auth(user_firebase["idToken"])
-    #   |> post("/api/cliente/add_points", %{"param" => paciente})
-    #   |> json_response(200)
+    points =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/add_points", %{"param" => paciente})
+      |> json_response(200)
 
     convert_points =
       build_conn()
@@ -310,5 +303,43 @@ defmodule Tecnovix.Test.App do
     email |> Tecnovix.Mailer.deliver_now()
 
     assert_delivered_email(email)
+  end
+
+  test "Generate Boleto" do
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+    params = TestHelp.single_json("single_descricao_generica_do_produto.json")
+    {:ok, descricao} = DescricaoModel.create(params)
+    {:ok, items_json} = TestHelp.items("items.json")
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> get("/api/cliente/generate_boleto?valor=15100")
+    |> json_response(200)
+  end
+
+  test "Envio de SMS" do
+    phone_number = "5527996211804"
+
+    codigo =
+      build_conn()
+      |> get("/api/send_sms", %{"phone_number" => phone_number})
+      |> json_response(200)
+      |> Map.get("data")
+
+      build_conn()
+      |> get("/api/confirmation_code", %{"code_sms" => codigo, "phone_number" => phone_number})
+      |> json_response(200)
+  end
+
+  test 'test' do
+    Tecnovix.ClientesModel.confirmation_code(1234, 5_527_996_211_804)
   end
 end

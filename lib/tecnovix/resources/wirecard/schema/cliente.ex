@@ -85,7 +85,6 @@ defmodule Tecnovix.Resource.Wirecard.Cliente do
     |> validate_length(:zipCode, max: 20)
     |> validate_required([
       :streetNumber,
-      :complement,
       :state,
       :district,
       :city,

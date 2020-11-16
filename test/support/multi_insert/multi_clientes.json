@@ -23,9 +23,11 @@
 "ramo": "2",
 "vendedor": "",
 "crm_medico": "111111",
-"dia_remessa": "2"
+"dia_remessa": "2",
+"estado": "ES"
 },
 {
+"estado": "ES",
 "loja": "53",
 "codigo": "533",
 "cnpj_cpf": "111111111",

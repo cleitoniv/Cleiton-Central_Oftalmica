@@ -23,6 +23,10 @@ defmodule TecnovixWeb.Router do
     plug :cliente_auth
   end
 
+  pipeline :usuario_cliente do
+    plug :user_cliente_auth
+  end
+
   pipeline :guest do
     plug :firebase_auth
   end
@@ -35,8 +39,11 @@ defmodule TecnovixWeb.Router do
   scope "/api" do
     pipe_through :api
 
-    post "/first_acess", TecnovixWeb.ClientesController, :first_acess
     post "/user_sync/login", TecnovixWeb.SyncUsersController, :login
+    get "/verify_field_cadastrado", TecnovixWeb.ClientesController, :verify_field_cadastrado
+    get "/send_sms", TecnovixWeb.ClientesController, :send_sms
+    get "/confirmation_code", TecnovixWeb.ClientesController, :confirmation_code
+    get "/termo_responsabilidade", TecnovixWeb.ClientesController, :termo_responsabilidade
 
     scope "/sync" do
       pipe_through :user_sync
@@ -82,8 +89,10 @@ defmodule TecnovixWeb.Router do
     scope "/cliente" do
       pipe_through :guest
       post "/", TecnovixWeb.ClientesController, :create_user
+      post "/first_access", TecnovixWeb.ClientesController, :first_access
       get "/protheus/products", TecnovixWeb.ProtheusController, :get_product
       get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
+      get "/get_endereco_by_cep", TecnovixWeb.ClientesController, :get_endereco_by_cep
       pipe_through :cliente
       get "/current_user", TecnovixWeb.ClientesController, :current_user
       post "/update_password", TecnovixWeb.ClientesController, :update_password
@@ -119,6 +128,19 @@ defmodule TecnovixWeb.Router do
       get "/endereco_entrega", TecnovixWeb.ClientesController, :get_endereco_entrega
       get "/get_graus", TecnovixWeb.ClientesController, :get_graus
       put "/read_notification/:id", TecnovixWeb.NotificacoesController, :read_notification
+      get "/verify_graus", TecnovixWeb.DescricaoGenericaDoProdutoController, :verify_graus
+      get "/revisao", TecnovixWeb.PedidosDeVendaController, :pacientes_revisao
+
+      post "/verify_graus",
+           TecnovixWeb.DescricaoGenericaDoProdutoController,
+           :verify_graus_olhos_diferentes
+
+      put "/select_card/:id", TecnovixWeb.CartaoCreditoClienteController, :select_card
+      post "/pedido_boleto", TecnovixWeb.PedidosDeVendaController, :create_boleto
+      get "/generate_boleto", TecnovixWeb.ProtheusController, :generate_boleto
+      delete "/card_delete/:id", TecnovixWeb.CartaoCreditoClienteController, :delete_card
+      get "/taxa", TecnovixWeb.PedidosDeVendaController, :taxa
+      post "/taxa_entrega", TecnovixWeb.PedidosDeVendaController, :taxa_entrega
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

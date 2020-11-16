@@ -14,6 +14,11 @@ defmodule Tecnovix.TestHelp do
     |> Jason.decode!()
   end
 
+  def sms() do
+    File.read!("test/support/protheus/sms_json.json")
+    |> Jason.decode!()
+  end
+
   def cliente() do
     File.read!("test/support/protheus/cliente.json")
     |> Jason.decode!()

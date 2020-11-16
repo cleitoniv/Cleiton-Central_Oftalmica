@@ -18,11 +18,19 @@
               "value": "010C"
             },
             {
+              "id": "TRATAM",
+              "value": "5.00000000"
+            },
+            {
               "id": "HASGRAU",
               "value": "1"
             },
             {
               "id": "HASEIXO",
+              "value": "1"
+            },
+            {
+              "id": "HASTEST",
               "value": "1"
             },
             {
@@ -115,6 +123,10 @@
             {
               "id": "HASGRAU",
               "value": "1"
+            },
+            {
+              "id": "HASTEST",
+              "value": "0"
             },
             {
               "id": "HASEIXO",

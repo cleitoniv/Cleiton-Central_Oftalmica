@@ -13,6 +13,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
   import Ecto.Query
 
+  def taxa_entrega() do
+    %{
+      valor: 10
+    }
+  end
+
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(params["data"], fn pedidos ->
@@ -58,11 +64,43 @@ defmodule Tecnovix.PedidosDeVendaModel do
     |> Repo.insert()
   end
 
-  def order(items, cliente) do
+  def somando_items(items) do
+    Enum.reduce(items, 0, fn item, acc ->
+      map =
+        Enum.reduce(item, %{}, fn {key, value}, acc ->
+          case key do
+            "price" -> Map.put(acc, "price", value)
+            "quantity" -> Map.put(acc, "quantidade", value)
+            _ -> acc
+          end
+         end)
+
+      acc + (map["price"] * map["quantidade"])
+    end)
+  end
+
+  def taxa_wirecard(items, installment, passo) do
+    case passo do
+      "1" ->
+        somando_items(items)
+        |> calculo_taxa(installment)
+        |> Kernel.trunc()
+      "2" ->
+        {:ok, items} = items_order(items)
+
+        somando_items(items)
+        |> calculo_taxa(installment)
+        |> Kernel.trunc()
+    end
+  end
+
+  def order(items, cliente, taxa_entrega, installment) do
+    taxa = taxa_wirecard(items, installment, "1")
+
     order =
       cliente
       |> PedidosDeVendaModel.order_params(items)
-      |> PedidosDeVendaModel.wirecard_order()
+      |> PedidosDeVendaModel.wirecard_order(taxa_entrega, taxa)
       |> Wirecard.create_order()
 
     case order do
@@ -71,37 +109,47 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def update_order(changeset) do
+  def update_order(changeset, status) do
     changeset
-    |> Ecto.Changeset.change(status_ped: 1)
+    |> Ecto.Changeset.change(pago: status)
     |> Repo.update()
   end
 
-  def payment(%{"id_cartao" => cartao_id}, order) do
+  def payment(%{"id_cartao" => cartao_id}, order, ccv, installment) do
     order = Jason.decode!(order.body)
     order_id = order["id"]
 
-    payment =
+    {:ok, payment} =
       cartao_id
       |> PedidosDeVendaModel.get_cartao_cliente()
-      |> PedidosDeVendaModel.payment_params()
+      |> PedidosDeVendaModel.payment_params(ccv, installment)
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
 
-    case payment do
-      {:ok, %{status_code: 201}} -> payment
-      _ -> {:error, :payment_not_created}
+    payment = Jason.decode!(payment.body)
+
+    case payment["status"] do
+      "CANCELLED" ->
+        try do
+          raise payment["cancellationDetails"]["description"]
+        rescue
+          e in _ -> {:errorPayment, e.message}
+        end
+
+      _ ->
+        {:ok, payment}
     end
   end
 
-  def wirecard_order(params) do
+  def wirecard_order(params, taxa_entrega, taxa) do
     {:ok,
      %{
        "ownId" => params["ownId"],
        "amount" => %{
          "currency" => "BRL",
          "subtotals" => %{
-           "shipping" => 1000
+           "shipping" => taxa_entrega,
+           "addition" => taxa
          }
        },
        "items" => params["items"],
@@ -126,8 +174,20 @@ defmodule Tecnovix.PedidosDeVendaModel do
      }}
   end
 
-  def create_pedido(items, cliente, order) do
-    case pedido_params(items, cliente, order) do
+  def create_pedido(items, cliente, order, parcela, taxa_entrega) do
+    case pedido_params(items, cliente, order, parcela, taxa_entrega) do
+      {:ok, pedido} ->
+        %PedidosDeVendaSchema{}
+        |> PedidosDeVendaSchema.changeset(pedido)
+        |> Repo.insert()
+
+      _ ->
+        {:error, :pedido_failed}
+    end
+  end
+
+  def create_pedido(items, cliente, parcela, taxa_entrega) do
+    case pedido_params(items, cliente, parcela, taxa_entrega) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -156,7 +216,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "prc_unitario" => items["prc_unitario"],
-      "tests" => items["tests"],
+      "tests" => "N",
       "virtotal" => items["quantidade"] * items["prc_unitario"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
@@ -167,10 +227,76 @@ defmodule Tecnovix.PedidosDeVendaModel do
     }
   end
 
-  def pedido_params(items, cliente, order) do
+  def formatting_test(teste) do
+    case teste do
+      "Sim" -> "S"
+      "Não" -> "N"
+      _ -> "N"
+    end
+  end
+
+  def pedido_params(items, cliente, order, installment, taxa_entrega) do
     pedido = %{
       "client_id" => cliente.id,
+      "tipo_pagamento" => "CREDIT_CARD",
+      "parcela" => installment,
       "order_id" => verify_type("A", order),
+      "taxa_wirecard" => taxa_wirecard(items, installment, "2"),
+      "filial" => "",
+      "numero" => "",
+      "taxa_entrega" => taxa_entrega,
+      "loja" => cliente.loja,
+      "cliente" => cliente.codigo,
+      "pd_correios" => "",
+      "vendedor_1" => "",
+      "items" =>
+        Enum.reduce(items, [], fn map, acc ->
+          array =
+            Enum.flat_map(map["items"], fn items ->
+              cond do
+                map["olho_direito"] != nil ->
+                  [olho_direito(items, map)]
+
+                map["olho_esquerdo"] != nil ->
+                  [olho_esquerdo(items, map)]
+
+                map["olho_ambos"] != nil ->
+                  codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
+
+                  [
+                    olho_direito(input_codigo(items, codigo), map),
+                    olho_esquerdo(input_codigo(items, codigo), map)
+                  ]
+
+                map["olho_diferentes"] != nil ->
+                  codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
+
+                  [
+                    olho_diferentes_D(input_codigo(items, codigo), map),
+                    olho_diferentes_E(input_codigo(items, codigo), map)
+                  ]
+
+                map["type"] == "C" ->
+                  [credito_items(items, map)]
+              end
+            end)
+
+          array ++ acc
+        end)
+    }
+
+    {:ok, pedido}
+  end
+
+  # BOLETO
+  def pedido_params(items, cliente, parcela, taxa_entrega) do
+    pedido = %{
+      "client_id" => cliente.id,
+      "tipo_pagamento" => "BOLETO",
+      "status_ped" => 0,
+      "parcela" => parcela,
+      "taxa_entrega" => taxa_entrega,
+      "order_id" => nil,
       "filial" => "",
       "numero" => "",
       "loja" => cliente.loja,
@@ -241,7 +367,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "paciente" => map["paciente"]["nome"],
       "num_pac" => map["paciente"]["numero"],
       "dt_nas_pac" => map["paciente"]["data_nascimento"],
-      "tests" => items["tests"],
+      "tests" => formatting_test(items["tests"]),
       "prc_unitario" => items["prc_unitario"],
       "olho" => "D",
       "virtotal" => items["quantidade"] * items["prc_unitario"],
@@ -253,11 +379,20 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "adicao" => map[olho]["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
       "serie_nf" => items["serie_nf"],
+      "duracao" => formatting_duracao(items["duracao"]),
       "num_pedido" => items["num_pedido"],
       "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
       "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10)
     }
+  end
+
+  defp formatting_duracao(duracao) do
+    duracao =
+      String.to_float(duracao)
+      |> Kernel.trunc()
+
+      "#{duracao} dias"
   end
 
   def olho_esquerdo(items, map) do
@@ -275,7 +410,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "operation" => map["operation"],
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
-      "tests" => items["tests"],
+      "tests" => formatting_test(items["tests"]),
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "paciente" => map["paciente"]["nome"],
@@ -288,6 +423,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "cilindrico" => map[olho]["cylinder"],
       "eixo" => map[olho]["axis"],
       "cor" => map[olho]["cor"],
+      "duracao" => formatting_duracao(items["duracao"]),
       "adc_padrao" => items["adc_padrao"],
       "adicao" => map[olho]["adicao"],
       "nota_fiscal" => items["nota_fiscal"],
@@ -308,15 +444,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "operation" => map["operation"],
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
-      "tests" => items["tests"],
+      "tests" => formatting_test(items["tests"]),
       "produto" => items["produto"],
-      "quantidade" => items["quantidade"],
+      "duracao" => formatting_duracao(items["duracao"]),
+      "quantidade" => items["quantity_for_eye"]["direito"],
       "paciente" => map["paciente"]["nome"],
       "num_pac" => map["paciente"]["numero"],
       "dt_nas_pac" => map["paciente"]["data_nascimento"],
       "prc_unitario" => items["prc_unitario"],
       "olho" => "D",
-      "virtotal" => items["quantidade"] * items["prc_unitario"],
+      "virtotal" => items["quantity_for_eye"]["direito"] * items["prc_unitario"],
       "esferico" => map["olho_diferentes"]["direito"]["degree"],
       "cilindrico" => map["olho_diferentes"]["direito"]["cylinder"],
       "eixo" => map["olho_diferentes"]["direito"]["axis"],
@@ -339,17 +476,18 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
       "operation" => map["operation"],
+      "duracao" => formatting_duracao(items["duracao"]),
       "codigo" => items["codigo"],
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],
-      "tests" => items["tests"],
-      "quantidade" => items["quantidade"],
+      "tests" => formatting_test(items["tests"]),
+      "quantidade" => items["quantity_for_eye"]["esquerdo"],
       "paciente" => map["paciente"]["nome"],
       "num_pac" => map["paciente"]["numero"],
       "dt_nas_pac" => map["paciente"]["data_nascimento"],
       "prc_unitario" => items["prc_unitario"],
       "olho" => "E",
-      "virtotal" => items["quantidade"] * items["prc_unitario"],
+      "virtotal" => items["quantity_for_eye"]["esquerdo"] * items["prc_unitario"],
       "esferico" => map["olho_diferentes"]["esquerdo"]["degree"],
       "cilindrico" => map["olho_diferentes"]["esquerdo"]["cylinder"],
       "eixo" => map["olho_diferentes"]["esquerdo"]["axis"],
@@ -377,32 +515,32 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "amount" => %{
         "currency" => "BRL",
         "subtotals" => %{
-          "shipping" => 1000
+          "shipping" => 0
         }
       },
       "items" => items,
       "customers" => %{
-        "ownId" => cliente.codigo,
+        "ownId" => Ecto.UUID.autogenerate(),
         "fullname" => cliente.nome,
         "email" => cliente.email,
         "birthDate" => cliente.data_nascimento,
         "taxDocument" => %{
           "type" => fisica_jurid,
-          "number" => "12345678901"
+          "number" => cliente.cnpj_cpf
         },
         "phone" => %{
-          "countryCode" => String.slice(cliente.telefone, 0..1),
+          "countryCode" => "55",
           "areaCode" => cliente.ddd,
-          "number" => String.slice(cliente.telefone, 4..13)
+          "number" => cliente.telefone
         },
         "shippingAddress" => %{
-          "city" => "Serra",
+          "city" => cliente.municipio,
           "complement" => cliente.complemento,
           "district" => cliente.bairro,
           "street" => cliente.endereco,
           "streetNumber" => cliente.numero,
           "zipCode" => cliente.cep,
-          "state" => "SP",
+          "state" => cliente.estado,
           "country" => "BRA"
         }
       }
@@ -415,9 +553,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
     __MODULE__.order_params(usuario_cliente.cliente, items)
   end
 
-  def payment_params({:ok, cartao = %CartaoSchema{}}) do
+  def payment_params({:ok, cartao = %CartaoSchema{}}, ccv, installment) do
     %{
-      "installmentCount" => 6,
+      "installmentCount" => installment,
       "statementDescriptor" => "central",
       "fundingInstrument" => %{
         "method" => "CREDIT_CARD",
@@ -425,7 +563,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           "expirationYear" => String.slice(cartao.ano_validade, 2..3),
           "expirationMonth" => cartao.mes_validade,
           "number" => cartao.cartao_number,
-          "cvc" => "123",
+          "cvc" => ccv,
           "holder" => %{
             "fullname" => cartao.nome_titular,
             "birthdate" => Date.to_string(cartao.data_nascimento_titular),
@@ -434,7 +572,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
               "number" => cartao.cpf_titular
             },
             "phone" => %{
-              "countryCode" => String.slice(cartao.telefone_titular, 0..1),
+              "countryCode" => "55",
               "areaCode" => String.slice(cartao.telefone_titular, 2..3),
               "number" => String.slice(cartao.telefone_titular, 4..13)
             },
@@ -491,15 +629,81 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
-    PedidosDeVendaSchema
-    |> preload(:items)
-    |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
-    |> order_by([p], desc: p.inserted_at)
-    |> Repo.all()
+
+    case filtro do
+      "2" -> get_pacientes_revisao(cliente_id)
+
+      2 -> get_pacientes_revisao(cliente_id)
+
+      _ ->
+        PedidosDeVendaSchema
+        |> preload(:items)
+        |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
+        |> order_by([p], desc: p.inserted_at)
+        |> Repo.all()
+    end
+  end
+
+  def get_pacientes_revisao(cliente_id) do
+    pedidos =
+      PedidosDeVendaSchema
+      |> preload(:items)
+      |> where([p], p.client_id == ^cliente_id)
+      |> order_by([p], desc: p.inserted_at)
+      |> Repo.all()
+
+    case pedidos do
+      [] -> []
+      pedido -> parse_pedidos_to_revisao(pedido)
+    end
+  end
+
+  def parse_pedidos_to_revisao(pedidos) do
+    pedidos =
+    Enum.flat_map(pedidos, fn pedido ->
+        Enum.map(pedido.items, fn item ->
+          Map.put(pedido, :items, [item])
+        end)
+      end)
+
+      pedido_com_paciente =
+        Enum.filter(pedidos, fn item ->
+          paciente =
+          Enum.map(item.items, fn items ->
+            items.paciente
+          end)
+
+          paciente != nil
+        end)
+        |> Enum.filter(fn pedido ->
+            duracao =
+              Enum.map(pedido.items, fn item ->
+                item.duracao
+              end)
+
+          data_hoje = Date.utc_today()
+
+          duracao =
+            String.replace(hd(duracao), ~r/[^\d]/, "")
+            |> String.to_integer()
+
+          count_range =
+            Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
+            |> Enum.count()
+
+          count_range >= 30
+        end)
+        |> Enum.map(fn map ->
+          Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
+        end)
+  end
+
+  def duracao_mais_data_insercao(item, duracao) do
+    Date.add(NaiveDateTime.to_date(item.inserted_at), duracao)
   end
 
   def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
-    case pedido_params(items, cliente, "") do
+    case pedido_params(items, cliente, "", 0) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
@@ -510,16 +714,42 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def get_pedido_id(pedido_id, cliente_id) do
-    pedido_id = String.to_integer(pedido_id)
-
-    case Repo.get(PedidosDeVendaSchema, pedido_id) do
+  def get_pedido_id(pedido_id, cliente_id, item_pedido) do
+    item_pedido = String.to_integer(item_pedido)
+    IO.inspect "oi"
+    case item_pedido do
       nil ->
-        {:error, :not_found}
+        case Repo.get(PedidosDeVendaSchema, pedido_id) do
+          nil ->
+            {:error, :not_found}
 
-      pedido ->
-        pedido = Repo.preload(pedido, :items)
-        {:ok, pedido}
+          pedido ->
+            pedido = Repo.preload(pedido, :items)
+            {:ok, pedido}
+        end
+
+      item_pedido ->
+        case Repo.get(PedidosDeVendaSchema, pedido_id) do
+          nil ->
+            {:error, :not_found}
+
+          pedido ->
+            pedidos = Repo.preload(pedido, :items)
+
+            pedido =
+              Enum.flat_map([pedidos], fn pedido ->
+                    Enum.map(pedido.items, fn item ->
+                      case item.id == item_pedido do
+                        true -> Map.put(pedido, :items, [item])
+                        false -> %{}
+                      end
+                    end)
+                end)
+                |> Enum.filter(fn filter -> filter != %{} end)
+                |> IO.inspect
+
+            {:ok, hd(pedido)}
+        end
     end
   end
 
@@ -549,5 +779,75 @@ defmodule Tecnovix.PedidosDeVendaModel do
       [] -> {:error, :not_found}
       pedidos -> {:ok, pedidos}
     end
+  end
+
+  def calculo_taxa(valor, taxa) do
+    taxa_cartao = valor * 0.0549 + 0.69 * 100
+    taxa_parcelamento = valor * (taxa / 100)
+    total_taxas = taxa_cartao + taxa_parcelamento
+  end
+
+  def taxa(valor, parcelado) do
+    list_taxa =
+      [
+        {1, 1.0},
+        {2, 4.5},
+        {3, 5.0},
+        {4, 5.5},
+        {5, 6.5},
+        {6, 7.5},
+        {7, 8.5},
+        {8, 9.5},
+        {9, 10.5},
+        {10, 11.5},
+        {11, 12.0},
+        {12, 12.5}
+      ]
+      |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelado end)
+
+    resp =
+      Enum.map(list_taxa, fn {parcela, taxa} ->
+        result =
+          ((calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela)
+          |> Float.ceil(2)
+
+        case parcela do
+          1 ->
+            %{"parcela" => "#{parcela}x de #{result}"}
+
+          _ ->
+            %{"parcela" => "#{parcela}x de #{result}"}
+        end
+      end)
+      |> Enum.map(fn map ->
+        [antes, depois] = String.split(map["parcela"], ".")
+
+        case String.length(depois) < 2 do
+          true -> %{"parcela" => map["parcela"] <> "0"}
+          false -> %{"parcela" => map["parcela"]}
+        end
+      end)
+
+    {:ok, resp}
+  end
+
+  def parcelas() do
+    parcelas = 12
+
+    {:ok, parcelas}
+  end
+
+  def get_order_contrato(cliente_id) do
+    pedidos =
+      PedidosDeVendaSchema
+      |> where([p], p.client_id == ^cliente_id)
+      |> preload([i], :items)
+      |> Repo.all()
+      |> Enum.flat_map(fn pedido ->
+          Enum.filter(pedido.items, fn filter ->
+            filter.tipo_venda == "C" end)
+      end)
+
+    {:ok, pedidos}
   end
 end

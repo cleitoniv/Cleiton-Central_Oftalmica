@@ -7,24 +7,6 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
 
   action_fallback Tecnovix.Resources.Fallback
 
-  defp usuario_auth(auth) do
-    case auth do
-      nil -> ""
-      usuario -> usuario
-    end
-  end
-
-  def verify_auth({:ok, cliente}) do
-    case cliente do
-      %UsuariosClienteSchema{} ->
-        user = Tecnovix.Repo.preload(cliente, :cliente)
-        {:ok, user.cliente}
-
-      v ->
-        {:ok, v}
-    end
-  end
-
   def create(conn, %{"param" => params}) do
     {:ok, cliente} = verify_auth(conn.private.auth)
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
@@ -50,8 +32,46 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: card})
     else
-      _ ->
-        {:error, :card_not_created}
+      {:error, %Ecto.Changeset{}} = error -> error
+      _ -> {:error, :card_not_created}
+    end
+  end
+
+  def delete_card(conn, %{"id" => id}) do
+    {:ok, cliente} = verify_auth(conn.private.auth)
+
+    with {:ok, _delete_card} <- CartaoModel.delete_card(id, cliente) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true}))
+    end
+  end
+
+  def select_card(conn, %{"id" => id}) do
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, cartao} <- CartaoModel.select_card(id, cliente) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true}))
+    end
+  end
+
+  defp usuario_auth(auth) do
+    case auth do
+      nil -> ""
+      usuario -> usuario
+    end
+  end
+
+  def verify_auth({:ok, cliente}) do
+    case cliente do
+      %UsuariosClienteSchema{} ->
+        user = Tecnovix.Repo.preload(cliente, :cliente)
+        {:ok, user.cliente}
+
+      v ->
+        {:ok, v}
     end
   end
 end

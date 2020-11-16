@@ -5,7 +5,7 @@ defmodule Tecnovix.MixProject do
     [
       app: :tecnovix,
       version: "0.1.0",
-      elixir: "~> 1.10.3",
+      elixir: "~> 1.11.2",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -53,7 +53,8 @@ defmodule Tecnovix.MixProject do
       {:bamboo, "~> 1.5"},
       {:cors_plug, "~> 1.5"},
       {:tesla, "~> 1.3.0"},
-      {:decimal, "~> 2.0", override: true}
+      {:decimal, "~> 2.0", override: true},
+      {:ets, "~> 0.8.1"}
     ]
   end
 

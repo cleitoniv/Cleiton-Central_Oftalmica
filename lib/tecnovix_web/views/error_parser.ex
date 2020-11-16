@@ -6,8 +6,8 @@ defmodule TecnovixWeb.ErrorParserView do
           Enum.filter(
             item,
             fn
-              {:ok, cliente} -> false
               {:error, changeset} -> true
+              cliente -> false
             end
           )
           |> Enum.map(fn

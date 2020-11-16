@@ -7,12 +7,16 @@ defmodule TecnovixWeb.ClientesView do
     %{
       id: item.id,
       uid: item.uid,
+      role: item.role,
       codigo: item.codigo,
       loja: item.loja,
+      cadastrado: item.cadastrado,
       fisica_jurid: item.fisica_jurid,
       cnpj_cpf: item.cnpj_cpf,
+      confirmation_sms: item.confirmation_sms,
       nome: item.nome,
       email: item.email,
+      email_fiscal: item.email_fiscal,
       data_nascimento: item.data_nascimento,
       nome_empresarial: item.nome_empresarial,
       endereco: item.endereco,
@@ -22,6 +26,7 @@ defmodule TecnovixWeb.ClientesView do
       cep: item.cep,
       cdmunicipio: item.cdmunicipio,
       municipio: item.municipio,
+      estado: item.estado,
       ddd: item.ddd,
       telefone: item.telefone,
       bloqueado: item.bloqueado,
@@ -37,7 +42,7 @@ defmodule TecnovixWeb.ClientesView do
   end
 
   def render("app_clientes.json", %{clientes: clientes}) do
-    render_many(clientes, __MODULE__, "cliente.json", as: :item)
+    render_many(clientes, __MODULE__, "clientes.json", as: :item)
   end
 
   def render("show_cliente.json", %{item: item}) do
@@ -46,7 +51,9 @@ defmodule TecnovixWeb.ClientesView do
       data: %{
         id: item.id,
         uid: item.uid,
+        role: item.role,
         codigo: item.codigo,
+        cadastrado: item.cadastrado,
         loja: item.loja,
         fisica_jurid: item.fisica_jurid,
         cnpj_cpf: item.cnpj_cpf,
@@ -54,10 +61,12 @@ defmodule TecnovixWeb.ClientesView do
         nome: item.nome,
         nome_empresarial: item.nome_empresarial,
         email: item.email,
+        email_fiscal: item.email_fiscal,
         endereco: item.endereco,
         numero: item.numero,
         complemento: item.complemento,
         bairro: item.bairro,
+        estado: item.estado,
         cep: item.cep,
         cdmunicipio: item.cdmunicipio,
         municipio: item.municipio,
@@ -105,6 +114,7 @@ defmodule TecnovixWeb.ClientesView do
           id: item.cliente.id,
           uid: item.cliente.uid,
           codigo: item.cliente.codigo,
+          role: item.role,
           loja: item.cliente.loja,
           fisica_jurid: item.cliente.fisica_jurid,
           cnpj_cpf: item.cliente.cnpj_cpf,
@@ -112,10 +122,12 @@ defmodule TecnovixWeb.ClientesView do
           nome: item.cliente.nome,
           nome_empresarial: item.cliente.nome_empresarial,
           email: item.cliente.email,
+          email_fiscal: item.email_fiscal,
           endereco: item.cliente.endereco,
           numero: item.cliente.numero,
           complemento: item.cliente.complemento,
           bairro: item.cliente.bairro,
+          estado: item.cliente.estado,
           cep: item.cliente.cep,
           cdmunicipio: item.cliente.cdmunicipio,
           municipio: item.cliente.municipio,
@@ -152,13 +164,17 @@ defmodule TecnovixWeb.ClientesView do
     }
   end
 
-  def render("cliente.json", %{item: item}) do
+  multi_parser("clientes.json", [:loja, :codigo, :cnpj_cpf])
+
+  def render("clientes.json", %{item: item}) do
     %{
       success: true,
       data: %{
         id: item.id,
         uid: item.uid,
         codigo: item.codigo,
+        cadastrado: item.cadastrado,
+        role: item.role,
         loja: item.loja,
         fisica_jurid: item.fisica_jurid,
         cnpj_cpf: item.cnpj_cpf,
@@ -166,11 +182,13 @@ defmodule TecnovixWeb.ClientesView do
         nome: item.nome,
         nome_empresarial: item.nome_empresarial,
         email: item.email,
+        email_fiscal: item.email_fiscal,
         endereco: item.endereco,
         numero: item.numero,
         complemento: item.complemento,
         bairro: item.bairro,
         cep: item.cep,
+        estado: item.estado,
         cdmunicipio: item.cdmunicipio,
         municipio: item.municipio,
         ddd: item.ddd,
@@ -200,6 +218,4 @@ defmodule TecnovixWeb.ClientesView do
     |> Map.put(:notifications, notifications)
     |> Map.put(:dia_remessa, dia_remessa)
   end
-
-  multi_parser("clientes.json", [:loja, :codigo, :cnpj_cpf])
 end

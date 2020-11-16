@@ -2,46 +2,40 @@ defmodule TecnovixWeb.UsuariosClienteController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.UsuariosClienteModel
   alias Tecnovix.{Email, UsuariosClienteModel, ClientesSchema, LogsClienteModel}
-  alias TecnovixWeb.{Auth.Firebase, LogsClienteController}
+  alias TecnovixWeb.{Auth.Firebase}
 
   action_fallback Tecnovix.Resources.Fallback
 
   def create(conn, %{"param" => params}) do
-    with {:ok, user} <- UsuariosClienteModel.create(params),
+    {:ok, cliente} = conn.private.auth
+    
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
+
+    with {:ok, authorized} <- UsuariosClienteModel.unique_email(params["email"]),
          {:ok, %{status_code: 200}} <-
-           Firebase.create_user(%{email: user.email, password: user.password}) do
-      # verificando se o email foi enviado com sucesso
-      case Email.send_email({user.nome, user.email}, params["password"], params["nome"]) do
-        {_send, {:delivered_email, _email}} ->
-          # atualizando o campo senha_enviada para 1(indicando que o email foi enviado)
-          UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
+           Firebase.create_user(%{email: params["email"], password: params["password"]}),
+         {:ok, user} <- UsuariosClienteModel.create(params),
+         {_, %{status_code: code}} when code == 200 or code == 202 <-
+           Email.send_email({user.nome, user.email}, params["password"], params["nome"]),
+         {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario Cliente Cadastrado.") do
+      UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
-        _ ->
-          {:error, :invalid_parameter}
-      end
-
-      {:ok, cliente} = conn.private.auth
-
-      ip =
-        conn.remote_ip
-        |> Tuple.to_list()
-        |> Enum.join()
-
-      LogsClienteModel.create(%{
-        "cliente_id" => cliente.id,
-        "data" => DateTime.utc_now(),
-        "ip" => ip,
-        "dispositivo" => "Samsung A30S",
-        "acao_realizada" => "Usuario Cliente #{user.nome} cadastrado."
-      })
-
-      # registrando a acao na tabela logs_cliente
       conn
       |> put_status(:created)
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: user})
     else
-      _ -> {:error, :register_error}
+      {:error, %Ecto.Changeset{} = error} -> {:error, error}
+      {:ok, %{status_code: 400} = resp} ->
+        body = Jason.decode!(resp.body)
+
+        case body["error"]["message"] do
+          "EMAIL_EXISTS" -> {:error, :email_invalid}
+          _ -> {:error, :register_error}
+        end
     end
   end
 
@@ -70,30 +64,30 @@ defmodule TecnovixWeb.UsuariosClienteController do
     end
   end
 
-  def delete_users(conn, %{"id" => id}) do
-    with {:ok, user} <- UsuariosClienteModel.search_user(id),
-         {:ok, user} <- UsuariosClienteModel.update_status(user, %{"status" => 0}) do
-      {:ok, cliente} = conn.private.auth
+  def delete_users(conn, %{"id" => id} = params) do
+    id = String.to_integer(id)
+    {:ok, cliente} = conn.private.auth
+    {:ok, usuario} = conn.private.auth_user
 
-      LogsClienteModel.create(%{
-        "cliente_id" => cliente.id,
-        "data" => DateTime.utc_now(),
-        "ip" => "teste",
-        "dispositivo" => "teste",
-        "acao_realizada" => "Usuario deletado"
-      })
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
 
+    with {:ok, token} <- Firebase.get_token(conn),
+         {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
+         {:ok, _user_firebase} <- Firebase.delete_user_firebase(%{idToken: token}),
+         {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario cliente deletado") do
       conn
-      |> put_status(:ok)
       |> put_resp_content_type("application/json")
-      |> render("show.json", %{item: user})
+      |> send_resp(200, Jason.encode!(%{success: true}))
     else
-      _ -> {:error, :invalid_parameter}
+      _ -> {:error, :not_found}
     end
   end
 
   def create_user(conn, %{"param" => params}) do
-    params = Map.put(params, "password", String.slice(Tecnovix.Repo.generate_event_id(), 6..12))
+    params = Map.put(params, "password", String.slice(Tecnovix.Repo.generate_event_id(), 6..11))
 
     case conn.private.auth do
       {:ok, %ClientesSchema{} = user} ->

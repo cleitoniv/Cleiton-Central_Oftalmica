@@ -8,6 +8,8 @@ defmodule TecnovixWeb.PedidosDeVendaView do
         id: item.id,
         client_id: item.client_id,
         order_id: item.order_id,
+        tipo_pagamento: item.tipo_pagamento,
+        parcela: item.parcela,
         filial: item.filial,
         loja: item.loja,
         integrado: item.integrado,
@@ -17,6 +19,9 @@ defmodule TecnovixWeb.PedidosDeVendaView do
         pd_correios: item.pd_correios,
         vendedor_1: item.vendedor_1,
         status_ped: item.status_ped,
+        pago: item.pago,
+        taxa_entrega: item.taxa_entrega,
+        taxa_wirecard: item.taxa_wirecard,
         inserted_at: item.inserted_at,
         updated_at: item.updated_at,
         items:

@@ -21,12 +21,11 @@
       "codigo": "123132213123",
       "nocontrato": "teste",
       "produto": "Lente",
-      "quantidade": 2,
+      "quantidade": 3,
       "prc_unitario": 15100,
       "paciente": "Gabriel",
       "num_pac": "123654",
       "dt_nas_pac": "12345678",
-      "virtotal": 1.5,
       "esferico": 1.5,
       "cilindrico": 0.5,
       "eixo": 1,
@@ -35,21 +34,74 @@
       "adicao": 1.5,
       "nota_fiscal": "123456789",
       "serie_nf": "123",
-      "num_pedido": "123456"
-      }
+      "num_pedido": "123456",
+      "tests": "Sim",
+      "duracao": "180.00000"
+    },
+    {
+    "grupo": "011C",
+    "filial": "teste",
+    "codigo": "123132213123",
+    "nocontrato": "teste",
+    "produto": "Lente",
+    "quantidade": 3,
+    "duracao": "180.00000",
+    "prc_unitario": 15100,
+    "paciente": "Gabriel",
+    "num_pac": "123654",
+    "dt_nas_pac": "12345678",
+    "esferico": 1.5,
+    "cilindrico": 0.5,
+    "eixo": 1,
+    "cor": "teste",
+    "adc_padrao": "teste",
+    "adicao": 1.5,
+    "nota_fiscal": "123456789",
+    "serie_nf": "123",
+    "num_pedido": "123456",
+    "tests": "Sim"
+    }
     ]
   },
   {
-    "operation": "Remessa",
+    "olho_direito": {
+        "degree": 0.5,
+        "cylinder": 5.5,
+        "axis": 10,
+        "adicao": 10.0,
+        "cor": "Azul"
+      },
+    "paciente": {
+      "nome": "Victor",
+      "numero": "132",
+      "data_nascimento": "1998-07-07"
+  },
+    "operation": "Avulso",
     "type": "C",
     "items": [
       {
-        "grupo": "010C",
-        "quantidade": 2,
-        "prc_unitario": 14000,
-        "produto": "Bioview Torica",
-        "codigo": "12313131"
-      }
+      "grupo": "011C",
+      "filial": "teste",
+      "codigo": "123132213123",
+      "nocontrato": "teste",
+      "produto": "Lente",
+      "quantidade": 3,
+      "prc_unitario": 15100,
+      "paciente": "Gabriel",
+      "num_pac": "123654",
+      "dt_nas_pac": "12345678",
+      "esferico": 1.5,
+      "cilindrico": 0.5,
+      "eixo": 1,
+      "cor": "teste",
+      "adc_padrao": "teste",
+      "adicao": 1.5,
+      "nota_fiscal": "123456789",
+      "serie_nf": "123",
+      "num_pedido": "123456",
+      "tests": "Sim",
+      "duracao": "180.00000"
+    }
     ]
   }
 ]

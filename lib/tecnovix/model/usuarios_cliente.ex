@@ -1,8 +1,24 @@
 defmodule Tecnovix.UsuariosClienteModel do
   use Tecnovix.DAO, schema: Tecnovix.UsuariosClienteSchema
   alias Tecnovix.UsuariosClienteSchema
+  alias Tecnovix.ClientesSchema
   alias Tecnovix.Repo
   import Ecto.Query
+
+  def unique_email(email) do
+    with nil <- Repo.get_by(UsuariosClienteSchema, email: email),
+         nil <- Repo.get_by(ClientesSchema, email: email) do
+         {:ok, email}
+    else
+      _ ->
+      error =
+        %UsuariosClienteSchema{}
+        |> Ecto.Changeset.change(%{})
+        |> Ecto.Changeset.add_error(:email, "Esse email já esta cadastrado.")
+
+      {:error, error}
+    end
+  end
 
   def show_users() do
     UsuariosClienteSchema
@@ -25,19 +41,13 @@ defmodule Tecnovix.UsuariosClienteModel do
     |> Repo.update()
   end
 
-  def update_status(user, params) do
-    user
-    |> UsuariosClienteSchema.update_status(params)
-    |> Repo.update()
-  end
-
   def search_user(id) do
-    case Repo.get_by(UsuariosClienteSchema, id: id) do
+    case Repo.get(UsuariosClienteSchema, id) do
       nil ->
         {:error, :not_found}
 
-      v ->
-        {:ok, v}
+      usuario ->
+        {:ok, usuario}
     end
   end
 
@@ -46,8 +56,17 @@ defmodule Tecnovix.UsuariosClienteModel do
       nil ->
         {:error, :not_found}
 
-      v ->
-        {:ok, v}
+      usuario ->
+        {:ok, usuario}
     end
+  end
+
+  def delete_users(id, cliente) do
+    usuarios =
+      UsuariosClienteSchema
+      |> where([u], u.cliente_id == ^cliente.id and u.id == ^id)
+      |> first()
+      |> Repo.one()
+      |> Repo.delete()
   end
 end

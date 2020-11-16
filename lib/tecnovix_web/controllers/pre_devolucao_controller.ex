@@ -1,7 +1,15 @@
 defmodule TecnovixWeb.PreDevolucaoController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.PreDevolucaoModel
-  alias Tecnovix.{PreDevolucaoModel, NotificacoesClienteModel}
+
+  alias Tecnovix.{
+    PreDevolucaoModel,
+    NotificacoesClienteModel,
+    CreditoFinanceiroModel,
+    ClientesSchema,
+    UsuariosClienteSchema,
+    LogsClienteModel
+  }
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -14,12 +22,35 @@ defmodule TecnovixWeb.PreDevolucaoController do
     end
   end
 
+  defp usuario_auth(auth) do
+    case auth do
+      nil -> ""
+      usuario -> usuario
+    end
+  end
+
   def create(conn, %{"param" => params}) do
-    {:ok, cliente} = conn.private.auth
+    {:ok, usuario} = usuario_auth(conn.private.auth_user)
+
+    {:ok, cliente} =
+      case conn.private.auth do
+        {:ok, %ClientesSchema{} = cliente} ->
+          {:ok, cliente}
+
+        {:ok, %UsuariosClienteSchema{} = usuario} ->
+          CreditoFinanceiroModel.get_cliente_by_id(usuario.cliente_id)
+      end
+
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
 
     with {:ok, devolucoes} <- PreDevolucaoModel.create(cliente, params),
-         {:ok, _notifications} <-
-           NotificacoesClienteModel.solicitation_devolution(devolucoes, cliente) do
+         {:ok, notifications} <-
+           NotificacoesClienteModel.solicitation_devolution(devolucoes, cliente),
+         {:ok, _logs} <-
+           LogsClienteModel.create(ip, usuario, cliente, "Devolução criada com sucesso.") do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

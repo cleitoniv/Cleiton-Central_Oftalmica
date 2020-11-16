@@ -4,6 +4,50 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
   import Ecto.Query
 
+  def select_card(id, cliente) do
+    case get_cc(%{"cliente_id" => cliente.id}) do
+      {:ok, _list} ->
+        cartao =
+          CartaoSchema
+          |> where([c], c.id == ^id and c.cliente_id == ^cliente.id)
+          |> update([c], inc: [status: 1])
+          |> Repo.update_all([])
+
+        {:ok, cartao}
+
+      _ ->
+        {:error, :not_found}
+    end
+  end
+
+  def delete_card(id, cliente) do
+    CartaoSchema
+    |> where([c], c.id == ^id and ^cliente.id == c.cliente_id)
+    |> first()
+    |> Repo.one()
+    |> Repo.delete()
+  end
+
+  def select_card_after_delete(cliente) do
+    card =
+      CartaoSchema
+      |> where([c], c.cliente_id == ^cliente.id and c.status == 0)
+      |> first()
+      |> Repo.one()
+
+    {:ok, select_card} =
+      case card do
+        nil ->
+          {:ok, []}
+
+        card ->
+          CartaoSchema.changeset(Map.put(card, :status, 1))
+          |> Repo.update()
+      end
+
+    {:ok, select_card}
+  end
+
   def get_cc(%{"cliente_id" => cliente_id}) do
     query =
       from c in CartaoSchema,
@@ -21,7 +65,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
           map
           |> Map.put("cliente_id", cliente.id)
           |> Map.put("cpf_titular", cliente.cnpj_cpf)
-          |> Map.put("telefone_titular", cliente.telefone)
+          |> Map.put("telefone_titular", "#{cliente.ddd}" <> "#{cliente.telefone}")
           |> Map.put("data_nascimento_titular", cliente.data_nascimento)
           |> Map.put("cep_endereco_cobranca", cliente.cep)
           |> Map.put("logradouro_endereco_cobranca", cliente.endereco)
@@ -29,6 +73,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
           |> Map.put("complemento_endereco_cobranca", cliente.complemento)
           |> Map.put("bairro_endereco_cobranca", cliente.bairro)
           |> Map.put("cidade_endereco_cobranca", cliente.municipio)
+          |> Map.put("estado_endereco_cobranca", cliente.estado)
         end
       )
 
@@ -36,11 +81,17 @@ defmodule Tecnovix.CartaoDeCreditoModel do
   end
 
   def detail_card(params, cliente) do
+    telefone =
+      case cliente.telefone do
+        "55" <> telefone -> "55" <> "#{cliente.ddd}" <> "#{telefone}"
+        telefone -> "55" <> "#{cliente.ddd}" <> "#{telefone}"
+      end
+
     card =
       params
       |> Map.put("cliente_id", cliente.id)
       |> Map.put("cpf_titular", cliente.cnpj_cpf)
-      |> Map.put("telefone_titular", cliente.telefone)
+      |> Map.put("telefone_titular", telefone)
       |> Map.put("data_nascimento_titular", cliente.data_nascimento)
       |> Map.put("cep_endereco_cobranca", cliente.cep)
       |> Map.put("logradouro_endereco_cobranca", cliente.endereco)
@@ -48,6 +99,7 @@ defmodule Tecnovix.CartaoDeCreditoModel do
       |> Map.put("complemento_endereco_cobranca", cliente.complemento)
       |> Map.put("bairro_endereco_cobranca", cliente.bairro)
       |> Map.put("cidade_endereco_cobranca", cliente.municipio)
+      |> Map.put("estado_endereco_cobranca", cliente.estado)
 
     {:ok, card}
   end

@@ -41,7 +41,6 @@ defmodule TecnovixWeb.InsertOrUpdate do
       |> Generator.put_auth(token)
       |> post("/api/sync/contas_a_receber", multi_param)
       |> json_response(200)
-      |> IO.inspect()
   end
 
   test "Retorno dos erros na inserção de multi contrato de parceria" do
@@ -68,7 +67,6 @@ defmodule TecnovixWeb.InsertOrUpdate do
       |> Generator.put_auth(token)
       |> post("/api/sync/descricao_generica_do_produto", multi_param)
       |> json_response(200)
-      |> IO.inspect()
   end
 
   test "Retorno dos erros na inserção de multi pedidos de venda" do

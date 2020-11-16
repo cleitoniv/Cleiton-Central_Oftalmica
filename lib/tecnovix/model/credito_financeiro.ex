@@ -121,9 +121,9 @@ defmodule Tecnovix.CreditoFinanceiroModel do
           "number" => "12345678901"
         },
         "phone" => %{
-          "countryCode" => String.slice(cliente.telefone, 0..1),
+          "countryCode" => "55",
           "areaCode" => cliente.ddd,
-          "number" => String.slice(cliente.telefone, 4..13)
+          "number" => cliente.telefone
         },
         "shippingAddress" => %{
           "city" => "Serra",
@@ -158,7 +158,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
               "number" => cartao.cpf_titular
             },
             "phone" => %{
-              "countryCode" => String.slice(cartao.telefone_titular, 0..1),
+              "countryCode" => "55",
               "areaCode" => String.slice(cartao.telefone_titular, 2..3),
               "number" => String.slice(cartao.telefone_titular, 4..13)
             },
@@ -216,5 +216,12 @@ defmodule Tecnovix.CreditoFinanceiroModel do
     |> Enum.reduce(0, fn credit, acc ->
       credit.valor + acc
     end)
+  end
+
+  def get_creditos_by_cliente(cliente_id) do
+    credito =
+      Credito
+      |> where([c], c.cliente_id == ^cliente_id)
+      |> Repo.all()
   end
 end

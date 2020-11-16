@@ -14,6 +14,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :olho, :string
     field :paciente, :string
     field :num_pac, :string
+    field :duracao, :string, default: "0 dias"
     field :dt_nas_pac, :date
     field :virtotal, :integer
     field :esferico, :decimal
@@ -40,6 +41,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :pedido_de_venda_id,
       :descricao_generica_do_produto_id,
       :filial,
+      :duracao,
       :codigo,
       :tests,
       :grupo,
@@ -79,6 +81,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :pedido_de_venda_id,
       :descricao_generica_do_produto_id,
       :filial,
+      :duracao,
       :codigo,
       :nocontrato,
       :tipo_venda,

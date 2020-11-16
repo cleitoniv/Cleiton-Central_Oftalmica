@@ -113,15 +113,18 @@ defmodule TecnovixWeb.Auth.Firebase do
       |> put_private(:auth_user, {:ok, nil})
     else
       false ->
-        {:error, :cliente_desativado}
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Cliente desativado."}))
+        |> halt()
 
       _ ->
         conn
-        |> user_cliente_auth()
+        |> user_cliente_auth(nil)
     end
   end
 
-  def user_cliente_auth(conn) do
+  def user_cliente_auth(conn, _opts) do
     with {:ok, token} <- get_token(conn),
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
          {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]),
@@ -168,6 +171,12 @@ defmodule TecnovixWeb.Auth.Firebase do
     params = Map.put(params, :returnSecureToken, true)
 
     url = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" <> @firebase_api_key
+
+    HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
+  end
+
+  def delete_user_firebase(%{idToken: idToken} = params) do
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:delete?key=" <> @firebase_api_key
 
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
   end

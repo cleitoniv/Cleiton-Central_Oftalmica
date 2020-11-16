@@ -5,6 +5,8 @@ defmodule Tecnovix.ClientesSchema do
   schema "clientes" do
     field :uid, :string
     field :codigo, :string
+    field :code_sms, :integer
+    field :confirmation_sms, :integer, default: 0
     field :loja, :string
     field :fisica_jurid, :string
     field :cnpj_cpf, :string
@@ -12,10 +14,12 @@ defmodule Tecnovix.ClientesSchema do
     field :nome, :string
     field :nome_empresarial, :string
     field :email, :string
+    field :email_fiscal, :string
     field :endereco, :string
     field :numero, :string
     field :complemento, :string
     field :bairro, :string
+    field :estado, :string
     field :cep, :string
     field :cdmunicipio, :string
     field :municipio, :string
@@ -30,6 +34,8 @@ defmodule Tecnovix.ClientesSchema do
     field :dia_remessa, :string
     field :wirecard_cliente_id, :string
     field :fcm_token, :string
+    field :cadastrado, :boolean, default: false
+    field :role, :string, default: "CLIENTE"
 
     timestamps(type: :utc_datetime)
   end
@@ -37,11 +43,13 @@ defmodule Tecnovix.ClientesSchema do
   def changeset(struct, params \\ {}) do
     struct
     |> cast(params, [
+      :role,
       :uid,
       :codigo,
       :loja,
       :fisica_jurid,
       :cnpj_cpf,
+      :email_fiscal,
       :data_nascimento,
       :nome,
       :nome_empresarial,
@@ -53,6 +61,7 @@ defmodule Tecnovix.ClientesSchema do
       :cep,
       :cdmunicipio,
       :municipio,
+      :estado,
       :ddd,
       :telefone,
       :bloqueado,
@@ -63,46 +72,48 @@ defmodule Tecnovix.ClientesSchema do
       :crm_medico,
       :dia_remessa,
       :wirecard_cliente_id,
-      :fcm_token
+      :fcm_token,
+      :cadastrado
     ])
-    |> validate_required([:fisica_jurid, :cnpj_cpf, :email])
+    |> validate_required([:fisica_jurid, :cnpj_cpf, :email], message: "Não pode estar em branco.")
     |> validate_inclusion(:fisica_jurid, ["F", "J"])
-    |> unique_constraint(:clientes_contraint)
+    |> unique_constraint([:uid], message: "UID já existe")
+    |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
+    |> unique_constraint([:email], message: "Esse email já existe")
+    |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
+    |> unique_constraint([:telefone, :cnpj_cpf],
+      message: "Esse número de telefone já está cadastrado.",
+      name: :telefone_unico
+    )
     |> validations_fisic_jurid(params)
   end
 
-  def first_acess(changeset, params \\ %{}) do
+  def sms(changeset, params \\ %{}) do
+    changeset
+    |> cast(params, [:code_sms, :confirmation_sms, :telefone, :ddd])
+    |> validate_required([:telefone, :code_sms])
+    |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
+  end
+
+  def first_access(changeset, params \\ %{}) do
     changeset
     |> cast(params, [
-      :uid,
-      :codigo,
-      :loja,
-      :fisica_jurid,
-      :cnpj_cpf,
-      :data_nascimento,
+      :role,
       :nome,
-      :nome_empresarial,
       :email,
-      :endereco,
-      :numero,
-      :complemento,
-      :bairro,
-      :cep,
-      :cdmunicipio,
-      :municipio,
-      :ddd,
+      :email_fiscal,
       :telefone,
-      :bloqueado,
-      :sit_app,
-      :cod_cnae,
-      :ramo,
-      :vendedor,
-      :crm_medico,
-      :dia_remessa,
-      :wirecard_cliente_id,
-      :fcm_token
+      :cadastrado
     ])
-    |> validate_required([:nome, :email, :telefone])
+    |> validate_required([:nome, :email, :telefone, :cadastrado],
+      message: "Não pode estar em branco."
+    )
+    |> validate_format(:email, ~r/@/)
+    |> unique_constraint([:uid], message: "UID já existe")
+    |> unique_constraint([:codigo, :loja], message: "Codigo e Loja já existe", name: :loja_codigo)
+    |> unique_constraint([:email], message: "Esse email já existe")
+    |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
+    |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
   end
 
   def validate_ramo_fisica(changeset, params \\ %{}) do
@@ -123,45 +134,65 @@ defmodule Tecnovix.ClientesSchema do
     case params["fisica_jurid"] do
       "F" ->
         changeset
-        |> validate_required([
-          :nome,
-          :email,
-          :ddd,
-          :telefone,
-          :data_nascimento,
-          :ramo,
-          :fisica_jurid,
-          :cnpj_cpf,
-          :endereco,
-          :numero,
-          :bairro,
-          :cep,
-          :municipio,
-          :crm_medico
-        ])
+        |> validate_required(
+          [
+            :nome,
+            :email,
+            :email_fiscal,
+            :data_nascimento,
+            :ramo,
+            :fisica_jurid,
+            :cnpj_cpf,
+            :endereco,
+            :numero,
+            :bairro,
+            :estado,
+            :cep,
+            :municipio,
+            :crm_medico
+          ],
+          message: "Não pode estar em branco."
+        )
         |> validate_ramo_fisica(params)
-        |> unique_constraint(:clientes_contraint)
+        |> unique_constraint([:uid], message: "UID já existe")
+        |> unique_constraint([:codigo, :loja],
+          message: "Codigo e Loja já existe",
+          name: :loja_codigo
+        )
+        |> unique_constraint([:email], message: "Esse email já existe")
+        |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
+        |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
 
       "J" ->
         changeset
-        |> validate_required([
-          :nome,
-          :email,
-          :ddd,
-          :telefone,
-          :data_nascimento,
-          :ramo,
-          :fisica_jurid,
-          :cnpj_cpf,
-          :nome_empresarial,
-          :endereco,
-          :numero,
-          :bairro,
-          :cep,
-          :municipio
-        ])
+        |> validate_required(
+          [
+            :nome,
+            :email,
+            :email_fiscal,
+            :data_nascimento,
+            :ramo,
+            :fisica_jurid,
+            :cnpj_cpf,
+            :nome_empresarial,
+            :endereco,
+            :numero,
+            :estado,
+            :bairro,
+            :cep,
+            :municipio
+          ],
+          message: "Não pode estar em branco."
+        )
         |> validate_ramo_juridica(params)
-        |> unique_constraint(:clientes_contraint)
+        |> unique_constraint([:uid], message: "UID já existe")
+        |> unique_constraint([:codigo, :loja],
+          message: "Codigo e Loja já existe",
+          name: :loja_codigo
+        )
+        |> unique_constraint([:email], message: "Esse email já existe")
+        |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
+        |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
 
       _ ->
         changeset

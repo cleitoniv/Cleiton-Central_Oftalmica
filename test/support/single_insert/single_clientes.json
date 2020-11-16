@@ -22,5 +22,6 @@
 	"ramo": "2",
   "crm_medico": "123",
 	"vendedor": "null",
-	"dia_remessa": "2"
+	"dia_remessa": "2",
+  "estado": "ES"
 }
