@@ -588,7 +588,7 @@ defmodule Tecnovix.App.ScreensProd do
 
     {:ok, detail}
   end
-  
+
   @impl true
   def get_cards(cliente) do
     case ClientesModel.get_cards(cliente) do

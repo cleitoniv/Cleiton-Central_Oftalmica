@@ -187,12 +187,13 @@ defmodule Tecnovix.Test.App do
     detail_order =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/detail_order?filtro=2")
+      |> get("/api/cliente/detail_order?filtro=1")
       |> json_response(200)
       |> Map.get("data")
       |> Enum.map(fn detail ->
         detail["item_pedido"]
       end)
+      |> IO.inspect()
 
     pedido_por_id =
       build_conn()
