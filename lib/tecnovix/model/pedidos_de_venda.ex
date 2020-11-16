@@ -717,8 +717,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedido_id(pedido_id, cliente_id, item_pedido) do
-    item_pedido = String.to_integer(item_pedido)
-    IO.inspect("oi")
+    item_pedido =
+      case item_pedido do
+        "" -> nil
+        item_pedido -> String.to_integer(item_pedido)
+      end
 
     case item_pedido do
       nil ->
