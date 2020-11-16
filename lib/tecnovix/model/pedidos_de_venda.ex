@@ -73,9 +73,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
             "quantity" -> Map.put(acc, "quantidade", value)
             _ -> acc
           end
-         end)
+        end)
 
-      acc + (map["price"] * map["quantidade"])
+      acc + map["price"] * map["quantidade"]
     end)
   end
 
@@ -85,6 +85,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         somando_items(items)
         |> calculo_taxa(installment)
         |> Kernel.trunc()
+
       "2" ->
         {:ok, items} = items_order(items)
 
@@ -388,11 +389,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   defp formatting_duracao(duracao) do
-    duracao =
-      String.to_float(duracao)
-      |> Kernel.trunc()
+    case duracao do
+      nil ->
+        "0 dias"
 
-      "#{duracao} dias"
+      v ->
+        String.to_float(v)
+        |> Kernel.trunc()
+
+        "#{v} dias"
+    end
   end
 
   def olho_esquerdo(items, map) do
@@ -629,11 +635,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
-
     case filtro do
-      "2" -> get_pacientes_revisao(cliente_id)
+      "2" ->
+        get_pacientes_revisao(cliente_id)
 
-      2 -> get_pacientes_revisao(cliente_id)
+      2 ->
+        get_pacientes_revisao(cliente_id)
 
       _ ->
         PedidosDeVendaSchema
@@ -660,42 +667,42 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def parse_pedidos_to_revisao(pedidos) do
     pedidos =
-    Enum.flat_map(pedidos, fn pedido ->
+      Enum.flat_map(pedidos, fn pedido ->
         Enum.map(pedido.items, fn item ->
           Map.put(pedido, :items, [item])
         end)
       end)
 
-      pedido_com_paciente =
-        Enum.filter(pedidos, fn item ->
-          paciente =
+    pedido_com_paciente =
+      Enum.filter(pedidos, fn item ->
+        paciente =
           Enum.map(item.items, fn items ->
             items.paciente
           end)
 
-          paciente != nil
-        end)
-        |> Enum.filter(fn pedido ->
-            duracao =
-              Enum.map(pedido.items, fn item ->
-                item.duracao
-              end)
+        paciente != nil
+      end)
+      |> Enum.filter(fn pedido ->
+        duracao =
+          Enum.map(pedido.items, fn item ->
+            item.duracao
+          end)
 
-          data_hoje = Date.utc_today()
+        data_hoje = Date.utc_today()
 
-          duracao =
-            String.replace(hd(duracao), ~r/[^\d]/, "")
-            |> String.to_integer()
+        duracao =
+          String.replace(hd(duracao), ~r/[^\d]/, "")
+          |> String.to_integer()
 
-          count_range =
-            Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
-            |> Enum.count()
+        count_range =
+          Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
+          |> Enum.count()
 
-          count_range >= 30
-        end)
-        |> Enum.map(fn map ->
-          Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
-        end)
+        count_range >= 30
+      end)
+      |> Enum.map(fn map ->
+        Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
+      end)
   end
 
   def duracao_mais_data_insercao(item, duracao) do
@@ -716,7 +723,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def get_pedido_id(pedido_id, cliente_id, item_pedido) do
     item_pedido = String.to_integer(item_pedido)
-    IO.inspect "oi"
+    IO.inspect("oi")
+
     case item_pedido do
       nil ->
         case Repo.get(PedidosDeVendaSchema, pedido_id) do
@@ -738,15 +746,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
             pedido =
               Enum.flat_map([pedidos], fn pedido ->
-                    Enum.map(pedido.items, fn item ->
-                      case item.id == item_pedido do
-                        true -> Map.put(pedido, :items, [item])
-                        false -> %{}
-                      end
-                    end)
+                Enum.map(pedido.items, fn item ->
+                  case item.id == item_pedido do
+                    true -> Map.put(pedido, :items, [item])
+                    false -> %{}
+                  end
                 end)
-                |> Enum.filter(fn filter -> filter != %{} end)
-                |> IO.inspect
+              end)
+              |> Enum.filter(fn filter -> filter != %{} end)
+              |> IO.inspect()
 
             {:ok, hd(pedido)}
         end
@@ -844,8 +852,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> preload([i], :items)
       |> Repo.all()
       |> Enum.flat_map(fn pedido ->
-          Enum.filter(pedido.items, fn filter ->
-            filter.tipo_venda == "C" end)
+        Enum.filter(pedido.items, fn filter ->
+          filter.tipo_venda == "C"
+        end)
       end)
 
     {:ok, pedidos}
