@@ -13,7 +13,6 @@ defmodule Tecnovix.UsuariosClienteModel do
       usuario ->
         case usuario.status == 0 and usuario.email == email do
           true ->
-            usuario =
               UsuariosClienteSchema
               |> where([u], u.email == ^email)
               |> update([u], set: [status: 1])
