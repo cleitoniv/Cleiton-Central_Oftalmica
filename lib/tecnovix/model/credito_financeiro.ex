@@ -226,8 +226,11 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   end
 
   def get_credito_by_status(filtro) do
-    Credito
-    |> where([c], c.status == ^filtro)
-    |> Repo.all()
+    creditos =
+      Credito
+      |> where([c], c.status == ^filtro)
+      |> Repo.all()
+
+    {:ok, creditos}
   end
 end
