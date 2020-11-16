@@ -10,20 +10,17 @@ defmodule Tecnovix.UsuariosClienteModel do
          nil <- Repo.get_by(ClientesSchema, email: email) do
       {:ok, email}
     else
-      _ ->
-        error =
-          %UsuariosClienteSchema{}
-          |> Ecto.Changeset.change(%{})
-          |> Ecto.Changeset.add_error(:email, "Esse email já esta cadastrado.")
-
-        {:error, error}
+      _ -> {:ok, email}
     end
   end
 
-  def show_users() do
-    UsuariosClienteSchema
-    |> where([u], u.status == 1)
-    |> Repo.all()
+  def show_users(cliente_id) do
+    usuarios =
+      UsuariosClienteSchema
+      |> where([u], u.status == 1 and u.cliente_id == ^cliente_id)
+      |> Repo.all()
+
+    {:ok, usuarios}
   end
 
   def cliente_id_filter(params) do
