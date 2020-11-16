@@ -11,6 +11,12 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
   }
 
   def get_creditos(conn, %{"filtro" => filtro}) do
+    filtro =
+      case filtro do
+        nil -> 0
+        _ -> String.to_integer(filtro)
+      end
+
     with {:ok, creditos} <- CreditoFinanceiroModel.get_credito_by_status(filtro) do
       conn
       |> put_status(200)
