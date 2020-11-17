@@ -772,7 +772,7 @@ defmodule Tecnovix.App.ScreensProd do
             "07" -> 0 + acc
             _ -> map.virtotal + acc
           end
-        end) + pedido.taxa_entrega,
+        end) + pedido.taxa_entrega + taxa_wirecard,
         previsao_entrega: pedido.previsao_entrega,
         taxa_entrega: pedido.taxa_entrega,
         items:
