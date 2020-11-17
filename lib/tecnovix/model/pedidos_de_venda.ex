@@ -728,8 +728,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedido_id(pedido_id, cliente_id, item_pedido) do
-    IO.inspect item_pedido
-
     item_pedido =
       case item_pedido do
         "" -> nil
@@ -765,7 +763,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
                 end)
               end)
               |> Enum.filter(fn filter -> filter != %{} end)
-
+              |> IO.inspect
+              
             {:ok, hd(pedido)}
         end
     end
