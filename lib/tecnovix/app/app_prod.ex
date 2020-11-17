@@ -605,6 +605,7 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end
       )
+      |> Enum.uniq()
 
     {:ok, detail}
   end

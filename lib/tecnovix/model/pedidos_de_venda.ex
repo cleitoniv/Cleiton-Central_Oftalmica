@@ -765,8 +765,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
                 end)
               end)
               |> Enum.filter(fn filter -> filter != %{} end)
-              |> Enum.uniq()
-              |> IO.inspect()
 
             {:ok, hd(pedido)}
         end
