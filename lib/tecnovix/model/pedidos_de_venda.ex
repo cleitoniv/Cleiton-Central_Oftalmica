@@ -660,10 +660,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
     pedidos =
       PedidosDeVendaSchema
       |> preload(:items)
-      |> where([p], p.client_id == ^cliente_id and not is_nil(p.paciente))
+      |> where([p], p.client_id == ^cliente_id)
       |> order_by([p], desc: p.inserted_at)
       |> Repo.all()
-      |> IO.inspect()
 
     case pedidos do
       [] -> []
@@ -686,8 +685,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
             items.paciente
           end)
 
+        IO.inspect paciente
+
         paciente != nil
       end)
+      |> IO.inspect
       |> Enum.filter(fn pedido ->
         duracao =
           Enum.map(pedido.items, fn item ->
