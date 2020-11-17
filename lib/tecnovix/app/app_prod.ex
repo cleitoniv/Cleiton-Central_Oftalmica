@@ -608,6 +608,7 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end
       )
+      |> IO.inspect
 
     {:ok, detail}
   end
