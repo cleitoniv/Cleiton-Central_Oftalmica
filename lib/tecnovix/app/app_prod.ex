@@ -565,10 +565,10 @@ defmodule Tecnovix.App.ScreensProd do
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id,
                     item_pedido: map.item_pedido,
-                    paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end)
+                    paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
+                    num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
+                    data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end)
                   }
-                  |> IO.inspect
-
                   {:ok, taxa} = taxa(resp.valor, map.parcela)
 
                   taxa =
@@ -807,7 +807,6 @@ defmodule Tecnovix.App.ScreensProd do
           )
           |> parse_items()
       }
-      |> IO.inspect()
 
       {:ok, pedido}
     end
