@@ -763,7 +763,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             pedido =
               Enum.flat_map([pedidos], fn pedido ->
                 Enum.map(pedido.items, fn item ->
-                  case item.id == item_pedido do
+                  case item.id == item_pedido  do
                     true -> Map.put(pedido, :items, [item])
                     false -> %{}
                   end

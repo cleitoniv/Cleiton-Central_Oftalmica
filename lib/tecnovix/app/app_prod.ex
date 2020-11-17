@@ -612,8 +612,9 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end
       )
-      |> Enum.flat_map(fn pedido -> pedido.items end)
-      |> Enum.group_by(fn items -> items.paciente end)
+      |> Enum.flat_map(fn pedido -> IO.inspect pedido.items end)
+      |> Enum.group_by(fn items -> IO.inspect items.paciente end)
+      |> IO.inspect
 
     {:ok, detail}
   end
