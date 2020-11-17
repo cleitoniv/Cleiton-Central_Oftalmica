@@ -242,7 +242,10 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "tipo_pagamento" => "CREDIT_CARD",
       "parcela" => installment,
       "order_id" => verify_type("A", order),
-      "taxa_wirecard" => taxa_wirecard(items, installment, "2"),
+      "taxa_wirecard" => case order do
+        nil -> 0
+        order -> taxa_wirecard(items, installment, "2")
+      end,
       "filial" => "",
       "numero" => "",
       "taxa_entrega" => taxa_entrega,

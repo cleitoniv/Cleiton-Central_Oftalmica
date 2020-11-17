@@ -32,6 +32,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :tests, :string
     field :grupo, :string
     belongs_to :pedido_de_venda, Tecnovix.PedidosDeVendaSchema
+    
     timestamps()
   end
 

@@ -142,6 +142,7 @@ defmodule TecnovixWeb.Router do
       delete "/card_delete/:id", TecnovixWeb.CartaoCreditoClienteController, :delete_card
       get "/taxa", TecnovixWeb.PedidosDeVendaController, :taxa
       post "/taxa_entrega", TecnovixWeb.PedidosDeVendaController, :taxa_entrega
+      post "/pedido_produto", TecnovixWeb.PedidosDeVendaController, :pedido_produto
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

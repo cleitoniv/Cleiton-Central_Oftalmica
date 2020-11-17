@@ -13,6 +13,34 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   action_fallback Tecnovix.Resources.Fallback
 
+  def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
+    {:ok, cliente} = conn.private.auth
+
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
+
+    with {:ok, pedido} <-
+      PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
+    {:ok, _logs} <-
+      LogsClienteModel.create(
+        ip,
+        nil,
+        cliente,
+        "Pedido feito com a remessa de contrato de produto."
+      ) do
+        conn
+        |> put_status(200)
+        |> put_resp_content_type("application/json")
+        |> render("pedido.json", %{item: pedido})
+    end
+  end
+
+  def pedido_produto(conn, _params) do
+    {:error, :order_not_created}
+  end
+
   def pacientes_revisao(conn, _params) do
     {:ok, cliente} = conn.private.auth
 
