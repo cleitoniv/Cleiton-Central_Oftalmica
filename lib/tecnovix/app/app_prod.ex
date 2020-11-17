@@ -518,7 +518,6 @@ defmodule Tecnovix.App.ScreensProd do
 
   @impl true
   def get_detail_order(cliente, filtro) do
-    IO.inspect filtro
     detail =
       Enum.map(
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
@@ -613,6 +612,7 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end
       )
+      |> Enum.group_by(fn item -> item.paciente end)
       |> IO.inspect
 
     {:ok, detail}
