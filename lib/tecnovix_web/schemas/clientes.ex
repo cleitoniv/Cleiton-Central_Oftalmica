@@ -5,8 +5,6 @@ defmodule Tecnovix.ClientesSchema do
   schema "clientes" do
     field :uid, :string
     field :codigo, :string
-    field :code_sms, :integer
-    field :confirmation_sms, :integer, default: 0
     field :loja, :string
     field :fisica_jurid, :string
     field :cnpj_cpf, :string
@@ -90,8 +88,8 @@ defmodule Tecnovix.ClientesSchema do
 
   def sms(changeset, params \\ %{}) do
     changeset
-    |> cast(params, [:code_sms, :confirmation_sms, :telefone, :ddd])
-    |> validate_required([:telefone, :code_sms])
+    |> cast(params, [:telefone, :ddd])
+    |> validate_required([:telefone])
     |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
   end
 
