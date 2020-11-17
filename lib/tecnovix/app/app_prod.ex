@@ -614,11 +614,12 @@ defmodule Tecnovix.App.ScreensProd do
         end
       )
 
-      {key, value} =
+      detail =
         case filtro do
           "2" -> Enum.group_by(detail, fn item -> item.paciente end)
-          _ -> detail
+          _ -> %{"detail" => detail}
         end
+        |> Map.values()
 
     {:ok, value}
   end
