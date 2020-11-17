@@ -624,7 +624,7 @@ defmodule Tecnovix.App.ScreensProd do
               end)
               |> IO.inspect
 
-              {:ok, value}
+              {:ok, hd(value)}
           _ -> {:ok, detail}
         end
         |> IO.inspect
