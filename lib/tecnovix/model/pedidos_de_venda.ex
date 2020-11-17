@@ -762,16 +762,23 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
             pedido =
               Enum.flat_map([pedidos], fn pedido ->
-                Enum.map(pedido.items, fn item ->
-                  case item.id == item_pedido  do
-                    true -> Map.put(pedido, :items, [item])
-                    false -> %{}
-                  end
+                Enum.group_by(pedido.items, fn item ->
+                  item.paciente
                 end)
               end)
-              |> Enum.filter(fn filter -> filter != %{} end)
 
-            {:ok, hd(pedido)}
+            # pedido =
+            #   Enum.flat_map([pedidos], fn pedido ->
+            #     Enum.map(pedido.items, fn item ->
+            #       case item.id == item_pedido  do
+            #         true -> Map.put(pedido, :items, [item])
+            #         false -> %{}
+            #       end
+            #     end)
+            #   end)
+            #   |> Enum.filter(fn filter -> filter != %{} end)
+
+            {:ok, pedido}
         end
     end
   end
