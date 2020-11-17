@@ -621,7 +621,7 @@ defmodule Tecnovix.App.ScreensProd do
         end
         |> Map.values()
 
-    {:ok, value}
+    {:ok, detail}
   end
 
   @impl true
