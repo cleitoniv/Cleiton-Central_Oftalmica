@@ -660,6 +660,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> where([p], p.client_id == ^cliente_id and not is_nil(p.paciente))
       |> order_by([p], desc: p.inserted_at)
       |> Repo.all()
+      |> IO.inspect()
 
     case pedidos do
       [] -> []
