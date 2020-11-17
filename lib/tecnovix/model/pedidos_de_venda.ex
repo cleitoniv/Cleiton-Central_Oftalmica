@@ -687,7 +687,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
         IO.inspect paciente
 
-        paciente != nil
+        paciente != [nil]
       end)
       |> IO.inspect
       |> Enum.filter(fn pedido ->
