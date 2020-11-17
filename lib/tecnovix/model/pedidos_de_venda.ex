@@ -709,6 +709,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Enum.map(fn map ->
         Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
       end)
+      |> IO.inspect
   end
 
   def duracao_mais_data_insercao(item, duracao) do
@@ -728,6 +729,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedido_id(pedido_id, cliente_id, item_pedido) do
+    IO.inspect item_pedido
+
     item_pedido =
       case item_pedido do
         "" -> nil
