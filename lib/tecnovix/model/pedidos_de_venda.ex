@@ -709,7 +709,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Enum.map(fn map ->
         Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
       end)
-      |> IO.inspect
   end
 
   def duracao_mais_data_insercao(item, duracao) do
