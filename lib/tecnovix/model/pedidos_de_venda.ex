@@ -204,6 +204,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "A" -> Jason.decode!(order.body)["id"]
       "C" -> nil
       "T" -> nil
+       _ -> nil
     end
   end
 
@@ -241,7 +242,10 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "client_id" => cliente.id,
       "tipo_pagamento" => "CREDIT_CARD",
       "parcela" => installment,
-      "order_id" => verify_type("A", order),
+      "order_id" => case order do
+        nil -> verify_type(nil, order)
+        _ -> verify_type("A", order)
+        end,
       "taxa_wirecard" => case order do
         nil -> 0
         order -> taxa_wirecard(items, installment, "2")
@@ -763,8 +767,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
                 end)
               end)
               |> Enum.filter(fn filter -> filter != %{} end)
-              |> Enum.uniq()
-              |> IO.inspect
 
             {:ok, hd(pedido)}
         end
