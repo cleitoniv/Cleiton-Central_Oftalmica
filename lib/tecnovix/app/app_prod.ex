@@ -558,7 +558,7 @@ defmodule Tecnovix.App.ScreensProd do
             "CREDIT_CARD" ->
               case filtro do
                 "2" ->
-                  resp = [%{
+                  resp = %{
                     valor: Enum.reduce(map.items, 0, fn item, acc ->
                       case item.operation do
                         "07" -> 0 + acc
@@ -572,8 +572,7 @@ defmodule Tecnovix.App.ScreensProd do
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
                     data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
                     produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end)
-                  }]
-                  |> Enum.group_by(fn item -> item.paciente end)
+                  }
 
                   {:ok, taxa} = taxa(resp.valor, map.parcela)
 
@@ -614,6 +613,12 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end
       )
+
+      case filtro do
+        "2" -> Enum.group_by(detail, fn item -> detail.paciente end)
+        _ -> detail
+      end
+      |> IO.inspect
 
     {:ok, detail}
   end
