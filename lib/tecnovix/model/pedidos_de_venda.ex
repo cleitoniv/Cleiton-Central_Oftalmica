@@ -770,7 +770,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
                 end)
               end)
               |> Enum.filter(fn filter -> filter != %{} end)
-              |> IO.inspect()
 
             {:ok, hd(pedido)}
         end

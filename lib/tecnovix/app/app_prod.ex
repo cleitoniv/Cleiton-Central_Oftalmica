@@ -612,8 +612,6 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end
       )
-      |> Enum.group_by(fn item -> item.paciente end)
-      |> IO.inspect
 
     {:ok, detail}
   end
