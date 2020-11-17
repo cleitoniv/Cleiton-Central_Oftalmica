@@ -252,7 +252,10 @@ defmodule Tecnovix.PedidosDeVendaModel do
       end,
       "filial" => "",
       "numero" => "",
-      "taxa_entrega" => taxa_entrega,
+      "taxa_entrega" => case taxa_entrega do
+        nil -> 0
+        taxa_entrega -> taxa_entrega
+      end,
       "loja" => cliente.loja,
       "cliente" => cliente.codigo,
       "pd_correios" => "",
