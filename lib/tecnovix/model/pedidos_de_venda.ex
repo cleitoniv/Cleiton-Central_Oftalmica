@@ -657,7 +657,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     pedidos =
       PedidosDeVendaSchema
       |> preload(:items)
-      |> where([p], p.client_id == ^cliente_id)
+      |> where([p], p.client_id == ^cliente_id and not is_nil(p.paciente))
       |> order_by([p], desc: p.inserted_at)
       |> Repo.all()
 
@@ -701,7 +701,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           |> Enum.count()
 
         count_range <= 30
-        
+
       end)
       |> Enum.map(fn map ->
         Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
@@ -725,7 +725,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedido_id(pedido_id, cliente_id, item_pedido) do
-    IO.inspect item_pedido
     item_pedido =
       case item_pedido do
         "" -> nil
