@@ -614,11 +614,12 @@ defmodule Tecnovix.App.ScreensProd do
         end
       )
 
-      case filtro do
-        "2" -> Enum.group_by(detail, fn item -> detail.paciente end)
-        _ -> detail
-      end
-      |> IO.inspect
+      detail =
+        case filtro do
+          "2" -> Enum.group_by(detail, fn item -> item.paciente end)
+          _ -> detail
+        end
+        |> IO.inspect
 
     {:ok, detail}
   end
