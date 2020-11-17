@@ -573,7 +573,11 @@ defmodule Tecnovix.App.ScreensProd do
                     data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
                     produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end)
                   }
-                  |> Enum.group_by(fn item -> item.paciente end)
+                  |> Enum.map(fn detalhes ->
+                    Enum.group_by(detalhes, fn pedido ->
+                      pedido.paciente
+                    end)
+                   end)
                   |> IO.inspect
 
                   {:ok, taxa} = taxa(resp.valor, map.parcela)
