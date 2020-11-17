@@ -526,7 +526,7 @@ defmodule Tecnovix.App.ScreensProd do
           case map.tipo_pagamento do
             "BOLETO" ->
               case filtro do
-                2 ->
+                "2" ->
                   resp = %{
                     valor: Enum.reduce(map.items, 0, fn item, acc ->
                       case item.operation do
@@ -555,7 +555,7 @@ defmodule Tecnovix.App.ScreensProd do
 
             "CREDIT_CARD" ->
               case filtro do
-                2 ->
+                "2" ->
                   resp = %{
                     valor: Enum.reduce(map.items, 0, fn item, acc ->
                       case item.operation do
