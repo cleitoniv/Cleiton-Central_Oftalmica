@@ -539,7 +539,8 @@ defmodule Tecnovix.App.ScreensProd do
                     item_pedido: map.item_pedido,
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
-                    data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end)
+                    data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
+                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end)
                   }
 
                 _ ->
@@ -570,7 +571,8 @@ defmodule Tecnovix.App.ScreensProd do
                     item_pedido: map.item_pedido,
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
-                    data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end)
+                    data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
+                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end)
                   }
                   {:ok, taxa} = taxa(resp.valor, map.parcela)
 
