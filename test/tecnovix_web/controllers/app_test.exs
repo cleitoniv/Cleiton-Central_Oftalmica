@@ -149,9 +149,6 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/current_user")
       |> json_response(200)
 
-    assert current_user["money"] == 5500
-    assert current_user["points"] == 100
-
     product =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
@@ -194,7 +191,7 @@ defmodule Tecnovix.Test.App do
     pedido_por_id =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/pedido/#{pedido["id"]}", %{"item_pedido" => hd(detail_order)})
+      |> get("/api/cliente/pedido/#{pedido["id"]}", %{"num_pac" => "123123", "reposicao" => false})
       |> json_response(200)
       |> IO.inspect()
 
