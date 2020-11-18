@@ -734,14 +734,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def get_pedido_id(pedido_id, cliente_id, item_pedido) do
-    item_pedido =
-      case item_pedido do
+  def get_pedido_id(pedido_id, cliente_id, num_pac) do
+    num_pac =
+      case num_pac do
         "" -> nil
-        item_pedido -> String.to_integer(item_pedido)
+        num_pac -> num_pac
       end
 
-    case item_pedido do
+    case num_pac do
       nil ->
         case Repo.get(PedidosDeVendaSchema, pedido_id) do
           nil ->
@@ -752,7 +752,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             {:ok, pedido}
         end
 
-      item_pedido ->
+      num_pac ->
         case Repo.get(PedidosDeVendaSchema, pedido_id) do
           nil ->
             {:error, :not_found}
@@ -760,15 +760,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
           pedido ->
             pedidos = Repo.preload(pedido, :items)
 
-            pedido =
+            items =
               Enum.flat_map([pedidos], fn pedido ->
-                pedido.items
-              end)
-              |> Enum.group_by(fn item -> item.num_pac end)
-              |> Enum.flat_map(fn {paciente, items} ->
-                Map.put(pedidos, :items, items)
+                Enum.filter(pedido.item, fn item ->
+                  item.num_pac == num_pac
+                end)
               end)
               |> IO.inspect
+
+            pedido = Map.put(pedidos, :items, items) |> IO.inspect
 
             {:ok, pedido}
         end

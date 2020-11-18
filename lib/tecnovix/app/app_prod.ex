@@ -535,7 +535,6 @@ defmodule Tecnovix.App.ScreensProd do
                     end),
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id,
-                    item_pedido: map.item_pedido,
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
                     data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
@@ -567,7 +566,6 @@ defmodule Tecnovix.App.ScreensProd do
                     end),
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id,
-                    item_pedido: map.item_pedido,
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
                     data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
@@ -771,8 +769,8 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  def get_pedido_id(cliente_id, pedido_id, item_pedido) do
-    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id, item_pedido) do
+  def get_pedido_id(cliente_id, pedido_id, num_pac) do
+    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id, num_pac) do
       pedido = %{
         data_inclusao: pedido.inserted_at,
         num_pedido: pedido.id,
