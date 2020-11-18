@@ -516,6 +516,12 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, resp}
   end
 
+  defp formartting_duracao(duracao) do
+    duracao =
+      String.replace(duracao, ~r/[^\d]/, "")
+      |> String.to_integer()
+  end
+
   @impl true
   def get_detail_order(cliente, filtro) do
     detail =
@@ -538,8 +544,10 @@ defmodule Tecnovix.App.ScreensTest do
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
                     data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
-                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end)
+                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
+                    data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duracao end)))
                   }
+                  |> IO.inspect()
 
                 _ ->
                   resp = %{
@@ -569,7 +577,8 @@ defmodule Tecnovix.App.ScreensTest do
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
                     data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
-                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end)
+                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
+                    data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duracao end)))
                   }
 
                   {:ok, taxa} = taxa(resp.valor, map.parcela)
