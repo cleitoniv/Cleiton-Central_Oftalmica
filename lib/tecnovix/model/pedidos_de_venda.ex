@@ -782,7 +782,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             #   end)
             #   |> Enum.filter(fn filter -> filter != %{} end)
 
-            {:ok, pedido}
+            {:ok, hd(pedido)}
         end
     end
   end
