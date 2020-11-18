@@ -763,13 +763,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
             pedido =
               Enum.flat_map([pedidos], fn pedido ->
                 Enum.map(pedido.items, fn item ->
-                  Enum.uniq_by([item], fn x ->
-                    x.num_pac
-                  end)
+                  items=
+                    Enum.uniq_by([item], fn uniq -> uniq.num_pac end)
+
+                  Map.put(pedido, :items, items)
                 end)
               end)
               |> IO.inspect
-              
+
             # pedido =
             #   Enum.flat_map([pedidos], fn pedido ->
             #     Enum.map(pedido.items, fn item ->
