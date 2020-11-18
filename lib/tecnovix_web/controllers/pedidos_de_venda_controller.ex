@@ -194,8 +194,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     stub = Screens.stub()
     {:ok, cliente} = conn.private.auth
 
-    IO.inspect reposicao
-
     reposicao =
       case reposicao do
         "false" -> nil
