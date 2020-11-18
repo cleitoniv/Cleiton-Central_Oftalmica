@@ -747,7 +747,6 @@ defmodule Tecnovix.App.ScreensTest do
         items: []
       }
     end)
-    |> Enum.filter(fn item -> item.num_pac == num_pac end)
     |> Enum.uniq_by(fn item -> item.num_pac end)
     |> Enum.map(fn paciente ->
       Enum.reduce(items, paciente, fn item, acc ->
@@ -761,6 +760,7 @@ defmodule Tecnovix.App.ScreensTest do
       group_by =
         Enum.group_by(paciente.items, fn item -> item.codigo_item end)
         |> Enum.map(fn {codigo, codigo_items} ->
+          codigo_items = Enum.filter(codigo_items, fn item -> item.num_pac == num_pac end)
           Enum.reduce(codigo_items, %{}, fn codigo_item, acc ->
             p_olho = parse_olho(codigo_item)
 
