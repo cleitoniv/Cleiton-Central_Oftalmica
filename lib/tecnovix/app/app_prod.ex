@@ -569,8 +569,10 @@ defmodule Tecnovix.App.ScreensProd do
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
                     data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
-                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end)
+                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
+                    data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duacao end)))
                   }
+                  |> IO.inspect
 
                   {:ok, taxa} = taxa(resp.valor, map.parcela)
 
@@ -620,6 +622,12 @@ defmodule Tecnovix.App.ScreensProd do
         end
 
     {:ok, detail}
+  end
+
+  defp formartting_duracao(duracao) do
+    duracao =
+      String.replace(duracao, ~r/[^\d]/, "")
+      |> String.to_integer()
   end
 
   @impl true
