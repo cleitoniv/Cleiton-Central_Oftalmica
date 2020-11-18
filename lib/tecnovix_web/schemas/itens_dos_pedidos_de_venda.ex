@@ -32,7 +32,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :tests, :string
     field :grupo, :string
     belongs_to :pedido_de_venda, Tecnovix.PedidosDeVendaSchema
-    
+
     timestamps()
   end
 
@@ -70,9 +70,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :url_image
     ])
     |> validate_required([
-      :pedido_de_venda_id,
-      :produto,
-      :quantidade
+      :pedido_de_venda_id
     ])
   end
 
@@ -106,10 +104,6 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :serie_nf,
       :num_pedido,
       :url_image
-    ])
-    |> validate_required([
-      :produto,
-      :quantidade
     ])
   end
 end
