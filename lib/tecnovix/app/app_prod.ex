@@ -786,6 +786,7 @@ defmodule Tecnovix.App.ScreensProd do
       Map.put(paciente, :items, group_by)
     end)
     |> Enum.filter(fn item -> item.paciente == num_pac end)
+    |> IO.inspect
   end
 
   defp parse_olho(item) do
