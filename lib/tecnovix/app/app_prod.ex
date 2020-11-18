@@ -835,7 +835,7 @@ defmodule Tecnovix.App.ScreensProd do
     case reposicao == nil do
       true ->
           with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
-            IO.inspect pedio.taxa_entrega
+            IO.inspect pedido.taxa_entrega
             IO.inspect pedido.taxa_wirecard
             pedido = %{
               data_inclusao: pedido.inserted_at,
