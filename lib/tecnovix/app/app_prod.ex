@@ -539,7 +539,7 @@ defmodule Tecnovix.App.ScreensProd do
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
                     data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
                     produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
-                    data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duacao end)))
+                    data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duracao end)))
                   }
 
                 _ ->
@@ -571,7 +571,7 @@ defmodule Tecnovix.App.ScreensProd do
                     num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
                     data_nascimento: Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
                     produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
-                    data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duacao end)))
+                    data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duracao end)))
                   }
                   |> IO.inspect
 
