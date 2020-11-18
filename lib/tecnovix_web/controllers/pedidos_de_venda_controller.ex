@@ -195,7 +195,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     {:ok, cliente} = conn.private.auth
 
     IO.inspect reposicao
-    
+
     reposicao =
       case reposicao do
         "false" -> nil
