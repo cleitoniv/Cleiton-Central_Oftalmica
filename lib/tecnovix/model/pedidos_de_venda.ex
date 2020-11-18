@@ -40,12 +40,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def insert_or_update(%{"id" => id} = params) do
-    with nil <- Repo.get_by(PedidosDeVendaSchema, id: id) |> IO.inspect do
-      __MODULE__.create_sync(params) |> IO.inspect
+    with nil <- Repo.get_by(PedidosDeVendaSchema, id: id) do
+      __MODULE__.create_sync(params)
     else
       changeset ->
         Repo.preload(changeset, :items)
-        |> __MODULE__.update_sync(params) |> IO.inspect
+        |> __MODULE__.update_sync(params)
     end
   end
 
