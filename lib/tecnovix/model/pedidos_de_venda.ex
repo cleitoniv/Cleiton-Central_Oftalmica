@@ -761,7 +761,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             pedidos = Repo.preload(pedido, :items)
 
             pedido =
-              Enum.map([pedidos], fn pedido ->
+              Enum.flat_map([pedidos], fn pedido ->
                 pedido.items
               end)
               |> Enum.group_by(fn item -> item.num_pac end)
