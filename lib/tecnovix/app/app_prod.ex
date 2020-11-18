@@ -616,11 +616,10 @@ defmodule Tecnovix.App.ScreensProd do
 
       detail =
         case filtro do
-          "2" -> Enum.uniq_by(detail, fn item -> IO.inspect detail
+          "2" -> Enum.uniq_by(detail, fn item ->
             item.num_pac end)
           _ -> detail
         end
-        |> IO.inspect
 
     {:ok, detail}
   end
