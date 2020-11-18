@@ -614,18 +614,11 @@ defmodule Tecnovix.App.ScreensProd do
         end
       )
 
-      {:ok, detail} =
+      detail =
         case filtro do
-          "2" ->
-              value =
-              Enum.group_by(detail, fn item -> item.num_pac end)
-              |> Enum.map(fn {key,value} ->
-                value
-              end)
-              |> IO.inspect
-
-              {:ok, hd(value)}
-          _ -> {:ok, detail}
+          "2" -> Enum.uniq_by(detail, fn item -> IO.inspect detail
+            item.num_pac end)
+          _ -> detail
         end
         |> IO.inspect
 

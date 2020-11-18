@@ -762,7 +762,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
             pedido =
               Enum.flat_map([pedidos], fn pedido ->
-                Enum.group_by(pedido.items, fn item ->
+                Enum.uniq_by(pedido.items, fn item ->
                   item.paciente
                 end)
               end)
