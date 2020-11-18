@@ -200,7 +200,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
         true -> params["reposicao"]
       end
 
-    with {:ok, pedido} <- stub.get_pedido_id(pedido_id, cliente.id, num_pac, reposicao) do
+    with {:ok, pedido} <- stub.get_pedido_id(pedido_id, cliente.id, num_pac, false) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
