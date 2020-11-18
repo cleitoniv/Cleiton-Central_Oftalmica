@@ -40,12 +40,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def insert_or_update(%{"filial" => filial, "numero" => numero} = params) do
-    with nil <- Repo.get_by(PedidosDeVendaSchema, filial: filial, numero: numero) do
-      __MODULE__.create_sync(params)
+    IO.inspect params
+    with nil <- Repo.get_by(PedidosDeVendaSchema, filial: filial, numero: numero) |> IO.inspect do
+      __MODULE__.create_sync(params) |> IO.inspect
     else
       changeset ->
         Repo.preload(changeset, :items)
-        |> __MODULE__.update_sync(params)
+        |> __MODULE__.update_sync(params) |> IO.inspect
     end
   end
 

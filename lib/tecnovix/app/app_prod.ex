@@ -835,8 +835,6 @@ defmodule Tecnovix.App.ScreensProd do
     case reposicao == nil do
       true ->
           with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
-            IO.inspect pedido.taxa_entrega
-            IO.inspect pedido.taxa_wirecard
             pedido = %{
               data_inclusao: pedido.inserted_at,
               num_pedido: pedido.id,
@@ -851,7 +849,6 @@ defmodule Tecnovix.App.ScreensProd do
                   "07" -> 0 + acc
                   _ -> map.virtotal + acc
                 end
-                |> IO.inspect()
               end) + pedido.taxa_entrega + pedido.taxa_wirecard,
               previsao_entrega: pedido.previsao_entrega,
               taxa_entrega: pedido.taxa_entrega,
@@ -884,6 +881,7 @@ defmodule Tecnovix.App.ScreensProd do
                     }
                   end
                 )
+                |> IO.inspect
                 |> parse_items()
             }
         end
