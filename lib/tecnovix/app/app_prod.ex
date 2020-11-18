@@ -736,7 +736,6 @@ defmodule Tecnovix.App.ScreensProd do
 
       Map.put(paciente, :items, group_by)
     end)
-    |> IO.inspect()
   end
 
   defp parse_items_reposicao(items, num_pac) do
@@ -751,7 +750,7 @@ defmodule Tecnovix.App.ScreensProd do
     |> Enum.uniq_by(fn item -> item.num_pac end)
     |> Enum.map(fn paciente ->
       Enum.reduce(items, paciente, fn item, acc ->
-        case item.num_pac == num_pac do
+        case item.num_pac == paciente.num_pac do
           true -> Map.put(acc, :items, acc.items ++ [item])
           false -> acc
         end
@@ -786,7 +785,7 @@ defmodule Tecnovix.App.ScreensProd do
 
       Map.put(paciente, :items, group_by)
     end)
-    |> IO.inspect()
+    |> Enum.filter(fn item -> item.paciente == num_pac end)
   end
 
   defp parse_olho(item) do
