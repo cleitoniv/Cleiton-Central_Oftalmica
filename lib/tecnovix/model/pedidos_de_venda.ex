@@ -765,7 +765,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
                 pedido.items
               end)
               |> Enum.group_by(fn item -> item.num_pac end)
-              |> Enum.map(fn {paciente, items} ->
+              |> Enum.flat_map(fn {paciente, items} ->
                 Map.put(pedidos, :items, items)
               end)
               |> IO.inspect
