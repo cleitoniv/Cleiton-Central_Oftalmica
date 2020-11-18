@@ -739,6 +739,7 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   defp parse_items_reposicao(items, num_pac) do
+    IO.inspect num_pac
     Enum.map(items, fn item ->
       %{
         num_pac: item.num_pac,
