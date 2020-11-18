@@ -867,7 +867,7 @@ defmodule Tecnovix.App.ScreensProd do
                       data_nascimento: item.dt_nas_pac,
                       nome_produto: item.produto,
                       valor_produto: item.prc_unitario,
-                      valor_credito_finan: item.valor_credito,
+                      valor_credito_finan: item.valor_credito_finan,
                       valor_credito_prod: item.valor_credito_prod,
                       quantidade: item.quantidade,
                       valor_total: item.virtotal,
