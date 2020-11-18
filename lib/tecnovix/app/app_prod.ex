@@ -738,6 +738,56 @@ defmodule Tecnovix.App.ScreensProd do
     end)
   end
 
+  defp parse_items_reposicao(items, num_pac) do
+    Enum.map(items, fn item ->
+      %{
+        num_pac: item.num_pac,
+        paciente: item.paciente,
+        data_nascimento: item.data_nascimento,
+        items: []
+      }
+    end)
+    |> Enum.filter(fn item -> item.num_pac == num_pac end)
+    |> Enum.uniq_by(fn item -> item.num_pac end)
+    |> Enum.map(fn paciente ->
+      Enum.reduce(items, paciente, fn item, acc ->
+        case item.num_pac == paciente.num_pac do
+          true -> Map.put(acc, :items, acc.items ++ [item])
+          false -> acc
+        end
+      end)
+    end)
+    |> Enum.map(fn paciente ->
+      group_by =
+        Enum.group_by(paciente.items, fn item -> item.codigo_item end)
+        |> Enum.map(fn {codigo, codigo_items} ->
+          Enum.reduce(codigo_items, %{}, fn codigo_item, acc ->
+            p_olho = parse_olho(codigo_item)
+
+            map =
+              Map.put(acc, :valor_produto, codigo_item.valor_produto)
+              |> Map.put(:quantidade, codigo_item.quantidade)
+              |> Map.put(:valor_total, codigo_item.valor_total)
+              |> Map.put(:olho, codigo_item.olho)
+              |> Map.put(
+                :url_image,
+                "http://portal.centraloftalmica.com/images/#{codigo_item.grupo}.jpg"
+              )
+              |> Map.put(:codigo_item, codigo_item.codigo_item)
+              |> Map.put(:nome_produto, codigo_item.nome_produto)
+              |> Map.put(:duracao, codigo_item.duracao)
+              |> Map.put(:grupo, codigo_item.grupo)
+              |> Map.put(:type, codigo_item.type)
+              |> Map.put(:operation, codigo_item.operation)
+
+            Map.merge(map, p_olho)
+          end)
+        end)
+
+      Map.put(paciente, :items, group_by)
+    end)
+  end
+
   defp parse_olho(item) do
     case item.olho do
       "D" ->
@@ -769,57 +819,109 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  def get_pedido_id(cliente_id, pedido_id, num_pac) do
-    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id, num_pac) do
-      pedido = %{
-        data_inclusao: pedido.inserted_at,
-        num_pedido: pedido.id,
-        valor: Enum.reduce(pedido.items, 0, fn map, acc ->
-          case map.operation do
-            "07" -> 0 + acc
-            _ -> map.virtotal + acc
-          end
-        end),
-        valor_total: Enum.reduce(pedido.items, 0, fn map, acc ->
-          case map.operation do
-            "07" -> 0 + acc
-            _ -> map.virtotal + acc
-          end
-        end) + pedido.taxa_entrega + pedido.taxa_wirecard,
-        previsao_entrega: pedido.previsao_entrega,
-        taxa_entrega: pedido.taxa_entrega,
-        items:
-          Enum.map(
-            pedido.items,
-            fn item ->
-              %{
-                type: item.tipo_venda,
-                operation: item.operation,
-                num_pac: item.num_pac,
-                paciente: item.paciente,
-                data_nascimento: item.dt_nas_pac,
-                nome_produto: item.produto,
-                valor_produto: item.prc_unitario,
-                quantidade: item.quantidade,
-                valor_total: item.virtotal,
-                olho: item.olho,
-                adicao: item.adicao,
-                cor: item.cor,
-                esferico: item.esferico,
-                eixo: item.eixo,
-                cilindro: item.cilindrico,
-                grupo: item.grupo,
-                url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
-                codigo_item: item.codigo_item,
-                duracao: item.duracao
-              }
-            end
-          )
-          |> parse_items()
-      }
-
-      {:ok, pedido}
+  def get_pedido_id(cliente_id, pedido_id, num_pac, reposicao) do
+    pedido =
+    case reposicao == nil do
+      true ->
+          with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
+            pedido = %{
+              data_inclusao: pedido.inserted_at,
+              num_pedido: pedido.id,
+              valor: Enum.reduce(pedido.items, 0, fn map, acc ->
+                case map.operation do
+                  "07" -> 0 + acc
+                  _ -> map.virtotal + acc
+                end
+              end),
+              valor_total: Enum.reduce(pedido.items, 0, fn map, acc ->
+                case map.operation do
+                  "07" -> 0 + acc
+                  _ -> map.virtotal + acc
+                end
+              end) + pedido.taxa_entrega + pedido.taxa_wirecard,
+              previsao_entrega: pedido.previsao_entrega,
+              taxa_entrega: pedido.taxa_entrega,
+              items:
+                Enum.map(
+                  pedido.items,
+                  fn item ->
+                    %{
+                      type: item.tipo_venda,
+                      operation: item.operation,
+                      num_pac: item.num_pac,
+                      paciente: item.paciente,
+                      data_nascimento: item.dt_nas_pac,
+                      nome_produto: item.produto,
+                      valor_produto: item.prc_unitario,
+                      quantidade: item.quantidade,
+                      valor_total: item.virtotal,
+                      olho: item.olho,
+                      adicao: item.adicao,
+                      cor: item.cor,
+                      esferico: item.esferico,
+                      eixo: item.eixo,
+                      cilindro: item.cilindrico,
+                      grupo: item.grupo,
+                      url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
+                      codigo_item: item.codigo_item,
+                      duracao: item.duracao
+                    }
+                  end
+                )
+                |> parse_items()
+            }
+        end
+      false ->
+        with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
+          pedido = %{
+            data_inclusao: pedido.inserted_at,
+            num_pedido: pedido.id,
+            valor: Enum.reduce(pedido.items, 0, fn map, acc ->
+              case map.operation do
+                "07" -> 0 + acc
+                _ -> map.virtotal + acc
+              end
+            end),
+            valor_total: Enum.reduce(pedido.items, 0, fn map, acc ->
+              case map.operation do
+                "07" -> 0 + acc
+                _ -> map.virtotal + acc
+              end
+            end) + pedido.taxa_entrega + pedido.taxa_wirecard,
+            previsao_entrega: pedido.previsao_entrega,
+            taxa_entrega: pedido.taxa_entrega,
+            items:
+              Enum.map(
+                pedido.items,
+                fn item ->
+                  %{
+                    type: item.tipo_venda,
+                    operation: item.operation,
+                    num_pac: item.num_pac,
+                    paciente: item.paciente,
+                    data_nascimento: item.dt_nas_pac,
+                    nome_produto: item.produto,
+                    valor_produto: item.prc_unitario,
+                    quantidade: item.quantidade,
+                    valor_total: item.virtotal,
+                    olho: item.olho,
+                    adicao: item.adicao,
+                    cor: item.cor,
+                    esferico: item.esferico,
+                    eixo: item.eixo,
+                    cilindro: item.cilindrico,
+                    grupo: item.grupo,
+                    url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
+                    codigo_item: item.codigo_item,
+                    duracao: item.duracao
+                  }
+                end
+              )
+              |> parse_items_reposicao(num_pac)
+          }
+      end
     end
+    {:ok, pedido}
   end
 
   @impl true

@@ -190,11 +190,17 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def detail_order_id(conn, %{"id" => pedido_id, "num_pac" => num_pac}) do
+  def detail_order_id(conn, %{"id" => pedido_id, "num_pac" => num_pac} = params) do
     stub = Screens.stub()
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, pedido} <- stub.get_pedido_id(pedido_id, cliente.id, num_pac) do
+    reposicao =
+      case params["reposicao"] do
+        false -> nil
+        true -> params["reposicao"]
+      end
+
+    with {:ok, pedido} <- stub.get_pedido_id(pedido_id, cliente.id, num_pac, reposicao) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

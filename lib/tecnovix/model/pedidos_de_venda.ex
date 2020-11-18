@@ -734,45 +734,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def get_pedido_id(pedido_id, cliente_id, num_pac) do
-    num_pac =
-      case num_pac do
-        "" -> nil
-        num_pac -> num_pac
+  def get_pedido_id(pedido_id, cliente_id) do
+      case Repo.get(PedidosDeVendaSchema, pedido_id) do
+        nil ->
+          {:error, :not_found}
+
+        pedido ->
+          pedido = Repo.preload(pedido, :items)
+          {:ok, pedido}
       end
-
-    case num_pac do
-      nil ->
-        case Repo.get(PedidosDeVendaSchema, pedido_id) do
-          nil ->
-            {:error, :not_found}
-
-          pedido ->
-            pedido = Repo.preload(pedido, :items)
-            {:ok, pedido}
-        end
-
-      num_pac ->
-        case Repo.get(PedidosDeVendaSchema, pedido_id) do
-          nil ->
-            {:error, :not_found}
-
-          pedido ->
-            pedidos = Repo.preload(pedido, :items)
-
-            items =
-              Enum.flat_map([pedidos], fn pedido ->
-                Enum.filter(pedido.item, fn item ->
-                  item.num_pac == num_pac
-                end)
-              end)
-              |> IO.inspect
-
-            pedido = Map.put(pedidos, :items, items) |> IO.inspect
-
-            {:ok, pedido}
-        end
-    end
   end
 
   def get_pedidos_protheus(filtro, nil) do
