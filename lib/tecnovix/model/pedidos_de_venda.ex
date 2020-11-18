@@ -760,16 +760,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
           pedido ->
             pedidos = Repo.preload(pedido, :items)
 
-            pedido =
-              Enum.flat_map([pedidos], fn pedido ->
-                Enum.map(pedido.items, fn item ->
-                  case item.id == item_pedido  do
-                    true -> Map.put(pedido, :items, [item])
-                    false -> %{}
-                  end
+            items =
+              Enum.flat_map(pedido.items, fn item ->
+                Enum.group_by(item, fn group -> group.num_pac end)
+                |> Enum.uniq_by(fn {key, value} ->
+                  key == hd(item.num_pac)
                 end)
               end)
-              |> Enum.filter(fn filter -> filter != %{} end)
+              |> IO.inspect
 
             {:ok, pedido}
         end

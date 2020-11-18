@@ -190,7 +190,6 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/detail_order?filtro=1")
       |> json_response(200)
       |> Map.get("data")
-      |> IO.inspect()
 
     pedido_por_id =
       build_conn()
