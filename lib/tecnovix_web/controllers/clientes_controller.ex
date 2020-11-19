@@ -394,7 +394,7 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) do
+  def devolution_continue(conn, %{"products" => products, "tipo" => "T" = tipo}) do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
@@ -402,6 +402,10 @@ defmodule TecnovixWeb.ClientesController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{"success" => true, "data" => devolution}))
     end
+  end
+
+  def devolution_continue(conn, _params) do
+    {:error, :type_devolution_credit}
   end
 
   def next_step(conn, %{"group" => group, "quantidade" => quantidade, "devolution" => devolution}) do
