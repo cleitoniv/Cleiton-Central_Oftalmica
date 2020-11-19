@@ -12,6 +12,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :prc_unitario, :integer, default: 0
     field :tipo_venda, :string
     field :olho, :string
+    field :status, :integer, default: 0
     field :paciente, :string
     field :num_pac, :string
     field :duracao, :string
@@ -41,6 +42,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :status,
       :valor_credito_finan,
       :valor_credito_prod,
       :pedido_de_venda_id,
@@ -81,6 +83,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
   def changeset_sync(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :status,
       :valor_credito_finan,
       :valor_credito_prod,
       :pedido_de_venda_id,

@@ -12,6 +12,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       tests: item.tests,
       operation: item.operation,
       tipo_venda: item.tipo_venda,
+      status: item.status,
       produto: item.produto,
       quantidade: item.quantidade,
       prc_unitario: item.prc_unitario,
