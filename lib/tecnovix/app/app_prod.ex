@@ -686,6 +686,7 @@ defmodule Tecnovix.App.ScreensProd do
         items: []
       }
     end)
+    |> Enum.uniq_by(fn item -> concat_paciente_dtnaspac(item.paciente, item.data_nascimento) end)
     |> Enum.map(fn paciente ->
       Enum.reduce(items, paciente, fn item, acc ->
         case concat_paciente_dtnaspac(item.paciente, item.data_nascimento) == concat_paciente_dtnaspac(paciente.paciente, paciente.data_nascimento) do
