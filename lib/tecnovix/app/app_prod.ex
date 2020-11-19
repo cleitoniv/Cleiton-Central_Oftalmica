@@ -727,6 +727,8 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   defp concat_paciente_dtnaspac(paciente, data) do
+    IO.inspect paciente
+    IO.inspect data
     paciente =
       case paciente do
         nil -> ""
@@ -744,7 +746,7 @@ defmodule Tecnovix.App.ScreensProd do
     paciente <> data |> IO.inspect
   end
 
-  defp parse_items_reposicao(items, num_pac) do
+  defp parse_items_reposicao(items, data_nascimento, nome) do
     Enum.map(items, fn item ->
       %{
         num_pac: item.num_pac,
@@ -791,7 +793,9 @@ defmodule Tecnovix.App.ScreensProd do
 
       Map.put(paciente, :items, group_by)
     end)
-    |> Enum.filter(fn item -> item.num_pac == num_pac end)
+    |> IO.inspect()
+    |> Enum.filter(fn item -> concat_paciente_dtnaspac(item.paciente, item.dt_nas_pac) == concat_paciente_dtnaspac(nome, data_nascimento) end)
+    |> IO.inspect
   end
 
   defp parse_olho(item) do
@@ -825,7 +829,7 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  def get_pedido_id(cliente_id, pedido_id, num_pac, reposicao) do
+  def get_pedido_id(cliente_id, pedido_id, data_nascimento, reposicao, nome) do
     pedido =
     case reposicao == nil do
       true ->
@@ -929,7 +933,7 @@ defmodule Tecnovix.App.ScreensProd do
                   }
                 end
               )
-              |> parse_items_reposicao(num_pac)
+              |> parse_items_reposicao(data_nascimento, nome)
           }
       end
     end
