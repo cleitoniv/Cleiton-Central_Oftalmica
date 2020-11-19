@@ -17,6 +17,8 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :duracao, :string
     field :dt_nas_pac, :date
     field :virtotal, :integer
+    field :valor_credito_finan, :integer, default: 0
+    field :valor_credito_prod, :integer, default: 0
     field :esferico, :decimal
     field :cilindrico, :decimal
     field :eixo, :integer
@@ -39,6 +41,8 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :valor_credito_finan,
+      :valor_credito_prod,
       :pedido_de_venda_id,
       :descricao_generica_do_produto_id,
       :filial,
@@ -77,6 +81,8 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
   def changeset_sync(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :valor_credito_finan,
+      :valor_credito_prod,
       :pedido_de_venda_id,
       :descricao_generica_do_produto_id,
       :filial,
