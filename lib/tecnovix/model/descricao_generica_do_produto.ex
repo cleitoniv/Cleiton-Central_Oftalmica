@@ -33,7 +33,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         _ ->
           [cont_keys(params)]
       end
-      |> IO.inspect
 
     case Enum.any?(result,fn
              {:ok, boolean} -> !boolean
@@ -123,7 +122,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       |> where(^params)
       |> first()
       |> Repo.one()
-      |> IO.inspect
 
     cond do
       query == nil -> {:ok, false}
