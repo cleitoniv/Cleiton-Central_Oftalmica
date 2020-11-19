@@ -122,9 +122,9 @@ defmodule Tecnovix.PreDevolucaoModel do
     Enum.map(products, fn product ->
       dev = pre_devolucao(cliente, products)
 
-    old = old_product(product)
-    
-    product_ready = Map.put(dev, "items", [old])
+      old = old_product(product)
+
+      product_ready = Map.put(dev, "items", [old])
 
       %PreDevolucaoSchema{}
       |> PreDevolucaoSchema.changeset(product_ready)
