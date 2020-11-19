@@ -529,8 +529,9 @@ defmodule Tecnovix.App.ScreensProd do
                   resp = %{
                     valor: Enum.reduce(map.items, 0, fn item, acc ->
                       case item.operation do
+                        "13" -> 0 + acc
                         "07" -> 0 + acc
-                        _ -> item.virtotal + acc
+                        _ -> item.virtotal + acc + map.taxa_wirecard
                       end
                     end),
                     data_inclusao: map.inserted_at,
