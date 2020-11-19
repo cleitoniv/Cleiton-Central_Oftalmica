@@ -124,6 +124,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       |> where(^params)
       |> first()
       |> Repo.one()
+      |> IO.inspect
 
     cond do
       query == nil -> {:ok, false}
