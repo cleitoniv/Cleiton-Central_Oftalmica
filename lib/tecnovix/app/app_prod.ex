@@ -605,11 +605,9 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   defp formartting_duracao(duracao) do
-    IO.inspect duracao
     duracao =
       String.replace(duracao, ~r/[^\d]/, "")
       |> String.to_integer()
-      |> IO.inspect
   end
 
   @impl true
@@ -864,7 +862,6 @@ defmodule Tecnovix.App.ScreensProd do
                     }
                   end
                 )
-                |> IO.inspect
                 |> parse_items()
             }
         end
