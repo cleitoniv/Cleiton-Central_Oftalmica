@@ -8,7 +8,8 @@ defmodule TecnovixWeb.ClientesController do
     AtendPrefClienteModel,
     UsuariosClienteSchema,
     ClientesSchema,
-    Services.ConfirmationSMS
+    Services.ConfirmationSMS,
+    PreDevolucaoModel
   }
 
   alias Tecnovix.{App.Screens, Services.Devolucao, Services.Auth, Endpoints.Protheus}
@@ -405,8 +406,13 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def devolution_continue(conn, %{"products" => products, "tipo" => "C" = tipo}) do
-    IO.inspect products
-    {:error, :type_devolution_credit}
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, _} <- PreDevolucaoModel.insert_dev(cliente, products) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{"success" => true, "data" => "Inserido."}))
+    end
   end
 
   def next_step(conn, %{"group" => group, "quantidade" => quantidade, "devolution" => devolution}) do

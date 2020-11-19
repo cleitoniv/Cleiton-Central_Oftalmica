@@ -80,7 +80,7 @@ defmodule Tecnovix.PreDevolucaoModel do
     %{
       "cliente_id" => cliente.id,
       "filial" => "N",
-      "tipo_pre_dev" => "N",
+      "tipo_pre_dev" => "C",
       "cod_pre_dev" => String.slice(Ecto.UUID.autogenerate(), 0..5),
       "loja" => cliente.loja,
       "cliente" => cliente.codigo
@@ -116,6 +116,22 @@ defmodule Tecnovix.PreDevolucaoModel do
       nil -> {:error, :not_found}
       contrato -> {:ok, contrato}
     end
+  end
+
+  def insert_dev(cliente, products) do
+    Enum.map(products, fn product ->
+      dev = pre_devolucao(cliente, products) |> IO.inspect
+
+      items =
+        itens_pre_devolucao(products) |> IO.inspect
+
+      product_ready = Map.put(dev, "items", items) |> IO.inspect
+
+      %PreDevolucaoSchema{}
+      |> PreDevolucaoSchema.changeset(product_ready)
+      |> Repo.insert()
+      |> IO.inspect
+    end)
   end
 
   def insert_pre_devolucao(cliente_id, %{
