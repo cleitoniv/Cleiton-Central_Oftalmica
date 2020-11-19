@@ -794,7 +794,9 @@ defmodule Tecnovix.App.ScreensProd do
       Map.put(paciente, :items, group_by)
     end)
     |> IO.inspect()
-    |> Enum.filter(fn item -> concat_paciente_dtnaspac(item.paciente, item.dt_nas_pac) == concat_paciente_dtnaspac(nome, data_nascimento) end)
+    |> Enum.filter(fn pedido ->
+      concat_paciente_dtnaspac(pedido.paciente, pedido.data_nascimento) == concat_paciente_dtnaspac(nome, data_nascimento)
+     end)
     |> IO.inspect
   end
 
