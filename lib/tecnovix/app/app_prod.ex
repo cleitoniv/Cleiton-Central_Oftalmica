@@ -734,14 +734,12 @@ defmodule Tecnovix.App.ScreensProd do
           String.replace(paciente, " ", "")
           |> String.downcase()
       end
-      |> IO.inspect
 
     data =
       case data do
         nil -> ""
-        data -> "#{data}/"
+        data -> "/#{data}"
       end
-      |> IO.inspect
 
     paciente <> data |> IO.inspect
   end
