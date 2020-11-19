@@ -90,6 +90,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   # Ajeitando o mapa da tabela dos Itens
   def itens_pre_devolucao(params) do
     params
+    |> Map.put("filial", params["filial"])
     |> Map.put("cod_pre_dev", params["cod_pre_dev"])
     |> new_product()
     |> old_product()
@@ -107,7 +108,7 @@ defmodule Tecnovix.PreDevolucaoModel do
     params
     |> Map.put("num_serie", params["num_serie"])
     |> Map.put("quant", params["quant"])
-    |> Map.put("produto", params["produto"])
+    |> Map.put("produto", params["title"])
   end
 
   def get_contrato(cliente) do
@@ -119,12 +120,10 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   def insert_dev(cliente, products) do
     Enum.map(products, fn product ->
-      dev = pre_devolucao(cliente, products) |> IO.inspect
+      dev = pre_devolucao(cliente, products)
 
-      items =
-        itens_pre_devolucao(products) |> IO.inspect
 
-      product_ready = Map.put(dev, "items", items) |> IO.inspect
+    product_ready = Map.put(dev, "items", old_product(product))
 
       %PreDevolucaoSchema{}
       |> PreDevolucaoSchema.changeset(product_ready)
