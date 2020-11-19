@@ -36,9 +36,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
     case Enum.any?(
            result,
-           fn
-             {:ok, boolean} -> !boolean
-             {:ok, boolean, olho} -> !boolean
+           fn  {:ok, boolean, olho} -> !boolean
            end
          ) do
       false ->
