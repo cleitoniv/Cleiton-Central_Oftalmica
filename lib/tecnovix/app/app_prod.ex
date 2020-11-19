@@ -727,8 +727,6 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   defp concat_paciente_dtnaspac(paciente, data) do
-    IO.inspect paciente
-    IO.inspect data
     paciente =
       case paciente do
         nil -> ""
@@ -743,7 +741,7 @@ defmodule Tecnovix.App.ScreensProd do
         data -> "/#{data}"
       end
 
-    paciente <> data |> IO.inspect
+    paciente <> data
   end
 
   defp parse_items_reposicao(items, data_nascimento, nome) do
