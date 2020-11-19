@@ -119,18 +119,18 @@ defmodule Tecnovix.PreDevolucaoModel do
   end
 
   def insert_dev(cliente, products) do
-    Enum.map(products, fn product ->
-      dev = pre_devolucao(cliente, products)
+    dev = pre_devolucao(cliente, products)
 
-      old = old_product(product)
+    items =
+      Enum.map(products, fn product ->
+        old = old_product(product)
+      end)
 
-      product_ready = Map.put(dev, "items", [old])
+    product_ready = Map.put(dev, "items", items)
 
-      %PreDevolucaoSchema{}
-      |> PreDevolucaoSchema.changeset(product_ready)
-      |> Repo.insert()
-      |> IO.inspect
-    end)
+    %PreDevolucaoSchema{}
+    |> PreDevolucaoSchema.changeset(product_ready)
+    |> Repo.insert()
   end
 
   def insert_pre_devolucao(cliente_id, %{
