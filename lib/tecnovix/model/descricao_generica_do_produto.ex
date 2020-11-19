@@ -44,7 +44,6 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       true ->
         {:error,
          Enum.reduce(result, [], fn
-           IO.inspect result
            {_, false, olho}, acc -> acc ++ ["Produto do olho #{olho} indisponivel"]
            {_, true, olho}, acc -> acc
          end)}
