@@ -120,10 +120,11 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   def insert_dev(cliente, products) do
     Enum.map(products, fn product ->
-      dev = pre_devolucao(cliente, products) |> IO.inspect
+      dev = pre_devolucao(cliente, products)
 
-      old = old_product(product) |> IO.inspect
-    product_ready = Map.put(dev, "items", old) |> IO.inspect
+    old = old_product(product)
+    
+    product_ready = Map.put(dev, "items", [old])
 
       %PreDevolucaoSchema{}
       |> PreDevolucaoSchema.changeset(product_ready)
