@@ -404,7 +404,8 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def devolution_continue(conn, _params) do
+  def devolution_continue(conn, %{"products" => products, "tipo" => "C" = tipo) do
+    IO.inspect products
     {:error, :type_devolution_credit}
   end
 
