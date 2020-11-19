@@ -565,7 +565,7 @@ defmodule Tecnovix.App.ScreensProd do
                       case item.operation do
                         "13" -> 0 + acc
                         "07" -> 0 + acc
-                        _ -> item.virtotal + acc
+                        _ -> item.virtotal + acc + map.taxa_wirecard
                       end
                     end),
                     data_inclusao: map.inserted_at,
@@ -576,19 +576,6 @@ defmodule Tecnovix.App.ScreensProd do
                     produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
                     data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duracao end)))
                   }
-
-                  {:ok, taxa} = taxa(resp.valor, map.parcela)
-
-                  taxa =
-                    Enum.reduce(taxa, 0, fn reduce, acc ->
-                      case Map.has_key?(reduce, "parcela#{map.parcela}") do
-                        true -> reduce["parcela#{map.parcela}"]
-                        false -> acc
-                      end
-                    end)
-                    |> IO.inspect
-                    
-                  Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
 
                 _ ->
                   resp = %{
@@ -602,18 +589,6 @@ defmodule Tecnovix.App.ScreensProd do
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id
                   }
-
-                  {:ok, taxa} = taxa(resp.valor, map.parcela)
-
-                  taxa =
-                    Enum.reduce(taxa, 0, fn reduce, acc ->
-                      case Map.has_key?(reduce, "parcela#{map.parcela}") do
-                        true -> reduce["parcela#{map.parcela}"]
-                        false -> acc
-                      end
-                    end)
-
-                  Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
               end
           end
         end
