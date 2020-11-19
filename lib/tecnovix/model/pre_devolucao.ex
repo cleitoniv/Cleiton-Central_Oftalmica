@@ -78,7 +78,7 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   def pre_devolucao(cliente, params) do
     %{
-      "cliente_id" => cliente.id,
+      "client_id" => cliente.id,
       "filial" => "N",
       "tipo_pre_dev" => "C",
       "cod_pre_dev" => String.slice(Ecto.UUID.autogenerate(), 0..5),
