@@ -689,7 +689,7 @@ defmodule Tecnovix.App.ScreensProd do
     |> Enum.uniq_by(fn item -> item.num_pac end)
     |> Enum.map(fn paciente ->
       Enum.reduce(items, paciente, fn item, acc ->
-        case item.num_pac == paciente.num_pac do
+        case concat_paciente_dtnaspac(item.paciente, item.data_nascimento) == concat_paciente_dtnaspac(paciente.paciente, paciente.data_nascimento) do
           true -> Map.put(acc, :items, acc.items ++ [item])
           false -> acc
         end
@@ -724,6 +724,26 @@ defmodule Tecnovix.App.ScreensProd do
 
       Map.put(paciente, :items, group_by)
     end)
+  end
+
+  defp concat_paciente_dtnaspac(paciente, data) do
+    paciente =
+      case paciente do
+        nil -> ""
+        paciente ->
+          String.replace(paciente, " ", "")
+          |> String.downcase()
+      end
+      |> IO.inspect
+
+    data =
+      case data do
+        nil -> ""
+        data -> "#{data}/"
+      end
+      |> IO.inspect
+
+    paciente <> data |> IO.inspect
   end
 
   defp parse_items_reposicao(items, num_pac) do

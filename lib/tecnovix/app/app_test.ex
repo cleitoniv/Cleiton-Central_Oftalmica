@@ -547,7 +547,6 @@ defmodule Tecnovix.App.ScreensTest do
                     produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
                     data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duracao end)))
                   }
-                  |> IO.inspect()
 
                 _ ->
                   resp = %{
@@ -698,6 +697,26 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, result}
   end
 
+  defp concat_paciente_dtnaspac(paciente, data) do
+    paciente =
+      case paciente do
+        nil -> ""
+        paciente ->
+          String.replace(paciente, " ", "")
+          |> String.downcase()
+      end
+      |> IO.inspect
+
+    data =
+      case data do
+        nil -> ""
+        data -> "/#{data}"
+      end
+      |> IO.inspect
+
+    paciente <> data |> IO.inspect
+  end
+
   defp parse_items(items) do
     Enum.map(items, fn item ->
       %{
@@ -707,10 +726,10 @@ defmodule Tecnovix.App.ScreensTest do
         items: []
       }
     end)
-    |> Enum.uniq_by(fn item -> item.num_pac end)
+    |> Enum.uniq_by(fn item -> concat_paciente_dtnaspac(item.paciente, item.data_nascimento) end)
     |> Enum.map(fn paciente ->
       Enum.reduce(items, paciente, fn item, acc ->
-        case item.num_pac == paciente.num_pac do
+        case concat_paciente_dtnaspac(item.paciente, item.data_nascimento) == concat_paciente_dtnaspac(paciente.paciente, paciente.data_nascimento) do
           true -> Map.put(acc, :items, acc.items ++ [item])
           false -> acc
         end

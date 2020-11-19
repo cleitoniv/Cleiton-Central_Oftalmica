@@ -192,7 +192,7 @@ defmodule Tecnovix.Test.App do
     pedido_por_id =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/pedido/#{pedido["id"]}", %{"num_pac" => "123123", "reposicao" => true})
+      |> get("/api/cliente/pedido/#{pedido["id"]}", %{"num_pac" => "123123", "reposicao" => false})
       |> json_response(200)
       |> IO.inspect()
 

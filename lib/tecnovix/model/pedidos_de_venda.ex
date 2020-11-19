@@ -259,7 +259,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
         Enum.reduce(items, [], fn map, acc ->
           array =
             Enum.flat_map(map["items"], fn items ->
-              IO.inspect items
               cond do
                 map["olho_direito"] != nil ->
                   [olho_direito(items, map)]
