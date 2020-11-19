@@ -107,7 +107,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   def old_product(params) do
     params
     |> Map.put("num_serie", params["num_serie"])
-    |> Map.put("quant", params["quant"])
+    |> Map.put("quant", 1)
     |> Map.put("produto", params["title"])
   end
 
