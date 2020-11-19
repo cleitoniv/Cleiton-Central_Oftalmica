@@ -90,7 +90,6 @@ defmodule Tecnovix.PreDevolucaoModel do
   # Ajeitando o mapa da tabela dos Itens
   def itens_pre_devolucao(params) do
     params
-    |> Map.put("filial", params["filial"])
     |> Map.put("cod_pre_dev", params["cod_pre_dev"])
     |> new_product()
     |> old_product()

@@ -31,7 +31,7 @@ defmodule Tecnovix.PreDevolucaoSchema do
       :loja,
       :status
     ])
-    |> validate_required([:client_id, :filial, :tipo_pre_dev])
+    |> validate_required([:client_id, :tipo_pre_dev])
     |> cast_assoc(:items)
   end
 end
