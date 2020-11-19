@@ -776,6 +776,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def calculo_taxa(valor, taxa) do
+    IO.inspect valor
     case valor do
       0 -> 0
       valor ->
