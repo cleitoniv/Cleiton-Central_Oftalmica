@@ -868,10 +868,10 @@ defmodule Tecnovix.App.ScreensProd do
                       valor_credito_prod: item.valor_credito_prod,
                       quantidade: item.quantidade,
                       valor_total: case item.operation do
-                        "13" -> item.valor_credito_finan
-                        "07" -> item.valor_credito_prod
-                         _ -> item.prc_unitario
-                      end * item.quantidade,
+                        "13" -> item.valor_credito_finan * item.quantidade
+                        "07" -> item.valor_credito_prod * item.quantidade
+                         _ -> item.prc_unitario * item.quantidade
+                      end,
                       olho: item.olho,
                       adicao: item.adicao,
                       cor: item.cor,

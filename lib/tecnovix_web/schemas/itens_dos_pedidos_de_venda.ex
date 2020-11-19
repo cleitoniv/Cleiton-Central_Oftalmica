@@ -9,7 +9,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :operation, :string
     field :produto, :string
     field :quantidade, :integer
-    field :prc_unitario, :integer
+    field :prc_unitario, :integer, default: 0
     field :tipo_venda, :string
     field :olho, :string
     field :paciente, :string
