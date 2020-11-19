@@ -597,7 +597,7 @@ defmodule Tecnovix.App.ScreensProd do
       detail =
         case filtro do
           "2" -> Enum.uniq_by(detail, fn item ->
-            item.num_pac end)
+            concat_paciente_dtnaspac(item.paciente, item.data_nascimento) end)
           _ -> detail
         end
 
