@@ -547,8 +547,9 @@ defmodule Tecnovix.App.ScreensProd do
                   resp = %{
                     valor: Enum.reduce(map.items, 0, fn item, acc ->
                       case item.operation do
+                        "13" -> 0 + acc
                         "07" -> 0 + acc
-                        _ -> item.virtotal + acc
+                        _ -> item.virtotal + acc + map.taxa_wirecard
                       end
                     end),
                     data_inclusao: map.inserted_at,
@@ -562,8 +563,9 @@ defmodule Tecnovix.App.ScreensProd do
                   resp = %{
                     valor: Enum.reduce(map.items, 0, fn item, acc ->
                       case item.operation do
+                        "13" -> 0 + acc
                         "07" -> 0 + acc
-                        _ -> item.virtotal + acc
+                        _ -> item.virtotal + acc + map.taxa_wirecard
                       end
                     end),
                     data_inclusao: map.inserted_at,
@@ -574,7 +576,6 @@ defmodule Tecnovix.App.ScreensProd do
                     produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
                     data_reposicao: Date.add(map.inserted_at, formartting_duracao(Enum.reduce(map.items, "", fn item, _acc -> item.duracao end)))
                   }
-                  |> IO.inspect
 
                   {:ok, taxa} = taxa(resp.valor, map.parcela)
 
@@ -592,8 +593,9 @@ defmodule Tecnovix.App.ScreensProd do
                   resp = %{
                     valor: Enum.reduce(map.items, 0, fn item, acc ->
                       case item.operation do
+                        "13" -> 0 + acc
                         "07" -> 0 + acc
-                        _ -> item.virtotal + acc
+                        _ -> item.virtotal + acc + map.taxa_wirecard
                       end
                     end),
                     data_inclusao: map.inserted_at,
