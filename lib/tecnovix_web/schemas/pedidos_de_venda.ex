@@ -6,8 +6,6 @@ defmodule Tecnovix.PedidosDeVendaSchema do
   schema "pedidos_de_venda" do
     belongs_to :client, Tecnovix.ClientesSchema
     field :order_id, :string
-    field :filial, :string
-    field :numero, :string
     field :integrado, :string, default: "0"
     field :loja, :string
     field :cliente, :string
@@ -43,8 +41,6 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :integrado,
       :loja,
       :client_id,
-      :filial,
-      :numero,
       :cliente,
       :tipo_venda_ret_id,
       :pd_correios,
@@ -67,8 +63,6 @@ defmodule Tecnovix.PedidosDeVendaSchema do
       :previsao_entrega,
       :order_id,
       :client_id,
-      :filial,
-      :numero,
       :cliente,
       :tipo_venda_ret_id,
       :pd_correios,

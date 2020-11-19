@@ -24,10 +24,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
      Enum.map(params["data"], fn pedidos ->
        {:ok, item} =
          with nil <-
-                Repo.get_by(PedidosDeVendaSchema,
-                  filial: pedidos["filial"],
-                  numero: pedidos["numero"]
-                ) do
+                Repo.get_by(PedidosDeVendaSchema, id: pedidos["id"]) do
            create_sync(pedidos)
          else
            changeset ->
@@ -250,8 +247,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
         nil -> 0
         order -> taxa_wirecard(items, installment, "2")
       end,
-      "filial" => "",
-      "numero" => "",
       "taxa_entrega" => case taxa_entrega do
         nil -> 0
         taxa_entrega -> taxa_entrega
@@ -309,8 +304,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "parcela" => parcela,
       "taxa_entrega" => taxa_entrega,
       "order_id" => nil,
-      "filial" => "",
-      "numero" => "",
       "loja" => cliente.loja,
       "cliente" => cliente.codigo,
       "pd_correios" => "",
