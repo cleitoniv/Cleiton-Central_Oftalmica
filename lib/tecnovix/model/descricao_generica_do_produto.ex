@@ -33,18 +33,18 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         _ ->
           [cont_keys(params)]
       end
+      |> IO.inspect
 
-    case Enum.any?(
-           result,
-           fn  {:ok, boolean, olho} -> !boolean
-           end
-         ) do
+    case Enum.any?(result,fn
+             {:ok, boolean} -> !boolean
+             {:ok, boolean, olho} -> !boolean end) do
       false ->
         {:ok, true}
 
       true ->
         {:error,
          Enum.reduce(result, [], fn
+           IO.inspect result
            {_, false, olho}, acc -> acc ++ ["Produto do olho #{olho} indisponivel"]
            {_, true, olho}, acc -> acc
          end)}
