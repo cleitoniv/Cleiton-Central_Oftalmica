@@ -142,6 +142,8 @@ defmodule Tecnovix.PreDevolucaoModel do
       } = params) do
     cliente = Repo.get(ClientesSchema, cliente_id)
 
+    IO.inspect products
+    
     devolutions = Map.put(devolutions, "produto", products["title"])
 
     case create(cliente, devolutions, tipo) do
