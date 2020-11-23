@@ -60,4 +60,14 @@ defmodule TecnovixWeb.PreDevolucaoController do
         {:error, :not_created}
     end
   end
+
+  def get_devolucoes(conn, %{"filtro" => filtro}) do
+    with {:ok, dev} <- PreDevolucaoModel.get_devolucoes(filtro) do
+
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("devolucoes.json", %{item: dev})
+    end
+  end
 end

@@ -2,6 +2,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   use Tecnovix.DAO, schema: Tecnovix.PreDevolucaoSchema
   alias Tecnovix.{PreDevolucaoSchema, NotificacoesClienteModel, ClientesSchema, Repo}
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
+  import Ecto.Query
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
@@ -141,7 +142,7 @@ defmodule Tecnovix.PreDevolucaoModel do
       } = params) do
     cliente = Repo.get(ClientesSchema, cliente_id)
 
-    IO.inspect params
+    devolutions = Map.put(devolutions, "produto", products["title"])
 
     case create(cliente, devolutions, tipo) do
       {:ok, dev} ->
@@ -150,5 +151,16 @@ defmodule Tecnovix.PreDevolucaoModel do
       erro ->
         erro
     end
+  end
+
+  def get_devolucoes(filtro) do
+    filtro = String.to_integer(filtro)
+
+    devs =
+      PreDevolucaoSchema
+      |> where([p], p.status == ^filtro)
+      |> Repo.all()
+
+    {:ok, devs}
   end
 end
