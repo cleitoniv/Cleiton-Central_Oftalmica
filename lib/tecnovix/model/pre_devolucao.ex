@@ -143,7 +143,7 @@ defmodule Tecnovix.PreDevolucaoModel do
     cliente = Repo.get(ClientesSchema, cliente_id)
 
     IO.inspect products
-    
+
     devolutions = Map.put(devolutions, "produto", products["title"])
 
     case create(cliente, devolutions, tipo) do
@@ -158,6 +158,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   def get_devolucoes(filtro) do
     devs =
       PreDevolucaoSchema
+      |> preload(:items)
       |> where([p], p.status == ^filtro)
       |> Repo.all()
 
