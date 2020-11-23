@@ -549,11 +549,7 @@ defmodule Tecnovix.App.ScreensProd do
                       case item.operation do
                         "13" -> 0 + acc
                         "07" -> 0 + acc
-                        _ ->
-                        IO.inspect item.group
-                        IO.inspect item.virtotal
-                        IO.inspect acc
-                        item.virtotal + acc
+                        _ -> item.virtotal + acc
                       end
                     end),
                     data_inclusao: map.inserted_at,
@@ -584,6 +580,10 @@ defmodule Tecnovix.App.ScreensProd do
                 _ ->
                   resp = %{
                     valor: Enum.reduce(map.items, 0, fn item, acc ->
+                      IO.inspect item.group
+                      IO.inspect map.taxa_wirecard
+                      IO.inspect item.virtotal
+                      
                       case item.operation do
                         "13" -> 0 + acc
                         "07" -> 0 + acc
