@@ -107,7 +107,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   # Incluindo no mapa de itens, campos e valores sobre o produto velho
   def old_product(params) do
     params
-    |> Map.put("num_de_serie", product["num_serie"])
+    |> Map.put("num_de_serie", params["num_serie"])
     |> Map.put("quant", 1)
     |> Map.put("produto", params["title"])
   end
@@ -121,6 +121,8 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   def insert_dev(cliente, products) do
     dev = pre_devolucao(cliente, products)
+
+    IO.inspect products
 
     items =
       Enum.map(products, fn product ->
