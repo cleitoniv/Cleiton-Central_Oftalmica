@@ -549,7 +549,11 @@ defmodule Tecnovix.App.ScreensProd do
                       case item.operation do
                         "13" -> 0 + acc
                         "07" -> 0 + acc
-                        _ -> item.virtotal + acc
+                        _ ->
+                        IO.inspect item.group
+                        IO.inspect item.virtotal
+                        IO.inspect acc
+                        item.virtotal + acc
                       end
                     end),
                     data_inclusao: map.inserted_at,
