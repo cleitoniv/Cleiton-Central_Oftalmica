@@ -139,9 +139,7 @@ defmodule Tecnovix.PreDevolucaoModel do
         devolutions: devolutions,
         products: products,
         tipo: tipo
-      } = params) do
-
-    IO.inspect params
+      }) do
 
     cliente = Repo.get(ClientesSchema, cliente_id)
 

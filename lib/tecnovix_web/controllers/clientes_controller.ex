@@ -485,6 +485,10 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
+  def get_and_send_email_dev(conn, %{"email" => email}) when is_nil(email) or email == "" do
+    {:error, :invalid_parameter}
+  end
+
   def get_graus(conn, %{"grupo" => grupo}) do
     stub = Screens.stub()
 
