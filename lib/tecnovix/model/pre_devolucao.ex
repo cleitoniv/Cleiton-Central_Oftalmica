@@ -138,11 +138,11 @@ defmodule Tecnovix.PreDevolucaoModel do
         devolutions: devolutions,
         products: products,
         tipo: tipo
-      }) do
+      } = params) do
     cliente = Repo.get(ClientesSchema, cliente_id)
 
-    IO.inspect devolutions
-    
+    IO.inspect params
+
     case create(cliente, devolutions, tipo) do
       {:ok, dev} ->
         NotificacoesClienteModel.solicitation_devolution(dev, cliente)
