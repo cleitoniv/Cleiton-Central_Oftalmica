@@ -779,12 +779,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def calculo_taxa(valor, taxa) do
+    IO.inspect valor
     case valor do
       0 -> 0
       valor ->
-        taxa_cartao = valor * 0.0549 + 0.69 * 100
-        taxa_parcelamento = valor * (taxa / 100)
-        total_taxas = taxa_cartao + taxa_parcelamento
+        taxa_cartao = valor * 0.0549 + (0.69 * 100) |> IO.inspect
+        taxa_parcelamento = valor * (taxa / 100) |> IO.inspect
+        total_taxas = taxa_cartao + taxa_parcelamento |> IO.inspect
     end
   end
 
