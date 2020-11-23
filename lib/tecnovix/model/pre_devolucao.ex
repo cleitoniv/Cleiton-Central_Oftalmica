@@ -154,8 +154,6 @@ defmodule Tecnovix.PreDevolucaoModel do
   end
 
   def get_devolucoes(filtro) do
-    filtro = String.to_integer(filtro)
-
     devs =
       PreDevolucaoSchema
       |> where([p], p.status == ^filtro)
