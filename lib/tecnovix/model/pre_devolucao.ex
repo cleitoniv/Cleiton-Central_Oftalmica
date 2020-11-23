@@ -122,12 +122,11 @@ defmodule Tecnovix.PreDevolucaoModel do
   def insert_dev(cliente, products) do
     dev = pre_devolucao(cliente, products)
 
-    IO.inspect products
-
     items =
       Enum.map(products, fn product ->
         old = old_product(product)
         |> Map.put("num_de_serie", product["num_serie"])
+        |> Map.put("tipo", "C")
       end)
 
     product_ready = Map.put(dev, "items", items)
