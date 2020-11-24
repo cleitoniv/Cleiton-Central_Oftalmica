@@ -15,6 +15,24 @@ defmodule Tecnovix.Services.Devolucao do
     |> Enum.into(%{})
   end
 
+  def calculate_series(products) do
+    Enum.group_by(products, fn product -> product["num_serie"] end)
+    |> Enum.reduce([], fn {key, value}, acc ->
+      case Enum.count(value) >= 2 do
+        true  ->
+          error =
+            %Tecnovix.ClientesSchema{}
+            |> Ecto.Changeset.change(%{})
+            |> Ecto.Changeset.add_error(:produto, "Esse produto já foi incluido na listagem.")
+
+            {:error, error}
+
+        false -> value ++ acc
+      end
+    end)
+    |> IO.inspect
+  end
+
   def next_step(groups, group, quantidade, products) do
     update_group = Map.put(groups, group, Map.get(groups, group) - quantidade)
 
@@ -99,7 +117,11 @@ defmodule Tecnovix.Services.Devolucao do
   end
 
   def insert(products, id, tipo) do
-    GenServer.call(:services_devolucao, {:insert, id, products, tipo})
+    case calculate_series(products) do
+      {:error, error} -> {:error, :invalid_product}
+      _ -> GenServer.call(:services_devolucao, {:insert, id, products, tipo})
+    end
+    |> IO.inspect
   end
 
   def next(id, group, quantidade, devolution) do
