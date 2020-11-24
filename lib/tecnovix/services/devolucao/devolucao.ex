@@ -72,6 +72,8 @@ defmodule Tecnovix.Services.Devolucao do
   end
 
   def handle_call({:insert, id, products, tipo}, _from, state) do
+    IO.inspect state
+
     series =
       Enum.map(products, fn product ->
         product["num_serie"]
@@ -79,13 +81,14 @@ defmodule Tecnovix.Services.Devolucao do
 
     series_process = Enum.filter(state.serie_process, fn serie -> serie not in series end)
 
-    new_state = Map.put(state, :serie_process, series_process)
+    state = Map.put(state, :serie_process, series_process)
 
     groups = calculate_groups(products)
 
     new_state =
       Map.put(state, id, %{products: products, devolutions: [], groups: groups, tipo: tipo})
-
+    |> IO.inspect
+    
     {product, quantidade} = init_devolution(products, groups)
 
     {:reply, {:ok, %{product: product, quantidade: quantidade}}, new_state}
