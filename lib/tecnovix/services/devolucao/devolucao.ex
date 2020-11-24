@@ -79,9 +79,9 @@ defmodule Tecnovix.Services.Devolucao do
         product["num_serie"]
       end)
 
-    series_proccess = Enum.filter(state.serie_proccess, fn serie -> serie not in series end)
+    series_proccess = Enum.filter(state.series_proccess, fn serie -> serie not in series end)
 
-    state = Map.put(state, :serie_proccess, series_proccess)
+    state = Map.put(state, :series_proccess, series_proccess)
 
     groups = calculate_groups(products)
 
