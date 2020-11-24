@@ -999,6 +999,7 @@ defmodule Tecnovix.App.ScreensProd do
 
     product =
       Enum.flat_map(product_serial["resources"], fn resource ->
+        IO.inspect resource
         case Enum.empty?(resource) do
           true ->
             error =
