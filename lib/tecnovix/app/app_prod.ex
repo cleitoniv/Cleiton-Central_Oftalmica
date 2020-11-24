@@ -996,42 +996,36 @@ defmodule Tecnovix.App.ScreensProd do
   @impl true
   def get_product_serie(_cliente, product_serial, serial) do
     product_serial = Jason.decode!(product_serial.body)
-
     product =
       Enum.flat_map(product_serial["resources"], fn resource ->
-        IO.inspect resource
-        case Enum.empty?(product_serial["resources"]) do
-          true ->
-            error =
-              %Ecto.Changeset{}
-              |> Ecto.Changeset.change(%{})
-              |> Ecto.Changeset.add_error(:produto, "Produto inexistente.")
-
-              {:error, error}
-
-          false ->
-            Enum.map(resource["models"], fn model ->
-              Enum.reduce(model["fields"], %{}, fn product, acc ->
-                case Map.has_key?(acc, product["id"]) do
-                  false -> Map.put(acc, organize_field(product), organize_value(product))
-                  true -> acc
-                end
-              end)
-              |> Map.put("num_serie", serial)
-            end)
-          end
-        end)
-
-    case product do
-      {:error, _} -> product |> IO.inspect
-      _ ->
-        product =
-          Enum.reduce(product, %{}, fn map, _acc ->
-            Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
+        Enum.map(resource["models"], fn model ->
+          Enum.reduce(model["fields"], %{}, fn product, acc ->
+            case Map.has_key?(acc, product["id"]) do
+              false -> Map.put(acc, organize_field(product), organize_value(product))
+              true -> acc
+            end
           end)
+          |> Map.put("num_serie", serial)
+        end)
+      end)
 
-        {:ok, product}
-    end
+      case Enum.empty?(product) do
+        true ->
+          error =
+            %ClientesSchema{}
+            |> Ecto.Changeset.change(%{})
+            |> Ecto.Changeset.add_error(:produto, "Produto inexistente.")
+
+            {:error, error}
+            |> IO.inspect
+        false ->
+          product =
+            Enum.reduce(product, %{}, fn map, _acc ->
+              Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
+            end)
+
+          {:ok, product}
+      end
   end
 
   defp parse_month(date) do

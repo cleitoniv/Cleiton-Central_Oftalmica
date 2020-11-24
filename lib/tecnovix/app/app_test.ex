@@ -727,8 +727,6 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   defp concat_paciente_dtnaspac(paciente, data) do
-    IO.inspect paciente
-    IO.inspect data
     paciente =
       case paciente do
         nil -> ""
@@ -743,7 +741,7 @@ defmodule Tecnovix.App.ScreensTest do
         data -> "/#{data}"
       end
 
-    paciente <> data |> IO.inspect
+    paciente <> data
   end
 
   defp parse_items_reposicao(items, data_nascimento, nome) do
@@ -793,11 +791,9 @@ defmodule Tecnovix.App.ScreensTest do
 
       Map.put(paciente, :items, group_by)
     end)
-    |> IO.inspect()
     |> Enum.filter(fn pedido ->
       concat_paciente_dtnaspac(pedido.paciente, pedido.data_nascimento) == concat_paciente_dtnaspac(nome, data_nascimento)
      end)
-    |> IO.inspect
   end
 
   defp parse_olho(item) do
@@ -998,7 +994,6 @@ defmodule Tecnovix.App.ScreensTest do
   @impl true
   def get_product_serie(_cliente, product_serial, serial) do
     product_serial = Jason.decode!(product_serial.body)
-
     product =
       Enum.flat_map(product_serial["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->
@@ -1012,12 +1007,23 @@ defmodule Tecnovix.App.ScreensTest do
         end)
       end)
 
-    product =
-      Enum.reduce(product, %{}, fn map, _acc ->
-        Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
-      end)
+      case Enum.empty?(product) do
+        true ->
+          error =
+            %ClientesSchema{}
+            |> Ecto.Changeset.change(%{})
+            |> Ecto.Changeset.add_error(:produto, "Produto inexistente.")
 
-    {:ok, product}
+            {:error, error}
+            |> IO.inspect
+        false ->
+          product =
+            Enum.reduce(product, %{}, fn map, _acc ->
+              Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
+            end)
+
+          {:ok, product}
+      end
   end
 
   defp parse_month(date) do
