@@ -1048,6 +1048,7 @@ defmodule Tecnovix.App.ScreensTest do
           product =
             Map.new()
             |> Map.put("mensagem", "Produto inexistente.")
+            |> Map.put("success", false)
 
         false ->
           product =
