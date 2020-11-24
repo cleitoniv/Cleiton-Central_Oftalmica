@@ -15,17 +15,6 @@ defmodule Tecnovix.Services.Devolucao do
     |> Enum.into(%{})
   end
 
-  def calculate_series(products) do
-    Enum.group_by(products, fn product -> product["num_serie"] end)
-    |> Enum.reduce([], fn {key, value}, acc ->
-      case Enum.count(value) >= 2 do
-        true  -> {:error, :product_repeated}
-
-        false -> value ++ acc
-      end
-    end)
-  end
-
   def next_step(groups, group, quantidade, products) do
     update_group = Map.put(groups, group, Map.get(groups, group) - quantidade)
 
@@ -57,7 +46,7 @@ defmodule Tecnovix.Services.Devolucao do
   end
 
   def init(_) do
-    {:ok, %{series_proccess: []}}
+    {:ok, %{}}
   end
 
   def init_devolution(products, groups) do
@@ -72,22 +61,10 @@ defmodule Tecnovix.Services.Devolucao do
   end
 
   def handle_call({:insert, id, products, tipo}, _from, state) do
-    IO.inspect state
-
-    series =
-      Enum.map(products, fn product ->
-        product["num_serie"]
-      end)
-
-    series_proccess = Enum.filter(state.series_proccess, fn serie -> serie not in series end)
-
-    state = Map.put(state, :series_proccess, series_proccess)
-
     groups = calculate_groups(products)
 
     new_state =
       Map.put(state, id, %{products: products, devolutions: [], groups: groups, tipo: tipo})
-    |> IO.inspect
 
     {product, quantidade} = init_devolution(products, groups)
 
@@ -119,22 +96,6 @@ defmodule Tecnovix.Services.Devolucao do
       end
 
     {:reply, resp, state}
-  end
-
-  def handle_call({:list, serial}, _from, state) do
-    case serial not in state.series_proccess do
-      true -> new_state = Map.put(state, :series_proccess, state.series_proccess ++ [serial])
-
-      {:reply, {:ok, :success}, new_state}
-
-      false ->
-
-      {:reply, {:error, :repeated}, state}
-    end
-  end
-
-  def list(num_serie) do
-    GenServer.call(:services_devolucao, {:list, num_serie})
   end
 
   def insert(products, id, tipo) do
