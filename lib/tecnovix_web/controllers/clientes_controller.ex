@@ -391,6 +391,7 @@ defmodule TecnovixWeb.ClientesController do
     else
       {:ok, %{status_code: 401}} -> {:error, :not_authorized}
       {:ok, %{status_code: 400}} -> {:error, :product_serial_error}
+      {:error, %Ecto.Changeset{} = error} -> {:error, error} |> IO.inspect
       _ -> {:error, :not_found}
     end
   end

@@ -1022,7 +1022,7 @@ defmodule Tecnovix.App.ScreensProd do
         end)
 
     case product do
-      {:error, _} -> product
+      {:error, _} -> product |> IO.inspect
       _ ->
         product =
           Enum.reduce(product, %{}, fn map, _acc ->
