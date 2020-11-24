@@ -72,20 +72,14 @@ defmodule Tecnovix.Services.Devolucao do
   end
 
   def handle_call({:insert, id, products, tipo}, _from, state) do
-    resp =
-      case calculate_series(products) do
-        {:error, :product_repeated} = error -> {:reply, error, state}
+    groups = calculate_groups(products)
 
-        product ->
-          groups = calculate_groups(products)
+    new_state =
+      Map.put(state, id, %{products: products, devolutions: [], groups: groups, tipo: tipo})
 
-          new_state =
-            Map.put(state, id, %{products: products, devolutions: [], groups: groups, tipo: tipo})
+    {product, quantidade} = init_devolution(products, groups)
 
-          {product, quantidade} = init_devolution(products, groups)
-
-          {:reply, {:ok, %{product: product, quantidade: quantidade}}, new_state}
-      end
+    {:reply, {:ok, %{product: product, quantidade: quantidade}}, new_state}
   end
 
   def handle_call({:next, id, group, quantidade, devolution}, _from, state) do
@@ -113,6 +107,22 @@ defmodule Tecnovix.Services.Devolucao do
       end
 
     {:reply, resp, state}
+  end
+
+  def handle_call({:list, serial}, _from, state) do
+    new_state = Map.put(state, serial, serial)
+
+    resp =
+      case Map.get(state, serial) do
+        nil -> {:ok, :success}
+        _ -> {:error, :repeated}
+      end
+
+    {:reply, resp, new_state}
+  end
+
+  def list(num_serie) do
+    GenServer.call(:services_devolucao, {:list, num_serie})
   end
 
   def insert(products, id, tipo) do

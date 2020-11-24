@@ -384,14 +384,24 @@ defmodule TecnovixWeb.ClientesController do
              serial: num_serie,
              token: auth["access_token"]
            }),
-         {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie) do
+         {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie),
+         {:ok, :success} <- Devolucao.list(num_serie) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
     else
       {:ok, %{status_code: 401}} -> {:error, :not_authorized}
       {:ok, %{status_code: 400}} -> {:error, :product_serial_error}
-      {:error, %Ecto.Changeset{} = error} -> {:error, error} |> IO.inspect()
+      {:error, %Ecto.Changeset{} = error} -> {:error, error}
+      {:error, :repeated} ->
+        data =
+            Map.new()
+            |> Map.put("mensagem", "Esse produto já consta em uma devolução")
+            |> Map.put("success", false)
+
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(200, Jason.encode!(%{success: true, data: data}))
       _ -> {:error, :not_found}
     end
   end

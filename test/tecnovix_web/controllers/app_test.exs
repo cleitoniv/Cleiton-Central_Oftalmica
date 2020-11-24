@@ -233,7 +233,9 @@ defmodule Tecnovix.Test.App do
     product_serie =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/product_serie/S030065036")
+      |> get("/api/cliente/product_serie/S03006485")
+      |> recycle()
+      |> get("/api/cliente/product_serie/S03006485")
       |> json_response(200)
       |> IO.inspect()
 

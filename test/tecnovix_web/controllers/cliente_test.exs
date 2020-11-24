@@ -264,6 +264,8 @@ defmodule TecnovixWeb.UsersTest do
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/devolution_continue", %{"products" => products, "tipo" => "T"})
+      |> recycle()
+      |> post("/api/cliente/devolution_continue", %{"products" => products, "tipo" => "T"})
       |> json_response(200)
       |> Map.get("data")
       |> Map.get("product")
