@@ -1063,7 +1063,6 @@ defmodule Tecnovix.App.ScreensProd do
       end
 
     {:ok, product}
-    end
   end
 
   defp parse_month(date) do
