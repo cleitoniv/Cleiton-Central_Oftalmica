@@ -19,18 +19,11 @@ defmodule Tecnovix.Services.Devolucao do
     Enum.group_by(products, fn product -> product["num_serie"] end)
     |> Enum.reduce([], fn {key, value}, acc ->
       case Enum.count(value) >= 2 do
-        true  ->
-          error =
-            %Tecnovix.ClientesSchema{}
-            |> Ecto.Changeset.change(%{})
-            |> Ecto.Changeset.add_error(:produto, "Esse produto já foi incluido na listagem.")
-
-            {:error, error}
+        true  -> {:error, :product_repeated}
 
         false -> value ++ acc
       end
     end)
-    |> IO.inspect
   end
 
   def next_step(groups, group, quantidade, products) do
@@ -79,14 +72,20 @@ defmodule Tecnovix.Services.Devolucao do
   end
 
   def handle_call({:insert, id, products, tipo}, _from, state) do
-    groups = calculate_groups(products)
+    resp =
+      case calculate_series(products) do
+        {:error, :product_repeated} = error -> {:reply, error, state}
 
-    new_state =
-      Map.put(state, id, %{products: products, devolutions: [], groups: groups, tipo: tipo})
+        product ->
+          groups = calculate_groups(products)
 
-    {product, quantidade} = init_devolution(products, groups)
+          new_state =
+            Map.put(state, id, %{products: products, devolutions: [], groups: groups, tipo: tipo})
 
-    {:reply, {:ok, %{product: product, quantidade: quantidade}}, new_state}
+          {product, quantidade} = init_devolution(products, groups)
+
+          {:reply, {:ok, %{product: product, quantidade: quantidade}}, new_state}
+      end
   end
 
   def handle_call({:next, id, group, quantidade, devolution}, _from, state) do
@@ -117,11 +116,7 @@ defmodule Tecnovix.Services.Devolucao do
   end
 
   def insert(products, id, tipo) do
-    case calculate_series(products) do
-      {:error, error} -> {:error, :invalid_product}
-      _ -> GenServer.call(:services_devolucao, {:insert, id, products, tipo})
-    end
-    |> IO.inspect
+    GenServer.call(:services_devolucao, {:insert, id, products, tipo})
   end
 
   def next(id, group, quantidade, devolution) do

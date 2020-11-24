@@ -242,7 +242,7 @@ defmodule TecnovixWeb.UsersTest do
         group: "011C"
       },
       %{
-        num_serie: "011" <> "0989898",
+        num_serie: "011" <> "0989897",
         id: 0,
         tests: 0,
         credits: 0,
