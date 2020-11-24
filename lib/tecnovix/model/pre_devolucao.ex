@@ -122,12 +122,13 @@ defmodule Tecnovix.PreDevolucaoModel do
   def insert_dev(cliente, products) do
     dev = pre_devolucao(cliente, products)
 
-    IO.inspect products
+    IO.inspect(products)
 
     items =
       Enum.map(products, fn product ->
-        old = old_product(product)
-        |> Map.put("tipo", "C")
+        old =
+          old_product(product)
+          |> Map.put("tipo", "C")
       end)
 
     product_ready = Map.put(dev, "items", items)
@@ -143,7 +144,6 @@ defmodule Tecnovix.PreDevolucaoModel do
         products: products,
         tipo: tipo
       }) do
-
     cliente = Repo.get(ClientesSchema, cliente_id)
 
     case create(cliente, devolutions, tipo) do

@@ -191,7 +191,11 @@ defmodule Tecnovix.Test.App do
     pedido_por_id =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/pedido/#{pedido["id"]}", %{"data_nascimento" => "07/07/1998", "reposicao" => true, "nome" => "Victor"})
+      |> get("/api/cliente/pedido/#{pedido["id"]}", %{
+        "data_nascimento" => "07/07/1998",
+        "reposicao" => true,
+        "nome" => "Victor"
+      })
       |> json_response(200)
 
     payments =
@@ -229,8 +233,9 @@ defmodule Tecnovix.Test.App do
     product_serie =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/product_serie/S030064856")
+      |> get("/api/cliente/product_serie/S03006485")
       |> json_response(200)
+      |> IO.inspect()
 
     extrato_finan =
       build_conn()

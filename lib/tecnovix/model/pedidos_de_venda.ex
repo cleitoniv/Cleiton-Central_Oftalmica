@@ -201,7 +201,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "A" -> Jason.decode!(order.body)["id"]
       "C" -> nil
       "T" -> nil
-       _ -> nil
+      _ -> nil
     end
   end
 
@@ -239,18 +239,21 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "client_id" => cliente.id,
       "tipo_pagamento" => "CREDIT_CARD",
       "parcela" => installment,
-      "order_id" => case order do
-        nil -> verify_type(nil, order)
-        _ -> verify_type("A", order)
+      "order_id" =>
+        case order do
+          nil -> verify_type(nil, order)
+          _ -> verify_type("A", order)
         end,
-      "taxa_wirecard" => case order do
-        nil -> 0
-        order -> taxa_wirecard(items, installment, "2")
-      end,
-      "taxa_entrega" => case taxa_entrega do
-        nil -> 0
-        taxa_entrega -> taxa_entrega
-      end,
+      "taxa_wirecard" =>
+        case order do
+          nil -> 0
+          order -> taxa_wirecard(items, installment, "2")
+        end,
+      "taxa_entrega" =>
+        case taxa_entrega do
+          nil -> 0
+          taxa_entrega -> taxa_entrega
+        end,
       "loja" => cliente.loja,
       "cliente" => cliente.codigo,
       "pd_correios" => "",
@@ -397,9 +400,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
   defp formatting_duracao(duracao) do
     duracao =
       case duracao do
-        nil -> 0
+        nil ->
+          0
 
-        "0" -> 0
+        "0" ->
+          0
 
         duracao ->
           String.to_float(duracao)
@@ -716,7 +721,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
           |> Enum.count()
 
         count_range <= 30
-
       end)
       |> Enum.map(fn map ->
         Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
@@ -740,14 +744,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedido_id(pedido_id, cliente_id) do
-      case Repo.get(PedidosDeVendaSchema, pedido_id) do
-        nil ->
-          {:error, :not_found}
+    case Repo.get(PedidosDeVendaSchema, pedido_id) do
+      nil ->
+        {:error, :not_found}
 
-        pedido ->
-          pedido = Repo.preload(pedido, :items)
-          {:ok, pedido}
-      end
+      pedido ->
+        pedido = Repo.preload(pedido, :items)
+        {:ok, pedido}
+    end
   end
 
   def get_pedidos_protheus(filtro, nil) do
@@ -780,9 +784,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def calculo_taxa(valor, taxa) do
     case valor do
-      0 -> 0
+      0 ->
+        0
+
       valor ->
-        taxa_cartao = valor * 0.0549 + (0.69 * 100)
+        taxa_cartao = valor * 0.0549 + 0.69 * 100
         taxa_parcelamento = valor * (taxa / 100)
         total_taxas = taxa_cartao + taxa_parcelamento
     end

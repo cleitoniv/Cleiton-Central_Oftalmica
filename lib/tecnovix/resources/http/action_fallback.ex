@@ -18,7 +18,13 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :type_devolution_credit}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Modo de devolução está no modo crédito para essa operação."}))
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "success" => false,
+        "data" => "Modo de devolução está no modo crédito para essa operação."
+      })
+    )
     |> halt()
   end
 

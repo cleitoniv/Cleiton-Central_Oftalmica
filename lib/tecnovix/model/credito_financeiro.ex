@@ -11,7 +11,6 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(data, fn param ->
-
        with nil <-
               Repo.get_by(Credito, cliente_id: param["cliente_id"]) do
          {:ok, create} = create(param)

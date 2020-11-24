@@ -13,10 +13,10 @@ defmodule Tecnovix.UsuariosClienteModel do
       usuario ->
         case usuario.status == 0 and usuario.email == email do
           true ->
-              UsuariosClienteSchema
-              |> where([u], u.email == ^email)
-              |> update([u], set: [status: 1, cargo: ^params["cargo"], nome: ^params["nome"]])
-              |> Repo.update_all([])
+            UsuariosClienteSchema
+            |> where([u], u.email == ^email)
+            |> update([u], set: [status: 1, cargo: ^params["cargo"], nome: ^params["nome"]])
+            |> Repo.update_all([])
 
             {:ativo, usuario}
 
@@ -33,7 +33,6 @@ defmodule Tecnovix.UsuariosClienteModel do
 
   def create_user(params) do
     with {:ok, email} <- unique_email(params["email"]) do
-
     end
   end
 

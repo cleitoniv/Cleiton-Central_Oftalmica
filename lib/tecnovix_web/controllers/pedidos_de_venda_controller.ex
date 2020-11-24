@@ -22,18 +22,18 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Enum.join()
 
     with {:ok, pedido} <-
-      PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
-    {:ok, _logs} <-
-      LogsClienteModel.create(
-        ip,
-        nil,
-        cliente,
-        "Pedido feito com a remessa de contrato de produto."
-      ) do
-        conn
-        |> put_status(200)
-        |> put_resp_content_type("application/json")
-        |> render("pedido.json", %{item: pedido})
+           PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
+         {:ok, _logs} <-
+           LogsClienteModel.create(
+             ip,
+             nil,
+             cliente,
+             "Pedido feito com a remessa de contrato de produto."
+           ) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedido.json", %{item: pedido})
     end
   end
 
@@ -190,7 +190,12 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def detail_order_id(conn, %{"id" => pedido_id, "data_nascimento" => data_nascimento, "reposicao" => reposicao, "nome" => nome}) do
+  def detail_order_id(conn, %{
+        "id" => pedido_id,
+        "data_nascimento" => data_nascimento,
+        "reposicao" => reposicao,
+        "nome" => nome
+      }) do
     stub = Screens.stub()
     {:ok, cliente} = conn.private.auth
 
@@ -200,7 +205,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
         "true" -> reposicao
       end
 
-    with {:ok, pedido} <- stub.get_pedido_id(pedido_id, cliente.id, data_nascimento, reposicao, nome) do
+    with {:ok, pedido} <-
+           stub.get_pedido_id(pedido_id, cliente.id, data_nascimento, reposicao, nome) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
