@@ -995,6 +995,8 @@ defmodule Tecnovix.App.ScreensProd do
 
   @impl true
   def get_product_serie(_cliente, product_serial, serial) do
+    IO.inspect product_serial
+
     product_serial = Jason.decode!(product_serial.body)
 
     product =
