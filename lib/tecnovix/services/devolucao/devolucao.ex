@@ -122,15 +122,15 @@ defmodule Tecnovix.Services.Devolucao do
   end
 
   def handle_call({:list, serial}, _from, state) do
-    new_state = Map.put(state, :series_proccess, state.series_proccess ++ [serial])
+    case serial not in state.series_proccess do
+      true -> new_state = Map.put(state, :series_proccess, state.series_proccess ++ [serial])
 
-    resp =
-      case Map.get(state, serial) do
-        nil -> {:ok, :success}
-        _ -> {:error, :repeated}
-      end
+      {:reply, {:ok, :success}, new_state}
 
-    {:reply, resp, new_state}
+      false ->
+
+      {:reply, {:error, :repeated}, state}
+    end
   end
 
   def list(num_serie) do
