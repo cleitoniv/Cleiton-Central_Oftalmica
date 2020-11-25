@@ -1139,7 +1139,7 @@ defmodule Tecnovix.App.ScreensProd do
       Enum.map(items_pedido, fn item ->
         %{
           id: item.id,
-          saldo: get_saldo(produtos, item),
+          saldo: get_saldo(produtos, items_pedido),
           produto: item.produto,
           items:
             Enum.map(items_pedido, fn pedido ->
