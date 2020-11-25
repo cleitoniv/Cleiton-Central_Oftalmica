@@ -1125,15 +1125,14 @@ defmodule Tecnovix.App.ScreensProd do
               true -> case items.operation do
                 "06" -> item.quantidade + acc
                 "07" -> (item.quantidade * -1) + acc
-                _ -> 0
+                _ -> 1
               end
-              false -> 0
+              false -> 2
             end
           end)
         false -> 0
       end
     end)
-    |> IO.inspect
   end
 
   def get_extrato_prod(cliente, produtos) do
