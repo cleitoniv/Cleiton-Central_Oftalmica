@@ -1130,7 +1130,16 @@ defmodule Tecnovix.App.ScreensTest do
       Enum.map(items_pedido, fn item ->
         %{
           id: item.id,
-          saldo: get_saldo(produtos, item),
+          saldo: Enum.reduce(items_pedido, 0, fn item, acc ->
+            result =
+              case item.operation do
+                "06" -> item.quantidade
+                "07" -> item.quantidade * -1
+                _ -> - 0
+              end
+
+            result + acc
+          end),
           produto: item.produto,
           grupo: item.grupo,
           items:
@@ -1142,6 +1151,7 @@ defmodule Tecnovix.App.ScreensTest do
                 quantidade: case item.operation do
                   "06" -> pedido.quantidade
                   "07" -> pedido.quantidade * -1
+                  _ -> 0
                 end
               }
             end)
