@@ -1117,16 +1117,11 @@ defmodule Tecnovix.App.ScreensTest do
   def get_saldo(produtos, item) do
     Enum.reduce(produtos, 0, fn produto, acc ->
       case produto["title"] == item.produto do
-        true -> Enum.reduce([item], 0, fn produto, acc ->
-          result =
-            case produto.operation do
-              "06" -> produto.quantidade
-              "07" -> produto.quantidade * -1
-              _ -> - 0
-            end
-
-          result + acc
-        end)
+        true -> case item.operation do
+          "06" -> item.quantidade + acc
+          "07" -> (item.quantidade * -1) + acc
+          _ -> acc
+        end
         false -> acc
       end
     end)
