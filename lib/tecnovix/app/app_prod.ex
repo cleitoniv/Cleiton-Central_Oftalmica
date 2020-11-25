@@ -1125,6 +1125,7 @@ defmodule Tecnovix.App.ScreensProd do
               "07" -> (produto.quantidade * -1) + acc
               _ -> - 0
             end
+            |> IO.inspect
         end)
         false -> acc
       end
