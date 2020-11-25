@@ -1127,7 +1127,7 @@ defmodule Tecnovix.App.ScreensProd do
               _ -> - 0
             end
 
-          result + acc
+          acc + result
         end)
         false -> acc
       end
