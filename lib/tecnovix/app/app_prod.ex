@@ -1120,16 +1120,11 @@ defmodule Tecnovix.App.ScreensProd do
     Enum.reduce(produtos, 0, fn produto, acc ->
       case produto["title"] == item.produto do
         true -> Enum.reduce([item], 0, fn produto, acc ->
-          result =
             case produto.operation do
-              "06" -> produto.quantidade
-              "07" -> produto.quantidade * -1
+              "06" -> produto.quantidade + acc
+              "07" -> (produto.quantidade * -1) + acc
               _ -> - 0
             end
-            |> IO.inspect
-            IO.inspect acc
-
-          acc + result
         end)
         false -> acc
       end
