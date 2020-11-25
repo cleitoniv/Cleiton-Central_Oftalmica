@@ -1132,13 +1132,17 @@ defmodule Tecnovix.App.ScreensTest do
           id: item.id,
           saldo: get_saldo(produtos, item),
           produto: item.produto,
+          grupo: item.grupo,
           items:
             Enum.map(items_pedido, fn pedido ->
               %{
                 produto: pedido.produto,
                 date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
                 pedido: pedido.id,
-                quantidade: pedido.quantidade
+                quantidade: case item.operation do
+                  "06" -> pedido.quantidade
+                  "07" -> pedido.quantidade * -1
+                end
               }
             end)
         }
