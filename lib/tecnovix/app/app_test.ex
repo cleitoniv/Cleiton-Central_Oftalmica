@@ -1116,22 +1116,33 @@ defmodule Tecnovix.App.ScreensTest do
 
   def get_saldo(produtos, item) do
     Enum.reduce(produtos, %{}, fn produto, acc ->
-      IO.inspect acc
       case produto["title"] == item.produto do
         true -> case item.operation do
           "06" ->
-            valor = Map.get(acc, item.produto)
-            acc = Map.put(acc, item.produto, item.quantidade + valor)
+              case Map.get(acc, item.produto) do
+                nil ->
+                  Map.put(acc, item.produto, item.quantidade)
+                  Map.get(acc, item.produto)
 
-            Map.get(acc, item.produto)
+                valor ->
+                  acc = Map.put(acc, item.produto, item.quantidade + valor)
+                  Map.get(acc, item.produto)
+              end
 
           "07" ->
-            valor = Map.get(acc, item.produto)
-            acc = Map.put(acc, item.produto, item.quantidade + valor)
-            Map.get(acc, item.produto)
+            case Map.get(acc, item.produto) do
+              nil ->
+                Map.put(acc, item.produto, item.quantidade)
+                Map.get(acc, item.produto)
+
+              valor ->
+                acc = Map.put(acc, item.produto, item.quantidade + valor)
+                Map.get(acc, item.produto)
+            end
 
           _ -> 0
         end
+        
         false -> 0
       end
     end)
