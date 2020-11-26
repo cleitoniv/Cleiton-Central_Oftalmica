@@ -1120,9 +1120,16 @@ defmodule Tecnovix.App.ScreensProd do
     produtos = Enum.map(produtos, fn produto -> Map.new() |> Map.put(produto["title"], 0) end)
 
     Enum.reduce(items_pedido, hd(produtos), fn item, acc ->
-      Map.put(acc, item.produto, Map.get(acc, item.produto) + item.quantidade)
+      Map.put(acc, item.produto,  calculate(acc, item))
     end)
     |> IO.inspect
+  end
+
+  def calculate(acc, item) do
+    case Map.get(acc, item.produto) do
+      nil -> 0
+      valor -> valor + item.quantidade
+    end
   end
 
   def get_extrato_prod(cliente, produtos) do
