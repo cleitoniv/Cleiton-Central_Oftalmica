@@ -1114,34 +1114,30 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, extratos}
   end
 
-  def get_saldo(produtos, item, items_pedido) do
-    Enum.reduce(produtos, 0, fn produto, acc ->
-      case item.produto == produto["title"] do
-        true ->
-          Enum.reduce(items_pedido, 0, fn items, acc ->
-            case item.produto ==  items.produto do
-              true -> case items.operation do
-                "06" -> item.quantidade + acc
-                "07" -> (item.quantidade * -1) + acc
-                _ -> 0
-              end
-              false -> 0
-            end
-          end)
-        false -> 0
-      end
+  def get_saldo(produtos, items_pedido) do
+    produtos = Enum.map(produtos, fn produto -> Map.new() |> Map.put(produto["title"], 0) end)
+
+    Enum.reduce(items_pedido, hd(produtos), fn item, acc ->
+      Map.put(acc, item.produto,  calculate(acc, item))
     end)
   end
+
+  def calculate(acc, item) do
+    case Map.get(acc, item.produto) do
+      nil -> 0
+      valor -> valor + item.quantidade
+    end
+  end
+
 
   def get_extrato_prod(cliente, produtos) do
     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
 
     extrato =
       Enum.map(items_pedido, fn item ->
-        IO.inspect items_pedido
         %{
           id: item.id,
-          saldo: get_saldo(produtos, item, items_pedido),
+          saldo: get_saldo(produtos, items_pedido),
           produto: item.produto,
           items:
             Enum.map(items_pedido, fn pedido ->

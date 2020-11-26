@@ -237,7 +237,6 @@ defmodule Tecnovix.Test.App do
       |> recycle()
       |> get("/api/cliente/product_serie/S03006485")
       |> json_response(200)
-      |> IO.inspect()
 
     extrato_finan =
       build_conn()
