@@ -1134,7 +1134,9 @@ defmodule Tecnovix.App.ScreensProd do
 
         false -> 0
       end
+      |> IO.inspect
     end)
+    |> IO.inspect
   end
 
   def get_extrato_prod(cliente, produtos) do
