@@ -1117,9 +1117,9 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   def get_saldo(produtos, items_pedido) do
-    produtos = Enum.map(produtos, fn produto -> Map.new() |> Map.put(produto["title"], 0) end) |> IO.inspect
+    produtos = Enum.map(produtos, fn produto -> Map.new() |> Map.put(produto["title"], 0) end)
 
-    Enum.reduce(items_pedido, produtos, fn item, acc ->
+    Enum.reduce(items_pedido, hd(produtos), fn item, acc ->
       Map.put(acc, item.produto, Map.get(acc, item.produto) + item.quantidade)
     end)
     |> IO.inspect
