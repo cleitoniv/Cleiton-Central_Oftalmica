@@ -1120,13 +1120,6 @@ defmodule Tecnovix.App.ScreensProd do
     0
   end
 
-  def calculate(acc, item) do
-    case Map.get(acc, item.produto) do
-      nil -> 0
-      valor -> valor + item.quantidade
-    end
-  end
-
   def get_extrato_prod(cliente, produtos) do
     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
 
@@ -1134,7 +1127,13 @@ defmodule Tecnovix.App.ScreensProd do
       Enum.map(items_pedido, fn item ->
         %{
           id: item.id,
-          saldo: get_saldo(produtos, items_pedido),
+          saldo: Enum.reduce(items_pedido, 0, fn item, acc ->
+            case pedido.operation do
+              "06" -> pedido.quantidade + acc
+              "07" -> (pedido.quantidade * -1) + acc
+              _ -> acc
+            end
+          end),
           produto: item.produto,
           items:
             Enum.map(items_pedido, fn pedido ->
