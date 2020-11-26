@@ -1129,6 +1129,7 @@ defmodule Tecnovix.App.ScreensProd do
         false -> acc
       end
     end)
+    |> IO.inspect
     |> Enum.reduce(0, fn {key, value}, _acc ->
       case key == item.produto do
         true -> value
