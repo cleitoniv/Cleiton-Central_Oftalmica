@@ -1128,9 +1128,9 @@ defmodule Tecnovix.App.ScreensProd do
         %{
           id: item.id,
           saldo: Enum.reduce(items_pedido, 0, fn item, acc ->
-            case pedido.operation do
-              "06" -> pedido.quantidade + acc
-              "07" -> (pedido.quantidade * -1) + acc
+            case item.operation do
+              "06" -> item.quantidade + acc
+              "07" -> (item.quantidade * -1) + acc
               _ -> acc
             end
           end),
