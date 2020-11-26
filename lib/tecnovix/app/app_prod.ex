@@ -1148,7 +1148,7 @@ defmodule Tecnovix.App.ScreensProd do
       |> Enum.map(fn produto ->
         case produto.produto == Enum.reduce(items_pedido, "", fn item, _ -> item.produto end) do
           true -> Map.put(produto, :saldo, Enum.reduce(items_pedido, 0, fn item, acc -> item.quantidade + acc end))
-          false -> 0
+          false -> produto
         end
       end)
       |> IO.inspect
