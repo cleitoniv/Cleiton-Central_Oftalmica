@@ -1124,9 +1124,9 @@ defmodule Tecnovix.App.ScreensProd do
             nil ->
               Map.put(acc, item.produto, item.quantidade)
               |> Map.get(item.produto)
-              |> IO.inspect
 
             valor ->
+              IO.inspect valor
               Map.put(acc, item.produto, item.quantidade + valor)
               |> Map.get(item.produto)
               |> IO.inspect
@@ -1134,9 +1134,7 @@ defmodule Tecnovix.App.ScreensProd do
 
         false -> 0
       end
-      |> IO.inspect
     end)
-    |> IO.inspect
   end
 
   def get_extrato_prod(cliente, produtos) do
