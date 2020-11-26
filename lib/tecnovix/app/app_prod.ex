@@ -1118,24 +1118,23 @@ defmodule Tecnovix.App.ScreensProd do
 
   def get_saldo(produtos, item, items_pedido) do
     Enum.reduce(produtos, 0, fn produto, acc ->
-      IO.inspect item.produto
-      IO.inspect produto["title"]
-      case item.produto == produto["title"] do
-        true ->
-          Enum.reduce(items_pedido, 0, fn items, acc ->
-            case item.produto ==  items.produto do
-              true -> case items.operation do
-                "06" -> acc = item.quantidade + acc
-                "07" -> acc = (item.quantidade * -1) + acc
-                _ -> 1
+      valor =
+        case item.produto == produto["title"] do
+          true ->
+            Enum.reduce(items_pedido, 0, fn items, acc ->
+              case item.produto ==  items.produto do
+                true -> case items.operation do
+                  "06" -> acc = item.quantidade + acc
+                  "07" -> acc = (item.quantidade * -1) + acc
+                  _ -> acc
+                end
+                false -> acc
               end
-              false -> 2
-            end
-          end)
-        false ->
-          IO.inspect "aqui"
-          0
-      end
+            end)
+          false -> acc
+        end
+
+        valor + acc
     end)
   end
 
