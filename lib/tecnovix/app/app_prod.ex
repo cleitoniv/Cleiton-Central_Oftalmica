@@ -1121,6 +1121,7 @@ defmodule Tecnovix.App.ScreensProd do
 
     Enum.reduce(items_pedido, hd(produtos), fn item, acc ->
       Map.put(acc, item.produto,  calculate(acc, item))
+      |> Map.get(item.produto)
     end)
     |> IO.inspect
   end
