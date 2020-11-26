@@ -1121,17 +1121,17 @@ defmodule Tecnovix.App.ScreensProd do
       case produto["title"] == item.produto do
         true ->
           case Map.get(acc, item.produto) do
-            nil ->
-              Map.put(acc, item.produto, item.quantidade)
-              |> Map.get(item.produto)
+            nil -> Map.put(acc, item.produto, item.quantidade)
 
-            valor ->
-              IO.inspect valor
-              Map.put(acc, item.produto, item.quantidade + valor)
-              |> Map.get(item.produto)
-              |> IO.inspect
+            valor -> Map.put(acc, item.produto, item.quantidade + valor)
           end
 
+        false -> acc
+      end
+    end)
+    |> Enum.reduce(0, fn {key, value}, _acc ->
+      case key == item.produto do
+        true -> value
         false -> 0
       end
     end)
