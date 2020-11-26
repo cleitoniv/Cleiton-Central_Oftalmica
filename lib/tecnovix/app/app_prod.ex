@@ -1116,8 +1116,8 @@ defmodule Tecnovix.App.ScreensProd do
     {:ok, extratos}
   end
 
-  def get_saldo(produtos, items_pedido) do
-    0
+  def get_saldo(items_pedido) do
+
   end
 
   def get_extrato_prod(cliente, produtos) do
@@ -1127,13 +1127,7 @@ defmodule Tecnovix.App.ScreensProd do
       Enum.map(items_pedido, fn item ->
         %{
           id: item.id,
-          saldo: Enum.reduce(items_pedido, 0, fn item, acc ->
-            case item.operation do
-              "06" -> item.quantidade + acc
-              "07" -> (item.quantidade * -1) + acc
-              _ -> acc
-            end
-          end),
+          saldo: 0,
           produto: item.produto,
           items:
             Enum.map(items_pedido, fn pedido ->
@@ -1151,6 +1145,13 @@ defmodule Tecnovix.App.ScreensProd do
         }
       end)
       |> Enum.uniq_by(fn uniq -> uniq.produto end)
+      |> Enum.map(fn produto ->
+        case produto.produto == Enum.reduce(items_pedido, "", fn item, _ -> item.produto end) do
+          true -> Map.put(produto, :saldo, Enum.reduce(items_pedido, 0, fn item, acc -> item.quantidade + acc end))
+          false -> 0
+        end
+      end)
+      |> IO.inspect
 
     extrato =
       Enum.map(extrato, fn map ->
