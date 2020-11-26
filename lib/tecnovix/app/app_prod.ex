@@ -1121,11 +1121,15 @@ defmodule Tecnovix.App.ScreensProd do
       case produto["title"] == item.produto do
         true ->
           case Map.get(acc, item.produto) do
-            nil -> Map.put(acc, item.produto, item.quantidade)
+            nil ->
+              Map.put(acc, item.produto, item.quantidade)
+              |> Map.get(item.produto)
+              |> IO.inspect
 
-            valor -> Map.put(acc, item.produto, item.quantidade + valor) |> IO.inspect
-
-            Map.get(acc, item.produto) |> IO.inspect
+            valor ->
+              Map.put(acc, item.produto, item.quantidade + valor)
+              |> Map.get(item.produto)
+              |> IO.inspect
           end
 
         false -> 0
