@@ -1116,26 +1116,13 @@ defmodule Tecnovix.App.ScreensProd do
     {:ok, extratos}
   end
 
-  def get_saldo(produtos, item, items_pedido) do
+  def get_saldo(produtos, item) do
     Enum.reduce(produtos, 0, fn produto, acc ->
-      valor =
-        case item.produto == produto["title"] do
-          true ->
-            Enum.reduce(items_pedido, 0, fn items, acc ->
-              case item.produto ==  items.produto do
-                true -> case items.operation do
-                  "06" -> acc = item.quantidade + acc
-                  "07" -> acc = (item.quantidade * -1) + acc
-                  _ -> acc
-                end
-                false -> acc
-              end
-            end)
-          false -> acc
-        end
-
-        valor + acc
-    end)
+      case produto["title"] == item.produto do
+        true -> produto["boxes"]
+        false -> 0
+      end
+    end
   end
 
   def get_extrato_prod(cliente, produtos) do
@@ -1145,7 +1132,7 @@ defmodule Tecnovix.App.ScreensProd do
       Enum.map(items_pedido, fn item ->
         %{
           id: item.id,
-          saldo: get_saldo(produtos, item, items_pedido),
+          saldo: get_saldo(produtos, item),
           produto: item.produto,
           items:
             Enum.map(items_pedido, fn pedido ->
