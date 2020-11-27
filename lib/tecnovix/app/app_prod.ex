@@ -1162,7 +1162,21 @@ defmodule Tecnovix.App.ScreensProd do
         )
       end)
 
+      extrato = get_saldo(extrato)
+
     {:ok, extrato}
+  end
+
+  defp get_saldo(extratos) do
+    Enum.map(extratos, fn extrato ->
+      saldo =
+        Enum.map(extrato.items, fn item ->
+          item.quantidade
+        end)
+        |> Enum.sum()
+
+      Map.put(extrato, :saldo, saldo)
+    end)
   end
 
   @impl true

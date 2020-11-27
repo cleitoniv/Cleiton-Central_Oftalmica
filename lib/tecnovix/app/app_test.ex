@@ -1114,22 +1114,6 @@ defmodule Tecnovix.App.ScreensTest do
     {:ok, extratos}
   end
 
-  def get_saldo(produtos, items_pedido) do
-    produtos = Enum.map(produtos, fn produto -> Map.new() |> Map.put(produto["title"], 0) end)
-
-    Enum.reduce(items_pedido, hd(produtos), fn item, acc ->
-      Map.put(acc, item.produto,  calculate(acc, item))
-    end)
-  end
-
-  def calculate(acc, item) do
-    case Map.get(acc, item.produto) do
-      nil -> 0
-      valor -> valor + item.quantidade
-    end
-  end
-
-
   def get_extrato_prod(cliente, produtos) do
     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
 
@@ -1155,13 +1139,6 @@ defmodule Tecnovix.App.ScreensTest do
         }
       end)
       |> Enum.uniq_by(fn uniq -> uniq.produto end)
-      |> Enum.map(fn produto ->
-        case produto.produto == Enum.reduce(items_pedido, "", fn item, _ -> item.produto end) do
-          true -> Map.put(produto, :saldo, Enum.reduce(items_pedido, 0, fn item, acc -> item.quantidade + acc end))
-          false -> produto
-        end
-      end)
-      |> IO.inspect
 
     extrato =
       Enum.map(extrato, fn map ->
@@ -1172,7 +1149,21 @@ defmodule Tecnovix.App.ScreensTest do
         )
       end)
 
+    extrato = get_saldo(extrato)
+
     {:ok, extrato}
+  end
+
+  defp get_saldo(extratos) do
+    Enum.map(extratos, fn extrato ->
+      saldo =
+        Enum.map(extrato.items, fn item ->
+          item.quantidade
+        end)
+        |> Enum.sum()
+
+      Map.put(extrato, :saldo, saldo)
+    end)
   end
 
   @impl true
