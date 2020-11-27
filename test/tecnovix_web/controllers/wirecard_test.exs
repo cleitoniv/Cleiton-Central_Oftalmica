@@ -26,6 +26,9 @@ defmodule Tecnovix.Test.Wirecard do
     cartao =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/get_pacote", %{"grupo" => "010C"})
+      |> IO.inspect
+      |> recycle()
       |> post("/api/cliente/card", %{"param" => cartao})
       |> json_response(200)
       |> Map.get("data")
