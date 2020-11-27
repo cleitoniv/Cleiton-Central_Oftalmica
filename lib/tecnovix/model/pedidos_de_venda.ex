@@ -93,7 +93,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def order(items, cliente, taxa_entrega, installment) do
-    IO.inspect items
     taxa = taxa_wirecard(items, installment, "1")
 
     order =
@@ -628,6 +627,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def items_order(items) do
+    IO.inspect items
     order_items =
       Enum.flat_map(
         items,
