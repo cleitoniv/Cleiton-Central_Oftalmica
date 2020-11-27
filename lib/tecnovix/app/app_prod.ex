@@ -816,13 +816,11 @@ defmodule Tecnovix.App.ScreensProd do
         end)
 
       Map.put(paciente, :items, group_by)
-    end)
-    |> IO.inspect()
+    end
     |> Enum.filter(fn pedido ->
       concat_paciente_dtnaspac(pedido.paciente, pedido.data_nascimento) ==
         concat_paciente_dtnaspac(nome, data_nascimento)
     end)
-    |> IO.inspect()
   end
 
   defp parse_olho(item) do
@@ -1147,7 +1145,6 @@ defmodule Tecnovix.App.ScreensProd do
           false -> produto
         end
       end)
-      |> IO.inspect
 
     extrato =
       Enum.map(extrato, fn map ->
