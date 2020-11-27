@@ -90,10 +90,10 @@ defmodule Tecnovix.PedidosDeVendaModel do
         |> calculo_taxa(installment)
         |> Kernel.trunc()
     end
-    |> IO.inspect
   end
 
   def order(items, cliente, taxa_entrega, installment) do
+    IO.inspect items
     taxa = taxa_wirecard(items, installment, "1")
 
     order =
