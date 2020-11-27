@@ -1116,10 +1116,6 @@ defmodule Tecnovix.App.ScreensProd do
     {:ok, extratos}
   end
 
-  def get_saldo(items_pedido) do
-
-  end
-
   def get_extrato_prod(cliente, produtos) do
     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
 
