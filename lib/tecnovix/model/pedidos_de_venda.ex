@@ -627,20 +627,26 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def items_order(items) do
-    IO.inspect items
     order_items =
-      Enum.flat_map(
-        items,
-        fn item ->
-          Enum.map(item["items"], fn order ->
-            %{
-              "product" => order["produto"],
-              "category" => "OTHER_CATEGORIES",
-              "quantity" => order["quantidade"],
-              "detail" => "Mais info...",
-              "price" => order["prc_unitario"]
-            }
-          end)
+      Enum.reduce(
+        items, [],
+        fn item, acc ->
+          list =
+            case item["operation"] do
+              "01" ->
+                Enum.map(item["items"], fn order ->
+                  %{
+                    "product" => order["produto"],
+                    "category" => "OTHER_CATEGORIES",
+                    "quantity" => order["quantidade"],
+                    "detail" => "Mais info...",
+                    "price" => order["prc_unitario"]
+                  }
+                end)
+              _ -> []
+            end
+
+            list ++ acc
         end
       )
 
