@@ -77,6 +77,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def taxa_wirecard(items, installment, passo) do
+    IO.inspect installment
     case passo do
       "1" ->
         somando_items(items)
@@ -824,7 +825,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         result =
           ((calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela)
           |> Float.ceil(2)
-          |> IO.inspect
+
         case parcela do
           1 ->
             %{"parcela" => "#{parcela}x de #{result}"}
