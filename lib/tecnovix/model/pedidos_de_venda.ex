@@ -99,14 +99,18 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "1" ->
         somando_items(items)
         |> calculo_taxa(taxa)
+        |> IO.inspect
         |> Kernel.trunc()
+        |> IO.inspect
 
       "2" ->
         {:ok, items} = items_order(items)
 
         somando_items(items)
         |> calculo_taxa(taxa)
+        |> IO.inspect
         |> Kernel.trunc()
+        |> IO.inspect
     end
   end
 
