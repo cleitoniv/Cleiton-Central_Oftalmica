@@ -813,8 +813,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
         0
 
       valor ->
-        taxa_cartao = (valor * 0.0549) + (0.69 * 100) |> IO.inspect
-        taxa_parcelamento = valor * (taxa / 100) |> IO.inspect
+        taxa_cartao = (valor * 0.0549) + (0.69 * 100)
+        taxa_parcelamento = valor * (taxa / 100)
         total_taxas = taxa_cartao + taxa_parcelamento
     end
   end
@@ -839,10 +839,10 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
-        result =
-          ((calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela)
+        result = (calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela
           |> Float.ceil(2)
-
+          |> IO.inspect
+          
         case parcela do
           1 ->
             %{"parcela" => "#{parcela}x de #{result}"}
