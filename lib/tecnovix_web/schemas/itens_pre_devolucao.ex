@@ -67,5 +67,6 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
       :dt_nas_pac,
       :numero
     ])
+    |> unique_constraint([:num_de_serie], message: "Esse número de série ja está em um processo de devolução.")
   end
 end
