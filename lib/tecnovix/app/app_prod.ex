@@ -601,7 +601,7 @@ defmodule Tecnovix.App.ScreensProd do
                         case item.operation do
                           "13" -> 0 + acc
                           "07" -> 0 + acc
-                          _ -> item.virtotal + acc + map.taxa_wirecard
+                          _ -> (item.virtotal + acc + map.taxa_wirecard) |> Float.ceil(2)
                         end
                       end),
                     data_inclusao: map.inserted_at,
