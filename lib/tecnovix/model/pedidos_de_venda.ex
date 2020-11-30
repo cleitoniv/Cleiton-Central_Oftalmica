@@ -77,18 +77,35 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def taxa_wirecard(items, installment, passo) do
-    IO.inspect installment
+    taxa =
+      [
+        {1, 0},
+        {2, 4.5},
+        {3, 5.0},
+        {4, 5.5},
+        {5, 6.5},
+        {6, 7.5},
+        {7, 8.5},
+        {8, 9.5},
+        {9, 10.5},
+        {10, 11.5},
+        {11, 12.0},
+        {12, 12.5}
+      ]
+      |> Enum.filter(fn {parcela, taxa} -> installment == parcela end)
+      |> Enum.reduce(0, fn {parcela, taxa}, _acc -> taxa end)
+
     case passo do
       "1" ->
         somando_items(items)
-        |> calculo_taxa(installment)
+        |> calculo_taxa(taxa)
         |> Kernel.trunc()
 
       "2" ->
         {:ok, items} = items_order(items)
 
         somando_items(items)
-        |> calculo_taxa(installment)
+        |> calculo_taxa(taxa)
         |> Kernel.trunc()
     end
   end
