@@ -818,7 +818,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
         {12, 12.5}
       ]
       |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelado end)
-
+      |> IO.inspect
+      
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
         result =
