@@ -575,9 +575,9 @@ defmodule Tecnovix.App.ScreensProd do
                         case item.operation do
                           "13" -> 0 + acc
                           "07" -> 0 + acc
-                          _ -> item.virtotal + acc + map.taxa_wirecard
+                          _ -> item.virtotal + acc
                         end
-                      end),
+                      end) + map.taxa_wirecard,
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id,
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
@@ -601,9 +601,9 @@ defmodule Tecnovix.App.ScreensProd do
                         case item.operation do
                           "13" -> 0 + acc
                           "07" -> 0 + acc
-                          _ -> (item.virtotal + acc + map.taxa_wirecard)
+                          _ -> item.virtotal + acc
                         end
-                      end),
+                      end) + map.taxa_wirecard,
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id
                   }
