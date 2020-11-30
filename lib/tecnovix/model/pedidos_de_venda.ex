@@ -100,7 +100,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         somando_items(items)
         |> calculo_taxa(taxa)
         |> IO.inspect
-        |> Kernel.trunc()
+        |> Kernel.round()
         |> IO.inspect
 
       "2" ->
@@ -109,7 +109,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         somando_items(items)
         |> calculo_taxa(taxa)
         |> IO.inspect
-        |> Kernel.trunc()
+        |> Kernel.round()
         |> IO.inspect
     end
   end
