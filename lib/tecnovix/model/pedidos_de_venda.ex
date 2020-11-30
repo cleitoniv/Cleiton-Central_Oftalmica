@@ -118,7 +118,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.order_params(items)
       |> PedidosDeVendaModel.wirecard_order(taxa_entrega, taxa)
       |> Wirecard.create_order()
-      |> IO.inspect
+
     case order do
       {:ok, %{status_code: 201}} -> order
       _ -> {:error, :order_not_created}
@@ -661,6 +661,23 @@ defmodule Tecnovix.PedidosDeVendaModel do
                     "price" => order["prc_unitario"]
                   }
                 end)
+
+              "06" ->
+                case item["type"] do
+                  "C" ->
+                    Enum.map(item["items"], fn order ->
+                      %{
+                        "product" => order["produto"],
+                        "category" => "OTHER_CATEGORIES",
+                        "quantity" => order["quantidade"],
+                        "detail" => "Mais info...",
+                        "price" => order["prc_unitario"]
+                      }
+                    end)
+
+                   _ -> []
+                end
+                
               _ -> []
             end
 
