@@ -26,7 +26,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     header = Protheus.authenticate(@header, token)
 
     url =
-      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=005087&LOJA=01&NUMSERIE=#{
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=#{cliente}&LOJA=#{loja}&NUMSERIE=#{
         serial
       }"
 
