@@ -175,7 +175,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> put_resp_content_type("application/json")
       |> render("pedido.json", %{item: pedido})
     else
-      _ -> {:error, :order_not_created}
+      v -> IO.inspect v 
+        {:error, :order_not_created}
     end
   end
 
