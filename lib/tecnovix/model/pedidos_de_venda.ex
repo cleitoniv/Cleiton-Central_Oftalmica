@@ -99,18 +99,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "1" ->
         somando_items(items)
         |> calculo_taxa(taxa)
-        |> IO.inspect
         |> Kernel.round()
-        |> IO.inspect
 
       "2" ->
         {:ok, items} = items_order(items)
 
         somando_items(items)
         |> calculo_taxa(taxa)
-        |> IO.inspect
         |> Kernel.round()
-        |> IO.inspect
     end
   end
 
@@ -817,8 +813,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
         0
 
       valor ->
-        taxa_cartao = (valor * 0.0549) + (0.69 * 100)
-        taxa_parcelamento = valor * (taxa / 100)
+        taxa_cartao = (valor * 0.0549) + (0.69 * 100) |> IO.inspect
+        taxa_parcelamento = valor * (taxa / 100) |> IO.inspect
         total_taxas = taxa_cartao + taxa_parcelamento
     end
   end
