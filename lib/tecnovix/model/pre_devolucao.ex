@@ -68,9 +68,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   def pre_devolucao(cliente, params, tipo) do
     %{
       "client_id" => cliente.id,
-      "filial" => "N",
       "tipo_pre_dev" => tipo,
-      "cod_pre_dev" => String.slice(Ecto.UUID.autogenerate(), 0..5),
       "loja" => cliente.loja,
       "cliente" => cliente.codigo,
       "items" => params
@@ -80,9 +78,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   def pre_devolucao(cliente, params) do
     %{
       "client_id" => cliente.id,
-      "filial" => "N",
       "tipo_pre_dev" => "C",
-      "cod_pre_dev" => String.slice(Ecto.UUID.autogenerate(), 0..5),
       "loja" => cliente.loja,
       "cliente" => cliente.codigo
     }
@@ -92,7 +88,6 @@ defmodule Tecnovix.PreDevolucaoModel do
   def itens_pre_devolucao(params) do
     params
     |> Map.put("filial", params["filial"])
-    |> Map.put("cod_pre_dev", params["cod_pre_dev"])
     |> new_product()
     |> old_product()
   end
@@ -121,8 +116,6 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   def insert_dev(cliente, products) do
     dev = pre_devolucao(cliente, products)
-
-    IO.inspect(products)
 
     items =
       Enum.map(products, fn product ->

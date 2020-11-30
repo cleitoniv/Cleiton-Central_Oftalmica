@@ -17,8 +17,7 @@ defmodule Tecnovix.Test.Wirecard do
     cliente =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente", %{"param" => user_param})
-      |> json_response(201)
+      |> post("/api/cliente", %{"param" => user_param})2      |> json_response(201)
       |> Map.get("data")
 
     cartao = Generator.cartao_cliente(cliente["id"])
