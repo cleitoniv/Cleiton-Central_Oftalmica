@@ -861,10 +861,10 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
         case parcela do
           1 ->
-            %{"parcela" => "#{parcela}x de R$ #{result}"}
+            %{"parcela" => "#{parcela}x de #{result}"}
 
           _ ->
-            %{"parcela" => "#{parcela}x de R$ #{result}"}
+            %{"parcela" => "#{parcela}x de #{result}"}
         end
       end)
       |> Enum.map(fn map ->
