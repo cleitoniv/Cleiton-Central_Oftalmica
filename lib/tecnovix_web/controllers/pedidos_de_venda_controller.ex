@@ -180,8 +180,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   def create(conn, params) do
-    IO.inspect "oi"
-    IO.inspect params
     {:error, :order_not_created}
   end
 
