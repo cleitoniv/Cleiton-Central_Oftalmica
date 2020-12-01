@@ -3,6 +3,7 @@ defmodule TecnovixWeb.ItensPreDevolucaoView do
 
   def build(%{item: item}) do
     %{
+      id: item.id,
       pre_devolucao_id: item.pre_devolucao_id,
       descricao_generica_do_produto_id: item.descricao_generica_do_produto_id,
       filial: item.filial,

@@ -32,8 +32,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       duracao: item.duracao,
       grupo: item.grupo,
       num_pedido: item.num_pedido,
-      inserted_at: item.inserted_at,
-      update_at: item.updated_at
+      inserted_at: item.inserted_at
     }
   end
 
