@@ -15,7 +15,6 @@ defmodule TecnovixWeb.ItensPreDevolucaoView do
       prod_subs: item.prod_subs,
       descricao: item.descricao,
       doc_devol: item.doc_devol,
-      serie: item.serie,
       doc_saida: item.doc_saida,
       serie_saida: item.serie_saida,
       item_doc: item.item_doc,

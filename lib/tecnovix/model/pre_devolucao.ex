@@ -155,12 +155,6 @@ defmodule Tecnovix.PreDevolucaoModel do
       |> where([p], p.status == ^filtro)
       |> Repo.all()
 
-    devs =
-      case devs do
-        nil -> []
-        devs -> devs
-      end
-
     {:ok, devs}
   end
 end

@@ -16,7 +16,6 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
     field :prod_subs, :string
     field :descricao, :string
     field :doc_devol, :string
-    field :serie, :string
     field :doc_saida, :string
     field :serie_saida, :string
     field :item_doc, :string
@@ -52,7 +51,6 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
       :prod_subs,
       :descricao,
       :doc_devol,
-      :serie,
       :doc_saida,
       :serie_saida,
       :item_doc,
