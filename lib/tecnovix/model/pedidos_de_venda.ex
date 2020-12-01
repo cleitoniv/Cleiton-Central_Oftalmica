@@ -92,8 +92,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
         {11, 12.0},
         {12, 12.5}
       ]
-      |> Enum.filter(fn {parcela, taxa} -> installment == parcela end)
-      |> Enum.reduce(0, fn {parcela, taxa}, _acc -> taxa end)
+      |> Enum.filter(fn {parcela, _taxa} -> installment == parcela end)
+      |> Enum.reduce(0, fn {_parcela, taxa}, _acc -> taxa end)
 
     case passo do
       "1" ->
@@ -265,7 +265,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "taxa_wirecard" =>
         case order do
           nil -> 0
-          order -> taxa_wirecard(items, installment, "2")
+          _ -> taxa_wirecard(items, installment, "2")
         end,
       "taxa_entrega" =>
         case taxa_entrega do
@@ -737,7 +737,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
         end)
       end)
 
-    pedido_com_paciente =
       Enum.filter(pedidos, fn item ->
         paciente =
           Enum.map(item.items, fn items ->
@@ -773,7 +772,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     Date.add(NaiveDateTime.to_date(item.inserted_at), duracao)
   end
 
-  def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
+  def create_credito_financeiro(items, cliente, %{"type" => _type, "operation" => _operation}) do
     case pedido_params(items, cliente, "", 0) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
@@ -785,7 +784,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-  def get_pedido_id(pedido_id, cliente_id) do
+  def get_pedido_id(pedido_id, _cliente_id) do
     case Repo.get(PedidosDeVendaSchema, pedido_id) do
       nil ->
         {:error, :not_found}
@@ -832,7 +831,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       valor ->
         taxa_cartao = (valor * 0.0549) + (0.69 * 100)
         taxa_parcelamento = valor * (taxa / 100)
-        total_taxas = taxa_cartao + taxa_parcelamento
+        taxa_cartao + taxa_parcelamento
     end
   end
 
@@ -852,7 +851,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         {11, 12.0},
         {12, 12.5}
       ]
-      |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelado end)
+      |> Enum.filter(fn {parcela, _taxa} -> parcela <= parcelado end)
 
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
@@ -868,7 +867,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         end
       end)
       |> Enum.map(fn map ->
-        [antes, depois] = String.split(map["parcela"], ".")
+        [_antes, depois] = String.split(map["parcela"], ".")
 
         case String.length(depois) < 2 do
           true -> %{"parcela" => map["parcela"] <> "0"}

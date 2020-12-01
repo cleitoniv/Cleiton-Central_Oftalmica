@@ -1,6 +1,5 @@
 defmodule TecnovixWeb.ClientesView do
   use Tecnovix.Resource.View, model: Tecnovix.ClientesModel
-  alias TecnovixWeb.ChangesetView
   import TecnovixWeb.ErrorParserView
 
   def build(%{item: item}) do
