@@ -408,20 +408,26 @@ defmodule TecnovixWeb.ClientesController do
   def devolution_continue(conn, %{"products" => products, "tipo" => "T" = tipo}) do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
-    with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
+    with  {:ok, true} <- PreDevolucaoModel.serial_authorized?(products.num_serie),
+          {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{"success" => true, "data" => devolution}))
+    else
+      {:ok, false} -> {:error, :serie_existente}
     end
   end
 
   def devolution_continue(conn, %{"products" => products, "tipo" => "C" = tipo}) do
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, _} <- PreDevolucaoModel.insert_dev(cliente, products) do
+    with  {:ok, true} <- PreDevolucaoModel.serial_authorized?(products.num_serie),
+          {:ok, _} <- PreDevolucaoModel.insert_dev(cliente, products) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{"success" => true, "data" => "Inserido."}))
+    else
+      {:ok, false} -> {:error, :serie_existente}
     end
   end
 

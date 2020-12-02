@@ -1,6 +1,6 @@
 defmodule Tecnovix.PreDevolucaoModel do
   use Tecnovix.DAO, schema: Tecnovix.PreDevolucaoSchema
-  alias Tecnovix.{PreDevolucaoSchema, NotificacoesClienteModel, ClientesSchema, Repo}
+  alias Tecnovix.{PreDevolucaoSchema, NotificacoesClienteModel, ClientesSchema, Repo, ItensPreDevolucaoSchema}
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
   import Ecto.Query
 
@@ -156,5 +156,12 @@ defmodule Tecnovix.PreDevolucaoModel do
       |> Repo.all()
 
     {:ok, devs}
+  end
+
+  def serial_authorized(num_serie) do
+    case Repo.get_by(ItensPreDevolucaoSchema, num_de_serie: num_serie) do
+      nil -> {:ok, true}
+      serial -> {:ok, false}
+    end
   end
 end

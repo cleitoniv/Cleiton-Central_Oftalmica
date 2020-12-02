@@ -80,6 +80,13 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :serie_existente}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Número de série já foi inserida em um processo de devolução."}))
+    |> halt()
+  end
+
   def call(conn, {:error, :not_authorized}) do
     conn
     |> put_resp_content_type("application/json")
