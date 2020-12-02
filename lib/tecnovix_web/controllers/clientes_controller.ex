@@ -406,7 +406,7 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) when is_nil(products) or products == "" or is_empty(products) do
+  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) when is_nil(products) or products == [] do
     {:error, :invalid_parameter}
   end
 
