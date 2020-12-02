@@ -411,6 +411,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def devolution_continue(conn, %{"products" => products, "tipo" => "T" = tipo}) do
+    IO.inspect products
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
