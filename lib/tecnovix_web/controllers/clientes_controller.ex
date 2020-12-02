@@ -406,6 +406,10 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
+  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) when is_nil(products) or products == "" do
+    {:error, :invalid_parameter}
+  end
+
   def devolution_continue(conn, %{"products" => products, "tipo" => "T" = tipo}) do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
