@@ -161,7 +161,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   def serial_authorized(num_serie) do
     case Repo.get_by(ItensPreDevolucaoSchema, num_de_serie: num_serie) do
       nil -> {:ok, true}
-      serial -> {:ok, false}
+      serial -> {:error, :repeated}
     end
   end
 end
