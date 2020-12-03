@@ -406,12 +406,11 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) when is_nil(products) or products == [] do
+  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) when products == [] do
     {:error, :invalid_parameter}
   end
 
   def devolution_continue(conn, %{"products" => products, "tipo" => "T" = tipo}) do
-    IO.inspect products
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do

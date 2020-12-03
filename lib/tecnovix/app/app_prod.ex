@@ -1105,7 +1105,7 @@ defmodule Tecnovix.App.ScreensProd do
             valor: credito.valor |> Kernel.trunc()
           }
         end)
-        |> Enum.filter(fn filter -> filter.date_filter < Date.end_of_month(data_hoje) end)
+        |> Enum.filter(fn filter -> filter.date_filter <= Date.end_of_month(data_hoje) and filter.date_filter >= Date.beginning_of_month(data_hoje) end)
     }
 
     extratos =
