@@ -243,6 +243,7 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/extrato_finan")
       |> json_response(200)
+      |> IO.inspect
 
     extrato_prod =
       build_conn()

@@ -1105,8 +1105,8 @@ defmodule Tecnovix.App.ScreensProd do
               pedido: credito.id,
               valor: credito.valor |> Kernel.trunc()
             }
-
-          case creditos.date_filter <= Date.end_of_month(data_hoje) and creditos.date_filter >= Date.beginning_of_month(data_hoje) do
+            
+          case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do
             true -> [creditos] ++ acc
             false -> acc
           end

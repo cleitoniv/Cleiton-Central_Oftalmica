@@ -1096,16 +1096,20 @@ defmodule Tecnovix.App.ScreensTest do
 
     extratos = %{
       data:
-        Enum.map(creditos, fn credito ->
-          %{
-            id: credito.id,
-            date_filter: NaiveDateTime.to_date(credito.inserted_at),
-            date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
-            pedido: credito.id,
-            valor: credito.valor |> Kernel.trunc()
-          }
+        Enum.reduce(creditos, [], fn credito, acc ->
+          creditos =
+            %{
+              id: credito.id,
+              date_filter: ~D[2020-12-01],
+              date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
+              pedido: credito.id,
+              valor: credito.valor |> Kernel.trunc()
+            }
+          case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do
+            true -> [creditos] ++ acc
+            false -> acc
+          end
         end)
-        |> Enum.filter(fn filter -> filter.date_filter < Date.end_of_month(data_hoje) end)
     }
 
     extratos =
