@@ -1094,23 +1094,24 @@ defmodule Tecnovix.App.ScreensProd do
 
     data_hoje = Date.utc_today()
 
-    IO.inspect data_hoje > Date.beginning_of_month(data_hoje)
-
     extratos = %{
       data:
-        Enum.map(creditos, fn credito ->
-          %{
-            id: credito.id,
-            date_filter: NaiveDateTime.to_date(credito.inserted_at),
-            date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
-            pedido: credito.id,
-            valor: credito.valor |> Kernel.trunc()
-          }
+        Enum.reduce(creditos, [], fn credito, acc ->
+          creditos =
+            %{
+              id: credito.id,
+              date_filter: NaiveDateTime.to_date(credito.inserted_at),
+              date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
+              pedido: credito.id,
+              valor: credito.valor |> Kernel.trunc()
+            }
+
+          case creditos.date_filter <= Date.end_of_month(data_hoje) and creditos.date_filter >= Date.beginning_of_month(data_hoje) do
+            true -> [creditos] ++ acc
+            false -> acc
+          end
         end)
-        |> IO.inspect
-        |> Enum.filter(fn filter -> filter.date_filter <= Date.end_of_month(data_hoje) and filter.date_filter >= Date.beginning_of_month(data_hoje) end)
     }
-    |> IO.inspect
 
     extratos =
       Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))
