@@ -28,6 +28,19 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :phone_existing}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "success" => false,
+        "data" => "Esse telefone já existe."
+      })
+    )
+    |> halt()
+  end
+
   def call(conn, {:error, :invalid_code_sms}) do
     conn
     |> put_resp_content_type("application/json")

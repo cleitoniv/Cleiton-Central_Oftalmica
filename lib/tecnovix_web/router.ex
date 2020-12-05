@@ -95,6 +95,7 @@ defmodule TecnovixWeb.Router do
       get "/protheus/products", TecnovixWeb.ProtheusController, :get_product
       get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
       get "/get_endereco_by_cep", TecnovixWeb.ClientesController, :get_endereco_by_cep
+      post "/verify_phone", TecnovixWeb.ClientesController, :verify_phone
       pipe_through :cliente
       get "/current_user", TecnovixWeb.ClientesController, :current_user
       post "/update_password", TecnovixWeb.ClientesController, :update_password
