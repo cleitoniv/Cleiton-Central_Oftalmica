@@ -190,11 +190,11 @@ defmodule TecnovixWeb.ClientesController do
 
   def current_user(conn, _params) do
     {:ok, user} = conn.private.auth
-    {:ok, auth_user} = conn.private.auth
+    {:ok, auth_user} = conn.private.auth_user
 
     case auth_user do
       %UsuariosClienteSchema{} ->
-        user = Tecnovix.Repo.preload(user, :cliente)
+        user = Tecnovix.Repo.preload(auth_user, :cliente)
 
         stub = Screens.stub()
 

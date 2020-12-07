@@ -154,6 +154,8 @@ defmodule TecnovixWeb.UsersTest do
 
     build_conn()
     |> Generator.put_auth(usuarioAuth["idToken"])
+    |> get("/api/cliente/current_user")
+    |> recycle()
     |> delete("/api/usuarios_cliente/#{usuario_cliente["id"]}", %{
       "idToken" => usuarioAuth["idToken"]
     })
