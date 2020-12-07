@@ -308,6 +308,7 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def confirmation_sms(params) do
+    IO.inspect params
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
     kvset
