@@ -98,13 +98,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
     case passo do
       "1" ->
         somando_items(items)
-<<<<<<< HEAD
-        |> calculo_taxa(installment)
-        |> Kernel.trunc()
-=======
         |> calculo_taxa(taxa)
         |> Kernel.round()
->>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
 
       "2" ->
         {:ok, items} = items_order(items)
@@ -742,21 +737,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
         end)
       end)
 
-<<<<<<< HEAD
-    pedido_com_paciente =
-=======
->>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
       Enum.filter(pedidos, fn item ->
         paciente =
           Enum.map(item.items, fn items ->
             items.paciente
           end)
 
-<<<<<<< HEAD
-        paciente != nil
-=======
         paciente != [nil]
->>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
       end)
       |> Enum.filter(fn pedido ->
         duracao =
@@ -774,11 +761,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
           |> Enum.count()
 
-<<<<<<< HEAD
-        count_range >= 30
-=======
         count_range <= 30
->>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
       end)
       |> Enum.map(fn map ->
         Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
@@ -801,52 +784,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
-<<<<<<< HEAD
-  def get_pedido_id(pedido_id, cliente_id, item_pedido) do
-    item_pedido = String.to_integer(item_pedido)
-    IO.inspect("oi")
-
-    case item_pedido do
-=======
   def get_pedido_id(pedido_id, _cliente_id) do
     case Repo.get(PedidosDeVendaSchema, pedido_id) do
->>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
       nil ->
         {:error, :not_found}
 
-<<<<<<< HEAD
-          pedido ->
-            pedido = Repo.preload(pedido, :items)
-            {:ok, pedido}
-        end
-
-      item_pedido ->
-        case Repo.get(PedidosDeVendaSchema, pedido_id) do
-          nil ->
-            {:error, :not_found}
-
-          pedido ->
-            pedidos = Repo.preload(pedido, :items)
-
-            pedido =
-              Enum.flat_map([pedidos], fn pedido ->
-                Enum.map(pedido.items, fn item ->
-                  case item.id == item_pedido do
-                    true -> Map.put(pedido, :items, [item])
-                    false -> %{}
-                  end
-                end)
-              end)
-              |> Enum.filter(fn filter -> filter != %{} end)
-              |> IO.inspect()
-
-            {:ok, hd(pedido)}
-        end
-=======
       pedido ->
         pedido = Repo.preload(pedido, :items)
         {:ok, pedido}
->>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
     end
   end
 
