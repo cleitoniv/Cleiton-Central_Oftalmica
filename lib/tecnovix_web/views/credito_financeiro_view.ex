@@ -14,4 +14,8 @@ defmodule TecnovixWeb.CreditoFinanceiroView do
       wirecard_reembolso_id: item.wirecard_reembolso_id
     }
   end
+
+  def render("creditos.json", %{item: items}) when is_list(items) do
+    render_many(items, __MODULE__, "show.json", as: :item)
+  end
 end

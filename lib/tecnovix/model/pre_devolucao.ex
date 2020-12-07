@@ -1,7 +1,8 @@
 defmodule Tecnovix.PreDevolucaoModel do
   use Tecnovix.DAO, schema: Tecnovix.PreDevolucaoSchema
-  alias Tecnovix.{PreDevolucaoSchema, NotificacoesClienteModel, ClientesSchema, Repo}
+  alias Tecnovix.{PreDevolucaoSchema, NotificacoesClienteModel, ClientesSchema, Repo, ItensPreDevolucaoSchema}
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
+  import Ecto.Query
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
@@ -67,9 +68,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   def pre_devolucao(cliente, params, tipo) do
     %{
       "client_id" => cliente.id,
-      "filial" => "N",
       "tipo_pre_dev" => tipo,
-      "cod_pre_dev" => String.slice(Ecto.UUID.autogenerate(), 0..5),
       "loja" => cliente.loja,
       "cliente" => cliente.codigo,
       "items" => params
@@ -78,10 +77,8 @@ defmodule Tecnovix.PreDevolucaoModel do
 
   def pre_devolucao(cliente, params) do
     %{
-      "cliente_id" => cliente.id,
-      "filial" => "N",
-      "tipo_pre_dev" => "N",
-      "cod_pre_dev" => String.slice(Ecto.UUID.autogenerate(), 0..5),
+      "client_id" => cliente.id,
+      "tipo_pre_dev" => "C",
       "loja" => cliente.loja,
       "cliente" => cliente.codigo
     }
@@ -91,7 +88,6 @@ defmodule Tecnovix.PreDevolucaoModel do
   def itens_pre_devolucao(params) do
     params
     |> Map.put("filial", params["filial"])
-    |> Map.put("cod_pre_dev", params["cod_pre_dev"])
     |> new_product()
     |> old_product()
   end
@@ -106,9 +102,9 @@ defmodule Tecnovix.PreDevolucaoModel do
   # Incluindo no mapa de itens, campos e valores sobre o produto velho
   def old_product(params) do
     params
-    |> Map.put("num_serie", params["num_serie"])
-    |> Map.put("quant", params["quant"])
-    |> Map.put("produto", params["produto"])
+    |> Map.put("num_de_serie", params["num_serie"])
+    |> Map.put("quant", 1)
+    |> Map.put("produto", params["title"])
   end
 
   def get_contrato(cliente) do
@@ -116,6 +112,23 @@ defmodule Tecnovix.PreDevolucaoModel do
       nil -> {:error, :not_found}
       contrato -> {:ok, contrato}
     end
+  end
+
+  def insert_dev(cliente, products) do
+    dev = pre_devolucao(cliente, products)
+
+    items =
+      Enum.map(products, fn product ->
+        old =
+          old_product(product)
+          |> Map.put("tipo", "C")
+      end)
+
+    product_ready = Map.put(dev, "items", items)
+
+    %PreDevolucaoSchema{}
+    |> PreDevolucaoSchema.changeset(product_ready)
+    |> Repo.insert()
   end
 
   def insert_pre_devolucao(cliente_id, %{
@@ -132,6 +145,23 @@ defmodule Tecnovix.PreDevolucaoModel do
 
       erro ->
         erro
+    end
+  end
+
+  def get_devolucoes(filtro) do
+    devs =
+      PreDevolucaoSchema
+      |> preload(:items)
+      |> where([p], p.status == ^filtro)
+      |> Repo.all()
+
+    {:ok, devs}
+  end
+
+  def serial_authorized?(num_serie) do
+    case Repo.get_by(ItensPreDevolucaoSchema, num_de_serie: num_serie) do
+      nil -> {:ok, true}
+      serial -> {:error, :repeated}
     end
   end
 end

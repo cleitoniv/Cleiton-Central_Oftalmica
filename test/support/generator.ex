@@ -51,7 +51,7 @@ defmodule TecnovixWeb.Support.Generator do
       "sit_app" => "A",
       "nome" => "Victor",
       "ddd" => "27",
-      "telefone" => "33225111",
+      "telefone" => "27996211804",
       "data_nascimento" => "07/07/1998",
       "ramo" => "1",
       "endereco" => "Rua Benedito Barcelos",

@@ -9,14 +9,17 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :operation, :string
     field :produto, :string
     field :quantidade, :integer
-    field :prc_unitario, :integer
+    field :prc_unitario, :integer, default: 0
     field :tipo_venda, :string
     field :olho, :string
+    field :status, :integer, default: 0
     field :paciente, :string
     field :num_pac, :string
-    field :duracao, :string, default: "0 dias"
+    field :duracao, :string
     field :dt_nas_pac, :date
     field :virtotal, :integer
+    field :valor_credito_finan, :integer, default: 0
+    field :valor_credito_prod, :integer, default: 0
     field :esferico, :decimal
     field :cilindrico, :decimal
     field :eixo, :integer
@@ -32,12 +35,16 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :tests, :string
     field :grupo, :string
     belongs_to :pedido_de_venda, Tecnovix.PedidosDeVendaSchema
+
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :status,
+      :valor_credito_finan,
+      :valor_credito_prod,
       :pedido_de_venda_id,
       :descricao_generica_do_produto_id,
       :filial,
@@ -69,15 +76,16 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :url_image
     ])
     |> validate_required([
-      :pedido_de_venda_id,
-      :produto,
-      :quantidade
+      :pedido_de_venda_id
     ])
   end
 
   def changeset_sync(struct, params \\ %{}) do
     struct
     |> cast(params, [
+      :status,
+      :valor_credito_finan,
+      :valor_credito_prod,
       :pedido_de_venda_id,
       :descricao_generica_do_produto_id,
       :filial,
@@ -105,10 +113,6 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :serie_nf,
       :num_pedido,
       :url_image
-    ])
-    |> validate_required([
-      :produto,
-      :quantidade
     ])
   end
 end

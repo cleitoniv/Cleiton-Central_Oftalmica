@@ -8,6 +8,34 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   alias Tecnovix.CreditoFinanceiroSchema, as: Credito
   import Ecto.Query
 
+  def insert_or_update(%{"data" => data} = params) when is_list(data) do
+    {:ok,
+     Enum.map(data, fn param ->
+       with nil <-
+              Repo.get_by(Credito, cliente_id: param["cliente_id"]) do
+         {:ok, create} = create(param)
+         create
+       else
+         changeset ->
+           {:ok, update} = __MODULE__.update(changeset, param)
+           update
+       end
+     end)}
+  end
+
+  def insert_or_update(%{"cliente_id" => cliente_id, "status" => status} = params) do
+    with nil <- Repo.get_by(Credito, cliente_id: cliente_id) do
+      __MODULE__.create(params)
+    else
+      changeset ->
+        __MODULE__.update(changeset, params)
+    end
+  end
+
+  def insert_or_update(_params) do
+    {:error, :invalid_parameter}
+  end
+
   def insert(params, order, payment, cliente_id) do
     case credito_params(params, order, payment, cliente_id) do
       {:ok, credito_params} -> create(credito_params)
@@ -223,5 +251,14 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       Credito
       |> where([c], c.cliente_id == ^cliente_id)
       |> Repo.all()
+  end
+
+  def get_credito_by_status(filtro) do
+    creditos =
+      Credito
+      |> where([c], c.status == ^filtro)
+      |> Repo.all()
+
+    {:ok, creditos}
   end
 end

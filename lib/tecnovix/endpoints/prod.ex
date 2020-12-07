@@ -26,7 +26,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     header = Protheus.authenticate(@header, token)
 
     url =
-      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=005087&LOJA=01&NUMSERIE=#{
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=#{cliente}&LOJA=#{loja}&NUMSERIE=#{
         serial
       }"
 
@@ -38,7 +38,9 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     header = Protheus.authenticate(@header, token)
 
     url =
-      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/GRIDREST/?CLIENTE=#{cliente}&LOJA=#{loja}&COUNT=#{count}"
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/GRIDREST/?CLIENTE=#{cliente}&LOJA=#{
+        loja
+      }&COUNT=#{count}"
 
     {:ok, get} = HTTPoison.get(url, header)
 
@@ -117,14 +119,15 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   def organize_cliente(http) do
-    cliente = Jason.decode!(http.body) |> IO.inspect
+    cliente = Jason.decode!(http.body) |> IO.inspect()
 
     organize =
       Enum.flat_map(cliente["resources"], fn resource ->
         Enum.flat_map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn field, acc ->
             case Map.has_key?(acc, field["id"]) do
-              false -> parse_field(field, acc)
+              false ->
+                parse_field(field, acc)
 
               true ->
                 acc
@@ -133,7 +136,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         end)
       end)
       |> Map.new()
-      |> IO.inspect
+      |> IO.inspect()
 
     {:ok, organize}
   end
@@ -147,7 +150,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         data_nascimento = "#{dia}#{mes}#{ano}"
 
         Map.put(acc, "A1_DTNASC", data_nascimento)
-        
+
       "A1_CNAE" ->
         case Map.has_key?(acc, "A1_YCRM_CNAE") do
           true -> acc
@@ -160,7 +163,8 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
           false -> Map.put(acc, "A1_YCRM_CNAE", field["value"])
         end
 
-      _ -> Map.put(acc, field["id"], field["value"])
+      _ ->
+        Map.put(acc, field["id"], field["value"])
     end
   end
 end

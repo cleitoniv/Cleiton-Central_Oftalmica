@@ -12,6 +12,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       tests: item.tests,
       operation: item.operation,
       tipo_venda: item.tipo_venda,
+      status: item.status,
       produto: item.produto,
       quantidade: item.quantidade,
       prc_unitario: item.prc_unitario,
@@ -31,8 +32,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       duracao: item.duracao,
       grupo: item.grupo,
       num_pedido: item.num_pedido,
-      inserted_at: item.inserted_at,
-      update_at: item.updated_at
+      inserted_at: item.inserted_at
     }
   end
 

@@ -10,6 +10,21 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
     NotificacoesClienteModel
   }
 
+  def get_creditos(conn, %{"filtro" => filtro}) do
+    filtro =
+      case filtro do
+        nil -> 0
+        _ -> String.to_integer(filtro)
+      end
+
+    with {:ok, creditos} <- CreditoFinanceiroModel.get_credito_by_status(filtro) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("creditos.json", %{item: creditos})
+    end
+  end
+
   defp usuario_auth(auth) do
     case auth do
       nil -> ""

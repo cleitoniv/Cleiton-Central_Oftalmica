@@ -71,6 +71,8 @@ defmodule TecnovixWeb.Router do
       post "/vendedores", TecnovixWeb.VendedoresController, :insert_or_update
       get "/clientes", TecnovixWeb.ClientesController, :get_clientes_app
       get "/pedidos", TecnovixWeb.PedidosDeVendaController, :get_pedidos
+      get "/creditos", TecnovixWeb.CreditoFinanceiroController, :get_creditos
+      get "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :get_devolucoes
     end
 
     scope "/atend_pref_cliente" do
@@ -93,6 +95,7 @@ defmodule TecnovixWeb.Router do
       get "/protheus/products", TecnovixWeb.ProtheusController, :get_product
       get "/protheus/:cnpj_cpf", TecnovixWeb.ProtheusController, :get_cliente
       get "/get_endereco_by_cep", TecnovixWeb.ClientesController, :get_endereco_by_cep
+      post "/verify_phone", TecnovixWeb.ClientesController, :verify_phone
       pipe_through :cliente
       get "/current_user", TecnovixWeb.ClientesController, :current_user
       post "/update_password", TecnovixWeb.ClientesController, :update_password
@@ -141,6 +144,8 @@ defmodule TecnovixWeb.Router do
       delete "/card_delete/:id", TecnovixWeb.CartaoCreditoClienteController, :delete_card
       get "/taxa", TecnovixWeb.PedidosDeVendaController, :taxa
       post "/taxa_entrega", TecnovixWeb.PedidosDeVendaController, :taxa_entrega
+      post "/pedido_produto", TecnovixWeb.PedidosDeVendaController, :pedido_produto
+      get "/get_pacote", TecnovixWeb.ContratoDeParceriaController, :get_pacote
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

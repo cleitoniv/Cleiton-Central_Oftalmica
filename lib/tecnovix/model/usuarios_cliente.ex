@@ -5,28 +5,52 @@ defmodule Tecnovix.UsuariosClienteModel do
   alias Tecnovix.Repo
   import Ecto.Query
 
-  def unique_email(email) do
+  def unique_email(%{"email" => email} = params) do
     with nil <- Repo.get_by(UsuariosClienteSchema, email: email),
          nil <- Repo.get_by(ClientesSchema, email: email) do
-         {:ok, email}
+      {:ok, email}
     else
-      _ ->
-      error =
-        %UsuariosClienteSchema{}
-        |> Ecto.Changeset.change(%{})
-        |> Ecto.Changeset.add_error(:email, "Esse email já esta cadastrado.")
+      usuario ->
+        case usuario.status == 0 and usuario.email == email do
+          true ->
+            UsuariosClienteSchema
+            |> where([u], u.email == ^email)
+            |> update([u], set: [status: 1, cargo: ^params["cargo"], nome: ^params["nome"]])
+            |> Repo.update_all([])
 
-      {:error, error}
+            {:ativo, usuario}
+
+          false ->
+            error =
+              %Tecnovix.UsuariosClienteSchema{}
+              |> Ecto.Changeset.change(%{})
+              |> Ecto.Changeset.add_error(:erro, "Esse email já esta cadastrado.")
+
+            {:error, error}
+        end
     end
   end
 
-  def show_users() do
-    UsuariosClienteSchema
-    |> Repo.all()
+  def create_user(params) do
+    with {:ok, email} <- unique_email(params["email"]) do
+    end
+  end
+
+  def show_users(cliente_id) do
+    usuarios =
+      UsuariosClienteSchema
+      |> where([u], u.status == 1 and u.cliente_id == ^cliente_id)
+      |> Repo.all()
+
+    {:ok, usuarios}
   end
 
   def cliente_id_filter(params) do
     dynamic([a], a.cliente_id == ^params["cliente_id"])
+  end
+
+  def status_filter(params) do
+    dynamic([u], u.status == ^params["status"])
   end
 
   def update(user, params) do
@@ -65,8 +89,9 @@ defmodule Tecnovix.UsuariosClienteModel do
     usuarios =
       UsuariosClienteSchema
       |> where([u], u.cliente_id == ^cliente.id and u.id == ^id)
-      |> first()
-      |> Repo.one()
-      |> Repo.delete()
+      |> update([u], set: [status: 0])
+      |> Repo.update_all([])
+
+    {:ok, usuarios}
   end
 end

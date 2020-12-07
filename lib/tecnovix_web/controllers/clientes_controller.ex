@@ -8,12 +8,21 @@ defmodule TecnovixWeb.ClientesController do
     AtendPrefClienteModel,
     UsuariosClienteSchema,
     ClientesSchema,
-    Services.ConfirmationSMS
+    Services.ConfirmationSMS,
+    PreDevolucaoModel
   }
 
   alias Tecnovix.{App.Screens, Services.Devolucao, Services.Auth, Endpoints.Protheus}
   alias TecnovixWeb.Auth.Firebase
   action_fallback Tecnovix.Resources.Fallback
+
+  def verify_phone(conn, %{"phone" => phone}) do
+    with {:ok, phone} <- ClientesModel.verify_phone(phone) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: phone}))
+    end
+  end
 
   def termo_responsabilidade(conn, _params) do
     with {:ok, termo} <- ClientesModel.termo_responsabilidade() do
@@ -22,6 +31,7 @@ defmodule TecnovixWeb.ClientesController do
       |> send_resp(200, Jason.encode!(%{success: true, data: termo}))
     end
   end
+
   # clicou em submit -> envia o sms -> guarda o codigo do sms na memoria -> depois de 120 apaga o codigo
   def send_sms(conn, %{"phone_number" => phone_number} = params) do
     code_sms = Enum.random(1_000..9_999)
@@ -35,7 +45,8 @@ defmodule TecnovixWeb.ClientesController do
          {:ok, %{"codigo" => "000"}} <-
            ClientesModel.send_sms(%{phone_number: phone_number}, code_sms),
          {:ok, _} <- ClientesModel.confirmation_sms(params),
-         {:ok, _} <- ConfirmationSMS.deleting_coding(code_sms, params["ddd"] <> params["telefone"]) do
+         {:ok, _} <-
+           ConfirmationSMS.deleting_coding(code_sms, params["ddd"] <> params["telefone"]) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: code_sms}))
@@ -43,9 +54,11 @@ defmodule TecnovixWeb.ClientesController do
       {:ok, %{"codigo" => "500"}} ->
         {:error, :not_authorized}
 
-      {:error, :number_found} -> {:error, :number_found}
+      {:error, :number_found} ->
+        {:error, :number_found}
 
-      _ -> {:error, :not_found}
+      _ ->
+        {:error, :not_found}
     end
   end
 
@@ -71,7 +84,6 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def first_access(conn, %{"param" => params}) do
-    IO.inspect params
     with {:ok, cliente} <- ClientesModel.create_first_access(params) do
       conn
       |> put_status(201)
@@ -380,24 +392,49 @@ defmodule TecnovixWeb.ClientesController do
              serial: num_serie,
              token: auth["access_token"]
            }),
-         {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie) do
+         {:ok, product} <- stub.get_product_serie(cliente, product_serial, num_serie),
+         {:ok, true} <- PreDevolucaoModel.serial_authorized?(num_serie) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: product}))
     else
       {:ok, %{status_code: 401}} -> {:error, :not_authorized}
       {:ok, %{status_code: 400}} -> {:error, :product_serial_error}
+      {:error, %Ecto.Changeset{} = error} -> {:error, error}
+      {:error, :repeated} ->
+        data =
+            Map.new()
+            |> Map.put("mensagem", "Esse produto já consta em uma devolução")
+            |> Map.put("success", false)
+
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(200, Jason.encode!(%{success: true, data: data}))
       _ -> {:error, :not_found}
     end
   end
 
-  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) do
+  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) when products == [] do
+    {:error, :invalid_parameter}
+  end
+
+  def devolution_continue(conn, %{"products" => products, "tipo" => "T" = tipo}) do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{"success" => true, "data" => devolution}))
+    end
+  end
+
+  def devolution_continue(conn, %{"products" => products, "tipo" => "C" = tipo}) do
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, _} <- PreDevolucaoModel.insert_dev(cliente, products) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{"success" => true, "data" => "Inserido."}))
     end
   end
 
@@ -450,11 +487,14 @@ defmodule TecnovixWeb.ClientesController do
            }),
          {:ok, grid, filters} <- stub.get_product_grid(products, cliente, "Todos"),
          {:ok, prod} <- stub.get_extrato_prod(cliente, grid) do
-
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: prod}))
     end
+  end
+
+  def get_and_send_email_dev(conn, %{"email" => email}) when is_nil(email) or email == "" do
+    {:error, :invalid_parameter}
   end
 
   def get_and_send_email_dev(conn, %{"email" => email}) do

@@ -17,8 +17,7 @@ defmodule Tecnovix.Test.Wirecard do
     cliente =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> post("/api/cliente", %{"param" => user_param})
-      |> json_response(201)
+      |> post("/api/cliente", %{"param" => user_param})2      |> json_response(201)
       |> Map.get("data")
 
     cartao = Generator.cartao_cliente(cliente["id"])
@@ -26,6 +25,9 @@ defmodule Tecnovix.Test.Wirecard do
     cartao =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
+      |> get("/api/cliente/get_pacote", %{"grupo" => "010C"})
+      |> IO.inspect
+      |> recycle()
       |> post("/api/cliente/card", %{"param" => cartao})
       |> json_response(200)
       |> Map.get("data")
@@ -80,6 +82,12 @@ defmodule Tecnovix.Test.Wirecard do
         "taxa_entrega" => 200
       })
       |> json_response(200)
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente/pedido_produto", %{"items" => items, "valor" => 0})
+    |> json_response(200)
+    |> IO.inspect()
   end
 
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // USUARIO_CLIENTE" do

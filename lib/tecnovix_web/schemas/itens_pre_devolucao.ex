@@ -16,7 +16,6 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
     field :prod_subs, :string
     field :descricao, :string
     field :doc_devol, :string
-    field :serie, :string
     field :doc_saida, :string
     field :serie_saida, :string
     field :item_doc, :string
@@ -24,7 +23,7 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
     field :tipo, :string
     field :paciente, :string
     field :numero, :string
-    field :dt_nas_pac, :string
+    field :dt_nas_pac, :date
     field :esferico, :decimal
     field :cilindrico, :decimal
     field :eixo, :decimal
@@ -52,7 +51,6 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
       :prod_subs,
       :descricao,
       :doc_devol,
-      :serie,
       :doc_saida,
       :serie_saida,
       :item_doc,
@@ -67,5 +65,6 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
       :dt_nas_pac,
       :numero
     ])
+    |> unique_constraint([:num_de_serie], message: "Esse número de série ja está em um processo de devolução.")
   end
 end

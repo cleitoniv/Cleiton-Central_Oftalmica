@@ -15,10 +15,43 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :type_devolution_credit}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "success" => false,
+        "data" => "Modo de devolução está no modo crédito para essa operação."
+      })
+    )
+    |> halt()
+  end
+
+  def call(conn, {:error, :phone_existing}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "success" => false,
+        "data" => "Esse telefone já existe."
+      })
+    )
+    |> halt()
+  end
+
   def call(conn, {:error, :invalid_code_sms}) do
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Código Inválido."}))
+    |> halt()
+  end
+
+  def call(conn, {:error, :product_repeated}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Esse número de série ja consta na listagem."}))
     |> halt()
   end
 
@@ -57,6 +90,13 @@ defmodule Tecnovix.Resources.Fallback do
     conn
     |> put_resp_content_type("application/json")
     |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Número de série inválido."}))
+    |> halt()
+  end
+
+  def call(conn, {:error, :serie_existente}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Número de série já foi inserida em um processo de devolução."}))
     |> halt()
   end
 
@@ -120,7 +160,13 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :register_error}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(400, Jason.encode!(%{"data" => %{"errors" => %{"REGISTRO" => ["Erro no registro."]}}, "success" => false}))
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "data" => %{"errors" => %{"REGISTRO" => ["Erro no registro."]}},
+        "success" => false
+      })
+    )
   end
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do

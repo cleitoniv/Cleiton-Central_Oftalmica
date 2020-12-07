@@ -8,13 +8,13 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def create(conn, %{"param" => params}) do
     {:ok, cliente} = conn.private.auth
-    
+
     ip =
       conn.remote_ip
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, authorized} <- UsuariosClienteModel.unique_email(params["email"]),
+    with {:ok, authorized} <- UsuariosClienteModel.unique_email(params),
          {:ok, %{status_code: 200}} <-
            Firebase.create_user(%{email: params["email"], password: params["password"]}),
          {:ok, user} <- UsuariosClienteModel.create(params),
@@ -28,14 +28,14 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> put_resp_content_type("application/json")
       |> render("show.json", %{item: user})
     else
-      {:error, %Ecto.Changeset{} = error} -> {:error, error}
-      {:ok, %{status_code: 400} = resp} ->
-        body = Jason.decode!(resp.body)
+      {:error, %Ecto.Changeset{} = error} ->
+        {:error, error}
 
-        case body["error"]["message"] do
-          "EMAIL_EXISTS" -> {:error, :email_invalid}
-          _ -> {:error, :register_error}
-        end
+      {:ativo, user} ->
+        conn
+        |> put_status(:created)
+        |> put_resp_content_type("application/json")
+        |> render("show.json", %{item: user})
     end
   end
 
@@ -76,7 +76,6 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
     with {:ok, token} <- Firebase.get_token(conn),
          {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
-         {:ok, _user_firebase} <- Firebase.delete_user_firebase(%{idToken: token}),
          {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario cliente deletado") do
       conn
       |> put_resp_content_type("application/json")
@@ -101,7 +100,11 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def cliente_index(conn, params) do
     {:ok, cliente} = conn.private.auth
-    params = Map.put(params, "cliente_id", cliente.id)
+
+    params =
+      Map.put(params, "cliente_id", cliente.id)
+      |> Map.put("status", 1)
+
     __MODULE__.index(conn, params)
   end
 end

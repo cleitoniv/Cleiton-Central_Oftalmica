@@ -18,7 +18,10 @@ defmodule TecnovixWeb.UsersTest do
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente", %{"param" => user_param})
-    |> json_response(201)
+    |> IO.inspect
+    |> recycle()
+    |> post("/api/cliente/verify_phone", %{"phone" => "27996211804"})
+    |> json_response(200)
     |> IO.inspect()
 
     # criando o usuario cliente
@@ -242,7 +245,7 @@ defmodule TecnovixWeb.UsersTest do
         group: "011C"
       },
       %{
-        num_serie: "011" <> "0989898",
+        num_serie: "011" <> "0989897",
         id: 0,
         tests: 0,
         credits: 0,
@@ -263,6 +266,8 @@ defmodule TecnovixWeb.UsersTest do
     devolution =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente/devolution_continue", %{"products" => products, "tipo" => "T"})
+      |> recycle()
       |> post("/api/cliente/devolution_continue", %{"products" => products, "tipo" => "T"})
       |> json_response(200)
       |> Map.get("data")

@@ -180,4 +180,17 @@ defmodule Tecnovix.ContratoDeParceriaModel do
       _ -> {:error, :payment_not_created}
     end
   end
+
+  def get_pacote(_grupo) do
+    pacotes =
+      [
+        %{
+          total: 302000,
+          quantity: 20,
+          price: 15100
+        }
+      ]
+
+    {:ok, pacotes}
+  end
 end

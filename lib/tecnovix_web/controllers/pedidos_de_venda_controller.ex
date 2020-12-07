@@ -13,6 +13,34 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   action_fallback Tecnovix.Resources.Fallback
 
+  def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
+    {:ok, cliente} = conn.private.auth
+
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
+
+    with {:ok, pedido} <-
+           PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
+         {:ok, _logs} <-
+           LogsClienteModel.create(
+             ip,
+             nil,
+             cliente,
+             "Pedido feito com a remessa de contrato de produto."
+           ) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("pedido.json", %{item: pedido})
+    end
+  end
+
+  def pedido_produto(conn, _params) do
+    {:error, :order_not_created}
+  end
+
   def pacientes_revisao(conn, _params) do
     {:ok, cliente} = conn.private.auth
 
@@ -120,14 +148,15 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-      taxa_entrega =
-        case taxa_entrega do
-          nil -> 0
-          taxa_entrega -> taxa_entrega
-        end
+    taxa_entrega =
+      case taxa_entrega do
+        nil -> 0
+        taxa_entrega -> taxa_entrega
+      end
 
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
-         {:ok, order} <- PedidosDeVendaModel.order(items_order, cliente, taxa_entrega, installment),
+         {:ok, order} <-
+           PedidosDeVendaModel.order(items_order, cliente, taxa_entrega, installment),
          {:ok, payment} <-
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order, ccv, installment),
          {:ok, pedido} <-
@@ -161,11 +190,23 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def detail_order_id(conn, %{"id" => pedido_id, "item_pedido" => item_pedido}) do
+  def detail_order_id(conn, %{
+        "id" => pedido_id,
+        "data_nascimento" => data_nascimento,
+        "reposicao" => reposicao,
+        "nome" => nome
+      }) do
     stub = Screens.stub()
     {:ok, cliente} = conn.private.auth
 
-    with {:ok, pedido} <- stub.get_pedido_id(pedido_id, cliente.id, item_pedido) do
+    reposicao =
+      case reposicao do
+        "false" -> nil
+        "true" -> reposicao
+      end
+
+    with {:ok, pedido} <-
+           stub.get_pedido_id(pedido_id, cliente.id, data_nascimento, reposicao, nome) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

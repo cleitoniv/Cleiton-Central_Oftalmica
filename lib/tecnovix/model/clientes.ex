@@ -10,6 +10,19 @@ defmodule Tecnovix.ClientesModel do
   @sms_token "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuZGlyZWN0Y2FsbHNvZnQuY29tIiwiYXVkIjoiMTkyLjE2OC4xNS4yNyIsImlhdCI6MTYwMzk5MjAwMCwibmJmIjoxNjAzOTkyMDAwLCJleHAiOjE2MDM5OTU2MDAsImRjdCI6IjMzMDI3NzQwMCIsImNsaWVudF9vYXV0aF9pZCI6IjM3NjA0OSJ9.B4gF3wAeOUkE9GNZSZCHBa8h_6touKQlrXebQrOocpw"
   @header [{"Content-Type", "application/x-www-form-urlencoded"}]
 
+  def verify_phone(phone) do
+    case Repo.get_by(ClientesSchema, [telefone: update_telefone(phone), ddd: get_ddd(phone)]) do
+      nil -> {:ok, phone}
+      _ ->
+        error =
+          %ClientesSchema{}
+          |> change(%{})
+          |> add_error(:telefone, "Esse telefone já esta cadastrado")
+
+        {:error, error}
+    end
+  end
+
   def create_first_access(params) do
     case Repo.get_by(ClientesSchema, email: params["email"]) do
       %{cadastrado: false} = cliente ->
@@ -117,7 +130,8 @@ defmodule Tecnovix.ClientesModel do
           params
           |> Map.put("cdmunicipio", String.slice(endereco["ibge"], 2..7))
 
-        _ -> params
+        _ ->
+          params
       end
 
     params =
@@ -170,6 +184,7 @@ defmodule Tecnovix.ClientesModel do
         String.replace(telefone, "-", "")
         |> String.replace(" ", "")
         |> String.slice(2..11)
+
       telefone ->
         String.replace(telefone, "-", "")
         |> String.replace(" ", "")
@@ -259,7 +274,7 @@ defmodule Tecnovix.ClientesModel do
 
     {:ok, resp} =
       HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
-
+    IO.inspect resp.body
     {:ok, Jason.decode!(resp.body)}
 
     # {:ok,
@@ -287,7 +302,8 @@ defmodule Tecnovix.ClientesModel do
   def get_ddd(phone_number) do
     case phone_number do
       nil -> phone_number
-      phone_number -> String.slice(phone_number, 2..3)
+      "55" <> phone_number -> String.slice(phone_number, 2..3)
+      phone_number -> String.slice(phone_number, 0..1)
     end
   end
 
@@ -341,9 +357,10 @@ defmodule Tecnovix.ClientesModel do
       true ->
         ETS.KeyValueSet.put(kvset, :confirmation_sms, 1)
         {:ok, 1}
-      false -> {:error, :invalid_code_sms}
-    end
 
+      false ->
+        {:error, :invalid_code_sms}
+    end
 
     # cliente =
     #   ClientesSchema

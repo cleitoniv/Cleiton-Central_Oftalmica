@@ -24,10 +24,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
      Enum.map(params["data"], fn pedidos ->
        {:ok, item} =
          with nil <-
-                Repo.get_by(PedidosDeVendaSchema,
-                  filial: pedidos["filial"],
-                  numero: pedidos["numero"]
-                ) do
+                Repo.get_by(PedidosDeVendaSchema, id: pedidos["id"]) do
            create_sync(pedidos)
          else
            changeset ->
@@ -39,8 +36,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
      end)}
   end
 
-  def insert_or_update(%{"filial" => filial, "numero" => numero} = params) do
-    with nil <- Repo.get_by(PedidosDeVendaSchema, filial: filial, numero: numero) do
+  def insert_or_update(%{"id" => id} = params) do
+    with nil <- Repo.get_by(PedidosDeVendaSchema, id: id) do
       __MODULE__.create_sync(params)
     else
       changeset ->
@@ -80,18 +77,41 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def taxa_wirecard(items, installment, passo) do
+    taxa =
+      [
+        {1, 0},
+        {2, 4.5},
+        {3, 5.0},
+        {4, 5.5},
+        {5, 6.5},
+        {6, 7.5},
+        {7, 8.5},
+        {8, 9.5},
+        {9, 10.5},
+        {10, 11.5},
+        {11, 12.0},
+        {12, 12.5}
+      ]
+      |> Enum.filter(fn {parcela, _taxa} -> installment == parcela end)
+      |> Enum.reduce(0, fn {_parcela, taxa}, _acc -> taxa end)
+
     case passo do
       "1" ->
         somando_items(items)
+<<<<<<< HEAD
         |> calculo_taxa(installment)
         |> Kernel.trunc()
+=======
+        |> calculo_taxa(taxa)
+        |> Kernel.round()
+>>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
 
       "2" ->
         {:ok, items} = items_order(items)
 
         somando_items(items)
-        |> calculo_taxa(installment)
-        |> Kernel.trunc()
+        |> calculo_taxa(taxa)
+        |> Kernel.round()
     end
   end
 
@@ -204,6 +224,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "A" -> Jason.decode!(order.body)["id"]
       "C" -> nil
       "T" -> nil
+      _ -> nil
     end
   end
 
@@ -241,11 +262,21 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "client_id" => cliente.id,
       "tipo_pagamento" => "CREDIT_CARD",
       "parcela" => installment,
-      "order_id" => verify_type("A", order),
-      "taxa_wirecard" => taxa_wirecard(items, installment, "2"),
-      "filial" => "",
-      "numero" => "",
-      "taxa_entrega" => taxa_entrega,
+      "order_id" =>
+        case order do
+          nil -> verify_type(nil, order)
+          _ -> verify_type("A", order)
+        end,
+      "taxa_wirecard" =>
+        case order do
+          nil -> 0
+          _ -> taxa_wirecard(items, installment, "2")
+        end,
+      "taxa_entrega" =>
+        case taxa_entrega do
+          nil -> 0
+          taxa_entrega -> taxa_entrega
+        end,
       "loja" => cliente.loja,
       "cliente" => cliente.codigo,
       "pd_correios" => "",
@@ -298,8 +329,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "parcela" => parcela,
       "taxa_entrega" => taxa_entrega,
       "order_id" => nil,
-      "filial" => "",
-      "numero" => "",
       "loja" => cliente.loja,
       "cliente" => cliente.codigo,
       "pd_correios" => "",
@@ -363,6 +392,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "operation" => map["operation"],
       "codigo" => items["codigo"],
       "nocontrato" => items["nocontrato"],
+      "status" => items["status"],
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "paciente" => map["paciente"]["nome"],
@@ -371,6 +401,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "tests" => formatting_test(items["tests"]),
       "prc_unitario" => items["prc_unitario"],
       "olho" => "D",
+      "valor_credito_finan" => items["valor_credito_finan"],
+      "valor_credito_prod" => items["valor_credito_prod"],
       "virtotal" => items["quantidade"] * items["prc_unitario"],
       "esferico" => map[olho]["degree"],
       "cilindrico" => map[olho]["cylinder"],
@@ -389,16 +421,20 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   defp formatting_duracao(duracao) do
-    case duracao do
-      nil ->
-        "0 dias"
+    duracao =
+      case duracao do
+        nil ->
+          0
 
-      v ->
-        String.to_float(v)
-        |> Kernel.trunc()
+        "0" ->
+          0
 
-        "#{v} dias"
-    end
+        duracao ->
+          String.to_float(duracao)
+          |> Kernel.trunc()
+      end
+
+    "#{duracao} dias"
   end
 
   def olho_esquerdo(items, map) do
@@ -413,6 +449,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
+      "status" => items["status"],
       "operation" => map["operation"],
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
@@ -423,6 +460,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "num_pac" => map["paciente"]["numero"],
       "dt_nas_pac" => map["paciente"]["data_nascimento"],
       "prc_unitario" => items["prc_unitario"],
+      "valor_credito_finan" => items["valor_credito_finan"],
+      "valor_credito_prod" => items["valor_credito_prod"],
       "olho" => "E",
       "virtotal" => items["quantidade"] * items["prc_unitario"],
       "esferico" => map[olho]["degree"],
@@ -447,6 +486,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
+      "status" => items["status"],
       "operation" => map["operation"],
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
@@ -458,6 +498,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "num_pac" => map["paciente"]["numero"],
       "dt_nas_pac" => map["paciente"]["data_nascimento"],
       "prc_unitario" => items["prc_unitario"],
+      "valor_credito_finan" => items["valor_credito_finan"],
+      "valor_credito_prod" => items["valor_credito_prod"],
       "olho" => "D",
       "virtotal" => items["quantity_for_eye"]["direito"] * items["prc_unitario"],
       "esferico" => map["olho_diferentes"]["direito"]["degree"],
@@ -484,6 +526,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "operation" => map["operation"],
       "duracao" => formatting_duracao(items["duracao"]),
       "codigo" => items["codigo"],
+      "status" => items["status"],
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],
       "tests" => formatting_test(items["tests"]),
@@ -492,6 +535,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "num_pac" => map["paciente"]["numero"],
       "dt_nas_pac" => map["paciente"]["data_nascimento"],
       "prc_unitario" => items["prc_unitario"],
+      "valor_credito_finan" => items["valor_credito_finan"],
+      "valor_credito_prod" => items["valor_credito_prod"],
       "olho" => "E",
       "virtotal" => items["quantity_for_eye"]["esquerdo"] * items["prc_unitario"],
       "esferico" => map["olho_diferentes"]["esquerdo"]["degree"],
@@ -606,18 +651,42 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def items_order(items) do
     order_items =
-      Enum.flat_map(
-        items,
-        fn item ->
-          Enum.map(item["items"], fn order ->
-            %{
-              "product" => order["produto"],
-              "category" => "OTHER_CATEGORIES",
-              "quantity" => order["quantidade"],
-              "detail" => "Mais info...",
-              "price" => order["prc_unitario"]
-            }
-          end)
+      Enum.reduce(
+        items, [],
+        fn item, acc ->
+          list =
+            case item["operation"] do
+              "01" ->
+                Enum.map(item["items"], fn order ->
+                  %{
+                    "product" => order["produto"],
+                    "category" => "OTHER_CATEGORIES",
+                    "quantity" => order["quantidade"],
+                    "detail" => "Mais info...",
+                    "price" => order["prc_unitario"]
+                  }
+                end)
+
+              "06" ->
+                case item["type"] do
+                  "C" ->
+                    Enum.map(item["items"], fn order ->
+                      %{
+                        "product" => order["produto"],
+                        "category" => "OTHER_CATEGORIES",
+                        "quantity" => order["quantidade"],
+                        "detail" => "Mais info...",
+                        "price" => order["prc_unitario"]
+                      }
+                    end)
+
+                   _ -> []
+                end
+
+              _ -> []
+            end
+
+            list ++ acc
         end
       )
 
@@ -673,14 +742,21 @@ defmodule Tecnovix.PedidosDeVendaModel do
         end)
       end)
 
+<<<<<<< HEAD
     pedido_com_paciente =
+=======
+>>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
       Enum.filter(pedidos, fn item ->
         paciente =
           Enum.map(item.items, fn items ->
             items.paciente
           end)
 
+<<<<<<< HEAD
         paciente != nil
+=======
+        paciente != [nil]
+>>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
       end)
       |> Enum.filter(fn pedido ->
         duracao =
@@ -698,7 +774,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
           Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
           |> Enum.count()
 
+<<<<<<< HEAD
         count_range >= 30
+=======
+        count_range <= 30
+>>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
       end)
       |> Enum.map(fn map ->
         Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
@@ -709,7 +789,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     Date.add(NaiveDateTime.to_date(item.inserted_at), duracao)
   end
 
-  def create_credito_financeiro(items, cliente, %{"type" => type, "operation" => operation}) do
+  def create_credito_financeiro(items, cliente, %{"type" => _type, "operation" => _operation}) do
     case pedido_params(items, cliente, "", 0) do
       {:ok, pedido} ->
         %PedidosDeVendaSchema{}
@@ -721,16 +801,20 @@ defmodule Tecnovix.PedidosDeVendaModel do
     end
   end
 
+<<<<<<< HEAD
   def get_pedido_id(pedido_id, cliente_id, item_pedido) do
     item_pedido = String.to_integer(item_pedido)
     IO.inspect("oi")
 
     case item_pedido do
+=======
+  def get_pedido_id(pedido_id, _cliente_id) do
+    case Repo.get(PedidosDeVendaSchema, pedido_id) do
+>>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
       nil ->
-        case Repo.get(PedidosDeVendaSchema, pedido_id) do
-          nil ->
-            {:error, :not_found}
+        {:error, :not_found}
 
+<<<<<<< HEAD
           pedido ->
             pedido = Repo.preload(pedido, :items)
             {:ok, pedido}
@@ -758,6 +842,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
             {:ok, hd(pedido)}
         end
+=======
+      pedido ->
+        pedido = Repo.preload(pedido, :items)
+        {:ok, pedido}
+>>>>>>> 5a9834ef9c326c62c14bba3a08e189b4ee6b90eb
     end
   end
 
@@ -790,15 +879,21 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def calculo_taxa(valor, taxa) do
-    taxa_cartao = valor * 0.0549 + 0.69 * 100
-    taxa_parcelamento = valor * (taxa / 100)
-    total_taxas = taxa_cartao + taxa_parcelamento
+    case valor do
+      0 ->
+        0
+
+      valor ->
+        taxa_cartao = (valor * 0.0549) + (0.69 * 100)
+        taxa_parcelamento = valor * (taxa / 100)
+        taxa_cartao + taxa_parcelamento
+    end
   end
 
   def taxa(valor, parcelado) do
     list_taxa =
       [
-        {1, 1.0},
+        {1, 0},
         {2, 4.5},
         {3, 5.0},
         {4, 5.5},
@@ -811,13 +906,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
         {11, 12.0},
         {12, 12.5}
       ]
-      |> Enum.filter(fn {parcela, taxa} -> parcela <= parcelado end)
+      |> Enum.filter(fn {parcela, _taxa} -> parcela <= parcelado end)
 
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
-        result =
-          ((calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela)
-          |> Float.ceil(2)
+        result = (calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela
+          |> Float.round(2)
 
         case parcela do
           1 ->
@@ -828,7 +922,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         end
       end)
       |> Enum.map(fn map ->
-        [antes, depois] = String.split(map["parcela"], ".")
+        [_antes, depois] = String.split(map["parcela"], ".")
 
         case String.length(depois) < 2 do
           true -> %{"parcela" => map["parcela"] <> "0"}

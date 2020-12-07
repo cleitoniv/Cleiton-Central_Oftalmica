@@ -48,15 +48,15 @@ defmodule Tecnovix.App.ScreensTest do
       "HASGRAU" -> "has_esferico"
       "HASCILIND" -> "has_cilindrico"
       "HASADICAO" -> "has_adicao"
-      "HASTEST" -> "has_teste"
       "HASCOLOR" -> "has_cor"
       "HASCURVA" -> "has_curva"
       "HASDIAMET" -> "has_diametro"
       "HASRAIO" -> "has_raio"
+      "HASTEST" -> "has_teste"
       "DSTRATAM" -> "type"
       "GRUPO" -> "group"
       "SUCESS" -> "success"
-      "DOC" -> "NF"
+      "DOC" -> "nf"
       "DESCSTAT" -> "mensagem"
       "PRDDESC" -> "title"
       "TRATAM" -> "duracao"
@@ -67,12 +67,6 @@ defmodule Tecnovix.App.ScreensTest do
   def organize_value(map) do
     case map["id"] do
       "HASEIXO" ->
-        case map["value"] do
-          "0" -> false
-          "1" -> true
-        end
-
-      "HASTEST" ->
         case map["value"] do
           "0" -> false
           "1" -> true
@@ -115,6 +109,12 @@ defmodule Tecnovix.App.ScreensTest do
         end
 
       "HASRAIO" ->
+        case map["value"] do
+          "0" -> false
+          "1" -> true
+        end
+
+      "HASTEST" ->
         case map["value"] do
           "0" -> false
           "1" -> true
@@ -163,7 +163,6 @@ defmodule Tecnovix.App.ScreensTest do
             end
           end)
           |> Map.put("visint", true)
-          |> Map.put("type", "TORICA")
           |> Map.put("previsao_entrega", 5)
           |> Map.put(
             "end_entrega",
@@ -241,10 +240,10 @@ defmodule Tecnovix.App.ScreensTest do
   end
 
   @impl true
-  def get_credits(_cliente) do
+  def get_credits(cliente) do
     %{
-      money: 5500,
-      points: 100
+      money: Tecnovix.CreditoFinanceiroModel.sum_credits(cliente),
+      points: 0
     }
   end
 
@@ -378,36 +377,6 @@ defmodule Tecnovix.App.ScreensTest do
     ]
 
     {:ok, products}
-  end
-
-  @impl true
-  def get_order(_cliente, filtro) do
-    orders = [
-      %{
-        paciente: "Marcos Barbosa Santos",
-        pedido: "282740",
-        date: "2020-08-15",
-        value: 12000,
-        status: "pendentes"
-      },
-      %{
-        paciente: "Marcos Barbosa Santos",
-        pedido: "282740",
-        date: "2020-08-15",
-        value: 12000,
-        status: "entregues"
-      },
-      %{
-        paciente: "Marcos Barbosa Santos",
-        pedido: "282740",
-        date: "2020-08-15",
-        value: 12000,
-        status: "reposição"
-      }
-    ]
-
-    orders = Enum.filter(orders, fn x -> x.status == filtro end)
-    {:ok, orders}
   end
 
   @impl true
@@ -555,37 +524,112 @@ defmodule Tecnovix.App.ScreensTest do
         fn map ->
           case map.tipo_pagamento do
             "BOLETO" ->
-              resp = %{
-                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
-                data_inclusao: map.inserted_at,
-                num_pedido: map.id,
-                item_pedido: map.item_pedido
-              }
+              case filtro do
+                "2" ->
+                  resp = %{
+                    valor:
+                      Enum.reduce(map.items, 0, fn item, acc ->
+                        case item.operation do
+                          "13" -> 0 + acc
+                          "07" -> 0 + acc
+                          _ -> item.virtotal + acc
+                        end
+                      end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id,
+                    paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
+                    num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
+                    data_nascimento:
+                      Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
+                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
+                    data_reposicao:
+                      Date.add(
+                        map.inserted_at,
+                        formartting_duracao(
+                          Enum.reduce(map.items, "", fn item, _acc -> item.duracao end)
+                        )
+                      )
+                  }
+
+                _ ->
+                  resp = %{
+                    valor:
+                      Enum.reduce(map.items, 0, fn item, acc ->
+                        case item.operation do
+                          "13" -> 0 + acc
+                          "07" -> 0 + acc
+                          _ -> item.virtotal + acc
+                        end
+                      end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id
+                  }
+              end
 
             "CREDIT_CARD" ->
-              resp = %{
-                valor: Enum.reduce(map.items, 0, fn item, acc -> item.virtotal + acc end),
-                data_inclusao: map.inserted_at,
-                num_pedido: map.id,
-                item_pedido: map.item_pedido
-              }
+              case filtro do
+                "2" ->
+                  resp = %{
+                    valor:
+                      Enum.reduce(map.items, 0, fn item, acc ->
+                        case item.operation do
+                          "13" -> 0 + acc
+                          "07" -> 0 + acc
+                          _ -> item.virtotal + acc + map.taxa_wirecard
+                        end
+                      end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id,
+                    paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
+                    num_pac: Enum.reduce(map.items, "", fn item, _acc -> item.num_pac end),
+                    data_nascimento:
+                      Enum.reduce(map.items, "", fn item, _acc -> item.dt_nas_pac end),
+                    produto: Enum.reduce(map.items, "", fn item, _acc -> item.produto end),
+                    data_reposicao:
+                      Date.add(
+                        map.inserted_at,
+                        formartting_duracao(
+                          Enum.reduce(map.items, "", fn item, _acc -> item.duracao end)
+                        )
+                      )
+                  }
 
-              {:ok, taxa} = taxa(resp.valor, map.parcela)
-
-              taxa =
-                Enum.reduce(taxa, 0, fn reduce, acc ->
-                  case Map.has_key?(reduce, "parcela#{map.parcela}") do
-                    true -> reduce["parcela#{map.parcela}"]
-                    false -> acc
-                  end
-                end)
-
-              Map.put(resp, :valor, (resp.valor + taxa) |> Kernel.trunc())
+                _ ->
+                  resp = %{
+                    valor:
+                      Enum.reduce(map.items, 0, fn item, acc ->
+                        case item.operation do
+                          "13" -> 0 + acc
+                          "07" -> 0 + acc
+                          _ -> item.virtotal + acc + map.taxa_wirecard
+                        end
+                      end),
+                    data_inclusao: map.inserted_at,
+                    num_pedido: map.id
+                  }
+              end
           end
         end
       )
 
+    detail =
+      case filtro do
+        "2" ->
+          Enum.uniq_by(detail, fn item ->
+            item.num_pac
+          end)
+
+        _ ->
+          detail
+      end
+
     {:ok, detail}
+  end
+
+  defp formartting_duracao(duracao) do
+    duracao =
+      String.replace(duracao, ~r/[^\d]/, "")
+      |> String.to_integer()
   end
 
   @impl true
@@ -664,10 +708,11 @@ defmodule Tecnovix.App.ScreensTest do
         items: []
       }
     end)
-    |> Enum.uniq_by(fn item -> item.num_pac end)
+    |> Enum.uniq_by(fn item -> concat_paciente_dtnaspac(item.paciente, item.data_nascimento) end)
     |> Enum.map(fn paciente ->
       Enum.reduce(items, paciente, fn item, acc ->
-        case item.num_pac == paciente.num_pac do
+        case concat_paciente_dtnaspac(item.paciente, item.data_nascimento) ==
+               concat_paciente_dtnaspac(paciente.paciente, paciente.data_nascimento) do
           true -> Map.put(acc, :items, acc.items ++ [item])
           false -> acc
         end
@@ -704,6 +749,80 @@ defmodule Tecnovix.App.ScreensTest do
     end)
   end
 
+  defp concat_paciente_dtnaspac(paciente, data) do
+    paciente =
+      case paciente do
+        nil ->
+          ""
+
+        paciente ->
+          String.replace(paciente, " ", "")
+          |> String.downcase()
+      end
+
+    data =
+      case data do
+        nil -> ""
+        data -> "/#{data}"
+      end
+
+    paciente <> data
+  end
+
+  defp parse_items_reposicao(items, data_nascimento, nome) do
+    Enum.map(items, fn item ->
+      %{
+        num_pac: item.num_pac,
+        paciente: item.paciente,
+        data_nascimento: item.data_nascimento,
+        items: []
+      }
+    end)
+    |> Enum.uniq_by(fn item -> concat_paciente_dtnaspac(item.paciente, item.data_nascimento) end)
+    |> Enum.map(fn paciente ->
+      Enum.reduce(items, paciente, fn item, acc ->
+        case concat_paciente_dtnaspac(item.paciente, item.data_nascimento) ==
+               concat_paciente_dtnaspac(paciente.paciente, paciente.data_nascimento) do
+          true -> Map.put(acc, :items, acc.items ++ [item])
+          false -> acc
+        end
+      end)
+    end)
+    |> Enum.map(fn paciente ->
+      group_by =
+        Enum.group_by(paciente.items, fn item -> item.codigo_item end)
+        |> Enum.map(fn {codigo, codigo_items} ->
+          Enum.reduce(codigo_items, %{}, fn codigo_item, acc ->
+            p_olho = parse_olho(codigo_item)
+
+            map =
+              Map.put(acc, :valor_produto, codigo_item.valor_produto)
+              |> Map.put(:quantidade, codigo_item.quantidade)
+              |> Map.put(:valor_total, codigo_item.valor_total)
+              |> Map.put(:olho, codigo_item.olho)
+              |> Map.put(
+                :url_image,
+                "http://portal.centraloftalmica.com/images/#{codigo_item.grupo}.jpg"
+              )
+              |> Map.put(:codigo_item, codigo_item.codigo_item)
+              |> Map.put(:nome_produto, codigo_item.nome_produto)
+              |> Map.put(:duracao, codigo_item.duracao)
+              |> Map.put(:grupo, codigo_item.grupo)
+              |> Map.put(:type, codigo_item.type)
+              |> Map.put(:operation, codigo_item.operation)
+
+            Map.merge(map, p_olho)
+          end)
+        end)
+
+      Map.put(paciente, :items, group_by)
+    end)
+    |> Enum.filter(fn pedido ->
+      concat_paciente_dtnaspac(pedido.paciente, pedido.data_nascimento) ==
+        concat_paciente_dtnaspac(nome, data_nascimento)
+    end)
+  end
+
   defp parse_olho(item) do
     case item.olho do
       "D" ->
@@ -735,47 +854,122 @@ defmodule Tecnovix.App.ScreensTest do
     end
   end
 
-  def get_pedido_id(cliente_id, pedido_id, item_pedido) do
-    with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id, item_pedido) do
-      pedido = %{
-        data_inclusao: pedido.inserted_at,
-        num_pedido: pedido.id,
-        valor: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
-        valor_total: Enum.reduce(pedido.items, 0, fn map, acc -> map.virtotal + acc end),
-        previsao_entrega: pedido.previsao_entrega,
-        taxa_entrega: pedido.taxa_entrega,
-        items:
-          Enum.map(
-            pedido.items,
-            fn item ->
-              %{
-                type: item.tipo_venda,
-                operation: item.operation,
-                num_pac: item.num_pac,
-                paciente: item.paciente,
-                data_nascimento: item.dt_nas_pac,
-                nome_produto: item.produto,
-                valor_produto: item.prc_unitario,
-                quantidade: item.quantidade,
-                valor_total: item.virtotal,
-                olho: item.olho,
-                adicao: item.adicao,
-                cor: item.cor,
-                esferico: item.esferico,
-                eixo: item.eixo,
-                cilindro: item.cilindrico,
-                grupo: item.grupo,
-                url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
-                codigo_item: item.codigo_item,
-                duracao: item.duracao
-              }
-            end
-          )
-          |> parse_items()
-      }
+  def get_pedido_id(cliente_id, pedido_id, data_nascimento, reposicao, nome) do
+    pedido =
+      case reposicao == nil do
+        true ->
+          with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
+            pedido = %{
+              data_inclusao: pedido.inserted_at,
+              num_pedido: pedido.id,
+              valor:
+                Enum.reduce(pedido.items, 0, fn map, acc ->
+                  case map.operation do
+                    "07" -> 0 + acc
+                    _ -> map.virtotal + acc
+                  end
+                end),
+              valor_total:
+                Enum.reduce(pedido.items, 0, fn map, acc ->
+                  case map.operation do
+                    "07" -> 0 + acc
+                    _ -> map.virtotal + acc
+                  end
+                end) + pedido.taxa_entrega + pedido.taxa_wirecard,
+              previsao_entrega: pedido.previsao_entrega,
+              taxa_entrega: pedido.taxa_entrega,
+              items:
+                Enum.map(
+                  pedido.items,
+                  fn item ->
+                    %{
+                      type: item.tipo_venda,
+                      operation: item.operation,
+                      num_pac: item.num_pac,
+                      paciente: item.paciente,
+                      data_nascimento: item.dt_nas_pac,
+                      nome_produto: item.produto,
+                      valor_produto: item.prc_unitario,
+                      valor_credito_finan: item.valor_credito_finan,
+                      valor_credito_prod: item.valor_credito_prod,
+                      quantidade: item.quantidade,
+                      valor_total:
+                        case item.operation do
+                          "13" -> item.valor_credito_finan * item.quantidade
+                          "07" -> item.valor_credito_prod * item.quantidade
+                          _ -> item.prc_unitario * item.quantidade
+                        end,
+                      olho: item.olho,
+                      adicao: item.adicao,
+                      cor: item.cor,
+                      esferico: item.esferico,
+                      eixo: item.eixo,
+                      cilindro: item.cilindrico,
+                      grupo: item.grupo,
+                      url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
+                      codigo_item: item.codigo_item,
+                      duracao: item.duracao
+                    }
+                  end
+                )
+                |> parse_items()
+            }
+          end
 
-      {:ok, pedido}
-    end
+        false ->
+          with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
+            pedido = %{
+              data_inclusao: pedido.inserted_at,
+              num_pedido: pedido.id,
+              valor:
+                Enum.reduce(pedido.items, 0, fn map, acc ->
+                  case map.operation do
+                    "07" -> 0 + acc
+                    _ -> map.virtotal + acc
+                  end
+                end),
+              valor_total:
+                Enum.reduce(pedido.items, 0, fn map, acc ->
+                  case map.operation do
+                    "07" -> 0 + acc
+                    _ -> map.virtotal + acc
+                  end
+                end) + pedido.taxa_entrega + pedido.taxa_wirecard,
+              previsao_entrega: pedido.previsao_entrega,
+              taxa_entrega: pedido.taxa_entrega,
+              items:
+                Enum.map(
+                  pedido.items,
+                  fn item ->
+                    %{
+                      type: item.tipo_venda,
+                      operation: item.operation,
+                      num_pac: item.num_pac,
+                      paciente: item.paciente,
+                      data_nascimento: item.dt_nas_pac,
+                      nome_produto: item.produto,
+                      valor_produto: item.prc_unitario,
+                      quantidade: item.quantidade,
+                      valor_total: item.virtotal,
+                      olho: item.olho,
+                      adicao: item.adicao,
+                      cor: item.cor,
+                      esferico: item.esferico,
+                      eixo: item.eixo,
+                      cilindro: item.cilindrico,
+                      grupo: item.grupo,
+                      url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
+                      codigo_item: item.codigo_item,
+                      duracao: item.duracao
+                    }
+                  end
+                )
+                |> parse_items_reposicao(data_nascimento, nome)
+            }
+          end
+      end
+
+    {:ok, pedido}
   end
 
   @impl true
@@ -833,6 +1027,8 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_product_serie(_cliente, product_serial, serial) do
+    product_serial = Jason.decode!(product_serial.body)
+
     product =
       Enum.flat_map(product_serial["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->
@@ -843,14 +1039,27 @@ defmodule Tecnovix.App.ScreensTest do
             end
           end)
           |> Map.put("num_serie", serial)
-          |> Map.put("produto", String.slice(Ecto.UUID.autogenerate(), 1..15))
         end)
       end)
 
     product =
-      Enum.reduce(product, %{}, fn map, _acc ->
-        Map.put(map, "image_url", "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg")
-      end)
+      case Enum.empty?(product) do
+        true ->
+          product =
+            Map.new()
+            |> Map.put("mensagem", "Produto inexistente.")
+            |> Map.put("success", false)
+
+        false ->
+          product =
+            Enum.reduce(product, %{}, fn map, _acc ->
+              Map.put(
+                map,
+                "image_url",
+                "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg"
+              )
+            end)
+      end
 
     {:ok, product}
   end
@@ -885,61 +1094,80 @@ defmodule Tecnovix.App.ScreensTest do
 
     data_hoje = Date.utc_today()
 
-    extratos =%{
+    extratos = %{
       data:
-        Enum.map(creditos, fn credito ->
+        Enum.reduce(creditos, [], fn credito, acc ->
+          creditos =
             %{
               id: credito.id,
-              date_filter: NaiveDateTime.to_date(credito.inserted_at),
+              date_filter: ~D[2020-12-01],
               date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
               pedido: credito.id,
               valor: credito.valor |> Kernel.trunc()
             }
+          case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do
+            true -> [creditos] ++ acc
+            false -> acc
+          end
         end)
-        |> Enum.filter(fn filter -> filter.date_filter < Date.end_of_month(data_hoje) end)
     }
 
-    extratos = Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))
+    extratos =
+      Map.put(extratos, :date, parse_month(data_hoje) <> Integer.to_string(data_hoje.year))
 
     {:ok, extratos}
   end
 
-  def get_saldo(produtos, item) do
-    Enum.reduce(produtos, 0, fn produto, acc ->
-        case produto["title"] == item.produto do
-          true -> produto["boxes"]
-          false -> acc
-        end
-    end)
-  end
-
   def get_extrato_prod(cliente, produtos) do
-     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
+    {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
 
-     extrato =
-       Enum.map(items_pedido, fn item ->
-         %{
-           id: item.id,
-           saldo: get_saldo(produtos, item),
-           produto: item.produto,
-           items: Enum.map(items_pedido, fn pedido ->
-             %{
-               produto: pedido.produto,
-               date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
-               pedido: pedido.id,
-               quantidade: pedido.quantidade
-             }
-           end)
-         }
-       end)
-       |> Enum.uniq_by(fn uniq -> uniq.produto end)
+    extrato =
+      Enum.map(items_pedido, fn item ->
+        %{
+          id: item.id,
+          saldo: 0,
+          produto: item.produto,
+          items:
+            Enum.map(items_pedido, fn pedido ->
+              %{
+                produto: pedido.produto,
+                date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
+                pedido: pedido.id,
+                quantidade: case pedido.operation do
+                  "06" -> pedido.quantidade
+                  "07" -> pedido.quantidade * -1
+                  _ -> 0
+                end
+              }
+            end)
+        }
+      end)
+      |> Enum.uniq_by(fn uniq -> uniq.produto end)
 
-       extrato =
-         Enum.map(extrato, fn map ->
-           Map.put(map, :items, Enum.filter(map.items, fn filter -> map.produto == filter.produto end))
-          end)
+    extrato =
+      Enum.map(extrato, fn map ->
+        Map.put(
+          map,
+          :items,
+          Enum.filter(map.items, fn filter -> map.produto == filter.produto end)
+        )
+      end)
+
+    extrato = get_saldo(extrato)
 
     {:ok, extrato}
+  end
+
+  defp get_saldo(extratos) do
+    Enum.map(extratos, fn extrato ->
+      saldo =
+        Enum.map(extrato.items, fn item ->
+          item.quantidade
+        end)
+        |> Enum.sum()
+
+      Map.put(extrato, :saldo, saldo)
+    end)
   end
 
   @impl true

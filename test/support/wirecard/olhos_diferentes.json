@@ -18,6 +18,7 @@
     "data_nascimento": "1998-07-07"
   },
   "type": "C",
+  "operation": "01",
   "items": [
     {
       "quantity_for_eye": {
@@ -29,7 +30,24 @@
       "tests": "Sim",
       "nocontrato": "teste",
       "produto": "BIOVIEW TORICA CX6",
-      "quantidade": 2,
+      "quantidade": 1,
+      "prc_unitario": 15100,
+      "nota_fiscal": "123456789",
+      "serie_nf": "123",
+      "num_pedido": "123456",
+      "duracao": "180.00000"
+    },
+    {
+      "quantity_for_eye": {
+        "esquerdo": 2,
+        "direito": 1
+      },
+      "type": "A",
+      "filial": "teste",
+      "tests": "Sim",
+      "nocontrato": "teste",
+      "produto": "BIOVIEW ASFERICA CX6",
+      "quantidade": 1,
       "prc_unitario": 15100,
       "nota_fiscal": "123456789",
       "serie_nf": "123",

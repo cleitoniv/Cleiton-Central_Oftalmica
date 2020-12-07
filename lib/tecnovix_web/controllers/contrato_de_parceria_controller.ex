@@ -36,7 +36,8 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
     with {:ok, items_order} <- ContratoDeParceriaModel.items_order(items),
          {:ok, order} <- ContratoDeParceriaModel.order(cliente, items_order),
          {:ok, _payment} <- ContratoDeParceriaModel.payment(id_cartao, order, ccv, installment),
-         {:ok, contrato} <- ContratoDeParceriaModel.create_contrato(cliente, items, order) |> IO.inspect(),
+         {:ok, contrato} <-
+           ContratoDeParceriaModel.create_contrato(cliente, items, order),
          {:ok, _notifications} <-
            NotificacoesClienteModel.credit_product_adquired(contrato, cliente) do
       conn
@@ -45,6 +46,14 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
       |> render("contrato.json", %{item: contrato})
     else
       _ -> {:error, :order_not_created}
+    end
+  end
+
+  def get_pacote(conn, %{"grupo" => grupo}) do
+    with {:ok, pacotes} <- ContratoDeParceriaModel.get_pacote(grupo) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: pacotes}))
     end
   end
 end
