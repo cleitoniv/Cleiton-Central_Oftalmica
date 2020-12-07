@@ -345,7 +345,7 @@ defmodule Tecnovix.ClientesModel do
     phone_number =
       String.replace(phone_number, "-", "")
       |> String.replace(" ", "")
-      |> String.slice(2..13)
+      |> String.slice(4..13)
       |> IO.inspect
 
     code_sms = String.to_integer(code_sms) |> IO.inspect
