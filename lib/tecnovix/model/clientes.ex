@@ -352,7 +352,7 @@ defmodule Tecnovix.ClientesModel do
 
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
-    {:ok, telefone} = ETS.KeyValueSet.get(kvset, :telefone)
+    {:ok, telefone} = ETS.KeyValueSet.get(kvset, :telefone) |> IO.inspect
     {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, :code_sms) |> IO.inspect
 
     case code_sms == code_sms_memory and telefone == phone_number do
