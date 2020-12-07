@@ -346,13 +346,14 @@ defmodule Tecnovix.ClientesModel do
       String.replace(phone_number, "-", "")
       |> String.replace(" ", "")
       |> String.slice(2..13)
+      |> IO.inspect
 
-    code_sms = String.to_integer(code_sms)
+    code_sms = String.to_integer(code_sms) |> IO.inspect
 
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
     {:ok, telefone} = ETS.KeyValueSet.get(kvset, :telefone)
-    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, :code_sms)
+    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, :code_sms) |> IO.inspect
 
     case code_sms == code_sms_memory and telefone == phone_number do
       true ->
