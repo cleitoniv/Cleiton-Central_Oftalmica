@@ -190,8 +190,9 @@ defmodule TecnovixWeb.ClientesController do
 
   def current_user(conn, _params) do
     {:ok, user} = conn.private.auth
+    {:ok, auth_user} = conn.private.auth
 
-    case user do
+    case auth_user do
       %UsuariosClienteSchema{} ->
         user = Tecnovix.Repo.preload(user, :cliente)
 
@@ -204,13 +205,13 @@ defmodule TecnovixWeb.ClientesController do
         conn
         |> put_view(TecnovixWeb.ClientesView)
         |> render("current_user.json", %{
-          item: Map.put(user.cliente, :role, "USUARIO"),
+          item: auth_user,
           credits: credits_info,
           notifications: notifications,
           dia_remessa: dia_remessa
         })
 
-      %ClientesSchema{} ->
+      _ ->
         stub = Screens.stub()
 
         credits_info = stub.get_credits(user)
