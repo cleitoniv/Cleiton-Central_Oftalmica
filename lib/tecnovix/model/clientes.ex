@@ -342,20 +342,12 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def confirmation_code(code_sms, phone_number) do
-    phone_number =
-      String.replace(phone_number, "-", "")
-      |> String.replace(" ", "")
-      |> String.slice(4..13)
-      |> IO.inspect
-
-    code_sms = String.to_integer(code_sms) |> IO.inspect
+    code_sms = String.to_integer(code_sms)
 
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
+    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, :code_sms)
 
-    {:ok, telefone} = ETS.KeyValueSet.get(kvset, :telefone) |> IO.inspect
-    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, :code_sms) |> IO.inspect
-
-    case code_sms == code_sms_memory and telefone == phone_number do
+    case code_sms == code_sms_memory do
       true ->
         ETS.KeyValueSet.put(kvset, :confirmation_sms, 1)
         {:ok, 1}
