@@ -37,10 +37,21 @@ defmodule Tecnovix.ClientesModel do
         {:error, error}
 
       _ ->
+      case Repo.get_by(ClientesSchema, [telefone: update_telefone(params["telefone"]), ddd: get_ddd(params["telefone"])]) do
+        nil ->
         %ClientesSchema{}
         |> ClientesSchema.first_access(params)
         |> formatting_telefone()
         |> Repo.insert()
+
+        {:ok, _} ->
+          error =
+            %ClientesSchema{}
+            |> change(%{})
+            |> add_error(:email, "Já existe um cliente com esse telefone cadastrado.")
+
+          {:error, error}
+      end
     end
   end
 
@@ -274,7 +285,6 @@ defmodule Tecnovix.ClientesModel do
 
     {:ok, resp} =
       HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
-    IO.inspect resp.body
     {:ok, Jason.decode!(resp.body)}
 
     # {:ok,
@@ -308,7 +318,6 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def confirmation_sms(params) do
-    IO.inspect params
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
     kvset
@@ -317,17 +326,6 @@ defmodule Tecnovix.ClientesModel do
     |> ETS.KeyValueSet.put!(:confirmation_sms, 0)
 
     {:ok, kvset}
-
-    # case Repo.get_by(ClientesSchema, telefone: params["telefone"]) do
-    #   nil ->
-    #     %ClientesSchema{}
-    #     |> ClientesSchema.sms(params)
-    #     |> formatting_telefone()
-    #     |> Repo.insert()
-    #
-    #   changeset ->
-    #     update_telefone(changeset, params)
-    # end
   end
 
   def update_telefone(changeset, params) do
@@ -355,27 +353,6 @@ defmodule Tecnovix.ClientesModel do
       false ->
         {:error, :invalid_code_sms}
     end
-
-    # cliente =
-    #   ClientesSchema
-    #   |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
-    #   |> first()
-    #   |> Repo.one()
-    #
-    # case cliente do
-    #   nil ->
-    #     {:error, :invalid_code_sms}
-    #
-    #   cliente ->
-    #     {cont, confirmation} =
-    #       ClientesSchema
-    #       |> where([c], c.code_sms == ^code_sms and ^phone_number == c.telefone)
-    #       |> update([u], set: [confirmation_sms: 1])
-    #       |> select([s], %{confirmation_sms: s.confirmation_sms})
-    #       |> Repo.update_all([])
-    #
-    #     {:ok, hd(confirmation)}
-    # end
   end
 
   def termo_responsabilidade() do

@@ -58,7 +58,7 @@ defmodule TecnovixWeb.ClientesController do
         {:error, :number_found}
 
       _ ->
-        {:error, :not_found}
+        {:error, :service_fail}
     end
   end
 

@@ -41,6 +41,19 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :service_fail}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "success" => false,
+        "data" => "Falha no serviço, por favor tente mais tarde."
+      })
+    )
+    |> halt()
+  end
+
   def call(conn, {:error, :invalid_code_sms}) do
     conn
     |> put_resp_content_type("application/json")
