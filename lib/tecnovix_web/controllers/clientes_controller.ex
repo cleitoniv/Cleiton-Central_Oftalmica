@@ -205,7 +205,7 @@ defmodule TecnovixWeb.ClientesController do
         conn
         |> put_view(TecnovixWeb.ClientesView)
         |> render("current_user.json", %{
-          item: Map.put(user.cliente, :role, "USUARIO") |> Map.put(:nome, auth_user.nome),
+          item: Map.put(user.cliente, :role, "USUARIO"),
           credits: credits_info,
           notifications: notifications,
           dia_remessa: dia_remessa
