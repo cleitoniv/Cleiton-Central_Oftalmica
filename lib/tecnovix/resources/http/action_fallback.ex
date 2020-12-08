@@ -64,7 +64,10 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :product_repeated}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Esse número de série ja consta na listagem."}))
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "Esse número de série ja consta na listagem."})
+    )
     |> halt()
   end
 
@@ -109,7 +112,13 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :serie_existente}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Número de série já foi inserida em um processo de devolução."}))
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "success" => false,
+        "data" => "Número de série já foi inserida em um processo de devolução."
+      })
+    )
     |> halt()
   end
 

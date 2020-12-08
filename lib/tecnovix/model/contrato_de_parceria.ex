@@ -182,14 +182,13 @@ defmodule Tecnovix.ContratoDeParceriaModel do
   end
 
   def get_pacote(_grupo) do
-    pacotes =
-      [
-        %{
-          total: 302000,
-          quantity: 20,
-          price: 15100
-        }
-      ]
+    pacotes = [
+      %{
+        total: 302_000,
+        quantity: 20,
+        price: 15100
+      }
+    ]
 
     {:ok, pacotes}
   end

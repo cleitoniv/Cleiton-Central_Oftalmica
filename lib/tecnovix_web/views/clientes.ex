@@ -210,24 +210,22 @@ defmodule TecnovixWeb.ClientesView do
         notifications: notifications,
         dia_remessa: dia_remessa
       }) do
+    case item do
+      %Tecnovix.UsuariosClienteSchema{} ->
+        TecnovixWeb.UsuariosClienteView.build(%{item: item})
+        |> Map.put(:points, credits.points)
+        |> Map.put(:money, credits.money)
+        |> Map.put(:notifications, notifications)
+        |> Map.put(:dia_remessa, dia_remessa)
+        |> IO.inspect()
 
-      case item do
-        %Tecnovix.UsuariosClienteSchema{} ->
-          TecnovixWeb.UsuariosClienteView.build(%{item: item})
-          |> Map.put(:points, credits.points)
-          |> Map.put(:money, credits.money)
-          |> Map.put(:notifications, notifications)
-          |> Map.put(:dia_remessa, dia_remessa)
-          |> IO.inspect
-
-        _ ->
+      _ ->
         __MODULE__.build(%{item: item})
         |> Map.put(:points, credits.points)
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
-        |> IO.inspect
-      end
-
+        |> IO.inspect()
+    end
   end
 end

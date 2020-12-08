@@ -647,7 +647,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def items_order(items) do
     order_items =
       Enum.reduce(
-        items, [],
+        items,
+        [],
         fn item, acc ->
           list =
             case item["operation"] do
@@ -675,13 +676,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
                       }
                     end)
 
-                   _ -> []
+                  _ ->
+                    []
                 end
 
-              _ -> []
+              _ ->
+                []
             end
 
-            list ++ acc
+          list ++ acc
         end
       )
 
@@ -737,35 +740,35 @@ defmodule Tecnovix.PedidosDeVendaModel do
         end)
       end)
 
-      Enum.filter(pedidos, fn item ->
-        paciente =
-          Enum.map(item.items, fn items ->
-            items.paciente
-          end)
+    Enum.filter(pedidos, fn item ->
+      paciente =
+        Enum.map(item.items, fn items ->
+          items.paciente
+        end)
 
-        paciente != [nil]
-      end)
-      |> Enum.filter(fn pedido ->
-        duracao =
-          Enum.map(pedido.items, fn item ->
-            item.duracao
-          end)
+      paciente != [nil]
+    end)
+    |> Enum.filter(fn pedido ->
+      duracao =
+        Enum.map(pedido.items, fn item ->
+          item.duracao
+        end)
 
-        data_hoje = Date.utc_today()
+      data_hoje = Date.utc_today()
 
-        duracao =
-          String.replace(hd(duracao), ~r/[^\d]/, "")
-          |> String.to_integer()
+      duracao =
+        String.replace(hd(duracao), ~r/[^\d]/, "")
+        |> String.to_integer()
 
-        count_range =
-          Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
-          |> Enum.count()
+      count_range =
+        Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
+        |> Enum.count()
 
-        count_range <= 30
-      end)
-      |> Enum.map(fn map ->
-        Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
-      end)
+      count_range <= 30
+    end)
+    |> Enum.map(fn map ->
+      Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
+    end)
   end
 
   def duracao_mais_data_insercao(item, duracao) do
@@ -829,7 +832,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         0
 
       valor ->
-        taxa_cartao = (valor * 0.0549) + (0.69 * 100)
+        taxa_cartao = valor * 0.0549 + 0.69 * 100
         taxa_parcelamento = valor * (taxa / 100)
         taxa_cartao + taxa_parcelamento
     end
@@ -855,7 +858,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     resp =
       Enum.map(list_taxa, fn {parcela, taxa} ->
-        result = (calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela
+        result =
+          ((calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela)
           |> Float.round(2)
 
         case parcela do

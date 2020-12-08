@@ -1097,14 +1097,14 @@ defmodule Tecnovix.App.ScreensTest do
     extratos = %{
       data:
         Enum.reduce(creditos, [], fn credito, acc ->
-          creditos =
-            %{
-              id: credito.id,
-              date_filter: ~D[2020-12-01],
-              date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
-              pedido: credito.id,
-              valor: credito.valor |> Kernel.trunc()
-            }
+          creditos = %{
+            id: credito.id,
+            date_filter: ~D[2020-12-01],
+            date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
+            pedido: credito.id,
+            valor: credito.valor |> Kernel.trunc()
+          }
+
           case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do
             true -> [creditos] ++ acc
             false -> acc
@@ -1133,11 +1133,12 @@ defmodule Tecnovix.App.ScreensTest do
                 produto: pedido.produto,
                 date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
                 pedido: pedido.id,
-                quantidade: case pedido.operation do
-                  "06" -> pedido.quantidade
-                  "07" -> pedido.quantidade * -1
-                  _ -> 0
-                end
+                quantidade:
+                  case pedido.operation do
+                    "06" -> pedido.quantidade
+                    "07" -> pedido.quantidade * -1
+                    _ -> 0
+                  end
               }
             end)
         }

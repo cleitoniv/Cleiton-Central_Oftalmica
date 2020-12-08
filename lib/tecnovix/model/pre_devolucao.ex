@@ -1,6 +1,14 @@
 defmodule Tecnovix.PreDevolucaoModel do
   use Tecnovix.DAO, schema: Tecnovix.PreDevolucaoSchema
-  alias Tecnovix.{PreDevolucaoSchema, NotificacoesClienteModel, ClientesSchema, Repo, ItensPreDevolucaoSchema}
+
+  alias Tecnovix.{
+    PreDevolucaoSchema,
+    NotificacoesClienteModel,
+    ClientesSchema,
+    Repo,
+    ItensPreDevolucaoSchema
+  }
+
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
   import Ecto.Query
 

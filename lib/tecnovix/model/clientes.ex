@@ -11,8 +11,10 @@ defmodule Tecnovix.ClientesModel do
   @header [{"Content-Type", "application/x-www-form-urlencoded"}]
 
   def verify_phone(phone) do
-    case Repo.get_by(ClientesSchema, [telefone: update_telefone(phone), ddd: get_ddd(phone)]) do
-      nil -> {:ok, phone}
+    case Repo.get_by(ClientesSchema, telefone: update_telefone(phone), ddd: get_ddd(phone)) do
+      nil ->
+        {:ok, phone}
+
       _ ->
         error =
           %ClientesSchema{}
@@ -37,21 +39,24 @@ defmodule Tecnovix.ClientesModel do
         {:error, error}
 
       _ ->
-      case Repo.get_by(ClientesSchema, [telefone: update_telefone(params["telefone"]), ddd: get_ddd(params["telefone"])]) do
-        nil ->
-        %ClientesSchema{}
-        |> ClientesSchema.first_access(params)
-        |> formatting_telefone()
-        |> Repo.insert()
-
-        {:ok, _} ->
-          error =
+        case Repo.get_by(ClientesSchema,
+               telefone: update_telefone(params["telefone"]),
+               ddd: get_ddd(params["telefone"])
+             ) do
+          nil ->
             %ClientesSchema{}
-            |> change(%{})
-            |> add_error(:email, "Já existe um cliente com esse telefone cadastrado.")
+            |> ClientesSchema.first_access(params)
+            |> formatting_telefone()
+            |> Repo.insert()
 
-          {:error, error}
-      end
+          {:ok, _} ->
+            error =
+              %ClientesSchema{}
+              |> change(%{})
+              |> add_error(:email, "Já existe um cliente com esse telefone cadastrado.")
+
+            {:error, error}
+        end
     end
   end
 
@@ -285,6 +290,7 @@ defmodule Tecnovix.ClientesModel do
 
     {:ok, resp} =
       HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
+
     {:ok, Jason.decode!(resp.body)}
 
     # {:ok,
