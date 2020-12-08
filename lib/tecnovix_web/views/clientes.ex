@@ -15,7 +15,7 @@ defmodule TecnovixWeb.ClientesView do
       nome: item.nome,
       email: item.email,
       email_fiscal: item.email_fiscal,
-      data_nascimento: item.data_nascimento,
+      data_nascimento: formatting_dtnasc(item.data_nascimento),
       nome_empresarial: item.nome_empresarial,
       endereco: item.endereco,
       numero: item.numero,
@@ -37,6 +37,15 @@ defmodule TecnovixWeb.ClientesView do
       wirecard_cliente_id: item.wirecard_cliente_id,
       fcm_token: item.fcm_token
     }
+  end
+
+  def formatting_dtnasc(data) do
+    case data do
+      nil -> ""
+      data ->
+        [ano, mes, dia] = String.split(Date.to_string(data), ["/", "-"])
+        "#{dia}-#{mes}-#{ano}"
+    end
   end
 
   def render("app_clientes.json", %{clientes: clientes}) do
