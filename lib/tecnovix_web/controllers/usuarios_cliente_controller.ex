@@ -31,6 +31,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
       {:error, %Ecto.Changeset{} = error} ->
         {:error, error}
 
+      {:ok, %{status_code: 400}} -> {:error, :invalid_parameter}
+
       {:ativo, user} ->
         conn
         |> put_status(:created)
