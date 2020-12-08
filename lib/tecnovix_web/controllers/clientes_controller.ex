@@ -190,7 +190,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def current_user(conn, _params) do
     {:ok, user} = conn.private.auth
-    {:ok, auth_user} = conn.private.auth_user |> IO.inspect
+    {:ok, auth_user} = conn.private.auth_user
 
     case auth_user do
       %UsuariosClienteSchema{} ->
@@ -205,7 +205,7 @@ defmodule TecnovixWeb.ClientesController do
         conn
         |> put_view(TecnovixWeb.ClientesView)
         |> render("current_user.json", %{
-          item: Map.put(user.cliente, :role, "USUARIO") |> Map.put(:nome_usuario, auth_user.nome),
+          item: Map.put(user.cliente, :role, "USUARIO") |> Map.put(:nome, auth_user.nome),
           credits: credits_info,
           notifications: notifications,
           dia_remessa: dia_remessa
