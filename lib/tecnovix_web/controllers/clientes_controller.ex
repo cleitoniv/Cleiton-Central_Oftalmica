@@ -190,7 +190,7 @@ defmodule TecnovixWeb.ClientesController do
 
   def current_user(conn, _params) do
     {:ok, user} = conn.private.auth
-    {:ok, auth_user} = conn.private.auth_user
+    {:ok, auth_user} = conn.private.auth_user |> IO.inspect
 
     case auth_user do
       %UsuariosClienteSchema{} ->

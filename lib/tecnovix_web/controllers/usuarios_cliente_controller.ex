@@ -31,13 +31,13 @@ defmodule TecnovixWeb.UsuariosClienteController do
       {:error, %Ecto.Changeset{} = error} ->
         {:error, error}
 
-      {:ok, %{status_code: 400}} -> {:error, :invalid_parameter}
-
       {:ativo, user} ->
         conn
         |> put_status(:created)
         |> put_resp_content_type("application/json")
         |> render("show.json", %{item: user})
+
+      _ -> {:error, :invalid_parameter}
     end
   end
 
