@@ -344,16 +344,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
 
                   [
-                    olho_direito(input_codigo(items, codigo), map),
-                    olho_esquerdo(input_codigo(items, codigo), map)
+                    olho_direito(input_codigo(items |> Map.put("quantidade", items["quantidade"] / items["quantidade"]), codigo), map),
+                    olho_esquerdo(input_codigo(items|> Map.put("quantidade", items["quantidade"] / items["quantidade"]), codigo), map)
                   ]
 
                 map["olho_diferentes"] != nil ->
                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
 
                   [
-                    olho_diferentes_D(input_codigo(items |> Map.put("quantidade", items["quantidade"] / items["quantidade"]), codigo), map),
-                    olho_diferentes_E(input_codigo(items |> Map.put("quantidade", items["quantidade"] / items["quantidade"]), codigo), map)
+                    olho_diferentes_D(input_codigo(items, codigo), map),
+                    olho_diferentes_E(input_codigo(items, codigo), map)
                   ]
 
                 map["type"] == "C" ->
