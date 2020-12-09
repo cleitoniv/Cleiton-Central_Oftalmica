@@ -403,6 +403,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def get_product_serie(conn, %{"num_serie" => num_serie}) do
+    num_serie = String.upcase(num_serie)
     stub = Screens.stub()
     stub_protheus = Protheus.stub()
 
