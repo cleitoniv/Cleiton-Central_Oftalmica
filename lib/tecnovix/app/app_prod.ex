@@ -31,17 +31,46 @@ defmodule Tecnovix.App.ScreensProd do
     HTTPoison.get(url, header)
   end
 
-  def get_endereco_entrega(%{cnpj_cpf: cnpj_cpf, token: token}) do
+  def get_endereco_entrega(cliente) do
     endereco = %{
-      cep: "29027-445",
-      endereco: "Rua Dr.Eurico Aguiar",
-      numero: "130",
-      complemento: "Sala 609",
-      bairro: "Santa Helena",
-      cidade: "Vitória"
+      cep: parse_field("A1_CEPE", cliente),
+      endereco: parse_field("A1_ENDENT", cliente),
+      numero: get_num("A1_ENDENT", cliente),
+      complemento: parse_field("A1_COMPENT", cliente),
+      bairro: parse_field("A1_BAIRROE", cliente),
+      cidade: parse_field("A1_MUNE", cliente)
     }
+    |> IO.inspect
 
     {:ok, endereco}
+  end
+
+  def get_num("A1_ENDENT" = key, cliente) do
+    case cliente["#{key}"] do
+      nil -> ""
+      value ->
+        [endereco, num] = String.split(value, ",")
+        num
+    end
+    |> IO.inspect
+  end
+
+  def parse_field("A1_ENDENT" = key, cliente) do
+    case cliente["#{key}"] do
+      nil -> ""
+      value ->
+        [endereco, num] = String.split(value, ",")
+        endereco
+    end
+    |> IO.inspect
+  end
+
+  def parse_field(key, cliente) do
+    case cliente["#{key}"] do
+      nil -> ""
+      value -> value
+    end
+    |> IO.inspect
   end
 
   def organize_field(map) do
