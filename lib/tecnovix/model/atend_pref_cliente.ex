@@ -47,8 +47,12 @@ defmodule Tecnovix.AtendPrefClienteModel do
         "4" -> "quinta-feira"
         "5" -> "sexta-feira"
       end
-
-    horario = String.downcase(params["horario"])
+      horario =
+        case params["horario"] do
+          "manha" -> String.downcase(params["horario"])
+          "tarde" -> String.downcase(params["horario"])
+          _ ->
+        end 
     {dia, _} = String.split_at(dia_remessa, 3)
 
     horario_new = "#{dia}_#{horario}"
@@ -59,7 +63,6 @@ defmodule Tecnovix.AtendPrefClienteModel do
       |> Map.put("cod_cliente", cliente.codigo)
       |> Map.put("loja_cliente", cliente.loja)
       |> Map.put("cliente_id", cliente.id)
-      |> IO.inspect
 
     case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
       nil ->
