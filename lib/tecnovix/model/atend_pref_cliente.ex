@@ -38,6 +38,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
   end
 
   def formatting_atend(params, cliente) do
+    IO.inspect params
     dia_remessa =
       case cliente.dia_remessa do
         nil -> "-"
