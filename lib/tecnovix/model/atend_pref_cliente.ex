@@ -115,15 +115,15 @@ defmodule Tecnovix.AtendPrefClienteModel do
         end
 
       _ ->
-      horario = "manha"
-
       {dia, _} = String.split_at(dia_remessa, 3)
 
-      horario_new = "#{dia}_#{horario}"
+      horario_new1 = "#{dia}_manha"
+      horario_new2 = "#{dia}_tarde"
 
       atend =
         Map.new()
-        |> Map.put(horario_new, 1)
+        |> Map.put(horario_new1, 1)
+        |> Map.put(horario_new2, 1)
         |> Map.put("cod_cliente", cliente.codigo)
         |> Map.put("loja_cliente", cliente.loja)
         |> Map.put("cliente_id", cliente.id)
@@ -132,49 +132,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
         nil ->
           create(atend)
 
-        changeset ->
-          previous =
-            Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
-              case value == 1 and key != :id do
-                true -> [key]
-                false -> []
-              end
-            end)
-            |> Enum.at(0)
-
-          atend = Map.put(atend, "#{previous}", 0)
-          update(changeset, atend)
-      end
-
-      horario = "tarde"
-
-      {dia, _} = String.split_at(dia_remessa, 3)
-
-      horario_new = "#{dia}_#{horario}"
-
-      atend =
-        Map.new()
-        |> Map.put(horario_new, 1)
-        |> Map.put("cod_cliente", cliente.codigo)
-        |> Map.put("loja_cliente", cliente.loja)
-        |> Map.put("cliente_id", cliente.id)
-
-      case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
-        nil ->
-          create(atend)
-
-        changeset ->
-          previous =
-            Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
-              case value == 1 and key != :id do
-                true -> [key]
-                false -> []
-              end
-            end)
-            |> Enum.at(0)
-
-          atend = Map.put(atend, "#{previous}", 0)
-          update(changeset, atend)
+        changeset -> update(changeset, atend)
       end
     end
   end
