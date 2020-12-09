@@ -85,6 +85,13 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :email_fail}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Esse usuario não pode redefinir senha."}))
+    |> halt()
+  end
+
   def call(conn, {:error, :cliente_desativado}) do
     conn
     |> put_resp_content_type("application/json")

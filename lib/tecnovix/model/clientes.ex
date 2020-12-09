@@ -3,12 +3,47 @@ defmodule Tecnovix.ClientesModel do
   alias Tecnovix.CartaoCreditoClienteSchema, as: Cartao
   alias Tecnovix.Repo
   import Ecto.Query
-  alias Tecnovix.ClientesSchema
+  alias Tecnovix.{ClientesSchema, UsuariosClienteSchema}
   import Ecto.Changeset
   import Ecto.Query
 
   @sms_token "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuZGlyZWN0Y2FsbHNvZnQuY29tIiwiYXVkIjoiMTkyLjE2OC4xNS4yNyIsImlhdCI6MTYwMzk5MjAwMCwibmJmIjoxNjAzOTkyMDAwLCJleHAiOjE2MDM5OTU2MDAsImRjdCI6IjMzMDI3NzQwMCIsImNsaWVudF9vYXV0aF9pZCI6IjM3NjA0OSJ9.B4gF3wAeOUkE9GNZSZCHBa8h_6touKQlrXebQrOocpw"
   @header [{"Content-Type", "application/x-www-form-urlencoded"}]
+
+  def verify_email(email) do
+    case Repo.get_by(ClientesSchema, email: email) do
+      nil ->
+        case Repo.get_by(UsuariosClienteSchema, email: email) do
+          nil ->
+            error =
+              %ClientesSchema{}
+              |> change(%{})
+              |> add_error(:email, "Esse email não está cadastrado.")
+
+            {:error, error}
+          _ ->
+          error =
+            %ClientesSchema{}
+            |> change(%{})
+            |> add_error(:email, "Usuario de cliente não pode redefinir senha.")
+
+          {:error, error}
+        end
+
+      email ->
+        case email.sit_app == "A" do
+          true -> {:ok, email}
+
+          false ->
+            error =
+              %ClientesSchema{}
+              |> change(%{})
+              |> add_error(:email, "Usuario bloqueado não pode redefinir senha.")
+
+          {:error, error}
+        end
+    end
+  end
 
   def verify_phone(phone) do
     case Repo.get_by(ClientesSchema, telefone: update_telefone(phone), ddd: get_ddd(phone)) do

@@ -16,6 +16,14 @@ defmodule TecnovixWeb.ClientesController do
   alias TecnovixWeb.Auth.Firebase
   action_fallback Tecnovix.Resources.Fallback
 
+  def verify_email(conn, %{"email" => email}) do
+    with {:ok, email} <- ClientesModel.verify_Email(email) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true}))
+    end
+  end
+
   def verify_phone(conn, %{"phone" => phone}) do
     with {:ok, phone} <- ClientesModel.verify_phone(phone) do
       conn
