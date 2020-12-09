@@ -226,6 +226,7 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
+        |> IO.inspect
 
       _ ->
         __MODULE__.build(%{item: item})
@@ -233,6 +234,7 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
+        |> IO.inspect
     end
   end
 end
