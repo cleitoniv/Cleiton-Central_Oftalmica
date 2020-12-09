@@ -227,7 +227,7 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
-        |> Map.put(:usuario_cliente, Map.from_struct(usuario_cliente))
+        |> Map.put(:usuario_cliente, Map.from_struct(usuario_cliente) |> Map.delete(:__META__))
         |> IO.inspect
 
       _ ->
@@ -236,7 +236,7 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
-        |> Map.put(:usuario_cliente, Map.from_struct(usuario_cliente))
+        |> Map.put(:usuario_cliente, Map.from_struct(usuario_cliente) |> Map.delete(:__META__))
         |> IO.inspect
     end
   end
