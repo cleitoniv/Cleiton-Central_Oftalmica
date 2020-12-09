@@ -35,7 +35,8 @@ defmodule TecnovixWeb.ClientesView do
       crm_medico: item.crm_medico,
       dia_remessa: item.dia_remessa,
       wirecard_cliente_id: item.wirecard_cliente_id,
-      fcm_token: item.fcm_token
+      fcm_token: item.fcm_token,
+      status: item.status
     }
   end
 
@@ -227,7 +228,6 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
-        |> Map.put(:usuario_cliente, field_usuario(usuario_cliente))
 
       _ ->
         __MODULE__.build(%{item: item})
@@ -235,20 +235,6 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
-        |> Map.put(:usuario_cliente, field_usuario(usuario_cliente))
     end
-  end
-
-  defp field_usuario(item) do
-    %{
-      cliente_id: item.cliente_id,
-      id: item.id,
-      nome: item.nome,
-      email: item.email,
-      cargo: item.cargo,
-      status: item.status,
-      password: item.password,
-      role: item.role
-    }
   end
 end
