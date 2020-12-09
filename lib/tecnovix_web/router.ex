@@ -37,6 +37,8 @@ defmodule TecnovixWeb.Router do
 
   # Other scopes may use custom stacks.
   scope "/api" do
+    post "/verify_email", TecnovixWeb.ClientesController, :verify_email
+
     pipe_through :api
 
     post "/user_sync/login", TecnovixWeb.SyncUsersController, :login
@@ -146,7 +148,6 @@ defmodule TecnovixWeb.Router do
       post "/taxa_entrega", TecnovixWeb.PedidosDeVendaController, :taxa_entrega
       post "/pedido_produto", TecnovixWeb.PedidosDeVendaController, :pedido_produto
       get "/get_pacote", TecnovixWeb.ContratoDeParceriaController, :get_pacote
-      post "/verify_email", TecnovixWeb.ClientesController, :verify_email
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
