@@ -289,7 +289,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
                   [olho_esquerdo(items, map)]
 
                 map["olho_ambos"] != nil ->
-                  IO.inspect "oi"
+                  IO.inspect items
+                  items = Map.put(items, "quantidade", items["quantidade"] / 2)
+                  IO.inspect items
                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
 
                   [
