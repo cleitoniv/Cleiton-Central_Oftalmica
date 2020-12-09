@@ -40,7 +40,6 @@ defmodule Tecnovix.App.ScreensProd do
       bairro: parse_field("A1_BAIRROE", cliente),
       cidade: parse_field("A1_MUNE", cliente)
     }
-    |> IO.inspect
 
     {:ok, endereco}
   end
@@ -52,7 +51,6 @@ defmodule Tecnovix.App.ScreensProd do
         [endereco, num] = String.split(value, ",")
         num
     end
-    |> IO.inspect
   end
 
   def parse_field("A1_ENDENT" = key, cliente) do
@@ -62,7 +60,6 @@ defmodule Tecnovix.App.ScreensProd do
         [endereco, num] = String.split(value, ",")
         endereco
     end
-    |> IO.inspect
   end
 
   def parse_field(key, cliente) do
@@ -70,7 +67,6 @@ defmodule Tecnovix.App.ScreensProd do
       nil -> ""
       value -> value
     end
-    |> IO.inspect
   end
 
   def organize_field(map) do

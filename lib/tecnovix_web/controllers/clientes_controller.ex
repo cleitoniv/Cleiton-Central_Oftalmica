@@ -202,10 +202,9 @@ defmodule TecnovixWeb.ClientesController do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with  {:ok, auth} <- Auth.token(),
-          {:ok, response = %{status_code: 200}} <- stub.get_endereco_entrega_protheus(%{cnpj_cpf: cliente.cnpj_cpf, token: auth["access_token"]}) |> IO.inspect,
+          {:ok, response = %{status_code: 200}} <- stub.get_endereco_entrega_protheus(%{cnpj_cpf: cliente.cnpj_cpf, token: auth["access_token"]}),
           {:ok, cliente} <- protheus.organize_cliente(response),
           {:ok, endereco} <- stub.get_endereco_entrega(cliente) do
-            IO.inspect cliente
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: endereco}))
