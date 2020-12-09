@@ -11,7 +11,7 @@ defmodule Tecnovix.ClientesModel do
   @header [{"Content-Type", "application/x-www-form-urlencoded"}]
 
   def get_period() do
-    period = ["Manha-Tarde", "Manha", "Tarde"]
+    period = ["Manhã-Tarde", "Manhã", "Tarde"]
 
     {:ok, period}
   end
