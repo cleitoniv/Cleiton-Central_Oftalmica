@@ -22,7 +22,14 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  def get_endereco_entrega(_cliente) do
+  def get_endereco_entrega_protheus(%{cnpj_cpf: cnpj_cpf, token: token}) do
+    params = %{"A1_CGC" => cnpj_cpf}
+    url = Protheus.generate_url("/rest/fwmodel/sa1rest", params)
+    header = Protheus.authenticate(@header, token)
+    HTTPoison.get(url, header)
+  end
+
+  def get_endereco_entrega(%{cnpj_cpf: cnpj_cpf, token: token}) do
     endereco = %{
       cep: "29027-445",
       endereco: "Rua Dr.Eurico Aguiar",

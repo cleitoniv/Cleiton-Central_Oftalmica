@@ -194,15 +194,22 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
+  alias Tecnovix.Services.Auth
+  alias Tecnovix.Endpoints.Protheus
+
   def get_endereco_entrega(conn, _params) do
     stub = Screens.stub()
+    protheus = Protheus.stub()
 
     {:ok, cliente} = verify_auth(conn.private.auth)
 
-    with {:ok, endereco} <- stub.get_endereco_entrega(cliente) do
+    with  {:ok, auth} <- Auth.token(),
+          {:ok, response} <- stub.get_endereco_entrega_protheus(%{cnpj_cpf: cliente.cnpj_cpf, token: auth["access_token"]}),
+          {:ok, cliente} <- protheus.organize_cliente(response) do
+            IO.inspect cliente
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: endereco}))
+      |> send_resp(200, Jason.encode!(%{success: true}))
     end
   end
 
