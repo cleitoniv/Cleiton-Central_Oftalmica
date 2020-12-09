@@ -217,7 +217,6 @@ defmodule TecnovixWeb.ClientesView do
   def render("current_user.json", %{
         item: item,
         credits: credits,
-        usuario_cliente: usuario_cliente,
         notifications: notifications,
         dia_remessa: dia_remessa
       }) do
