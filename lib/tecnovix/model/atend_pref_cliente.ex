@@ -50,7 +50,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
       end
 
     case params["horario"] do
-      "Manhã" ->
+      "manha" ->
         horario = String.downcase(params["horario"])
 
         {dia, _} = String.split_at(dia_remessa, 3)
@@ -82,7 +82,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
             update(changeset, atend)
         end
 
-      "Tarde" ->
+      "tarde" ->
         horario = String.downcase(params["horario"])
 
         {dia, _} = String.split_at(dia_remessa, 3)
@@ -115,7 +115,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
         end
 
       _ ->
-      horario = "manhã"
+      horario = "manha"
 
       {dia, _} = String.split_at(dia_remessa, 3)
 
