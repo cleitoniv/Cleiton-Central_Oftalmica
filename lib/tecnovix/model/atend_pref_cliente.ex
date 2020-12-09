@@ -49,37 +49,37 @@ defmodule Tecnovix.AtendPrefClienteModel do
       end
 
     case params["horario"] do
-      "Manha" ->
-      horario = String.downcase(params["horario"])
+      "Manhã" ->
+        horario = String.downcase(params["horario"])
 
-      {dia, _} = String.split_at(dia_remessa, 3)
+        {dia, _} = String.split_at(dia_remessa, 3)
 
-      horario_new = "#{dia}_#{horario}"
+        horario_new = "#{dia}_#{horario}"
 
-      atend =
-        Map.new()
-        |> Map.put(horario_new, 1)
-        |> Map.put("cod_cliente", cliente.codigo)
-        |> Map.put("loja_cliente", cliente.loja)
-        |> Map.put("cliente_id", cliente.id)
+        atend =
+          Map.new()
+          |> Map.put(horario_new, 1)
+          |> Map.put("cod_cliente", cliente.codigo)
+          |> Map.put("loja_cliente", cliente.loja)
+          |> Map.put("cliente_id", cliente.id)
 
-      case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
-        nil ->
-          create(atend)
+        case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
+          nil ->
+            create(atend)
 
-        changeset ->
-          previous =
-            Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
-              case value == 1 and key != :id do
-                true -> [key]
-                false -> []
-              end
-            end)
-            |> Enum.at(0)
+          changeset ->
+            previous =
+              Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
+                case value == 1 and key != :id do
+                  true -> [key]
+                  false -> []
+                end
+              end)
+              |> Enum.at(0)
 
-          atend = Map.put(atend, "#{previous}", 0)
-          update(changeset, atend)
-      end
+            atend = Map.put(atend, "#{previous}", 0)
+            update(changeset, atend)
+        end
 
       "Tarde" ->
         horario = String.downcase(params["horario"])
@@ -114,7 +114,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
         end
 
       _ ->
-      horario = "manha"
+      horario = "manhã"
 
       {dia, _} = String.split_at(dia_remessa, 3)
 
