@@ -14,6 +14,7 @@ defmodule TecnovixWeb.ClientesController do
 
   alias Tecnovix.{App.Screens, Services.Devolucao, Services.Auth, Endpoints.Protheus}
   alias TecnovixWeb.Auth.Firebase
+  alias Tecnovix.Endpoints.Protheus
   action_fallback Tecnovix.Resources.Fallback
 
   def get_period(conn, _params) do
@@ -194,9 +195,6 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  alias Tecnovix.Services.Auth
-  alias Tecnovix.Endpoints.Protheus
-
   def get_endereco_entrega(conn, _params) do
     stub = Screens.stub()
     protheus = Protheus.stub()
@@ -204,7 +202,7 @@ defmodule TecnovixWeb.ClientesController do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with  {:ok, auth} <- Auth.token(),
-          {:ok, response} <- stub.get_endereco_entrega_protheus(%{cnpj_cpf: cliente.cnpj_cpf, token: auth["access_token"]}),
+          {:ok, response} <- stub.get_endereco_entrega_protheus(%{cnpj_cpf: cliente.cnpj_cpf, token: auth["access_token"]}) |> IO.inspect,
           {:ok, cliente} <- protheus.organize_cliente(response) do
             IO.inspect cliente
       conn

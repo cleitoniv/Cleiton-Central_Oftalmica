@@ -8,12 +8,13 @@ defmodule Tecnovix.App.ScreensProd do
     NotificacoesClienteModel,
     CreditoFinanceiroModel
   }
-  
+
   alias Tecnovix.Endpoints.Protheus
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
   @product_url "http://portal.centraloftalmica.com/images/010C.jpg"
+  @header [{"Content-Type", "application/x-www-form-urlencoded"}]
 
   def get_graus(grupo) do
     case DescricaoModel.get_graus(grupo) do
