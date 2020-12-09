@@ -216,6 +216,7 @@ defmodule TecnovixWeb.ClientesView do
   def render("current_user.json", %{
         item: item,
         credits: credits,
+        usuario_cliente: usuario_cliente,
         notifications: notifications,
         dia_remessa: dia_remessa
       }) do
@@ -226,6 +227,7 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
+        |> Map.put(:usuario_cliente, usuario_cliente)
         |> IO.inspect
 
       _ ->
@@ -234,6 +236,7 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
+        |> Map.put(:usuario_cliente, usuario_cliente)
         |> IO.inspect
     end
   end
