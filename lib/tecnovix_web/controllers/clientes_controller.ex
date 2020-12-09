@@ -16,6 +16,16 @@ defmodule TecnovixWeb.ClientesController do
   alias TecnovixWeb.Auth.Firebase
   action_fallback Tecnovix.Resources.Fallback
 
+  def get_period(conn, _params) do
+    with {:ok, period} <- ClientesModel.get_period() do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: period}))
+    else
+      _ -> {:error, :invalid_parameter}
+    end
+  end
+
   def verify_email(conn, %{"email" => email}) do
     with {:ok, email} <- ClientesModel.verify_email(email) do
       conn

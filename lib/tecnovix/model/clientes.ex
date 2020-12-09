@@ -10,6 +10,12 @@ defmodule Tecnovix.ClientesModel do
   @sms_token "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuZGlyZWN0Y2FsbHNvZnQuY29tIiwiYXVkIjoiMTkyLjE2OC4xNS4yNyIsImlhdCI6MTYwMzk5MjAwMCwibmJmIjoxNjAzOTkyMDAwLCJleHAiOjE2MDM5OTU2MDAsImRjdCI6IjMzMDI3NzQwMCIsImNsaWVudF9vYXV0aF9pZCI6IjM3NjA0OSJ9.B4gF3wAeOUkE9GNZSZCHBa8h_6touKQlrXebQrOocpw"
   @header [{"Content-Type", "application/x-www-form-urlencoded"}]
 
+  def get_period() do
+    period = ["Manhã-Tarde", "Manhã", "Tarde"]
+
+    {:ok, period}
+  end
+
   def verify_email(email) do
     case Repo.get_by(ClientesSchema, email: email) do
       nil ->

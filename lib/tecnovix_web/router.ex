@@ -148,6 +148,7 @@ defmodule TecnovixWeb.Router do
       post "/taxa_entrega", TecnovixWeb.PedidosDeVendaController, :taxa_entrega
       post "/pedido_produto", TecnovixWeb.PedidosDeVendaController, :pedido_produto
       get "/get_pacote", TecnovixWeb.ContratoDeParceriaController, :get_pacote
+      get "/period", TecnovixWeb.ClientesController, :get_period
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema

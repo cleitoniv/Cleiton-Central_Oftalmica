@@ -78,6 +78,13 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :inatived}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Usuario não autorizado"}))
+    |> halt()
+  end
+
   def call(conn, {:error, :email_invalid}) do
     conn
     |> put_resp_content_type("application/json")
