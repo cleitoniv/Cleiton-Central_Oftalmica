@@ -59,6 +59,7 @@ defmodule Tecnovix.AtendPrefClienteModel do
       |> Map.put("cod_cliente", cliente.codigo)
       |> Map.put("loja_cliente", cliente.loja)
       |> Map.put("cliente_id", cliente.id)
+      |> IO.inspect
 
     case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
       nil ->
