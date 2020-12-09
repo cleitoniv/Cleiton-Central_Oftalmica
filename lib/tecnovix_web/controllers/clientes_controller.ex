@@ -17,7 +17,7 @@ defmodule TecnovixWeb.ClientesController do
   action_fallback Tecnovix.Resources.Fallback
 
   def verify_email(conn, %{"email" => email}) do
-    with {:ok, email} <- ClientesModel.verify_Email(email) do
+    with {:ok, email} <- ClientesModel.verify_email(email) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))

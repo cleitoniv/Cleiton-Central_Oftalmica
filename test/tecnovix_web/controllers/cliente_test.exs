@@ -25,6 +25,8 @@ defmodule TecnovixWeb.UsersTest do
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
+      |> recycle()
+      |> post("/api/verify_email", %{"email" => user_param["email"]})
       |> json_response(201)
       |> IO.inspect
 
