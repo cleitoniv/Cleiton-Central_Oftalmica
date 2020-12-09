@@ -135,7 +135,8 @@ defmodule TecnovixWeb.Auth.Firebase do
       |> put_private(:auth_user, {:ok, user})
     else
       false ->
-        {:error, :inatived}
+        put_private(conn, :auth, {:ok, user.cliente})
+        |> put_private(:auth_user, {:ok, user})
 
       _ ->
         halt(conn)
