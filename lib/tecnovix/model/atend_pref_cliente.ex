@@ -103,9 +103,8 @@ defmodule Tecnovix.AtendPrefClienteModel do
           changeset ->
             previous =
               Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
-                IO.inspect key
                 case value == 1 and key != :id and key != horario_new do
-                  true -> [key]
+                  true -> [key] |> IO.inspect
                   false -> []
                 end
               end)
