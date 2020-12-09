@@ -47,39 +47,134 @@ defmodule Tecnovix.AtendPrefClienteModel do
         "4" -> "quinta-feira"
         "5" -> "sexta-feira"
       end
-      horario =
-        case params["horario"] do
-          "manha" -> String.downcase(params["horario"])
-          "tarde" -> String.downcase(params["horario"])
-          _ ->
-        end 
-    {dia, _} = String.split_at(dia_remessa, 3)
 
-    horario_new = "#{dia}_#{horario}"
+    case params["horario"] do
+      "Manha" ->
+      horario = String.downcase(params["horario"])
 
-    atend =
-      Map.new()
-      |> Map.put(horario_new, 1)
-      |> Map.put("cod_cliente", cliente.codigo)
-      |> Map.put("loja_cliente", cliente.loja)
-      |> Map.put("cliente_id", cliente.id)
+      {dia, _} = String.split_at(dia_remessa, 3)
 
-    case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
-      nil ->
-        create(atend)
+      horario_new = "#{dia}_#{horario}"
 
-      changeset ->
-        previous =
-          Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
-            case value == 1 and key != :id do
-              true -> [key]
-              false -> []
-            end
-          end)
-          |> Enum.at(0)
+      atend =
+        Map.new()
+        |> Map.put(horario_new, 1)
+        |> Map.put("cod_cliente", cliente.codigo)
+        |> Map.put("loja_cliente", cliente.loja)
+        |> Map.put("cliente_id", cliente.id)
 
-        atend = Map.put(atend, "#{previous}", 0)
-        update(changeset, atend)
+      case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
+        nil ->
+          create(atend)
+
+        changeset ->
+          previous =
+            Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
+              case value == 1 and key != :id do
+                true -> [key]
+                false -> []
+              end
+            end)
+            |> Enum.at(0)
+
+          atend = Map.put(atend, "#{previous}", 0)
+          update(changeset, atend)
+      end
+
+      "Tarde" ->
+        horario = String.downcase(params["horario"])
+
+        {dia, _} = String.split_at(dia_remessa, 3)
+
+        horario_new = "#{dia}_#{horario}"
+
+        atend =
+          Map.new()
+          |> Map.put(horario_new, 1)
+          |> Map.put("cod_cliente", cliente.codigo)
+          |> Map.put("loja_cliente", cliente.loja)
+          |> Map.put("cliente_id", cliente.id)
+
+        case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
+          nil ->
+            create(atend)
+
+          changeset ->
+            previous =
+              Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
+                case value == 1 and key != :id do
+                  true -> [key]
+                  false -> []
+                end
+              end)
+              |> Enum.at(0)
+
+            atend = Map.put(atend, "#{previous}", 0)
+            update(changeset, atend)
+        end
+
+      _ ->
+      horario = "manha"
+
+      {dia, _} = String.split_at(dia_remessa, 3)
+
+      horario_new = "#{dia}_#{horario}"
+
+      atend =
+        Map.new()
+        |> Map.put(horario_new, 1)
+        |> Map.put("cod_cliente", cliente.codigo)
+        |> Map.put("loja_cliente", cliente.loja)
+        |> Map.put("cliente_id", cliente.id)
+
+      case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
+        nil ->
+          create(atend)
+
+        changeset ->
+          previous =
+            Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
+              case value == 1 and key != :id do
+                true -> [key]
+                false -> []
+              end
+            end)
+            |> Enum.at(0)
+
+          atend = Map.put(atend, "#{previous}", 0)
+          update(changeset, atend)
+      end
+
+      horario = "tarde"
+
+      {dia, _} = String.split_at(dia_remessa, 3)
+
+      horario_new = "#{dia}_#{horario}"
+
+      atend =
+        Map.new()
+        |> Map.put(horario_new, 1)
+        |> Map.put("cod_cliente", cliente.codigo)
+        |> Map.put("loja_cliente", cliente.loja)
+        |> Map.put("cliente_id", cliente.id)
+
+      case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
+        nil ->
+          create(atend)
+
+        changeset ->
+          previous =
+            Enum.flat_map(Map.from_struct(changeset), fn {key, value} ->
+              case value == 1 and key != :id do
+                true -> [key]
+                false -> []
+              end
+            end)
+            |> Enum.at(0)
+
+          atend = Map.put(atend, "#{previous}", 0)
+          update(changeset, atend)
+      end
     end
   end
 end
