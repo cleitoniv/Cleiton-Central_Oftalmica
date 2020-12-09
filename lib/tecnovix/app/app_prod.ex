@@ -8,7 +8,8 @@ defmodule Tecnovix.App.ScreensProd do
     NotificacoesClienteModel,
     CreditoFinanceiroModel
   }
-
+  
+  alias Tecnovix.Endpoints.Protheus
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
 
