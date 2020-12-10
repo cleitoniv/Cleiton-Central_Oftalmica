@@ -73,10 +73,11 @@ defmodule TecnovixWeb.ClientesController do
       {:ok, %{"codigo" => "500"}} ->
         {:error, :not_authorized}
 
-      {:error, :number_found} ->
+      {:error, :number_found} = v ->
+        IO.inspect v
         {:error, :number_found}
 
-      _ ->
+      v -> IO.inspect v
         {:error, :service_fail}
     end
   end
