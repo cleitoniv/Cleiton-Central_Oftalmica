@@ -73,9 +73,13 @@ defmodule TecnovixWeb.ClientesController do
       {:ok, %{"codigo" => "500"}} ->
         {:error, :not_authorized}
 
-      {:error, :number_found} -> {:error, :number_found}
+      {:error, :number_found} ->
+        {:error, :number_found}
 
-      _ -> {:error, :service_fail}
+      {:error, %HTTPoison.Error{id: nil, reason: :timeout}} -> {:error, :service_fail}
+
+      _ ->
+      {:error, :service_fail}
     end
   end
 
