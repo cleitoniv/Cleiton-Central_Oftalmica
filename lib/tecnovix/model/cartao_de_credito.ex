@@ -28,15 +28,6 @@ defmodule Tecnovix.CartaoDeCreditoModel do
     |> Repo.delete()
   end
 
-  def get_card(id) do
-    cartao =
-      CartaoSchema
-      |> where([c], c.id == ^id)
-      |> Repo.all()
-
-    {:ok, hd(cartao)}
-  end
-
   def select_card_after_delete(cliente) do
     card =
       CartaoSchema

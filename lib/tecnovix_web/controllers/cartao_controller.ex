@@ -46,7 +46,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, card} <- CartaoModel.delete_card(id, cliente) |> IO.inspect,
+    with {:ok, card} <- CartaoModel.delete_card(id, cliente),
          {:ok, _logs} <-
           LogsClienteModel.create(
             ip,
