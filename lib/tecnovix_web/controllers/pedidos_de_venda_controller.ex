@@ -113,7 +113,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              ip,
              usuario,
              cliente,
-             "Pedido feito em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete, no boleto."
+             "Pedido #{pedido.id} feito em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete, no boleto."
            ) do
       conn
       |> put_status(200)
@@ -168,7 +168,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              ip,
              usuario,
              cliente,
-             "Pedido feito em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete, no crédito com o cartão #{id_cartao}."
+             "Pedido #{pedido.id} feito em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete, no crédito com o cartão #{id_cartao}."
            ),
          {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
       # IO.inspect Jason.decode!(order.body)
