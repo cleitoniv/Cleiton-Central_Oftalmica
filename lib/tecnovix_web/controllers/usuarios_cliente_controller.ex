@@ -77,8 +77,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Enum.join()
 
     with {:ok, token} <- Firebase.get_token(conn),
-         {:ok, user} <- UsuariosClienteModel.delete_users(id, cliente),
-         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Usuario cliente #{user.nome} deletado") do
+         {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
+         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Usuario cliente deletado") do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
