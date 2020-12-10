@@ -25,7 +25,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
              ip,
              usuario,
              cliente,
-             "Cartão de crédito adicionado com sucesso."
+             "Cartão de crédito #{params["cartao_number"]} adicionado."
            ) do
       conn
       |> put_status(200)
@@ -39,8 +39,16 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
 
   def delete_card(conn, %{"id" => id}) do
     {:ok, cliente} = verify_auth(conn.private.auth)
+    {:ok, usuario} = conn.private.auth_user
 
-    with {:ok, _delete_card} <- CartaoModel.delete_card(id, cliente) do
+    with {:ok, card} <- CartaoModel.delete_card(id, cliente),
+         {:ok, _logs} <-
+          LogsClienteModel.create(
+            ip,
+            usuario,
+            cliente,
+            "Cartão de crédito #{card["cartao_number"]} deletado."
+          ) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
