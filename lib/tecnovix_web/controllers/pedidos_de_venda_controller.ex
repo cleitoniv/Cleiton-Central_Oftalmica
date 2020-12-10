@@ -15,6 +15,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
     {:ok, cliente} = conn.private.auth
+    {:ok, usuario} = conn.private.auth_user
+
 
     ip =
       conn.remote_ip
@@ -26,7 +28,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
-             nil,
+             usuario,
              cliente,
              "Pedido feito com a remessa de contrato de produto."
            ) do
