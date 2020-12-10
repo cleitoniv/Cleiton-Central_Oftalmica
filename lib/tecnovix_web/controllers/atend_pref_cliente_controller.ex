@@ -24,43 +24,7 @@ defmodule TecnovixWeb.AtendPrefClienteController do
     end
   end
 
-  # SOMENTE O REPRESENTANTE PODERAR ALTERAR O ATENDIMENTO PREFERENCIAL
-  # USUARIO CLIENTE E O CLIENTE SÓ PODERAR VER
-
-  # def atend_pref(conn, %{"param" => params}) do
-  #   {:ok, cliente} = conn.private.auth
-  #
-  #   with {:ok, atendimento} <- AtendPrefClienteModel.create(params, cliente.id) do
-  #     case conn.private.auth do
-  #       {:ok, %Tecnovix.ClientesSchema{}} ->
-  #         LogsClienteModel.create(%{
-  #           "cliente_id" => cliente.id,
-  #           "data" => DateTime.utc_now(),
-  #           "ip" => "teste",
-  #           "dispositivo" => "teste",
-  #           "acao_realizada" => "Atendimento preferencial do cliente atualizado"
-  #         })
-  #
-  #       {:ok, %Tecnovix.UsuariosClienteSchema{} = params} ->
-  #         LogsClienteModel.create(%{
-  #           "cliente_id" => params.cliente_id,
-  #           "usuario_cliente_id" => params.id,
-  #           "data" => DateTime.utc_now(),
-  #           "ip" => "teste",
-  #           "dispositivo" => "teste",
-  #           "acao_realizada" => "Atendimento preferencial do cliente atualizado"
-  #         })
-  #     end
-  #
-  #     conn
-  #     |> put_status(:created)
-  #     |> put_resp_content_type("applicaton/json")
-  #     |> put_view(TecnovixWeb.AtendPrefClienteView)
-  #   end
-  # end
-
   def get_and_crud_atendimento(conn, %{"horario" => horario} = params) do
-    IO.inspect conn
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
 
