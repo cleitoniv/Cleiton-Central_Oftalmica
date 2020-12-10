@@ -136,7 +136,8 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         end)
       end)
       |> Map.new()
-
+      |> IO.inspect
+      
     {:ok, organize}
   end
 
