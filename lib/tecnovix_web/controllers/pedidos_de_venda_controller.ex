@@ -1,4 +1,4 @@
-sdefmodule TecnovixWeb.PedidosDeVendaController do
+defmodule TecnovixWeb.PedidosDeVendaController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.PedidosDeVendaModel
 
