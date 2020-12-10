@@ -1,4 +1,4 @@
-defmodule TecnovixWeb.PedidosDeVendaController do
+sdefmodule TecnovixWeb.PedidosDeVendaController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.PedidosDeVendaModel
 
@@ -168,7 +168,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              ip,
              usuario,
              cliente,
-             "Pedido feito em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete, no crédito."
+             "Pedido feito em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete, no crédito com o cartão #{id_cartao}."
            ),
          {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
       # IO.inspect Jason.decode!(order.body)
