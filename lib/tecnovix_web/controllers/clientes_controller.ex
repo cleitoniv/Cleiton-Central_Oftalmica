@@ -70,7 +70,8 @@ defmodule TecnovixWeb.ClientesController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: code_sms}))
     else
-      {:ok, %{"codigo" => "500"}} ->
+      {:ok, %{"codigo" => "500"}} = v ->
+        IO.inspect v
         {:error, :not_authorized}
 
       {:error, :number_found} = v ->
