@@ -15,7 +15,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :status, :integer, default: 0
     field :paciente, :string
     field :num_pac, :string
-    field :duracao, :string
+    field :duracao, :string, default: "0 dias"
     field :dt_nas_pac, :date
     field :virtotal, :integer
     field :valor_credito_finan, :integer, default: 0
