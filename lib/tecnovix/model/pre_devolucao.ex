@@ -6,7 +6,8 @@ defmodule Tecnovix.PreDevolucaoModel do
     NotificacoesClienteModel,
     ClientesSchema,
     Repo,
-    ItensPreDevolucaoSchema
+    ItensPreDevolucaoSchema,
+    LogsClienteModel
   }
 
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
@@ -150,7 +151,7 @@ defmodule Tecnovix.PreDevolucaoModel do
     case create(cliente, devolutions, tipo) do
       {:ok, dev} ->
         NotificacoesClienteModel.solicitation_devolution(dev, cliente)
-
+        LogsClienteModel.create(ip, usuario, cliente, "Devolução id #{dev.id} do tipo #{dev.tipo_pre_dev} feita com sucesso.")
       erro ->
         erro
     end
