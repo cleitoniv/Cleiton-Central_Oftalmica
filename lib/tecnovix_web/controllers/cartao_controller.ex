@@ -41,6 +41,11 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
     {:ok, cliente} = verify_auth(conn.private.auth)
     {:ok, usuario} = conn.private.auth_user
 
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
+
     with {:ok, card} <- CartaoModel.delete_card(id, cliente),
          {:ok, _logs} <-
           LogsClienteModel.create(
