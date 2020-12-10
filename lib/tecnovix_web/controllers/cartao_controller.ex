@@ -55,10 +55,11 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
             "Cartão de crédito deletado."
           ) do
 
-          IO.inspect card
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
+    else
+      _ -> {:error, :invalid_parameter}
     end
   end
 

@@ -30,7 +30,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              ip,
              usuario,
              cliente,
-             "Pedido feito com a remessa de contrato de produto."
+             "Pedido feito com a remessa de contrato de produto no valor de #{valor}."
            ) do
       conn
       |> put_status(200)
