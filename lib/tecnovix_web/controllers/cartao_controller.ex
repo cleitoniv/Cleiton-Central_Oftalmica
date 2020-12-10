@@ -46,13 +46,13 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, card} <- CartaoModel.delete_card(id, cliente),
+    with {:ok, _card} <- CartaoModel.delete_card(id, cliente),
          {:ok, _logs} <-
           LogsClienteModel.create(
             ip,
             usuario,
             cliente,
-            "Cartão de crédito #{card["cartao_number"]} deletado."
+            "Cartão de crédito #{id} deletado."
           ) do
       conn
       |> put_resp_content_type("application/json")
