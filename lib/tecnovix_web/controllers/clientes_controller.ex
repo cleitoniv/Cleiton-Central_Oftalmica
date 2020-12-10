@@ -531,10 +531,17 @@ defmodule TecnovixWeb.ClientesController do
   def get_and_send_email_dev(conn, %{"email" => email}) do
     stub = Screens.stub()
 
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
+
     {:ok, cliente} = verify_auth(conn.private.auth)
+    {:ok, usuario} = conn.private.auth_user
 
     with {:ok, _} <- stub.get_and_send_email_dev(email),
-         {:ok, _} <- stub.get_and_send_email_dev(cliente.email) do
+         {:ok, _} <- stub.get_and_send_email_dev(cliente.email),
+         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Email de devolução enviado para #{email}") do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
