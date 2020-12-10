@@ -38,7 +38,6 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
   end
 
   def delete_card(conn, %{"id" => id}) do
-    IO.inspect id
     {:ok, cliente} = verify_auth(conn.private.auth)
     {:ok, usuario} = conn.private.auth_user
 
@@ -47,14 +46,16 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, _card} <- CartaoModel.delete_card(id, cliente),
+    with {:ok, card} <- CartaoModel.delete_card(id, cliente),
          {:ok, _logs} <-
           LogsClienteModel.create(
             ip,
             usuario,
             cliente,
-            "Cartão de crédito #{id} deletado."
+            "Cartão de crédito deletado."
           ) do
+
+          IO.inspect card
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
