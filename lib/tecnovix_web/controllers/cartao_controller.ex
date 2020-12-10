@@ -38,6 +38,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
   end
 
   def delete_card(conn, %{"id" => id}) do
+    IO.inspect id
     {:ok, cliente} = verify_auth(conn.private.auth)
     {:ok, usuario} = conn.private.auth_user
 
