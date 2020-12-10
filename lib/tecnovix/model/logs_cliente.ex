@@ -19,7 +19,7 @@ defmodule Tecnovix.LogsClienteModel do
           %{
             "ip" => ip,
             "usuario_cliente_id" => usuario.id,
-            "cliente_id" => cliente.id,
+            "cliente_id" => nil,
             "dispositivo" => "Samsung A30S",
             "acao_realizada" => msg
           }

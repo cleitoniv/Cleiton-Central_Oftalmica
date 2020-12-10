@@ -31,11 +31,6 @@ defmodule Tecnovix.UsuariosClienteModel do
     end
   end
 
-  def create_user(params) do
-    with {:ok, email} <- unique_email(params["email"]) do
-    end
-  end
-
   def show_users(cliente_id) do
     usuarios =
       UsuariosClienteSchema

@@ -60,9 +60,17 @@ defmodule TecnovixWeb.AtendPrefClienteController do
   # end
 
   def get_and_crud_atendimento(conn, %{"horario" => horario} = params) do
+    IO.inspect conn
     {:ok, cliente} = conn.private.auth
+    {:ok, usuario} = conn.private.auth_user
 
-    with {:ok, atendimento} <- AtendPrefClienteModel.formatting_atend(params, cliente) do
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
+
+    with {:ok, atendimento} <- AtendPrefClienteModel.formatting_atend(params, cliente),
+         {:ok, _logs} <- LogsClienteModel.create(ip, nil, usuario, "Horario de atendimento adicionado/atualizado para #{cliente.dia_remessa}-#{horario}") do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

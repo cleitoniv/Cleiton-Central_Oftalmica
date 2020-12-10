@@ -8,6 +8,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def create(conn, %{"param" => params}) do
     {:ok, cliente} = conn.private.auth
+    {:ok, usuario} = conn.private.auth_user
 
     ip =
       conn.remote_ip
@@ -20,7 +21,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
          {:ok, user} <- UsuariosClienteModel.create(params),
          {_, %{status_code: code}} when code == 200 or code == 202 <-
            Email.send_email({user.nome, user.email}, params["password"], params["nome"]),
-         {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario Cliente Cadastrado.") do
+         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Usuario cliente #{user.nome} cadastrado.") do
       UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
       conn
@@ -43,19 +44,18 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def update_users(conn, %{"id" => id, "param" => params}) do
     {:ok, cliente} = conn.private.auth
+    {:ok, usuario} = conn.private.auth_user
+
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
 
     with {:ok, user} <- UsuariosClienteModel.search_user(id),
          true <- user.cliente_id == cliente.id,
-         {:ok, user} <- UsuariosClienteModel.update(user, params) do
+         {:ok, user} <- UsuariosClienteModel.update(user, params),
+         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Atualizou o usuário #{user.nome}") do
       {:ok, cliente} = conn.private.auth
-
-      LogsClienteModel.create(%{
-        "cliente_id" => cliente.id,
-        "data" => DateTime.utc_now(),
-        "ip" => "teste",
-        "dispositivo" => "teste",
-        "acao_realizada" => "Atualizou o usuário"
-      })
 
       conn
       |> put_status(:ok)
@@ -77,8 +77,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Enum.join()
 
     with {:ok, token} <- Firebase.get_token(conn),
-         {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
-         {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario cliente deletado") do
+         {:ok, user} <- UsuariosClienteModel.delete_users(id, cliente),
+         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Usuario cliente #{user.nome} deletado") do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
