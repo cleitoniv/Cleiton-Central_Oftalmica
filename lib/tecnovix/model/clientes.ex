@@ -349,6 +349,8 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def phone_number_existing?(phone_number, ddd) do
+    IO.inspect ddd
+    IO.inspect phone_number
     case Repo.get_by(ClientesSchema, [telefone: phone_number, ddd: ddd]) do
       nil -> {:ok, phone_number}
       existing -> {:error, :number_found}
