@@ -63,6 +63,7 @@ defmodule Tecnovix.App.ScreensProd do
       value ->
         case String.split(value, ",") do
           [endereco, num] -> endereco
+          [endereco] -> endereco
           _ -> ""
         end
     end
