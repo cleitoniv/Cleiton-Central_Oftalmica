@@ -60,7 +60,7 @@ defmodule TecnovixWeb.ClientesController do
       |> Map.put("ddd", ClientesModel.get_ddd(phone_number))
       |> Map.put("telefone", ClientesModel.formatting_phone_number(phone_number))
 
-    with {:ok, _telefone} <- ClientesModel.phone_number_existing?(params["telefone"]),
+    with {:ok, _telefone} <- ClientesModel.phone_number_existing?(params["telefone"], params["ddd"]),
          {:ok, %{"codigo" => "000"}} <-
            ClientesModel.send_sms(%{phone_number: phone_number}, code_sms),
          {:ok, _} <- ClientesModel.confirmation_sms(params),

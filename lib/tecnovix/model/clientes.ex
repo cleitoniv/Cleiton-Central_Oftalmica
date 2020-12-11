@@ -90,7 +90,7 @@ defmodule Tecnovix.ClientesModel do
             |> formatting_telefone()
             |> Repo.insert()
 
-          {:ok, _} ->
+          changeset ->
             error =
               %ClientesSchema{}
               |> change(%{})
@@ -348,8 +348,8 @@ defmodule Tecnovix.ClientesModel do
     #  }}
   end
 
-  def phone_number_existing?(phone_number) do
-    case Repo.get_by(ClientesSchema, telefone: phone_number) do
+  def phone_number_existing?(phone_number, ddd) do
+    case Repo.get_by(ClientesSchema, [telefone: phone_number, ddd: ddd]) do
       nil -> {:ok, phone_number}
       existing -> {:error, :number_found}
     end
