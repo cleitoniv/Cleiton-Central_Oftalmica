@@ -152,9 +152,9 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
     case field["id"] do
       "A1_DTNASC" ->
-        ano = String.slice(check(field["value"]), 0..3)
-        mes = String.slice(check(field["value"]), 4..5)
-        dia = String.slice(check(field["value"]), 6..7)
+        ano = String.slice(check.(field["value"]), 0..3)
+        mes = String.slice(check.(field["value"]), 4..5)
+        dia = String.slice(check.(field["value"]), 6..7)
         data_nascimento = "#{dia}#{mes}#{ano}"
 
         Map.put(acc, "A1_DTNASC", data_nascimento)
