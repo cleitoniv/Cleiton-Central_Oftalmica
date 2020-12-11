@@ -716,17 +716,21 @@ defmodule Tecnovix.PedidosDeVendaModel do
         get_pacientes_revisao(cliente_id)
 
       _ ->
+        pedido =
         PedidosDeVendaSchema
         |> preload(:items)
         |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
         |> order_by([p], desc: p.inserted_at)
         |> Repo.all()
+
+        pedido
         |> Enum.flat_map(fn pedido ->
           Enum.filter(pedido.items, fn filter ->
             filter.tipo_venda == "C" and filter.operation == "06"
           end)
         end)
 
+      pedido
     end
   end
 
