@@ -15,14 +15,6 @@ defmodule Tecnovix.Services.ConfirmationSMS do
       true -> ETS.KeyValueSet.delete_all(kvset)
       false -> kvset
     end
-
-    # ClientesSchema
-    # |> where(
-    #   [c],
-    #   c.code_sms == ^code_sms and ^phone_number == c.telefone and c.confirmation_sms == 0
-    # )
-    # |> update([c], set: [code_sms: nil])
-    # |> Repo.update_all([])
   end
 
   def start_link(_) do
