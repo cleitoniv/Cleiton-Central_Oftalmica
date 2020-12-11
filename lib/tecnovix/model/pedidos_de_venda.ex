@@ -721,15 +721,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
           |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
           |> order_by([p], desc: p.inserted_at)
           |> Repo.all()
-
-        items =
-          Enum.reduce(pedido, [], fn pedido, acc ->
-            item =
-              Enum.filter(pedido.items, fn filter ->
-                filter.operation != "06"
-              end)
-            [Map.put(pedido, :items, item ++ acc)]
-          end)
     end
   end
 
