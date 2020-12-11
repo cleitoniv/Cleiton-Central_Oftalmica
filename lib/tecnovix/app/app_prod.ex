@@ -50,8 +50,11 @@ defmodule Tecnovix.App.ScreensProd do
     case cliente["#{key}"] do
       nil -> ""
       value ->
-        [endereco, num] = String.split(value, ",")
-        num
+        case String.split(value, ",") do
+          [nil, num] -> ""
+          [endereco, nil] -> ""
+          [endereco, num] -> num
+        end
     end
   end
 
@@ -59,7 +62,7 @@ defmodule Tecnovix.App.ScreensProd do
     case cliente["#{key}"] do
       nil -> ""
       value ->
-        [endereco, num] = String.split(value, ",")
+        [endereco, _num] = String.split(value, ",")
         endereco
     end
   end
