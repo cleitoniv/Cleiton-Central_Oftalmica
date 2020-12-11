@@ -50,7 +50,7 @@ defmodule Tecnovix.App.ScreensProd do
     case cliente["#{key}"] do
       nil -> ""
       value ->
-        case String.split(value, ",") do
+        case String.split(value, ",") |> IO.inspect do
           [nil, num] -> ""
           [endereco, nil] -> ""
           [endereco, num] -> num
