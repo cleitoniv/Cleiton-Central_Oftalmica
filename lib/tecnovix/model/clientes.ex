@@ -358,9 +358,10 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def get_ddd(phone_number) do
+    IO.inspect phone_number
     case phone_number do
       nil -> phone_number
-      "55" <> phone_number -> String.slice(phone_number, 2..3)
+      "55" <> phone_number -> String.slice(phone_number, 0..1)
       phone_number -> String.slice(phone_number, 0..1)
     end
   end
