@@ -147,8 +147,6 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     end
    end
 
-   IO.inspect field
-
     case field["id"] do
       "A1_DTNASC" ->
         ano = String.slice(check.(field["value"]), 0..3)

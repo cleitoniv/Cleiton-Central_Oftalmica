@@ -210,6 +210,8 @@ defmodule TecnovixWeb.ClientesController do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: endereco}))
+    else
+      _ -> {:error, :invalid_parameter}
     end
   end
 
