@@ -253,7 +253,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def pedido_params(items, cliente, order, installment, taxa_entrega) do
-    IO.inspect items
     pedido = %{
       "client_id" => cliente.id,
       "tipo_pagamento" => "CREDIT_CARD",
@@ -717,20 +716,20 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
       _ ->
         pedido =
-        PedidosDeVendaSchema
-        |> preload(:items)
-        |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
-        |> order_by([p], desc: p.inserted_at)
-        |> Repo.all()
+          PedidosDeVendaSchema
+          |> preload(:items)
+          |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
+          |> order_by([p], desc: p.inserted_at)
+          |> Repo.all()
 
         items =
-          Enum.flat_map(pedido, fn pedido ->
-            Enum.filter(pedido.items, fn filter ->
-              filter.tipo_venda != "C" and filter.operation != "06"
-            end)
+          Enum.reduce(pedido, [], fn pedido, acc ->
+            item =
+              Enum.filter(pedido.items, fn filter ->
+                filter.operation != "06"
+              end)
+            [Map.put(pedido, :items, item ++ acc)]
           end)
-
-        Map.put(pedido, :items, items)
     end
   end
 

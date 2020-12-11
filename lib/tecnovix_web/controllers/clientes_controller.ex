@@ -545,7 +545,7 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, _} <- stub.get_and_send_email_dev(email),
          {:ok, _} <- stub.get_and_send_email_dev(cliente.email),
-         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Email de devolução enviado para #{email}") do
+         {:ok, _logs} <- Tecnovix.LogsClienteModel.create(ip, usuario, cliente, "Email de devolução enviado para #{email}") do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))

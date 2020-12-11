@@ -187,7 +187,6 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/detail_order?filtro=0")
       |> json_response(200)
       |> Map.get("data")
-      |> IO.inspect
 
     pedido_por_id =
       build_conn()
@@ -244,7 +243,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/extrato_finan")
       |> json_response(200)
-      |> IO.inspect()
 
     extrato_prod =
       build_conn()
