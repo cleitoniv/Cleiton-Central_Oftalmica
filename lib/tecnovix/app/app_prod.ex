@@ -25,6 +25,7 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   def get_endereco_entrega_protheus(%{cnpj_cpf: cnpj_cpf, token: token}) do
+    IO.inspect cnpj_cpf
     params = %{"A1_CGC" => cnpj_cpf}
     url = Protheus.generate_url("/rest/fwmodel/sa1rest", params)
     header = Protheus.authenticate(@header, token)
@@ -40,7 +41,6 @@ defmodule Tecnovix.App.ScreensProd do
       bairro: parse_field("A1_BAIRROE", cliente),
       cidade: parse_field("A1_MUNE", cliente)
     }
-    |> IO.inspect
 
     {:ok, endereco}
   end

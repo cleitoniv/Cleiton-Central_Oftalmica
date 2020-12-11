@@ -135,8 +135,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
           end)
         end)
       end)
-      |> Map.new()
-      |> IO.inspect
+      |> Map.new()cnpj_cpf
 
     {:ok, organize}
   end
