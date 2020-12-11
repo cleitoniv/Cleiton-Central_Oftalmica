@@ -30,6 +30,7 @@ defmodule Tecnovix.App.ScreensProd do
     url = Protheus.generate_url("/rest/fwmodel/sa1rest", params)
     header = Protheus.authenticate(@header, token)
     HTTPoison.get(url, header)
+    |> IO.inspect
   end
 
   def get_endereco_entrega(cliente) do
