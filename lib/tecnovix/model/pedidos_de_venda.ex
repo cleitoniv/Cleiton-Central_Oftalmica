@@ -723,15 +723,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
         |> order_by([p], desc: p.inserted_at)
         |> Repo.all()
 
-        pedido
-        |> Enum.flat_map(fn pedido ->
-          Enum.filter(pedido.items, fn filter ->
-            filter.tipo_venda == "C" and filter.operation == "06"
+        items =
+          Enum.flat_map(pedido, fn pedido ->
+            Enum.filter(pedido.items, fn filter ->
+              filter.tipo_venda != "C" and filter.operation != "06"
+            end)
           end)
-        end)
-        |> IO.inspect
 
-      pedido
+        Map.put(pedido, :items, items)
     end
   end
 
