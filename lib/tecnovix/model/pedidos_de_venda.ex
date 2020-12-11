@@ -715,12 +715,22 @@ defmodule Tecnovix.PedidosDeVendaModel do
         get_pacientes_revisao(cliente_id)
 
       _ ->
-        pedido =
+        pedidos =
           PedidosDeVendaSchema
           |> preload(:items)
           |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
           |> order_by([p], desc: p.inserted_at)
           |> Repo.all()
+          |> IO.inspect
+
+        Enum.reduce(pedidos, [], fn pedido, acc ->
+          items =
+            Enum.filter(pedido.items, fn item ->
+              item.operation != "06"
+            end)
+
+          [Map.put(pedido, :items, items)] ++ acc
+        end)
     end
   end
 
