@@ -40,6 +40,7 @@ defmodule Tecnovix.App.ScreensProd do
       bairro: parse_field("A1_BAIRROE", cliente),
       cidade: parse_field("A1_MUNE", cliente)
     }
+    |> IO.inspect
 
     {:ok, endereco}
   end
