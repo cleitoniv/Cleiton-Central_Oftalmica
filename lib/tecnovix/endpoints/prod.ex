@@ -137,16 +137,22 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
       end)
       |> Map.new()
       |> IO.inspect
-      
+
     {:ok, organize}
   end
 
   def parse_field(field, acc) do
+    check = fn data -> case is_nil(data) do
+      true -> ""
+      false -> data
+    end
+   end
+
     case field["id"] do
       "A1_DTNASC" ->
-        ano = String.slice(field["value"], 0..3)
-        mes = String.slice(field["value"], 4..5)
-        dia = String.slice(field["value"], 6..7)
+        ano = String.slice(check(field["value"]), 0..3)
+        mes = String.slice(check(field["value"]), 4..5)
+        dia = String.slice(check(field["value"]), 6..7)
         data_nascimento = "#{dia}#{mes}#{ano}"
 
         Map.put(acc, "A1_DTNASC", data_nascimento)
