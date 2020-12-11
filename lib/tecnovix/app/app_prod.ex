@@ -51,8 +51,6 @@ defmodule Tecnovix.App.ScreensProd do
       nil -> ""
       value ->
         case String.split(value, ",") |> IO.inspect do
-          [nil, num] -> ""
-          [endereco, nil] -> ""
           [endereco, num] -> num
           _ -> ""
         end
@@ -64,8 +62,6 @@ defmodule Tecnovix.App.ScreensProd do
       nil -> ""
       value ->
         case String.split(value, ",") do
-          [nil, num] -> ""
-          [endereco, nil] -> endereco
           [endereco, num] -> endereco
           _ -> ""
         end
