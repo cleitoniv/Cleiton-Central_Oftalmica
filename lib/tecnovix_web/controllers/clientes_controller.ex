@@ -54,7 +54,6 @@ defmodule TecnovixWeb.ClientesController do
   # clicou em submit -> envia o sms -> guarda o codigo do sms na memoria -> depois de 120 apaga o codigo
   def send_sms(conn, %{"phone_number" => phone_number} = params) do
     code_sms = Enum.random(1_000..9_999)
-    IO.inspect phone_number
 
     params =
       Map.put(params, "code_sms", code_sms)

@@ -799,7 +799,16 @@ defmodule Tecnovix.PedidosDeVendaModel do
         {:error, :not_found}
 
       pedido ->
-        pedido = Repo.preload(pedido, :items)
+        pedido =
+        Repo.preload(pedido, :items)
+
+        Enum.flat_map(pedido, fn pedido ->
+          Enum.filter(pedido.items, fn filter ->
+            filter.tipo_venda == "C" and filter.operation == "06"
+          end)
+        end)
+        |> IO.inspect
+
         {:ok, pedido}
     end
   end
