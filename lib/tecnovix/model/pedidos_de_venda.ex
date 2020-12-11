@@ -729,6 +729,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             filter.tipo_venda == "C" and filter.operation == "06"
           end)
         end)
+        |> IO.inspect
 
       pedido
     end
