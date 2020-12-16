@@ -511,6 +511,7 @@ defmodule TecnovixWeb.ClientesController do
   def get_extrato_prod(conn, _params) do
     protheus = Protheus.stub()
     stub = Screens.stub()
+    data_hoje = Date.utc_today()
 
     {:ok, cliente} = verify_auth(conn.private.auth)
 
@@ -526,7 +527,8 @@ defmodule TecnovixWeb.ClientesController do
          {:ok, prod} <- stub.get_extrato_prod(cliente, grid) do
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: prod}))
+      |> send_resp(200, Jason.encode!(%{success: true, data: prod,
+        date: stub.parse_month(data_hoje) <> Integer.to_string(data_hoje.year)}))
     end
   end
 

@@ -1105,7 +1105,7 @@ defmodule Tecnovix.App.ScreensProd do
     {:ok, product}
   end
 
-  defp parse_month(date) do
+  def parse_month(date) do
     case date.month do
       1 -> "Janeiro/"
       2 -> "Fevereiro/"
@@ -1166,7 +1166,6 @@ defmodule Tecnovix.App.ScreensProd do
     extrato =
       Enum.map(items_pedido, fn item ->
         %{
-          date: parse_month(data_hoje) <> Integer.to_string(data_hoje.year),
           id: item.id,
           saldo: 0,
           produto: item.produto,
