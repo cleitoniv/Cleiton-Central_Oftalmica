@@ -769,6 +769,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
       count_range =
         Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
         |> Enum.count()
+        |> IO.inspect
+
+        Date.range(duracao_mais_data_insercao(pedido, duracao), ~D[2021-02-27])
+        |> Enum.count()
+        |> IO.inspect
 
       count_range <= 30
     end)
@@ -778,7 +783,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def duracao_mais_data_insercao(item, duracao) do
-    Date.add(NaiveDateTime.to_date(item.inserted_at), duracao)
+    Date.add(NaiveDateTime.to_date(item.inserted_at), duracao) |> IO.inspect
   end
 
   def create_credito_financeiro(items, cliente, %{"type" => _type, "operation" => _operation}) do
