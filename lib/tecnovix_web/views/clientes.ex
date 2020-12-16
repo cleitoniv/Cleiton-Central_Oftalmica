@@ -37,7 +37,8 @@ defmodule TecnovixWeb.ClientesView do
       wirecard_cliente_id: item.wirecard_cliente_id,
       fcm_token: item.fcm_token,
       status: item.status,
-      nome_usuario: item.nome_usuario
+      nome_usuario: item.nome_usuario,
+      apelido: item.apelido
     }
   end
 
@@ -60,6 +61,7 @@ defmodule TecnovixWeb.ClientesView do
       data: %{
         id: item.id,
         uid: item.uid,
+        apelido: item.apelido,
         role: item.role,
         codigo: item.codigo,
         cadastrado: item.cadastrado,
@@ -145,14 +147,16 @@ defmodule TecnovixWeb.ClientesView do
           bloqueado: item.cliente.bloqueado,
           sit_app: item.cliente.sit_app,
           cod_cnae: item.cliente.cod_cnae,
-          ramo: item.cliente.ramo,
+          ramo: item.cliente.ramo,,
+          apelido: item.apelido
           vendedor: item.cliente.vendedor,
           crm_medico: item.cliente.crm_medico,
           dia_remessa: item.cliente.dia_remessa,
           wirecard_cliente_id: item.cliente.wirecard_cliente_id,
           fcm_token: item.cliente.fcm_token,
           inserted_at: item.cliente.inserted_at,
-          updated_at: item.cliente.updated_at
+          updated_at: item.cliente.updated_at,
+          apelido: item.apelido
         },
         atend_pref_cliente: %{
           seg_manha: item.atend_pref_cliente.seg_manha,
@@ -210,7 +214,8 @@ defmodule TecnovixWeb.ClientesView do
         crm_medico: item.crm_medico,
         dia_remessa: item.dia_remessa,
         wirecard_cliente_id: item.wirecard_cliente_id,
-        fcm_token: item.fcm_token
+        fcm_token: item.fcm_token,
+        apelido: item.apelido
       }
     }
   end
