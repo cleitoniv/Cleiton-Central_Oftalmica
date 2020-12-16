@@ -21,6 +21,7 @@ defmodule Tecnovix.UsuariosClienteSchema do
     struct
     |> cast(params, [:cliente_id, :uid, :nome, :email, :cargo, :status, :password, :role])
     |> validate_required([:cliente_id, :nome, :email, :status, :password])
+    |> validate_length(:nome, max: 15, message: "Não pode ser maior que 15 caracteres")
     |> unique_constraint(:email, message: "Esse email ja esta cadastrado.")
   end
 
