@@ -147,16 +147,15 @@ defmodule TecnovixWeb.ClientesView do
           bloqueado: item.cliente.bloqueado,
           sit_app: item.cliente.sit_app,
           cod_cnae: item.cliente.cod_cnae,
-          ramo: item.cliente.ramo,,
-          apelido: item.apelido
+          ramo: item.cliente.ramo,
+          apelido: item.apelido,
           vendedor: item.cliente.vendedor,
           crm_medico: item.cliente.crm_medico,
           dia_remessa: item.cliente.dia_remessa,
           wirecard_cliente_id: item.cliente.wirecard_cliente_id,
           fcm_token: item.cliente.fcm_token,
           inserted_at: item.cliente.inserted_at,
-          updated_at: item.cliente.updated_at,
-          apelido: item.apelido
+          updated_at: item.cliente.updated_at
         },
         atend_pref_cliente: %{
           seg_manha: item.atend_pref_cliente.seg_manha,
