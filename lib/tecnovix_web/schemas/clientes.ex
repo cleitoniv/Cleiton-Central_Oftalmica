@@ -34,6 +34,7 @@ defmodule Tecnovix.ClientesSchema do
     field :fcm_token, :string
     field :cadastrado, :boolean, default: false
     field :role, :string, default: "CLIENTE"
+    field :apelido, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -71,7 +72,8 @@ defmodule Tecnovix.ClientesSchema do
       :dia_remessa,
       :wirecard_cliente_id,
       :fcm_token,
-      :cadastrado
+      :cadastrado,
+      :apelido
     ])
     |> validate_required([:fisica_jurid, :cnpj_cpf, :email], message: "Não pode estar em branco.")
     |> validate_inclusion(:fisica_jurid, ["F", "J"])
@@ -101,9 +103,10 @@ defmodule Tecnovix.ClientesSchema do
       :email,
       :email_fiscal,
       :telefone,
-      :cadastrado
+      :cadastrado,
+      :apelido
     ])
-    |> validate_required([:nome, :email, :telefone, :cadastrado],
+    |> validate_required([:nome, :email, :telefone, :cadastrado, :apelido],
       message: "Não pode estar em branco."
     )
     |> validate_format(:email, ~r/@/)
@@ -112,6 +115,7 @@ defmodule Tecnovix.ClientesSchema do
     |> unique_constraint([:email], message: "Esse email já existe")
     |> unique_constraint([:cnpj_cpf], message: "Esse CNPJ/CPF já existe")
     |> unique_constraint([:telefone], message: "Esse número de telefone já está cadastrado.")
+    |> validate_length(:apelido, max: 15, message: "Não pode ser maior que 15 caracteres")
   end
 
   def validate_ramo_fisica(changeset, params \\ %{}) do
