@@ -1120,30 +1120,52 @@ defmodule Tecnovix.App.ScreensTest do
 
   def get_extrato_prod(cliente, produtos) do
     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
+    data_hoje = Date.utc_today()
 
     extrato =
       Enum.map(items_pedido, fn item ->
         %{
+          date: parse_month(data_hoje) <> Integer.to_string(data_hoje.year),
           id: item.id,
           saldo: 0,
           produto: item.produto,
           items:
-            Enum.map(items_pedido, fn pedido ->
-              %{
-                produto: pedido.produto,
-                date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
-                pedido: pedido.id,
-                quantidade:
-                  case pedido.operation do
-                    "06" -> pedido.quantidade
-                    "07" -> pedido.quantidade * -1
-                    _ -> 0
-                  end
-              }
+            Enum.reduce(items_pedido, [], fn pedido, acc ->
+              creditos =
+                %{
+                  date_filter: NaiveDateTime.to_date(pedido.inserted_at),
+                  produto: pedido.produto,
+                  date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
+                  pedido: pedido.pedido_de_venda_id,
+                  quantidade:
+                    case pedido.operation do
+                      "06" -> pedido.quantidade
+                      "07" -> pedido.quantidade * -1
+                      _ -> 0
+                    end
+                }
+
+              case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do
+                true -> [creditos] ++ acc
+                false -> acc
+              end
             end)
         }
       end)
       |> Enum.uniq_by(fn uniq -> uniq.produto end)
+      |> Enum.map(fn produto ->
+        case produto.produto == Enum.reduce(items_pedido, "", fn item, _ -> item.produto end) do
+          true ->
+            Map.put(
+              produto,
+              :saldo,
+              Enum.reduce(items_pedido, 0, fn item, acc -> item.quantidade + acc end)
+            )
+
+          false ->
+            produto
+        end
+      end)
 
     extrato =
       Enum.map(extrato, fn map ->
