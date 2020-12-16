@@ -765,12 +765,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
       duracao =
         String.replace(hd(duracao), ~r/[^\d]/, "")
         |> String.to_integer()
-
+      IO.inspect "Count de hoje"
       count_range =
         Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
         |> Enum.count()
         |> IO.inspect
 
+        IO.inspect "Count de 2021"
         Date.range(duracao_mais_data_insercao(pedido, duracao), ~D[2021-02-27])
         |> Enum.count()
         |> IO.inspect
@@ -783,6 +784,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def duracao_mais_data_insercao(item, duracao) do
+    IO.inspect "Data duração"
     Date.add(NaiveDateTime.to_date(item.inserted_at), duracao) |> IO.inspect
   end
 
