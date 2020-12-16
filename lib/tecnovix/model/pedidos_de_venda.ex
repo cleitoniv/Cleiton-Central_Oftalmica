@@ -767,7 +767,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         |> String.to_integer()
 
       count_range =
-        Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
+        Date.range(duracao_mais_data_insercao(pedido, duracao), ~D[2021-02-27])
         |> Enum.count()
 
       count_range <= 30
