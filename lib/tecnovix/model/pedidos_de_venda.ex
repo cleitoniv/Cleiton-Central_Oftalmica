@@ -771,10 +771,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
         Date.diff(duracao_mais_data_insercao(pedido, duracao), data_hoje)
         |> IO.inspect
 
-      count_range =
-        Date.diff(duracao_mais_data_insercao(pedido, duracao), ~D[2021-02-21])
-        |> IO.inspect
-
       count_range <= 30 and count_range >= 0
     end)
     |> Enum.map(fn map ->
