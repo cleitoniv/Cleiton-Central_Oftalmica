@@ -765,18 +765,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
       duracao =
         String.replace(hd(duracao), ~r/[^\d]/, "")
         |> String.to_integer()
-      IO.inspect "Count de hoje"
+
       count_range =
-        Date.range(duracao_mais_data_insercao(pedido, duracao), data_hoje)
-        |> Enum.count()
+        Date.diff(duracao_mais_data_insercao(pedido, duracao), data_hoje)
         |> IO.inspect
 
-        IO.inspect "Count de 2021"
-        Date.range(duracao_mais_data_insercao(pedido, duracao), ~D[2021-02-27])
-        |> Enum.count()
-        |> IO.inspect
-
-      count_range <= 30
+      count_range <= 30 and count_range >= 0
     end)
     |> Enum.map(fn map ->
       Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
@@ -784,8 +778,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def duracao_mais_data_insercao(item, duracao) do
-    IO.inspect "Data duração"
-    Date.add(NaiveDateTime.to_date(item.inserted_at), duracao) |> IO.inspect
+    Date.add(NaiveDateTime.to_date(item.inserted_at), duracao)
   end
 
   def create_credito_financeiro(items, cliente, %{"type" => _type, "operation" => _operation}) do
