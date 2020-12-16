@@ -754,7 +754,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
       paciente != [nil]
     end)
-    |> IO.inspect
     |> Enum.filter(fn pedido ->
       duracao =
         Enum.map(pedido.items, fn item ->
@@ -769,7 +768,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
       count_range =
         Date.diff(duracao_mais_data_insercao(pedido, duracao), data_hoje)
-        |> IO.inspect
 
       count_range <= 30 and count_range >= 0
     end)
