@@ -67,8 +67,6 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create_first_access(params) do
-    IO.inspect params
-    IO.inspect "-----------------------------------------------"
     case Repo.get_by(ClientesSchema, email: params["email"]) do
       %{cadastrado: false} = cliente ->
         update_first_access(cliente, params)
@@ -90,9 +88,8 @@ defmodule Tecnovix.ClientesModel do
             %ClientesSchema{}
             |> ClientesSchema.first_access(params)
             |> formatting_telefone()
-            |> IO.inspect
+            |> formatting_ddd()
             |> Repo.insert()
-            |> IO.inspect
 
           changeset ->
             error =
@@ -249,6 +246,20 @@ defmodule Tecnovix.ClientesModel do
         String.replace(telefone, "-", "")
         |> String.replace(" ", "")
         |> String.slice(2..11)
+    end)
+  end
+
+  defp formatting_ddd(changeset \\ %ClientesSchema{}) do
+    update_change(changeset, :ddd, fn
+      "55" <> telefone ->
+        String.replace(telefone, "-", "")
+        |> String.replace(" ", "")
+        |> String.slice(0..1)
+
+      telefone ->
+        String.replace(telefone, "-", "")
+        |> String.replace(" ", "")
+        |> String.slice(0..1)
     end)
   end
 
