@@ -7,9 +7,9 @@ defmodule Tecnovix.Services.ConfirmationSMS do
   def delete_code(code_sms, phone_number) do
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
-    {:ok, telefone} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number)) |> IO.inspect
-    {:ok, confirmation_sms} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "confirmation_sms")) |> IO.inspect
-    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "code_sms")) |> IO.inspect
+    {:ok, telefone} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number))
+    {:ok, confirmation_sms} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "confirmation_sms"))
+    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "code_sms"))
 
     case telefone == phone_number and code_sms == code_sms_memory and confirmation_sms == 0 do
       true ->
@@ -37,7 +37,7 @@ defmodule Tecnovix.Services.ConfirmationSMS do
   end
 
   def handle_call({:confirmation, code_sms, phone_number}, _from, state) do
-    Process.send_after(self(), {:ok, code_sms, phone_number}, 60000 * 1)
+    Process.send_after(self(), {:ok, code_sms, phone_number}, 30000)
 
     {:reply, {:ok, state}, state}
   end

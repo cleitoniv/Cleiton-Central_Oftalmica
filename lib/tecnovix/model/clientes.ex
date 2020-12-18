@@ -415,7 +415,12 @@ defmodule Tecnovix.ClientesModel do
 
     case code_sms == code_sms_memory do
       true ->
-        ETS.KeyValueSet.put(kvset, String.to_atom(phone_number <> "confirmation_sms"), 1)
+        kvset
+        |> ETS.KeyValueSet.delete(String.to_atom(phone_number))
+        |> ETS.KeyValueSet.delete(String.to_atom(phone_number <> "code_sms"))
+        |> ETS.KeyValueSet.delete(String.to_atom(phone_number <> "confirmation_sms"))
+        |> IO.inspect
+        
         {:ok, 1}
 
       false ->
