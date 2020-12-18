@@ -349,8 +349,6 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def phone_number_existing?(phone_number, ddd) do
-    IO.inspect ddd
-    IO.inspect phone_number
     case Repo.get_by(ClientesSchema, [telefone: phone_number, ddd: ddd]) do
       nil -> {:ok, phone_number}
       existing -> {:error, :number_found}
@@ -358,7 +356,6 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def get_ddd(phone_number) do
-    IO.inspect phone_number
     case phone_number do
       nil -> phone_number
       "55" <> phone_number -> String.slice(phone_number, 0..1)
@@ -372,9 +369,9 @@ defmodule Tecnovix.ClientesModel do
     telefone = params["ddd"] <> params["telefone"]
 
     kvset
-    |> ETS.KeyValueSet.put!(:telefone, params["ddd"] <> params["telefone"])
-    |> ETS.KeyValueSet.put!(:code_sms, params["code_sms"])
-    |> ETS.KeyValueSet.put!(:confirmation_sms, 0)
+    |> ETS.KeyValueSet.put!(String.to_atom(telefone), params["ddd"] <> params["telefone"])
+    |> ETS.KeyValueSet.put!(String.to_atom(telefone <> "code_sms"), params["code_sms"])
+    |> ETS.KeyValueSet.put!(String.to_atom(telefone <> "confirmation_sms"), 0)
 
     {:ok, kvset}
   end
@@ -391,14 +388,20 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def confirmation_code(code_sms, phone_number) do
+    phone_number =
+      case phone_number do
+        "55" <> phone_number -> phone_number
+        _ -> phone_number
+      end
+
     code_sms = String.to_integer(code_sms)
 
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
-    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, :code_sms)
+    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "code_sms"))
 
     case code_sms == code_sms_memory do
       true ->
-        ETS.KeyValueSet.put(kvset, :confirmation_sms, 1)
+        ETS.KeyValueSet.put(kvset, String.to_atom(phone_number <> "confirmation_sms"), 1)
         {:ok, 1}
 
       false ->
