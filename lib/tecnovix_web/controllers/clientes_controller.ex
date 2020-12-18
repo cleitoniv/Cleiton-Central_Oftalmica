@@ -105,6 +105,8 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def first_access(conn, %{"param" => params}) do
+    params = Map.put(params, "ddd", ClientesModel.get_ddd(params["telefone"]))
+    
     with {:ok, cliente} <- ClientesModel.create_first_access(params) do
       conn
       |> put_status(201)

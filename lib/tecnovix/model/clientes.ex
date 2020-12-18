@@ -88,7 +88,7 @@ defmodule Tecnovix.ClientesModel do
             %ClientesSchema{}
             |> ClientesSchema.first_access(params)
             |> formatting_telefone()
-            |> formatting_ddd()
+            |> IO.inspect
             |> Repo.insert()
 
           changeset ->
