@@ -67,6 +67,8 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create_first_access(params) do
+    IO.inspect params
+    
     case Repo.get_by(ClientesSchema, email: params["email"]) do
       %{cadastrado: false} = cliente ->
         update_first_access(cliente, params)
@@ -88,7 +90,6 @@ defmodule Tecnovix.ClientesModel do
             %ClientesSchema{}
             |> ClientesSchema.first_access(params)
             |> formatting_telefone()
-            |> IO.inspect
             |> Repo.insert()
 
           changeset ->
