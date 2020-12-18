@@ -369,6 +369,8 @@ defmodule Tecnovix.ClientesModel do
   def confirmation_sms(params) do
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
+    telefone = params["ddd"] <> params["telefone"]
+
     kvset
     |> ETS.KeyValueSet.put!(:telefone, params["ddd"] <> params["telefone"])
     |> ETS.KeyValueSet.put!(:code_sms, params["code_sms"])
