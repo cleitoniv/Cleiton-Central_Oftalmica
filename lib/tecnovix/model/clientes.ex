@@ -67,6 +67,8 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create_first_access(params) do
+    IO.inspect params
+    IO.inspect "-----------------------------------------------"
     case Repo.get_by(ClientesSchema, email: params["email"]) do
       %{cadastrado: false} = cliente ->
         update_first_access(cliente, params)
@@ -88,13 +90,15 @@ defmodule Tecnovix.ClientesModel do
             %ClientesSchema{}
             |> ClientesSchema.first_access(params)
             |> formatting_telefone()
+            |> IO.inspect
             |> Repo.insert()
+            |> IO.inspect
 
           changeset ->
             error =
               %ClientesSchema{}
               |> change(%{})
-              |> add_error(:email, "Já existe um cliente com esse telefone cadastrado.")
+              |> add_error(:telefone, "Já existe um cliente com esse telefone cadastrado.")
 
             {:error, error}
         end
