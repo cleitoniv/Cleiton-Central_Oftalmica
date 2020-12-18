@@ -14,9 +14,9 @@ defmodule Tecnovix.Services.ConfirmationSMS do
     case telefone == phone_number and code_sms == code_sms_memory and confirmation_sms == 0 do
       true ->
         kvset
-        |> ETS.KeyValueSet.delete(String.to_atom(phone_number))
-        |> ETS.KeyValueSet.delete(String.to_atom(phone_number <> "code_sms"))
-        |> ETS.KeyValueSet.delete(String.to_atom(phone_number <> "confirmation_sms"))
+        |> ETS.KeyValueSet.delete!(String.to_atom(phone_number))
+        |> ETS.KeyValueSet.delete!(String.to_atom(phone_number <> "code_sms"))
+        |> ETS.KeyValueSet.delete!(String.to_atom(phone_number <> "confirmation_sms"))
 
       false -> kvset
     end

@@ -416,11 +416,11 @@ defmodule Tecnovix.ClientesModel do
     case code_sms == code_sms_memory do
       true ->
         kvset
-        |> ETS.KeyValueSet.delete(String.to_atom(phone_number))
-        |> ETS.KeyValueSet.delete(String.to_atom(phone_number <> "code_sms"))
-        |> ETS.KeyValueSet.delete(String.to_atom(phone_number <> "confirmation_sms"))
+        |> ETS.KeyValueSet.delete!(String.to_atom(phone_number))
+        |> ETS.KeyValueSet.delete!(String.to_atom(phone_number <> "code_sms"))
+        |> ETS.KeyValueSet.delete!(String.to_atom(phone_number <> "confirmation_sms"))
         |> IO.inspect
-        
+
         {:ok, 1}
 
       false ->
