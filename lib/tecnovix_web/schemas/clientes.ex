@@ -104,7 +104,8 @@ defmodule Tecnovix.ClientesSchema do
       :email_fiscal,
       :telefone,
       :cadastrado,
-      :apelido
+      :apelido,
+      :ddd
     ])
     |> validate_required([:nome, :email, :telefone, :cadastrado, :apelido],
       message: "Não pode estar em branco."
