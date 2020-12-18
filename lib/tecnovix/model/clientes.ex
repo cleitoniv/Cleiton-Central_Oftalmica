@@ -419,7 +419,6 @@ defmodule Tecnovix.ClientesModel do
         |> ETS.KeyValueSet.delete!(String.to_atom(phone_number))
         |> ETS.KeyValueSet.delete!(String.to_atom(phone_number <> "code_sms"))
         |> ETS.KeyValueSet.delete!(String.to_atom(phone_number <> "confirmation_sms"))
-        |> IO.inspect
 
         {:ok, 1}
 
