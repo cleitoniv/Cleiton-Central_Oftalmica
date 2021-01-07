@@ -48,7 +48,7 @@ defmodule Tecnovix.Resources.Fallback do
       400,
       Jason.encode!(%{
         "success" => false,
-        "data" => "Falha no serviço, por favor tente mais tarde."
+        "data" => "Falha no serviço, por favor tente novamente mais tarde."
       })
     )
     |> halt()
