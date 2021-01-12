@@ -351,7 +351,7 @@ defmodule Tecnovix.ClientesModel do
     #  %{
     #    "api" => "sms",
     #    "callerid" => "16245239335948",
-    #    "codigo" => "007",
+    #    "codigo" => "000",
     #    "destino" => ["5527996211804"],
     #    "detalhe" => [
     #      %{"destino" => "5527996211804", "id_mensagem" => 16245239336055}
