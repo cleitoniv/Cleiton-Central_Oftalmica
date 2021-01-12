@@ -346,7 +346,7 @@ defmodule Tecnovix.ClientesModel do
       HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
 
     {:ok, Jason.decode!(resp.body)}
-
+    |> IO.inspect
     # {:ok,
     #  %{
     #    "api" => "sms",
