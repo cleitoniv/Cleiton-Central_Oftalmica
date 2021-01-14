@@ -78,8 +78,7 @@ defmodule TecnovixWeb.ClientesController do
 
       {:error, %HTTPoison.Error{id: nil, reason: :timeout}} -> {:error, :service_fail}
 
-      v -> IO.inspect v
-      {:error, :service_fail}
+      _ -> {:error, :service_fail}
     end
   end
 

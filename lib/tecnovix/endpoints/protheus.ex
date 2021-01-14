@@ -8,6 +8,7 @@ defmodule Tecnovix.Endpoints.Protheus do
   @callback get_client_products(products :: term) :: {:ok, term}
   @callback get_client_points(term) :: {:ok, term}
   @callback generate_boleto(term) :: {:ok, term}
+  @callback get_contract_table(term) :: {:ok, term}
 
   @central_endpoint Application.fetch_env!(:tecnovix, :central_endpoint)
 
