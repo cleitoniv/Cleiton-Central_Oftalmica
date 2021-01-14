@@ -195,7 +195,7 @@ defmodule Tecnovix.ContratoDeParceriaModel do
                 end
             end)
 
-          Map.put(productPackages2, :total, (productPackages2.price * productPackages2.quantity) * 100)
+          Map.put(productPackages2, :total, (productPackages2.price * productPackages2.quantity))
         end)
     end)
     |> IO.inspect
