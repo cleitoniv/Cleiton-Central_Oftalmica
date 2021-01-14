@@ -186,11 +186,11 @@ defmodule Tecnovix.ContratoDeParceriaModel do
 
     packages = Enum.flat_map(productPackages["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->
-          Enum.reduce(model["fields"], %{}, fn {key, value}, acc ->
+          Enum.reduce(model["fields"], %{}, fn package, acc ->
             productPackages =
-              case key do
-                "DA1_PRCVEN" -> Map.put(acc, :price, value)
-                "DA1_QTDLOT" -> Map.put(acc, :quantity, value)
+              case package["id"] do
+                "DA1_PRCVEN" -> Map.put(acc, :price, package["value"])
+                "DA1_QTDLOT" -> Map.put(acc, :quantity, package["value"])
                 _ -> acc
               end
               |> IO.inspect
