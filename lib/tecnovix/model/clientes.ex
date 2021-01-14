@@ -318,7 +318,7 @@ defmodule Tecnovix.ClientesModel do
 
     params =
       Map.put(Map.new(), "client_id", "suporte@centraloftalmica.com")
-      |> Map.put("client_secret", "0754943")
+      |> Map.put("client_secret", "C3ntr@l")
 
     uri = URI.encode_query(params)
 
