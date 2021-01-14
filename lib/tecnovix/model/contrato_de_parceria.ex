@@ -189,13 +189,13 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           productPackages2 =
             Enum.reduce(model["fields"], %{}, fn package, acc ->
                 case package["id"] do
-                  "DA1_PRCVEN" -> Map.put(acc, :price, package["value"])
-                  "DA1_QTDLOT" -> Map.put(acc, :quantity, package["value"])
+                  "DA1_PRCVEN" -> Map.put(acc, :price, transform_value(package["value"]) * 100)
+                  "DA1_QTDLOT" -> Map.put(acc, :quantity, transform_value(package["value"]))
                   _ -> acc
                 end
             end)
 
-          Map.put(productPackages2, :total, (transform_value(productPackages2.price) * transform_value(productPackages2.quantity)) * 100)
+          Map.put(productPackages2, :total, (productPackages2.price * productPackages2.quantity) * 100)
         end)
     end)
     |> IO.inspect
