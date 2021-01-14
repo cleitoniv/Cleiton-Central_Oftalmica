@@ -39,7 +39,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
   @impl true
   def get_contract_table(%{cliente: cliente, loja: loja, grupo: grupo} = params, token) do
-    url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{loja}&GRUPO=#{grupo}"
+    url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{"007498"}&LOJA=#{"01"}&GRUPO=#{grupo}"
     header = Protheus.authenticate(@header, token)
 
     HTTPoison.get(url, header)
