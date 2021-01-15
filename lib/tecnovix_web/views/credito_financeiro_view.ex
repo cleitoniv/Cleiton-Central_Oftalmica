@@ -4,6 +4,7 @@ defmodule TecnovixWeb.CreditoFinanceiroView do
 
   def build(%{item: item}) do
     %{
+      id: item.id,
       cliente_id: item.cliente_id,
       valor: item.valor,
       desconto: item.desconto,
