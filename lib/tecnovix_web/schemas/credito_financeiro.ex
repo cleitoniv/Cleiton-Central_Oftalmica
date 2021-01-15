@@ -3,15 +3,16 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
   import Ecto.Changeset
 
   schema "credito_financeiro" do
-    belongs_to :cliente, Tecnovix.ClientesSchema
-    field :valor, :integer
-    field :desconto, :integer
-    field :prestacoes, :integer
-    field :tipo_pagamento, :string
-    field :wirecard_pedido_id, :string
-    field :wirecard_pagamento_id, :string
-    field :wirecard_reembolso_id, :string
-    field :status, :integer, default: 0
+    belongs_to(:cliente, Tecnovix.ClientesSchema)
+    field(:valor, :integer)
+    field(:desconto, :integer)
+    field(:prestacoes, :integer)
+    field(:tipo_pagamento, :string)
+    field(:wirecard_pedido_id, :string)
+    field(:wirecard_pagamento_id, :string)
+    field(:wirecard_reembolso_id, :string)
+    field(:status, :integer, default: 0)
+    field(:saldo, :integer, default: 0)
 
     timestamps()
   end
@@ -27,7 +28,8 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
       :wirecard_pedido_id,
       :wirecard_pagamento_id,
       :wirecard_reembolso_id,
-      :status
+      :status,
+      :saldo
     ])
     |> validate_required([:cliente_id])
   end

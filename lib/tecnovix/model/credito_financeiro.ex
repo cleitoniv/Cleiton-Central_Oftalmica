@@ -242,7 +242,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
     |> where([c], ^cliente.id == c.cliente_id)
     |> Repo.all()
     |> Enum.reduce(0, fn credit, acc ->
-      credit.valor + acc
+      credit.saldo + acc
     end)
   end
 
