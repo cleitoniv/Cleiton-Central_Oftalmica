@@ -31,7 +31,7 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> render("creditos.json", %{item: creditos})
+      |> render("show.json", %{item: creditos})
     else
       {:error, %Ecto.Changeset{} = error} -> {:error, error}
       _ -> {:error, :invalid_parameter}
