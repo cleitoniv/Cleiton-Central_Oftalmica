@@ -75,6 +75,7 @@ defmodule TecnovixWeb.Router do
       get "/pedidos", TecnovixWeb.PedidosDeVendaController, :get_pedidos
       get "/creditos", TecnovixWeb.CreditoFinanceiroController, :get_creditos
       get "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :get_devolucoes
+      post "/creditos", TecnovixWeb.CreditoFinanceiroController, :insert_or_update
     end
 
     scope "/atend_pref_cliente" do

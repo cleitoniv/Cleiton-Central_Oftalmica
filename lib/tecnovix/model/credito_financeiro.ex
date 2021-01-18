@@ -23,7 +23,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
      end)}
   end
 
-  def insert_or_update(%{"cliente_id" => cliente_id, "status" => status} = params) do
+  def insert_or_update(%{"cliente_id" => cliente_id} = params) do
     with nil <- Repo.get_by(Credito, cliente_id: cliente_id) do
       __MODULE__.create(params)
     else

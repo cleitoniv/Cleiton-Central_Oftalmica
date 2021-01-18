@@ -8,7 +8,8 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
     UsuariosClienteSchema,
     LogsClienteModel,
     NotificacoesClienteModel
-  }
+
+
 
   def get_creditos(conn, %{"filtro" => filtro}) do
     filtro =
@@ -24,6 +25,19 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
       |> render("creditos.json", %{item: creditos})
     end
   end
+
+  def insert_or_update(conn, params) do
+    with {:ok, creditos} <- CreditoFinanceiroModel.insert_or_update(params) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("creditos.json", %{item: creditos})
+    else
+      {:error, %Ecto.Changeset{} = error} -> {:error, error}
+      _ -> {:error, :invalid_parameter}
+    end
+  end
+}
 
   defp usuario_auth(auth) do
     case auth do

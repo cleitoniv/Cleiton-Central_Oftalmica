@@ -277,7 +277,7 @@ defmodule TecnovixWeb.UsersTest do
       paciente: "Mauricio",
       quant: 5,
       numero: "123",
-      dt_nas_pac: "2020/07/07",
+      dt_nas_pac: "07/07/1998",
       esferico: 1.25,
       cilindrico: 1.0,
       eixo: 1.22,
