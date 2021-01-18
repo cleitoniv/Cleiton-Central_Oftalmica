@@ -31,6 +31,5 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
       :status,
       :saldo
     ])
-    |> validate_required([:cliente_id])
   end
 end
