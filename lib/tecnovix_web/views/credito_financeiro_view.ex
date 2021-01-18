@@ -10,9 +10,6 @@ defmodule TecnovixWeb.CreditoFinanceiroView do
       desconto: item.desconto,
       prestacoes: item.prestacoes,
       tipo_pagamento: item.tipo_pagamento,
-      wirecard_pedido_id: item.wirecard_pedido_id,
-      wirecard_pagamento_id: item.wirecard_pagamento_id,
-      wirecard_reembolso_id: item.wirecard_reembolso_id,
       saldo: item.saldo,
       inserted_at: item.inserted_at,
       status: item.status

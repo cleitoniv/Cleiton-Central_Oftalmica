@@ -2,14 +2,14 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.CreditoFinanceiroModel
 
+  action_fallback Tecnovix.Resources.Fallback
+
   alias Tecnovix.{
     CreditoFinanceiroModel,
     ClientesSchema,
     UsuariosClienteSchema,
     LogsClienteModel,
     NotificacoesClienteModel}
-
-
 
   def get_creditos(conn, %{"filtro" => filtro}) do
     filtro =
