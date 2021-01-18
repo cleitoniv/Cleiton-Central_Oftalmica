@@ -23,17 +23,20 @@ defmodule Tecnovix.CreditoFinanceiroModel do
      end)}
   end
 
-  def insert_or_update(%{"cliente_id" => cliente_id} = params) do
-    with nil <- Repo.get_by(Credito, cliente_id: cliente_id) do
+  def insert_or_update(%{"cliente_id" => cliente_id, "id" => id} = params) do
+    with nil <- Repo.get_by(Credito, cliente_id: cliente_id, id: id) do
       __MODULE__.create(params)
+      |> IO.inspect
     else
       changeset ->
         __MODULE__.update(changeset, params)
+        |> IO.inspect
     end
   end
 
   def insert_or_update(_params) do
     {:error, :invalid_parameter}
+    |> IO.inspect
   end
 
   def insert(params, order, payment, cliente_id) do
