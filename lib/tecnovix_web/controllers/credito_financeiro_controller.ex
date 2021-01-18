@@ -7,7 +7,7 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
     ClientesSchema,
     UsuariosClienteSchema,
     LogsClienteModel,
-    NotificacoesClienteModel
+    NotificacoesClienteModel}
 
 
 
@@ -37,7 +37,6 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
       _ -> {:error, :invalid_parameter}
     end
   end
-}
 
   defp usuario_auth(auth) do
     case auth do
