@@ -23,8 +23,9 @@ defmodule Tecnovix.CreditoFinanceiroModel do
      end)}
   end
 
-  def insert_or_update(%{"cliente_id" => cliente_id, "id" => id} = params) do
-    with nil <- Repo.get_by(Credito, cliente_id: cliente_id, id: id) do
+  def insert_or_update(%{"id" => id} = params) do
+    IO.inspect params
+    with nil <- Repo.get(Credito, id) do
       __MODULE__.create(params)
       |> IO.inspect
     else
