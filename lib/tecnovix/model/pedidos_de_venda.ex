@@ -118,7 +118,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.order_params(items)
       |> PedidosDeVendaModel.wirecard_order(taxa_entrega, taxa)
       |> Wirecard.create_order()
-
+      |> IO.inspect
     case order do
       {:ok, %{status_code: 201}} -> order
       _ -> {:error, :order_not_created}
@@ -141,7 +141,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.payment_params(ccv, installment)
       |> PedidosDeVendaModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
-
+      |> IO.inspect
     payment = Jason.decode!(payment.body)
 
     case payment["status"] do
@@ -196,7 +196,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
         |> Repo.insert()
-
+        |> IO.inspect
       _ ->
         {:error, :pedido_failed}
     end
