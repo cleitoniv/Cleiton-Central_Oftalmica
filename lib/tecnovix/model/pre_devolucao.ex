@@ -46,12 +46,9 @@ defmodule Tecnovix.PreDevolucaoModel do
   def create(cliente, params, tipo) do
     devolucao = pre_devolucao(cliente, params, tipo)
 
-    {:ok, item} =
-      %PreDevolucaoSchema{}
-      |> PreDevolucaoSchema.changeset(devolucao)
-      |> Repo.insert()
-
-    {:ok, item}
+    %PreDevolucaoSchema{}
+    |> PreDevolucaoSchema.changeset(devolucao)
+    |> Repo.insert()
   end
 
   def create(cliente, params) do
@@ -146,7 +143,6 @@ defmodule Tecnovix.PreDevolucaoModel do
         products: products,
         tipo: tipo
       } = params) do
-        IO.inspect params
     cliente = Repo.get(ClientesSchema, cliente_id)
 
     case create(cliente, devolutions, tipo) do

@@ -35,6 +35,18 @@ defmodule Tecnovix.ItensPreDevolucaoSchema do
   end
 
   def changeset(struct, params \\ %{}) do
+    params =
+      case Map.has_key?(params, "dt_nas_pac") do
+        true ->
+          case String.contains?(params["dt_nas_pac"], "/") do
+            true -> [dia, mes, ano] = String.split(params["dt_nas_pac"], "/")
+                    date = "#{ano}-#{mes}-#{dia}"
+                    Map.put(params, "dt_nas_pac", date)
+            false -> params
+          end
+        false -> params
+      end
+
     struct
     |> cast(params, [
       :pre_devolucao_id,

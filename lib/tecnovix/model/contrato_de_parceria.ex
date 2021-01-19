@@ -198,7 +198,6 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           Map.put(productPackages2, :total, (productPackages2.price * productPackages2.quantity))
         end)
     end)
-    |> IO.inspect
 
     {:ok, packages}
   end
