@@ -907,6 +907,7 @@ defmodule Tecnovix.App.ScreensProd do
                 Enum.reduce(pedido.items, 0, fn map, acc ->
                   case map.operation do
                     "07" -> 0 + acc
+                    "13" -> 0 + acc
                     _ -> map.virtotal + acc
                   end
                 end),
@@ -914,6 +915,7 @@ defmodule Tecnovix.App.ScreensProd do
                 Enum.reduce(pedido.items, 0, fn map, acc ->
                   case map.operation do
                     "07" -> 0 + acc
+                    "13" -> 0 + acc
                     _ -> map.virtotal + acc
                   end
                 end) + pedido.taxa_entrega + pedido.taxa_wirecard,
