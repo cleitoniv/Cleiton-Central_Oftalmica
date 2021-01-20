@@ -256,6 +256,7 @@ defmodule Tecnovix.App.ScreensProd do
           Enum.filter(produtos, fn items -> items["type"] != nil end)
           |> Enum.filter(fn items -> String.downcase(items["type"]) == String.downcase(filtro) end)
       end
+      |> IO.inspect
 
     {:ok, data, filters}
   end
