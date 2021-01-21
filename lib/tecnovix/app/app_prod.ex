@@ -167,6 +167,13 @@ defmodule Tecnovix.App.ScreensProd do
           "TRUE" -> true
         end
 
+      "VALORT" ->
+          case is_integer(map["value"]) do
+            true -> map["value"] / 1
+
+            false -> map["value"]
+          end
+
       _ ->
         map["value"]
     end
