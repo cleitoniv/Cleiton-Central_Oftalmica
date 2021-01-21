@@ -278,6 +278,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "vendedor_1" => "",
       "items" =>
         Enum.reduce(items, [], fn map, acc ->
+          IO.inspect map
           array =
             Enum.flat_map(map["items"], fn items ->
               cond do
