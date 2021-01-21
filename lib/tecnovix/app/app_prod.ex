@@ -167,7 +167,12 @@ defmodule Tecnovix.App.ScreensProd do
           "TRUE" -> true
         end
 
-      "VALORT" -> String.to_integer(map["value"])
+      "VALORT" ->
+          try do
+            String.to_float(map["value"])
+          rescue
+             _ -> String.to_float("0.01000000")
+          end
 
       _ ->
         map["value"]
