@@ -373,6 +373,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def olho_direito(items, map) do
+    IO.inspect items
     olho =
       cond do
         map["olho_direito"] != nil -> "olho_direito"
