@@ -16,6 +16,7 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       produto: item.produto,
       quantidade: item.quantidade,
       prc_unitario: item.prc_unitario,
+      valor_test: item.valor_test,
       olho: item.olho,
       paciente: item.paciente,
       num_pac: item.num_pac,

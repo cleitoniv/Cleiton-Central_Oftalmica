@@ -20,6 +20,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :virtotal, :integer
     field :valor_credito_finan, :integer, default: 0
     field :valor_credito_prod, :integer, default: 0
+    field :valor_test, :integer, default: 0
     field :esferico, :decimal
     field :cilindrico, :decimal
     field :eixo, :integer
@@ -73,7 +74,8 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :nota_fiscal,
       :serie_nf,
       :num_pedido,
-      :url_image
+      :url_image,
+      :valor_test
     ])
     |> validate_required([
       :pedido_de_venda_id
@@ -112,7 +114,8 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :nota_fiscal,
       :serie_nf,
       :num_pedido,
-      :url_image
+      :url_image,
+      :valor_test
     ])
   end
 end
