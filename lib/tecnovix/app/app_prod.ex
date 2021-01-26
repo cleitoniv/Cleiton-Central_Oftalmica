@@ -25,12 +25,10 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   def get_endereco_entrega_protheus(%{cnpj_cpf: cnpj_cpf, token: token}) do
-    IO.inspect cnpj_cpf
     params = %{"A1_CGC" => cnpj_cpf}
     url = Protheus.generate_url("/rest/fwmodel/sa1rest", params)
     header = Protheus.authenticate(@header, token)
     HTTPoison.get(url, header)
-    |> IO.inspect
   end
 
   def get_endereco_entrega(cliente) do
@@ -50,7 +48,7 @@ defmodule Tecnovix.App.ScreensProd do
     case cliente["#{key}"] do
       nil -> ""
       value ->
-        case String.split(value, ",") |> IO.inspect do
+        case String.split(value, ",") do
           [endereco, num] -> num
           _ -> ""
         end
@@ -263,7 +261,6 @@ defmodule Tecnovix.App.ScreensProd do
           Enum.filter(produtos, fn items -> items["type"] != nil end)
           |> Enum.filter(fn items -> String.downcase(items["type"]) == String.downcase(filtro) end)
       end
-      |> IO.inspect
 
     {:ok, data, filters}
   end
