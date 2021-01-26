@@ -143,6 +143,13 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :system_fail}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Tente novamente mais tarde."}))
+    |> halt()
+  end
+
   def call(conn, {:error, :protheus_not_found}) do
     conn
     |> put_resp_content_type("application/json")

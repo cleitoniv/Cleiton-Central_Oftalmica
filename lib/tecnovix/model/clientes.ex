@@ -9,6 +9,7 @@ defmodule Tecnovix.ClientesModel do
 
   @sms_token "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuZGlyZWN0Y2FsbHNvZnQuY29tIiwiYXVkIjoiMTkyLjE2OC4xNS4yNyIsImlhdCI6MTYwMzk5MjAwMCwibmJmIjoxNjAzOTkyMDAwLCJleHAiOjE2MDM5OTU2MDAsImRjdCI6IjMzMDI3NzQwMCIsImNsaWVudF9vYXV0aF9pZCI6IjM3NjA0OSJ9.B4gF3wAeOUkE9GNZSZCHBa8h_6touKQlrXebQrOocpw"
   @header [{"Content-Type", "application/x-www-form-urlencoded"}]
+  @ticket_key Application.fetch_env!(:tecnovix, :helpdesk_key)
 
   def get_period() do
     period = ["Manhã - Tarde", "Manhã", "Tarde"]
@@ -125,6 +126,21 @@ defmodule Tecnovix.ClientesModel do
       [] -> {:error, :not_found}
       clientes -> {:ok, clientes}
     end
+  end
+
+  def create_ticket(cliente, message) do
+    params =
+      Map.new()
+      |> Map.put(:name, cliente.nome)
+      |> Map.put(:email, cliente.email)
+      |> Map.put(:subject, "Testing API")
+      |> Map.put(:message, message)
+
+    header = [{"X-API-Key", @ticket_key}]
+
+    url = "https://162.214.116.118/suporte/api/tickets.json"
+
+    HTTPoison.post(url, Jason.encode!(params), header) |> IO.inspect
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do

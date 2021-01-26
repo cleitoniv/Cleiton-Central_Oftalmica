@@ -428,4 +428,24 @@ defmodule TecnovixWeb.UsersTest do
     |> get("/api/verify_field_cadastrado?email=#{first_access["email"]}")
     |> json_response(200)
   end
+
+  test "Criando um TICKET" do
+    user_firebase = Generator.user()
+    user_client_param = Generator.users_cliente()
+    user_param = Generator.user_param()
+
+    # criando o cliente
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente", %{"param" => user_param})
+    |> json_response(201)
+
+    message = %{"message" => "Quero abrir um TICKET"}
+
+    build_conn()
+    |> Generator.put_auth(user_firebase["idToken"])
+    |> post("/api/cliente/create_ticket", message)
+    |> json_response(200)
+    |> IO.inspect
+  end
 end

@@ -101,6 +101,7 @@ defmodule TecnovixWeb.Router do
       post "/verify_phone", TecnovixWeb.ClientesController, :verify_phone
 
       pipe_through :cliente
+      post "/create_ticket", TecnovixWeb.ClientesController, :create_ticket
       get "/current_user", TecnovixWeb.ClientesController, :current_user
       post "/update_password", TecnovixWeb.ClientesController, :update_password
       get "/", TecnovixWeb.ClientesController, :show
