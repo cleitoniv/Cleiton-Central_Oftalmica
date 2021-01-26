@@ -20,13 +20,13 @@ defmodule TecnovixWeb.UsersTest do
     |> post("/api/cliente", %{"param" => user_param})
     |> json_response(201)
 
+    IO.inspect Tecnovix.Repo.all(Tecnovix.EnderecoEntregaSchema)
+
     # criando o usuario cliente
     user_client =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
-      |> recycle()
-      |> post("/api/verify_email", %{"email" => user_param["email"]})
       |> json_response(201)
       |> IO.inspect
 

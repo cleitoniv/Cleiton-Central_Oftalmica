@@ -131,7 +131,6 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def create_user(conn, %{"param" => params}) do
-    IO.inspect params
     params =
       Map.put(
         params,
@@ -144,7 +143,9 @@ defmodule TecnovixWeb.ClientesController do
     params = Map.put(params, "email", jwt.fields["email"])
     params = Map.put(params, "uid", jwt.fields["user_id"])
 
-    with {:ok, cliente} <- ClientesModel.insert_or_update_first(params) do
+    with {:ok, cliente} <- ClientesModel.insert_or_update_first(params),
+         {:ok, _endereco} <- Tecnovix.EnderecoEntregaModel.create(Map.put(params, "cliente_id", cliente.id)) do
+
       conn
       |> put_status(201)
       |> put_resp_content_type("application/json")

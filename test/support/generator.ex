@@ -66,7 +66,14 @@ defmodule TecnovixWeb.Support.Generator do
       "dia_remessa" => "3",
       "loja" => "01",
       "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
-      "complemento" => "Casa"
+      "complemento" => "Casa",
+      "cep_entrega" => "29027445",
+      "complemento_entrega" => "Sem Complemento",
+      "bairro_entrega" => "Bela Vista",
+      "endereco_entrega" => "Rua Benedito Barcelos",
+      "estado_entrega" => "ES",
+      "cidade_entrega" => "Vitória",
+      "numero_entrega" => "111"
     }
   end
 
