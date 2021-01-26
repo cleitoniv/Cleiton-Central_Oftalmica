@@ -19,6 +19,36 @@ defmodule Tecnovix.PedidosDeVendaModel do
     }
   end
 
+  def decrease_pedido(pedido, cliente_id) do
+    IO.inspect "oi"
+
+    PedidosDeVendaSchema
+    |> preload([p], :items)
+    |> Repo.all()
+    |> IO.inspect
+    |> Enum.reduce(%{}, fn items_pedido, _acc ->
+      case items_pedido.tipo_venda == "A" and items_pedido.operation == "13" and items_pedido.cliente_id == cliente_id do
+        true ->
+          params =
+            Map.new()
+            |> Map.put("valor", -(items_pedido.valor_credito_finan * items_pedido.quantidade))
+            |> Map.put("saldo", -(items_pedido.valor_credito_finan * items_pedido.quantidade))
+            |> Map.put("tipo_pagamento", "CREDIT_FINAN")
+            |> Map.put("cliente_id", cliente_id)
+            |> Map.put("status", 1)
+            |> IO.inspect
+
+          case Tecnovix.CreditoFinanceiroModel.create(params) |> IO.inspect do
+            {:ok, _credito} = credito -> credito
+            _ -> {:error, :invalid_credentials}
+          end
+
+        false -> {:ok, false}
+      end
+    end)
+    |> IO.inspect
+  end
+
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(params["data"], fn pedidos ->
@@ -374,7 +404,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def olho_direito(items, map) do
-    IO.inspect items
     olho =
       cond do
         map["olho_direito"] != nil -> "olho_direito"
