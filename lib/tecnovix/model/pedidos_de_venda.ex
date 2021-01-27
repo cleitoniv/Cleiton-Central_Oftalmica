@@ -19,7 +19,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     }
   end
 
-  def decrease_pedido(pedido, cliente_id) do
+  def decrease_balance(pedido, cliente_id) do
     IO.inspect "oi"
 
     PedidosDeVendaSchema
