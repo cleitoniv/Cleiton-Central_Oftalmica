@@ -736,6 +736,14 @@ defmodule Tecnovix.PedidosDeVendaModel do
       2 ->
         get_pacientes_revisao(cliente_id)
 
+      0 ->
+        pedidos =
+          PedidosDeVendaSchema
+          |> preload(:items)
+          |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro and p.status_ped == "3")
+          |> order_by([p], desc: p.inserted_at)
+          |> Repo.all()
+
       _ ->
         pedidos =
           PedidosDeVendaSchema
