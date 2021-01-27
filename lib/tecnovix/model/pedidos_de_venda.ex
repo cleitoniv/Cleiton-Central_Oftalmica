@@ -19,6 +19,24 @@ defmodule Tecnovix.PedidosDeVendaModel do
     }
   end
 
+  def sum_credits(cliente) do
+    PedidosDeVendaSchema
+    |> where([p], p.client_id == ^cliente.id)
+    |> preload([p], :items)
+    |> Repo.all()
+    |> Enum.reduce(0, fn pedido, acc ->
+      valor =
+        Enum.reduce(pedido.items, 0, fn items_pedido, acc ->
+          case items_pedido.status == 0 and items_pedido.operation == "13" do
+            true -> acc + (items_pedido.valor_credito_finan * items_pedido.quantidade)
+            false -> 0
+          end
+        end)
+
+      valor + acc
+    end)
+  end
+
   # def decrease_balance(pedido, cliente_id) do
   #   IO.inspect "oi"
 

@@ -12,6 +12,8 @@ defmodule Tecnovix.App.ScreensProd do
   alias Tecnovix.Endpoints.Protheus
   alias Tecnovix.OpcoesCompraCreditoFinanceiroModel, as: OpcoesCreditoModel
   alias Tecnovix.DescricaoGenericaDoProdutoModel, as: DescricaoModel
+  alias Tecnovix.PedidosDeVendaModel
+  alias Tecnovix.CreditoFinanceiroModel
 
   @product_url "http://portal.centraloftalmica.com/images/010C.jpg"
   @header [{"Content-Type", "application/x-www-form-urlencoded"}]
@@ -288,7 +290,7 @@ defmodule Tecnovix.App.ScreensProd do
   @impl true
   def get_credits(cliente) do
     %{
-      money: Tecnovix.CreditoFinanceiroModel.sum_credits(cliente),
+      money: CreditoFinanceiroModel.sum_credits(cliente) - PedidosDeVendaModel.sum_credits((cliente)),
       points: 0
     }
   end
