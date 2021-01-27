@@ -729,6 +729,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
+    IO.inspect filtro
     case filtro do
       "2" ->
         get_pacientes_revisao(cliente_id)
@@ -736,7 +737,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       2 ->
         get_pacientes_revisao(cliente_id)
 
-      0 ->
+      "0" ->
         pedidos =
           PedidosDeVendaSchema
           |> preload(:items)
