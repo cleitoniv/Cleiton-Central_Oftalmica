@@ -76,8 +76,8 @@
       "numero": "132",
       "data_nascimento": "1998-07-07"
   },
-    "operation": "06",
-    "type": "C",
+    "operation": "13",
+    "type": "A",
     "items": [
       {
       "grupo": "011C",
@@ -100,7 +100,8 @@
       "serie_nf": "123",
       "num_pedido": "123456",
       "tests": "Sim",
-      "duracao": "180.00000"
+      "duracao": "180.00000",
+      "valor_test": 0
     }
     ]
   }
