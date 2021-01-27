@@ -417,7 +417,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "olho" => "D",
       "valor_credito_finan" => items["valor_credito_finan"],
       "valor_credito_prod" => items["valor_credito_prod"],
-      "valor_test" => round(items["valor_test"]) || 0,
+      "valor_test" => round(items["valor_test"] || 0.01),
       "virtotal" => items["quantidade"] * items["prc_unitario"],
       "esferico" => map[olho]["degree"],
       "cilindrico" => map[olho]["cylinder"],
