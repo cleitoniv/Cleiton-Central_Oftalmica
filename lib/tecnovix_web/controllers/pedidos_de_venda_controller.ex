@@ -25,6 +25,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
     with {:ok, pedido} <-
            PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
+         {:ok, _} <- PedidosDeVendaModel.decrease_balance(pedido, cliente.id),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
@@ -163,7 +164,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order, ccv, installment),
          {:ok, pedido} <-
            PedidosDeVendaModel.create_pedido(items, cliente, order, installment, taxa_entrega),
-         {:ok, _} <- PedidosDeVendaModel.decrease_balance(pedido, cliente.id),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
