@@ -740,7 +740,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         pedidos =
           PedidosDeVendaSchema
           |> preload(:items)
-          |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro and p.status_ped == "3")
+          |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro and p.status_ped == 3)
           |> order_by([p], desc: p.inserted_at)
           |> Repo.all()
 
