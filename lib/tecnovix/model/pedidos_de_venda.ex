@@ -21,12 +21,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
   def decrease_balance(pedido, cliente_id) do
     IO.inspect "oi"
+    pedidos =
+      PedidosDeVendaSchema
+      |> preload([p], :items)
+      |> Repo.all()
 
-    PedidosDeVendaSchema
-    |> preload([p], :items)
-    |> Repo.all()
-    |> IO.inspect
-    |> Enum.reduce(%{}, fn items_pedido, _acc ->
+    |> Enum.reduce(pedidos.items, %{}, fn items_pedido, _acc ->
       case items_pedido.tipo_venda == "A" and items_pedido.operation == "13" and items_pedido.cliente_id == cliente_id do
         true ->
           params =
