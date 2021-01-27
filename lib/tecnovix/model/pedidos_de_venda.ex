@@ -24,6 +24,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
     pedidos =
       PedidosDeVendaSchema
+      |> where([p], p.client_id == ^cliente_id)
       |> preload([p], :items)
       |> Repo.all()
 
@@ -31,7 +32,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       IO.inspect pedido
       Enum.reduce(pedido.items, 0 , fn items_pedido, _acc ->
         IO.inspect items_pedido
-        case items_pedido.tipo_venda == "A" and items_pedido.operation == "13" and items_pedido.cliente_id == cliente_id do
+        case items_pedido.tipo_venda == "A" and items_pedido.operation == "13" do
           true ->
             params =
               Map.new()
