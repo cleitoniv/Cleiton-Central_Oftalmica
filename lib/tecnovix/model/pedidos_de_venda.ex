@@ -26,29 +26,32 @@ defmodule Tecnovix.PedidosDeVendaModel do
       PedidosDeVendaSchema
       |> preload([p], :items)
       |> Repo.all()
-      |> hd()
 
-     Enum.reduce(pedidos.items, %{}, fn items_pedido, _acc ->
-      case items_pedido.tipo_venda == "A" and items_pedido.operation == "13" and items_pedido.cliente_id == cliente_id do
-        true ->
-          params =
-            Map.new()
-            |> Map.put("valor", -(items_pedido.valor_credito_finan * items_pedido.quantidade))
-            |> Map.put("saldo", -(items_pedido.valor_credito_finan * items_pedido.quantidade))
-            |> Map.put("tipo_pagamento", "CREDIT_FINAN")
-            |> Map.put("cliente_id", cliente_id)
-            |> Map.put("status", 1)
-            |> IO.inspect
+     Enum.reduce(pedidos, %{}, fn pedido, _acc ->
+      IO.inspect pedido
+      Enum.reduce(pedido.items, 0 , fn items_pedido, _acc ->
+        IO.inspect items_pedido
+        case items_pedido.tipo_venda == "A" and items_pedido.operation == "13" and items_pedido.cliente_id == cliente_id do
+          true ->
+            params =
+              Map.new()
+              |> Map.put("valor", -(items_pedido.valor_credito_finan * items_pedido.quantidade))
+              |> Map.put("saldo", -(items_pedido.valor_credito_finan * items_pedido.quantidade))
+              |> Map.put("tipo_pagamento", "CREDIT_FINAN")
+              |> Map.put("cliente_id", cliente_id)
+              |> Map.put("status", 1)
+              |> IO.inspect
 
-          case Tecnovix.CreditoFinanceiroModel.create(params) |> IO.inspect do
-            {:ok, _credito} = credito -> credito
-            _ -> {:error, :invalid_credentials}
-          end
+            case Tecnovix.CreditoFinanceiroModel.create(params) |> IO.inspect do
+              {:ok, _credito} = credito -> credito
+              _ -> {:error, :invalid_credentials}
+            end
 
-        false -> {:ok, false}
-      end
+          false -> {:ok, false}
+        end
+      end)
+      |> IO.inspect
     end)
-    |> IO.inspect
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
