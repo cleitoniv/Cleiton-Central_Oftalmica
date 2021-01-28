@@ -1161,7 +1161,7 @@ defmodule Tecnovix.App.ScreensProd do
             pedido: credito.id,
             valor: case Map.has_key?(credito, :valor) do
               true -> credito.valor |> Kernel.trunc()
-              false -> (credito.valor_credito_finan * -1) |> Kernel.trunc()
+              false -> ((credito.valor_credito_finan * credito.quantidade) * -1) |> Kernel.trunc()
             end
           }
 
