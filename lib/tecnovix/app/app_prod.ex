@@ -1143,8 +1143,11 @@ defmodule Tecnovix.App.ScreensProd do
     {:ok, creditos} =
       case CreditoFinanceiroModel.get_creditos_by_cliente(cliente.id) do
         [] -> {:ok, []}
-        credito -> {:ok, credito}
+        credito -> case PedidosDeVendaModel.get_pedidos_finan(cliente.id) do
+          pedidos_finan -> {:ok, credito ++ pedidos_finan}
+        end
       end
+      |> IO.inspect
 
     data_hoje = Date.utc_today()
 
@@ -1156,7 +1159,7 @@ defmodule Tecnovix.App.ScreensProd do
             date_filter: NaiveDateTime.to_date(credito.inserted_at),
             date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
             pedido: credito.id,
-            valor: credito.valor |> Kernel.trunc()
+            valor: credito.valor |> Kernel.trunc() || credito.valor_credito_finan |> Kernel.trunc()
           }
 
           case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do

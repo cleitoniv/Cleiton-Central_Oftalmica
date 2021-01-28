@@ -729,7 +729,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
-    IO.inspect filtro
     case filtro do
       "2" ->
         get_pacientes_revisao(cliente_id)
@@ -753,6 +752,17 @@ defmodule Tecnovix.PedidosDeVendaModel do
           |> order_by([p], desc: p.inserted_at)
           |> Repo.all()
     end
+  end
+
+  def get_pedidos_finan(cliente_id) do
+    pedidos =
+      PedidosDeVendaSchema
+      |> preload(:items)
+      |> where([p], p.client_id == ^cliente_id and p.operation == "13")
+      |> Repo.all()
+      |> Enum.reduce([], fn pedido, acc ->
+        pedido.items ++ acc
+      end)
   end
 
   def get_pacientes_revisao(cliente_id) do
