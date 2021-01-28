@@ -1159,7 +1159,10 @@ defmodule Tecnovix.App.ScreensProd do
             date_filter: NaiveDateTime.to_date(credito.inserted_at),
             date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
             pedido: credito.id,
-            valor: credito.valor |> Kernel.trunc() || credito.valor_credito_finan |> Kernel.trunc()
+            valor: case Map.has_key?(credito, :credito) do
+              true -> credito.valor |> Kernel.trunc()
+              false -> (credito.valor_credito_finan * -1) |> Kernel.trunc()
+            end
           }
 
           case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do
