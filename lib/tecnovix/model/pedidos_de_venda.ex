@@ -758,7 +758,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     pedidos =
       PedidosDeVendaSchema
       |> preload(:items)
-      |> where([p], p.client_id == ^cliente_id and p.operation == "13")
+      |> where([p], p.client_id == ^cliente_id)
       |> Repo.all()
       |> Enum.reduce([], fn pedido, acc ->
         pedido.items ++ acc
