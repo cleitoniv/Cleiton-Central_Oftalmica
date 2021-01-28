@@ -1159,7 +1159,7 @@ defmodule Tecnovix.App.ScreensProd do
             date_filter: NaiveDateTime.to_date(credito.inserted_at),
             date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
             pedido: credito.id,
-            valor: case Map.has_key?(credito, :credito) do
+            valor: case Map.has_key?(credito, :valor) do
               true -> credito.valor |> Kernel.trunc()
               false -> (credito.valor_credito_finan * -1) |> Kernel.trunc()
             end
