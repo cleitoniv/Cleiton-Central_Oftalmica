@@ -28,6 +28,19 @@ defmodule Tecnovix.Resources.Fallback do
     |> halt()
   end
 
+  def call(conn, {:error, :credit_insufficient}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "success" => false,
+        "data" => "Você não tem crédito suficiente para essa operação."
+      })
+    )
+    |> halt()
+  end
+
   def call(conn, {:error, :phone_existing}) do
     conn
     |> put_resp_content_type("application/json")

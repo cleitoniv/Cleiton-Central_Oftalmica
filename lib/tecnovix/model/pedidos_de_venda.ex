@@ -765,7 +765,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       end)
   end
 
-  def confirm_buy(money, %{"operation" => "13"} = pedido) do
+  def confirm_buy(money, [%{"operation" => "13"}] = pedido) do
     valor_pedido =
       Enum.reduce(pedido["items"], 0, fn items, acc ->
         (items["quantidade"] * items["valor_credito_finan"]) + acc
@@ -781,7 +781,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       end
   end
 
-  def confirm_buy(), do: {:ok, true}
+  def confirm_buy(_money, _pedido), do: {:ok, true}
 
   def get_pacientes_revisao(cliente_id) do
     pedidos =
