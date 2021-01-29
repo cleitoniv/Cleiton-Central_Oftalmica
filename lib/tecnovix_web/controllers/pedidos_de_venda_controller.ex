@@ -23,22 +23,23 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with  %{money: money} <- stub.get_credits(cliente),
-           true <- PedidosDeVendaModel.confirm_buy(money, items),
-          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
-        #  {:ok, _} <- PedidosDeVendaModel.decrease_balance(pedido, cliente.id),
-         {:ok, _logs} <-
+  with %{money: money} <- stub.get_credits(cliente),
+        {:ok, true} <- PedidosDeVendaModel.confirm_buy(money, items),
+        {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
+        {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
              usuario,
              cliente,
-             "Pedido feito com a remessa de contrato de produto no valor de #{valor}."
+             "Pedido feito com a remessa de contrato de produto/financeiro no valor de #{valor}."
            ) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("pedido.json", %{item: pedido})
-    end
+      else
+      {:ok, false} -> {:error, :credit_insufficient}
+      end
   end
 
   def pedido_produto(conn, _params) do
