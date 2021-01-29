@@ -351,11 +351,11 @@ defmodule TecnovixWeb.UsersTest do
       Channel.connect(TecnovixWeb.Socket, %{"token" => user_firebase["idToken"]}, %{})
 
     {:ok, _, socket} = Channel.subscribe_and_join(socket, "cliente:#{cliente["id"]}", %{})
-    resp = Channel.push(socket, "update_notifications_number", %{})
+    resp = Channel.push(socket, "update_money", %{})
 
     Channel.assert_reply(resp, :ok)
 
-    Channel.assert_broadcast("update_notifications_number", %{})
+    Channel.assert_broadcast("update_money", %{}) |> IO.inspect
   end
 
   test "Testando REST do Via CEP" do

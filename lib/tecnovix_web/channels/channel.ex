@@ -2,14 +2,13 @@ defmodule TecnovixWeb.Channel do
   use Phoenix.Channel
   alias Tecnovix.ClientesSchema
   alias Tecnovix.UsuariosClienteSchema
-  alias Tecnovix.App.Screens
 
   def check_cliente_id(id, id, socket) do
     {:ok, socket}
   end
 
   def check_cliente_id(_id, _cliente_id, _socket) do
-    {:error, :unauthorized}
+    {:error, :not_authorized}
   end
 
   def join("cliente:" <> id, _payload, socket) do
@@ -22,12 +21,10 @@ defmodule TecnovixWeb.Channel do
     end
   end
 
-  def handle_in("update_notifications_number", _payload, socket) do
-    stub = Screens.stub()
+  def handle_in("update_money", _payload, socket) do
+    money = Tecnovix.CreditoFinanceiroModel.sum_credits(socket.assigns.cliente) - Tecnovix.PedidosDeVendaModel.sum_credits((socket.assigns.cliente))
 
-    notifications = stub.get_notifications(socket.assigns.cliente)
-
-    broadcast!(socket, "update_notifications_number", %{"notifications" => notifications})
+    broadcast!(socket, "update_money", %{"money" => money})
 
     {:reply, :ok, socket}
   end
