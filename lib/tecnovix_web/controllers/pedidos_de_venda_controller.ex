@@ -16,15 +16,16 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
-
+    stub = Screens.stub()
 
     ip =
       conn.remote_ip
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, pedido} <-
-           PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
+    with  %{money: money} <- stub.get_credits(cliente),
+           true <- PedidosDeVendaModel.confirm_buy(money, items),
+          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
         #  {:ok, _} <- PedidosDeVendaModel.decrease_balance(pedido, cliente.id),
          {:ok, _logs} <-
            LogsClienteModel.create(

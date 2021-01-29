@@ -765,6 +765,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
       end)
   end
 
+  def confirm_buy(money, items) do
+    IO.inspect items
+    true
+  end
+
   def get_pacientes_revisao(cliente_id) do
     pedidos =
       PedidosDeVendaSchema
