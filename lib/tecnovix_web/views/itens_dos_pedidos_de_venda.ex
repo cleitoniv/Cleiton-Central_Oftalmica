@@ -24,6 +24,8 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       virtotal: item.virtotal,
       esferico: item.esferico,
       cilindrico: item.cilindrico,
+      valor_credito_finan: item.valor_credito_finan,
+      valor_credito_prod: item.valor_credito_prod,
       eixo: item.eixo,
       cor: item.cor,
       adic_padrao: item.adic_padrao,

@@ -770,10 +770,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       Enum.reduce(pedido["items"], 0, fn items, acc ->
         (items["quantidade"] * items["valor_credito_finan"]) + acc
       end)
-      |> IO.inspect
-
-      IO.inspect valor_pedido
-      IO.inspect money
 
       case valor_pedido < money do
         true -> {:ok, true}
