@@ -142,9 +142,15 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   end
 
   def wirecard_payment(params) do
+    installmentCount =
+      case params["installmentCount"] do
+        0 -> 1
+        installmentCount -> installmentCount
+      end
+
     {:ok,
      %{
-       "installmentCount" => params["installmentCount"] != 0 || 1,
+       "installmentCount" => installmentCount,
        "statementDescriptor" => params["statementDescriptor"],
        "fundingInstrument" => params["fundingInstrument"]
      }}
