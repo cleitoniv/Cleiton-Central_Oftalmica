@@ -48,7 +48,9 @@ defmodule Tecnovix.App.ScreensProd do
 
   def get_num("A1_ENDENT" = key, cliente) do
     case cliente["#{key}"] do
-      nil -> ""
+      nil ->
+        ""
+
       value ->
         case String.split(value, ",") do
           [endereco, num] -> num
@@ -59,7 +61,9 @@ defmodule Tecnovix.App.ScreensProd do
 
   def parse_field("A1_ENDENT" = key, cliente) do
     case cliente["#{key}"] do
-      nil -> ""
+      nil ->
+        ""
+
       value ->
         case String.split(value, ",") do
           [endereco, num] -> endereco
@@ -168,11 +172,11 @@ defmodule Tecnovix.App.ScreensProd do
         end
 
       "VALORT" ->
-          try do
-            String.to_float(map["value"])
-          rescue
-             _ -> String.to_float("0.01000000")
-          end
+        try do
+          String.to_float(map["value"])
+        rescue
+          _ -> String.to_float("0.01000000")
+        end
 
       _ ->
         map["value"]
@@ -290,7 +294,8 @@ defmodule Tecnovix.App.ScreensProd do
   @impl true
   def get_credits(cliente) do
     %{
-      money: CreditoFinanceiroModel.sum_credits(cliente) - PedidosDeVendaModel.sum_credits((cliente)),
+      money:
+        CreditoFinanceiroModel.sum_credits(cliente) - PedidosDeVendaModel.sum_credits(cliente),
       points: 0
     }
   end
@@ -1142,12 +1147,14 @@ defmodule Tecnovix.App.ScreensProd do
   def get_extrato_finan(cliente) do
     {:ok, creditos} =
       case CreditoFinanceiroModel.get_creditos_by_cliente(cliente.id) do
-        [] -> {:ok, []}
-        credito -> case PedidosDeVendaModel.get_pedidos_finan(cliente.id) do
-          pedidos_finan -> {:ok, credito ++ pedidos_finan}
-        end
+        [] ->
+          {:ok, []}
+
+        credito ->
+          case PedidosDeVendaModel.get_pedidos_finan(cliente.id) do
+            pedidos_finan -> {:ok, credito ++ pedidos_finan}
+          end
       end
-      |> IO.inspect
 
     data_hoje = Date.utc_today()
 
@@ -1159,10 +1166,11 @@ defmodule Tecnovix.App.ScreensProd do
             date_filter: NaiveDateTime.to_date(credito.inserted_at),
             date: formatting_date(NaiveDateTime.to_date(credito.inserted_at)),
             pedido: credito.id,
-            valor: case Map.has_key?(credito, :valor) do
-              true -> credito.valor |> Kernel.trunc()
-              false -> ((credito.valor_credito_finan * credito.quantidade) * -1) |> Kernel.trunc()
-            end
+            valor:
+              case Map.has_key?(credito, :valor) do
+                true -> credito.valor |> Kernel.trunc()
+                false -> (credito.valor_credito_finan * credito.quantidade * -1) |> Kernel.trunc()
+              end
           }
 
           case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do
@@ -1190,19 +1198,18 @@ defmodule Tecnovix.App.ScreensProd do
           produto: item.produto,
           items:
             Enum.reduce(items_pedido, [], fn pedido, acc ->
-              creditos =
-                %{
-                  date_filter: NaiveDateTime.to_date(pedido.inserted_at),
-                  produto: pedido.produto,
-                  date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
-                  pedido: pedido.pedido_de_venda_id,
-                  quantidade:
-                    case pedido.operation do
-                      "06" -> pedido.quantidade
-                      "07" -> pedido.quantidade * -1
-                      _ -> 0
-                    end
-                }
+              creditos = %{
+                date_filter: NaiveDateTime.to_date(pedido.inserted_at),
+                produto: pedido.produto,
+                date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
+                pedido: pedido.pedido_de_venda_id,
+                quantidade:
+                  case pedido.operation do
+                    "06" -> pedido.quantidade
+                    "07" -> pedido.quantidade * -1
+                    _ -> 0
+                  end
+              }
 
               case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do
                 true -> [creditos] ++ acc

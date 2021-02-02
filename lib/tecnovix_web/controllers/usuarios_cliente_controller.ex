@@ -21,7 +21,13 @@ defmodule TecnovixWeb.UsuariosClienteController do
          {:ok, user} <- UsuariosClienteModel.create(params),
          {_, %{status_code: code}} when code == 200 or code == 202 <-
            Email.send_email({user.nome, user.email}, params["password"], params["nome"]),
-         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Usuario cliente #{user.nome} cadastrado.") do
+         {:ok, _logs} <-
+           LogsClienteModel.create(
+             ip,
+             usuario,
+             cliente,
+             "Usuario cliente #{user.nome} cadastrado."
+           ) do
       UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
       conn
@@ -33,12 +39,13 @@ defmodule TecnovixWeb.UsuariosClienteController do
         {:error, error}
 
       {:ativo, user} ->
-          conn
-          |> put_status(:created)
-          |> put_resp_content_type("application/json")
-          |> render("show.json", %{item: user})
+        conn
+        |> put_status(:created)
+        |> put_resp_content_type("application/json")
+        |> render("show.json", %{item: user})
 
-      _ -> {:error, :invalid_parameter}
+      _ ->
+        {:error, :invalid_parameter}
     end
   end
 
@@ -54,7 +61,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
     with {:ok, user} <- UsuariosClienteModel.search_user(id),
          true <- user.cliente_id == cliente.id,
          {:ok, user} <- UsuariosClienteModel.update(user, params),
-         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Atualizou o usuário #{user.nome}") do
+         {:ok, _logs} <-
+           LogsClienteModel.create(ip, usuario, cliente, "Atualizou o usuário #{user.nome}") do
       {:ok, cliente} = conn.private.auth
 
       conn

@@ -1,7 +1,14 @@
 defmodule TecnovixWeb.ContratoDeParceriaController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.ContratoDeParceriaModel
-  alias Tecnovix.{ContratoDeParceriaModel, UsuariosClienteSchema, NotificacoesClienteModel, Services.Auth}
+
+  alias Tecnovix.{
+    ContratoDeParceriaModel,
+    UsuariosClienteSchema,
+    NotificacoesClienteModel,
+    Services.Auth
+  }
+
   alias Tecnovix.Endpoints.Protheus
   action_fallback Tecnovix.Resources.Fallback
 
@@ -53,9 +60,13 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
     {:ok, cliente} = conn.private.auth
     protheus = Protheus.stub()
 
-    with  {:ok, auth} <- Auth.token(),
-          {:ok, resp} <- protheus.get_contract_table(%{cliente: cliente.codigo, loja: cliente.loja, grupo: grupo}, auth["access_token"]),
-          {:ok, pacotes} <- ContratoDeParceriaModel.get_package(resp) do
+    with {:ok, auth} <- Auth.token(),
+         {:ok, resp} <-
+           protheus.get_contract_table(
+             %{cliente: cliente.codigo, loja: cliente.loja, grupo: grupo},
+             auth["access_token"]
+           ),
+         {:ok, pacotes} <- ContratoDeParceriaModel.get_package(resp) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: pacotes}))

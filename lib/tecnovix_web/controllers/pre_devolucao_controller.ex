@@ -50,7 +50,12 @@ defmodule TecnovixWeb.PreDevolucaoController do
          {:ok, notifications} <-
            NotificacoesClienteModel.solicitation_devolution(devolucoes, cliente),
          {:ok, _logs} <-
-           LogsClienteModel.create(ip, usuario, cliente, "Devolução id #{devolucoes.id} criada com sucesso.") do
+           LogsClienteModel.create(
+             ip,
+             usuario,
+             cliente,
+             "Devolução id #{devolucoes.id} criada com sucesso."
+           ) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

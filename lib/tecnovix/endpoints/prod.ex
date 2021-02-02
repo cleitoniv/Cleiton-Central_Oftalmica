@@ -13,7 +13,22 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
   @impl true
   def get_contract_table(%{cliente: cliente, loja: loja, grupo: grupo} = params, token) do
-    url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{loja}&GRUPO=#{grupo}"
+    url =
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{
+        loja
+      }&GRUPO=#{grupo}"
+
+    header = Protheus.authenticate(@header, token)
+
+    HTTPoison.get(url, header)
+  end
+
+  def get_contract_table_finan(%{cliente: cliente, loja: loja}, token) do
+    url =
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{
+        loja
+      }&GRUPO=CRFI"
+
     header = Protheus.authenticate(@header, token)
 
     HTTPoison.get(url, header)
@@ -149,11 +164,12 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   def parse_field(field, acc) do
-    check = fn data -> case is_nil(data) do
-      true -> ""
-      false -> data
+    check = fn data ->
+      case is_nil(data) do
+        true -> ""
+        false -> data
+      end
     end
-   end
 
     case field["id"] do
       "A1_DTNASC" ->

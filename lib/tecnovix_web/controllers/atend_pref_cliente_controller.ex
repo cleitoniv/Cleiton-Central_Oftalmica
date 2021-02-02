@@ -34,7 +34,13 @@ defmodule TecnovixWeb.AtendPrefClienteController do
       |> Enum.join()
 
     with {:ok, atendimento} <- AtendPrefClienteModel.formatting_atend(params, cliente),
-         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Horario de atendimento adicionado/atualizado para #{cliente.dia_remessa}-#{horario}") do
+         {:ok, _logs} <-
+           LogsClienteModel.create(
+             ip,
+             usuario,
+             cliente,
+             "Horario de atendimento adicionado/atualizado para #{cliente.dia_remessa}-#{horario}"
+           ) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

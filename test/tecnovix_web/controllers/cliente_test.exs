@@ -20,7 +20,7 @@ defmodule TecnovixWeb.UsersTest do
     |> post("/api/cliente", %{"param" => user_param})
     |> json_response(201)
 
-    IO.inspect Tecnovix.Repo.all(Tecnovix.EnderecoEntregaSchema)
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.EnderecoEntregaSchema))
 
     # criando o usuario cliente
     user_client =
@@ -28,7 +28,7 @@ defmodule TecnovixWeb.UsersTest do
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
       |> json_response(201)
-      |> IO.inspect
+      |> IO.inspect()
 
     # Motrando a Logs
     Tecnovix.Repo.all(Tecnovix.LogsClienteSchema)
@@ -355,7 +355,7 @@ defmodule TecnovixWeb.UsersTest do
 
     Channel.assert_reply(resp, :ok)
 
-    Channel.assert_broadcast("update_money", %{}) |> IO.inspect
+    Channel.assert_broadcast("update_money", %{}) |> IO.inspect()
   end
 
   test "Testando REST do Via CEP" do
@@ -446,6 +446,6 @@ defmodule TecnovixWeb.UsersTest do
     |> Generator.put_auth(user_firebase["idToken"])
     |> post("/api/cliente/create_ticket", message)
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 end

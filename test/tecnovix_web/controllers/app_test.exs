@@ -162,6 +162,7 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/offers")
       |> json_response(200)
+      |> IO.inspect
 
     assert offers["success"] == true
 
@@ -249,7 +250,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/extrato_prod")
       |> json_response(200)
-      |> IO.inspect
 
     email = "victorasilva0707@gmail.com"
 
@@ -353,7 +353,7 @@ defmodule Tecnovix.Test.App do
       |> json_response(201)
       |> Map.get("data")
 
-      cartao = Generator.cartao_cliente(cliente["id"])
+    cartao = Generator.cartao_cliente(cliente["id"])
 
     cartao =
       build_conn()
@@ -395,6 +395,6 @@ defmodule Tecnovix.Test.App do
       })
       |> json_response(200)
       |> Map.get("data")
-      |> IO.inspect
+      |> IO.inspect()
   end
 end

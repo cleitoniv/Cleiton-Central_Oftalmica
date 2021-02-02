@@ -97,6 +97,32 @@ defmodule Tecnovix.CreditoFinanceiroModel do
      }}
   end
 
+  def get_package(resp) do
+    productPackages = Jason.decode!(resp.body)
+
+    packages =
+      Enum.flat_map(productPackages["resources"], fn resource ->
+        Enum.map(resource["models"], fn model ->
+          Enum.reduce(model["fields"], %{}, fn package, acc ->
+            case package["id"] do
+              "DA1_PRCVEN" -> Map.put(acc, :discount, transform_value(package["value"]) * 100)
+              "DA1_YCONDP" -> Map.put(acc, :installmentCount, String.at(package["value"], 0) |> String.to_integer())
+              "DA1_QTDLOT" -> Map.put(acc, :value, transform_value(package["value"]) * 100)
+              _ -> acc
+            end
+          end)
+        end)
+      end)
+
+    {:ok, packages}
+  end
+
+  def transform_value(string) do
+    String.to_float(string)
+    |> Float.ceil(0)
+    |> Kernel.round()
+  end
+
   def payment(id_cartao, order, params) do
     order = Jason.decode!(order.body)
     order_id = order["id"]

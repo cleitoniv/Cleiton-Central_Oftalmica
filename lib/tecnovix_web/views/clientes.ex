@@ -44,7 +44,9 @@ defmodule TecnovixWeb.ClientesView do
 
   def formatting_dtnasc(data) do
     case data do
-      nil -> ""
+      nil ->
+        ""
+
       data ->
         [ano, mes, dia] = String.split(Date.to_string(data), ["/", "-"])
         "#{dia}-#{mes}-#{ano}"

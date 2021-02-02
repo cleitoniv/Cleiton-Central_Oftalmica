@@ -48,13 +48,12 @@ defmodule TecnovixWeb.CartaoCreditoClienteController do
 
     with {:ok, card} <- CartaoModel.delete_card(id, cliente),
          {:ok, _logs} <-
-          LogsClienteModel.create(
-            ip,
-            usuario,
-            cliente,
-            "Cartão de crédito #{card.cartao_number} deletado."
-          ) do
-
+           LogsClienteModel.create(
+             ip,
+             usuario,
+             cliente,
+             "Cartão de crédito #{card.cartao_number} deletado."
+           ) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))

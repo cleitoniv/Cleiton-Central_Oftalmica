@@ -17,6 +17,15 @@ defmodule Tecnovix.EnderecoEntregaSchema do
 
   def changeset(changeset, params \\ %{}) do
     changeset
-    |> cast(params, [:cep_entrega, :numero_entrega, :complemento_entrega, :bairro_entrega, :cidade_entrega, :endereco_entrega, :cliente_id, :estado_entrega])
+    |> cast(params, [
+      :cep_entrega,
+      :numero_entrega,
+      :complemento_entrega,
+      :bairro_entrega,
+      :cidade_entrega,
+      :endereco_entrega,
+      :cliente_id,
+      :estado_entrega
+    ])
   end
 end

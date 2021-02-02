@@ -28,18 +28,20 @@ defmodule Tecnovix.ClientesModel do
               |> add_error(:email, "Esse email não está cadastrado.")
 
             {:error, error}
-          _ ->
-          error =
-            %ClientesSchema{}
-            |> change(%{})
-            |> add_error(:email, "Usuario de cliente não pode redefinir senha.")
 
-          {:error, error}
+          _ ->
+            error =
+              %ClientesSchema{}
+              |> change(%{})
+              |> add_error(:email, "Usuario de cliente não pode redefinir senha.")
+
+            {:error, error}
         end
 
       email ->
         case email.sit_app == "A" do
-          true -> {:ok, email}
+          true ->
+            {:ok, email}
 
           false ->
             error =
@@ -47,7 +49,7 @@ defmodule Tecnovix.ClientesModel do
               |> change(%{})
               |> add_error(:email, "Usuario bloqueado não pode redefinir senha.")
 
-          {:error, error}
+            {:error, error}
         end
     end
   end
@@ -140,7 +142,7 @@ defmodule Tecnovix.ClientesModel do
 
     url = "https://162.214.116.118/suporte/api/tickets.json"
 
-    HTTPoison.post(url, Jason.encode!(params), header) |> IO.inspect
+    HTTPoison.post(url, Jason.encode!(params), header)
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
@@ -362,7 +364,6 @@ defmodule Tecnovix.ClientesModel do
       HTTPoison.post(url, uri, [{"Content-Type", "application/x-www-form-urlencoded"}])
 
     {:ok, Jason.decode!(resp.body)}
-    |> IO.inspect
     # {:ok,
     #  %{
     #    "api" => "sms",
@@ -379,7 +380,7 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def phone_number_existing?(phone_number, ddd) do
-    case Repo.get_by(ClientesSchema, [telefone: phone_number, ddd: ddd]) do
+    case Repo.get_by(ClientesSchema, telefone: phone_number, ddd: ddd) do
       nil -> {:ok, phone_number}
       existing -> {:error, :number_found}
     end
@@ -427,7 +428,9 @@ defmodule Tecnovix.ClientesModel do
     code_sms = String.to_integer(code_sms)
 
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
-    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "code_sms"))
+
+    {:ok, code_sms_memory} =
+      ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "code_sms"))
 
     case code_sms == code_sms_memory do
       true ->

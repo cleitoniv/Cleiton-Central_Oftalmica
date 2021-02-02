@@ -23,10 +23,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-  with %{money: money} <- stub.get_credits(cliente),
-        {:ok, true} <- PedidosDeVendaModel.confirm_buy(money, items),
-        {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
-        {:ok, _logs} <-
+    with %{money: money} <- stub.get_credits(cliente),
+         {:ok, true} <- PedidosDeVendaModel.confirm_buy(money, items),
+         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
+         {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
              usuario,
@@ -37,9 +37,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> render("pedido.json", %{item: pedido})
-      else
+    else
       {:ok, false} -> {:error, :credit_insufficient}
-      end
+    end
   end
 
   def pedido_produto(conn, _params) do
@@ -171,7 +171,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              ip,
              usuario,
              cliente,
-             "Pedido id #{pedido.id} feito. Em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete e cartão de credito id #{id_cartao}."
+             "Pedido id #{pedido.id} feito. Em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete e cartão de credito id #{
+               id_cartao
+             }."
            ),
          {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
       conn

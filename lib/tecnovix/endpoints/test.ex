@@ -37,9 +37,22 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
      }}
   end
 
+  def get_contract_table_finan(%{cliente: cliente, loja: loja} = params, token) do
+    url =
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=007480&LOJA=01&GRUPO=CRFI"
+
+    header = Protheus.authenticate(@header, token)
+
+    HTTPoison.get(url, header)
+  end
+
   @impl true
   def get_contract_table(%{cliente: cliente, loja: loja, grupo: grupo} = params, token) do
-    url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{"007498"}&LOJA=#{"01"}&GRUPO=#{grupo}"
+    url =
+      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{"007480"}&LOJA=#{
+        "01"
+      }&GRUPO=#{grupo}"
+
     header = Protheus.authenticate(@header, token)
 
     HTTPoison.get(url, header)
@@ -141,7 +154,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   def organize_cliente(http) do
-    cliente = Jason.decode!(http.body) |> IO.inspect()
+    cliente = Jason.decode!(http.body)
 
     organize =
       Enum.flat_map(cliente["resources"], fn resource ->
@@ -158,7 +171,6 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         end)
       end)
       |> Map.new()
-      |> IO.inspect()
 
     {:ok, organize}
   end

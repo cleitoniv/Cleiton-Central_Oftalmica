@@ -182,22 +182,23 @@ defmodule Tecnovix.ContratoDeParceriaModel do
   end
 
   def get_package(resp) do
-    productPackages = Jason.decode!(resp.body)
+    productPackages = Jason.decode!(resp.body) |> IO.inspect()
 
-    packages = Enum.flat_map(productPackages["resources"], fn resource ->
+    packages =
+      Enum.flat_map(productPackages["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->
           productPackages2 =
             Enum.reduce(model["fields"], %{}, fn package, acc ->
-                case package["id"] do
-                  "DA1_PRCVEN" -> Map.put(acc, :price, transform_value(package["value"]) * 100)
-                  "DA1_QTDLOT" -> Map.put(acc, :quantity, transform_value(package["value"]))
-                  _ -> acc
-                end
+              case package["id"] do
+                "DA1_PRCVEN" -> Map.put(acc, :price, transform_value(package["value"]) * 100)
+                "DA1_QTDLOT" -> Map.put(acc, :quantity, transform_value(package["value"]))
+                _ -> acc
+              end
             end)
 
-          Map.put(productPackages2, :total, (productPackages2.price * productPackages2.quantity))
+          Map.put(productPackages2, :total, productPackages2.price * productPackages2.quantity)
         end)
-    end)
+      end)
 
     {:ok, packages}
   end
@@ -206,6 +207,5 @@ defmodule Tecnovix.ContratoDeParceriaModel do
     String.to_float(string)
     |> Float.ceil(0)
     |> Kernel.round()
-    |> IO.inspect
   end
 end

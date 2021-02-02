@@ -8,8 +8,12 @@ defmodule Tecnovix.Services.ConfirmationSMS do
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)
 
     {:ok, telefone} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number))
-    {:ok, confirmation_sms} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "confirmation_sms"))
-    {:ok, code_sms_memory} = ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "code_sms"))
+
+    {:ok, confirmation_sms} =
+      ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "confirmation_sms"))
+
+    {:ok, code_sms_memory} =
+      ETS.KeyValueSet.get(kvset, String.to_atom(phone_number <> "code_sms"))
 
     case telefone == phone_number and code_sms == code_sms_memory and confirmation_sms == 0 do
       true ->
@@ -18,10 +22,10 @@ defmodule Tecnovix.Services.ConfirmationSMS do
         |> ETS.KeyValueSet.delete!(String.to_atom(phone_number <> "code_sms"))
         |> ETS.KeyValueSet.delete!(String.to_atom(phone_number <> "confirmation_sms"))
 
-      false -> kvset
+      false ->
+        kvset
     end
   end
-
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, :state, name: :confirmation_sms)

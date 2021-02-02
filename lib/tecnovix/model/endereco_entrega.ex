@@ -5,7 +5,8 @@ defmodule Tecnovix.EnderecoEntregaModel do
 
   def create(params) do
     case is_nil(params["cep_entrega"]) do
-      true -> {:ok, %{}}
+      true ->
+        {:ok, %{}}
 
       false ->
         %EnderecoEntregaSchema{}

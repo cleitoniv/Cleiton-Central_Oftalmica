@@ -22,7 +22,9 @@ defmodule TecnovixWeb.Channel do
   end
 
   def handle_in("update_money", _payload, socket) do
-    money = Tecnovix.CreditoFinanceiroModel.sum_credits(socket.assigns.cliente) - Tecnovix.PedidosDeVendaModel.sum_credits((socket.assigns.cliente))
+    money =
+      Tecnovix.CreditoFinanceiroModel.sum_credits(socket.assigns.cliente) -
+        Tecnovix.PedidosDeVendaModel.sum_credits(socket.assigns.cliente)
 
     broadcast!(socket, "update_money", %{"money" => money})
 

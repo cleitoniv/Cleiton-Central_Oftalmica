@@ -60,7 +60,8 @@ defmodule TecnovixWeb.ClientesController do
       |> Map.put("ddd", ClientesModel.get_ddd(phone_number))
       |> Map.put("telefone", ClientesModel.formatting_phone_number(phone_number))
 
-    with {:ok, _telefone} <- ClientesModel.phone_number_existing?(params["telefone"], params["ddd"]),
+    with {:ok, _telefone} <-
+           ClientesModel.phone_number_existing?(params["telefone"], params["ddd"]),
          {:ok, %{"codigo" => "000"}} <-
            ClientesModel.send_sms(%{phone_number: phone_number}, code_sms),
          {:ok, _} <- ClientesModel.confirmation_sms(params),
@@ -76,9 +77,11 @@ defmodule TecnovixWeb.ClientesController do
       {:error, :number_found} ->
         {:error, :number_found}
 
-      {:error, %HTTPoison.Error{id: nil, reason: :timeout}} -> {:error, :service_fail}
+      {:error, %HTTPoison.Error{id: nil, reason: :timeout}} ->
+        {:error, :service_fail}
 
-      _ -> {:error, :service_fail}
+      _ ->
+        {:error, :service_fail}
     end
   end
 
@@ -144,8 +147,8 @@ defmodule TecnovixWeb.ClientesController do
     params = Map.put(params, "uid", jwt.fields["user_id"])
 
     with {:ok, cliente} <- ClientesModel.insert_or_update_first(params),
-         {:ok, _endereco} <- Tecnovix.EnderecoEntregaModel.create(Map.put(params, "cliente_id", cliente.id)) do
-
+         {:ok, _endereco} <-
+           Tecnovix.EnderecoEntregaModel.create(Map.put(params, "cliente_id", cliente.id)) do
       conn
       |> put_status(201)
       |> put_resp_content_type("application/json")
@@ -206,10 +209,14 @@ defmodule TecnovixWeb.ClientesController do
 
     {:ok, cliente} = verify_auth(conn.private.auth)
 
-    with  {:ok, auth} <- Auth.token(),
-          {:ok, response = %{status_code: 200}} <- stub.get_endereco_entrega_protheus(%{cnpj_cpf: cliente.cnpj_cpf, token: auth["access_token"]}),
-          {:ok, cliente} <- protheus.organize_cliente(response),
-          {:ok, endereco} <- stub.get_endereco_entrega(cliente) do
+    with {:ok, auth} <- Auth.token(),
+         {:ok, response = %{status_code: 200}} <-
+           stub.get_endereco_entrega_protheus(%{
+             cnpj_cpf: cliente.cnpj_cpf,
+             token: auth["access_token"]
+           }),
+         {:ok, cliente} <- protheus.organize_cliente(response),
+         {:ok, endereco} <- stub.get_endereco_entrega(cliente) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: endereco}))
@@ -235,7 +242,10 @@ defmodule TecnovixWeb.ClientesController do
         conn
         |> put_view(TecnovixWeb.ClientesView)
         |> render("current_user.json", %{
-          item: Map.put(user.cliente, :role, "USUARIO") |> Map.put(:status, auth_user.status) |> Map.put(:nome_usuario, auth_user.nome),
+          item:
+            Map.put(user.cliente, :role, "USUARIO")
+            |> Map.put(:status, auth_user.status)
+            |> Map.put(:nome_usuario, auth_user.nome),
           credits: credits_info,
           notifications: notifications,
           dia_remessa: dia_remessa
@@ -297,10 +307,16 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def offers(conn, _params) do
-    stub = Screens.stub()
+    protheus = Protheus.stub()
     {:ok, cliente} = verify_auth(conn.private.auth)
 
-    with {:ok, offers} <- stub.get_offers(cliente) do
+    with {:ok, auth} <- Auth.token(),
+         {:ok, resp} <-
+           protheus.get_contract_table_finan(
+             %{cliente: cliente.codigo, loja: cliente.loja},
+             auth["access_token"]
+           ),
+         {:ok, offers} <- Tecnovix.CreditoFinanceiroModel.get_package(resp) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: offers}))
@@ -472,7 +488,6 @@ defmodule TecnovixWeb.ClientesController do
     {:ok, cliente} = conn.private.auth
 
     with {:ok, %{status_code: 200}} <- ClientesModel.create_ticket(cliente, message) do
-
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
@@ -544,8 +559,14 @@ defmodule TecnovixWeb.ClientesController do
          {:ok, prod} <- stub.get_extrato_prod(cliente, grid) do
       conn
       |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true, data: prod,
-        date: stub.parse_month(data_hoje) <> Integer.to_string(data_hoje.year)}))
+      |> send_resp(
+        200,
+        Jason.encode!(%{
+          success: true,
+          data: prod,
+          date: stub.parse_month(data_hoje) <> Integer.to_string(data_hoje.year)
+        })
+      )
     end
   end
 
@@ -566,7 +587,13 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, _} <- stub.get_and_send_email_dev(email),
          {:ok, _} <- stub.get_and_send_email_dev(cliente.email),
-         {:ok, _logs} <- Tecnovix.LogsClienteModel.create(ip, usuario, cliente, "Email de devolução enviado para #{email}") do
+         {:ok, _logs} <-
+           Tecnovix.LogsClienteModel.create(
+             ip,
+             usuario,
+             cliente,
+             "Email de devolução enviado para #{email}"
+           ) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))

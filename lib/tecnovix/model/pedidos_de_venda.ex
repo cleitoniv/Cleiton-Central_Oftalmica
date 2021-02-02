@@ -28,7 +28,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       valor =
         Enum.reduce(pedido.items, 0, fn items_pedido, acc ->
           case items_pedido.status == 0 and items_pedido.operation == "13" do
-            true -> acc + (items_pedido.valor_credito_finan * items_pedido.quantidade)
+            true -> acc + items_pedido.valor_credito_finan * items_pedido.quantidade
             false -> 0
           end
         end)
@@ -214,6 +214,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         %PedidosDeVendaSchema{}
         |> PedidosDeVendaSchema.changeset(pedido)
         |> Repo.insert()
+
       _ ->
         {:error, :pedido_failed}
     end
@@ -270,7 +271,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def pedido_params(items, cliente, order, installment, taxa_entrega) do
-    IO.inspect(items)
     pedido = %{
       "client_id" => cliente.id,
       "tipo_pagamento" => "CREDIT_CARD",
@@ -306,7 +306,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
                   [olho_esquerdo(items, map)]
 
                 map["olho_ambos"] != nil ->
-                  items = Map.put(items, "quantidade", items["quantidade"] / 2 |> Kernel.trunc())
+                  items =
+                    Map.put(items, "quantidade", (items["quantidade"] / 2) |> Kernel.trunc())
+
                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
 
                   [
@@ -478,7 +480,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "prc_unitario" => items["prc_unitario"],
       "valor_credito_finan" => items["valor_credito_finan"],
       "valor_credito_prod" => items["valor_credito_prod"],
-      "valor_test" => round(items["valor_test"]),
+      "valor_test" => round(items["valor_test"] || 0.01),
       "olho" => "E",
       "virtotal" => items["quantidade"] * items["prc_unitario"],
       "esferico" => map[olho]["degree"],
@@ -518,7 +520,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "prc_unitario" => items["prc_unitario"],
       "valor_credito_finan" => items["valor_credito_finan"],
       "valor_credito_prod" => items["valor_credito_prod"],
-      "valor_test" => round(items["valor_test"]),
+      "valor_test" => round(items["valor_test"] || 0.01),
       "olho" => "D",
       "virtotal" => items["quantity_for_eye"]["direito"] * items["prc_unitario"],
       "esferico" => map["olho_diferentes"]["direito"]["degree"],
@@ -557,7 +559,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "prc_unitario" => items["prc_unitario"],
       "valor_credito_finan" => items["valor_credito_finan"],
       "valor_credito_prod" => items["valor_credito_prod"],
-      "valor_test" => round(items["valor_test"]),
+      "valor_test" => round(items["valor_test"] || 0.01),
       "olho" => "E",
       "virtotal" => items["quantity_for_eye"]["esquerdo"] * items["prc_unitario"],
       "esferico" => map["olho_diferentes"]["esquerdo"]["degree"],
@@ -740,7 +742,10 @@ defmodule Tecnovix.PedidosDeVendaModel do
         pedidos =
           PedidosDeVendaSchema
           |> preload(:items)
-          |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro or p.status_ped == 3)
+          |> where(
+            [p],
+            (p.client_id == ^cliente_id and p.status_ped == ^filtro) or p.status_ped == 3
+          )
           |> order_by([p], desc: p.inserted_at)
           |> Repo.all()
 
@@ -768,13 +773,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def confirm_buy(money, [%{"operation" => "13"} = pedido]) do
     valor_pedido =
       Enum.reduce(pedido["items"], 0, fn items, acc ->
-        (items["quantidade"] * items["valor_credito_finan"]) + acc
+        items["quantidade"] * items["valor_credito_finan"] + acc
       end)
 
-      case valor_pedido < money do
-        true -> {:ok, true}
-        false -> {:ok, false}
-      end
+    case valor_pedido < money do
+      true -> {:ok, true}
+      false -> {:ok, false}
+    end
   end
 
   def confirm_buy(_money, _pedido), do: {:ok, true}
@@ -821,8 +826,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         String.replace(hd(duracao), ~r/[^\d]/, "")
         |> String.to_integer()
 
-      count_range =
-        Date.diff(duracao_mais_data_insercao(pedido, duracao), data_hoje)
+      count_range = Date.diff(duracao_mais_data_insercao(pedido, duracao), data_hoje)
 
       count_range <= 30 and count_range >= 0
     end)
@@ -853,8 +857,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         {:error, :not_found}
 
       pedido ->
-        pedido =
-        Repo.preload(pedido, :items)
+        pedido = Repo.preload(pedido, :items)
 
         {:ok, pedido}
     end

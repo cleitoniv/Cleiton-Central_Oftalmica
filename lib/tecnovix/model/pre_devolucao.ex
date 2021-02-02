@@ -137,17 +137,21 @@ defmodule Tecnovix.PreDevolucaoModel do
     |> Repo.insert()
   end
 
-  def insert_pre_devolucao(cliente_id, %{
-        groups: groups,
-        devolutions: devolutions,
-        products: products,
-        tipo: tipo
-      } = params) do
+  def insert_pre_devolucao(
+        cliente_id,
+        %{
+          groups: groups,
+          devolutions: devolutions,
+          products: products,
+          tipo: tipo
+        } = params
+      ) do
     cliente = Repo.get(ClientesSchema, cliente_id)
 
     case create(cliente, devolutions, tipo) do
       {:ok, dev} ->
         NotificacoesClienteModel.solicitation_devolution(dev, cliente)
+
       erro ->
         erro
     end

@@ -1130,19 +1130,18 @@ defmodule Tecnovix.App.ScreensTest do
           produto: item.produto,
           items:
             Enum.reduce(items_pedido, [], fn pedido, acc ->
-              creditos =
-                %{
-                  date_filter: NaiveDateTime.to_date(pedido.inserted_at),
-                  produto: pedido.produto,
-                  date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
-                  pedido: pedido.pedido_de_venda_id,
-                  quantidade:
-                    case pedido.operation do
-                      "06" -> pedido.quantidade
-                      "07" -> pedido.quantidade * -1
-                      _ -> 0
-                    end
-                }
+              creditos = %{
+                date_filter: NaiveDateTime.to_date(pedido.inserted_at),
+                produto: pedido.produto,
+                date: formatting_date(NaiveDateTime.to_date(pedido.inserted_at)),
+                pedido: pedido.pedido_de_venda_id,
+                quantidade:
+                  case pedido.operation do
+                    "06" -> pedido.quantidade
+                    "07" -> pedido.quantidade * -1
+                    _ -> 0
+                  end
+              }
 
               case Date.diff(creditos.date_filter, Date.beginning_of_month(data_hoje)) >= 0 do
                 true -> [creditos] ++ acc

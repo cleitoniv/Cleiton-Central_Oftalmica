@@ -9,7 +9,8 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
     ClientesSchema,
     UsuariosClienteSchema,
     LogsClienteModel,
-    NotificacoesClienteModel}
+    NotificacoesClienteModel
+  }
 
   def get_creditos(conn, %{"filtro" => filtro}) do
     filtro =

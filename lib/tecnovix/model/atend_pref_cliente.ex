@@ -114,25 +114,26 @@ defmodule Tecnovix.AtendPrefClienteModel do
         end
 
       _ ->
-      {dia, _} = String.split_at(dia_remessa, 3)
+        {dia, _} = String.split_at(dia_remessa, 3)
 
-      horario_new1 = "#{dia}_manha"
-      horario_new2 = "#{dia}_tarde"
+        horario_new1 = "#{dia}_manha"
+        horario_new2 = "#{dia}_tarde"
 
-      atend =
-        Map.new()
-        |> Map.put(horario_new1, 1)
-        |> Map.put(horario_new2, 1)
-        |> Map.put("cod_cliente", cliente.codigo)
-        |> Map.put("loja_cliente", cliente.loja)
-        |> Map.put("cliente_id", cliente.id)
+        atend =
+          Map.new()
+          |> Map.put(horario_new1, 1)
+          |> Map.put(horario_new2, 1)
+          |> Map.put("cod_cliente", cliente.codigo)
+          |> Map.put("loja_cliente", cliente.loja)
+          |> Map.put("cliente_id", cliente.id)
 
-      case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
-        nil ->
-          create(atend)
+        case Repo.get_by(AtendPrefClienteSchema, cliente_id: cliente.id) do
+          nil ->
+            create(atend)
 
-        changeset -> update(changeset, atend)
-      end
+          changeset ->
+            update(changeset, atend)
+        end
     end
   end
 end
