@@ -44,6 +44,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   end
 
   def credito_params(params, order, payment, cliente_id) do
+    IO.inspect params
     order_body = Jason.decode!(order.body)
     payment_body = Jason.decode!(payment.body)
 
@@ -105,7 +106,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
         Enum.map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn package, acc ->
             case package["id"] do
-              "DA1_PRCVEN" -> Map.put(acc, :discount, transform_value(package["value"]) * 100)
+              "DA1_PRCVEN" -> Map.put(acc, :discount, transform_value(package["value"]))
               "DA1_YCONDP" -> Map.put(acc, :installmentCount, String.at(package["value"], 0) |> String.to_integer())
               "DA1_QTDLOT" -> Map.put(acc, :value, transform_value(package["value"]) * 100)
               _ -> acc

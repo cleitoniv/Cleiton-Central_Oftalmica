@@ -47,6 +47,7 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
   end
 
   def create(conn, %{"items" => params, "id_cartao" => id_cartao}) do
+    IO.inspect items
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
     {:ok, cliente} =
