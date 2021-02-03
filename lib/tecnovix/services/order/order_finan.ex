@@ -8,10 +8,8 @@ defmodule Tecnovix.Services.OrderFinan do
 
   # Legenda de Pedidos
   #
-  # "S" -> Sim foi pago.
-  # "N" -> Não foi pago.
-  # "R" -> Reembolsado.
-  # "P" -> Pendente de pagamento.
+  # "1" -> Sim foi pago.
+  # "2" -> Não foi pago.
 
   def verify_pedidos(pedidos) do
     verify =
@@ -38,7 +36,7 @@ defmodule Tecnovix.Services.OrderFinan do
   end
 
   def start_link(_) do
-    GenServer.start_link(__MODULE__, :state, name: :order)
+    GenServer.start_link(__MODULE__, :state, name: :orderFinan)
   end
 
   def init(_) do
