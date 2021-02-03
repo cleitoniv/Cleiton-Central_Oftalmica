@@ -19,7 +19,8 @@ defmodule Tecnovix.Application do
       {Tecnovix.Services.Auth, []},
       {Tecnovix.Services.Devolucao, []},
       {Tecnovix.Services.ConfirmationSMS, []},
-      {Tecnovix.Services.Order, []}
+      {Tecnovix.Services.Order, []},
+      {Tecnovix.Services.OrderFinan, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
