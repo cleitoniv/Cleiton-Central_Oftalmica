@@ -695,7 +695,9 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   def format_date(date) do
-    [ano, mes, dia] = String.split(date, "-")
+    [ano, mes, dia] =
+      Date.to_string(date)
+      |> String.split("-")
 
     "#{dia}/#{mes}/#{ano}"
   end
