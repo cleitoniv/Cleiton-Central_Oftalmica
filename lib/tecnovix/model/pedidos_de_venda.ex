@@ -670,14 +670,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
     pedidos =
       PedidosDeVendaSchema
       |> preload(:items)
-      |> where([p], p.client_id == ^cliente_id and p.pago == "S")
+      |> where([p], p.client_id == ^cliente_id)
       |> Repo.all()
-      |> IO.inspect
 
     pedidos_ready =
       Enum.flat_map(pedidos, fn pedido ->
         Enum.reduce(pedido.items, [], fn items, acc ->
-          case (items.tipo_venda == "C" and items.operation == "06") or (items.tipo_venda == "A" and items.operation == "01") do
+          case (items.tipo_venda == "C" and items.operation == "06") or (items.tipo_venda == "A" and items.operation == "01" and items.pago == "S") do
             true -> acc ++ [pedido]
             false -> acc
           end
