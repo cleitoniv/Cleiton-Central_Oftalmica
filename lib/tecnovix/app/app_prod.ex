@@ -694,6 +694,12 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
+  def format_date(date) do
+    [ano, mes, dia] = String.split(date, "-")
+
+    "#{dia}/#{mes}/#{ano}"
+  end
+
   @impl true
   def get_payments(creditsFinans, pedidos, filtro) do
     payments =
@@ -701,10 +707,10 @@ defmodule Tecnovix.App.ScreensProd do
         credits =
           Map.new()
           |> Map.put(:id, creditsFinan.id)
-          |> Map.put(:vencimento, NaiveDateTime.to_date(creditsFinan.inserted_at))
+          |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(creditsFinan.inserted_at)))
           |> Map.put(:valor, creditsFinan.valor)
           |> Map.put(:nf, "")
-          |> Map.put(:method, creditsFinan.tipo_pagamento)
+          |> Map.put(:method, "CREDIT_FINAN")
           |> Map.put(:status, 1)
 
         orders =
@@ -715,10 +721,10 @@ defmodule Tecnovix.App.ScreensProd do
                   map =
                     Map.new()
                     |> Map.put(:id, items.id)
-                    |> Map.put(:vencimento, NaiveDateTime.to_date(items.inserted_at))
+                    |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
                     |> Map.put(:nf, "")
                     |> Map.put(:valor, items.virtotal)
-                    |> Map.put(:method, "CREDIT_PRODUCT")
+                    |> Map.put(:method, "CREDIT_CARD")
                     |> Map.put(:status, 1)
 
                     [map] ++ acc
@@ -726,9 +732,9 @@ defmodule Tecnovix.App.ScreensProd do
                   map =
                     Map.new()
                     |> Map.put(:id, items.id)
-                    |> Map.put(:vencimento, NaiveDateTime.to_date(items.inserted_at))
-                    |> Map.put(:valor, items.quantidade * items.valor_credito_finan)
-                    |> Map.put(:method, "CREDIT_FINAN")
+                    |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
+                    |> Map.put(:valor, items.virtotal)
+                    |> Map.put(:method, "CREDIT_PRODUCT")
                     |> Map.put(:nf, "")
                     |> Map.put(:status, 1)
 
