@@ -44,7 +44,6 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   end
 
   def credito_params(params, order, payment, cliente_id) do
-    IO.inspect params
     order_body = Jason.decode!(order.body)
     payment_body = Jason.decode!(payment.body)
 
@@ -60,6 +59,18 @@ defmodule Tecnovix.CreditoFinanceiroModel do
     }
 
     {:ok, params}
+  end
+
+  def get_payments(cliente_id) do
+    pedidos =
+      Credito
+      |> where([c], c.cliente_id == ^cliente_id and c.status == 1 or c.status == 3)
+      |> Repo.all()
+      |> Enum.reduce([], fn pedido, acc ->
+        acc ++ [pedido]
+      end)
+
+    {:ok, pedidos}
   end
 
   def order(params, cliente) do

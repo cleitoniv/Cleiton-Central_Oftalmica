@@ -695,59 +695,101 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
-  def get_payments(_cliente, filtro) do
-    payments = [
-      %{
-        id: 0,
-        vencimento: "30/03/20",
-        nf: "6848529",
-        valor: 12000,
-        method: "BOLETO",
-        codigo_barra: "34191.79001 01043.510047 91020.150008 6 83820026000",
-        status: 0
-      },
-      %{
-        id: 1,
-        vencimento: "30/03/20",
-        nf: "6848529",
-        valor: 12000,
-        method: "CREDIT_CARD",
-        status: 1
-      },
-      %{
-        id: 2,
-        vencimento: "30/03/20",
-        nf: "6848529",
-        valor: 12000,
-        method: "CREDIT_CARD",
-        status: 1
-      },
-      %{
-        id: 3,
-        vencimento: "30/03/20",
-        nf: "6848529",
-        valor: 12000,
-        method: "CREDIT_FINAN",
-        status: 1
-      },
-      %{
-        id: 4,
-        vencimento: "30/03/20",
-        nf: "6848529",
-        valor: 12000,
-        method: "CREDIT_PRODUCT",
-        status: 1
-      },
-      %{
-        id: 5,
-        vencimento: "30/03/20",
-        nf: "6848529",
-        valor: 12000,
-        method: "BOLETO",
-        codigo_barra: "34191.79001 01043.510047 91020.150008 6 83820026000",
-        status: 2
-      }
-    ]
+  def get_payments(payments, filtro) do
+    IO.inspect payments
+
+    IO.inspcet "--------------------"
+    payments =
+      Enum.reduce(payments, [], fn payment, acc ->
+        case payments.items == nil do
+          true ->
+            payment =
+              Map.new()
+              |> Map.put(:id, payment.id)
+              |> Map.put(:vencimento, payment.inserted_at)
+              |> Map.put(:valor, payment.valor)
+              |> Map.put(:method, payment.tipo_pagamento)
+              |> Map.put(:status, 1)
+
+              acc ++ [payment]
+          false ->
+            list =
+              Enum.map(payment.items, fn items ->
+                case items.operation == "01" do
+                  true ->
+                      Map.new()
+                      |> Map.put(:id, items.id)
+                      |> Map.put(:vencimento, items.inserted_at)
+                      |> Map.put(:valor, items.virtotal)
+                      |> Map.put(:method, "CREDIT_PRODUCT")
+                      |> Map.put(:status, 1)
+                  false ->
+                    Map.new()
+                      |> Map.put(:id, items.id)
+                      |> Map.put(:vencimento, items.inserted_at)
+                      |> Map.put(:valor, items.quantidade * items.valor_credito_finan)
+                      |> Map.put(:method, "CREDIT_FINAN")
+                      |> Map.put(:status, 1)
+                end
+              end)
+
+            list ++ acc
+        end
+      end)
+      |> IO.inspect
+
+    # payments = [
+    #   %{
+    #     id: 0,
+    #     vencimento: "30/03/20",
+    #     nf: "6848529",
+    #     valor: 12000,
+    #     method: "BOLETO",
+    #     codigo_barra: "34191.79001 01043.510047 91020.150008 6 83820026000",
+    #     status: 0
+    #   },
+    #   %{
+    #     id: 1,
+    #     vencimento: "30/03/20",
+    #     nf: "6848529",
+    #     valor: 12000,
+    #     method: "CREDIT_CARD",
+    #     status: 1
+    #   },
+    #   %{
+    #     id: 2,
+    #     vencimento: "30/03/20",
+    #     nf: "6848529",
+    #     valor: 12000,
+    #     method: "CREDIT_CARD",
+    #     status: 1
+    #   },
+    #   %{
+    #     id: 3,
+    #     vencimento: "30/03/20",
+    #     nf: "6848529",
+    #     valor: 12000,
+    #     method: "CREDIT_FINAN",
+    #     status: 1
+    #   },
+    #   %{
+    #     id: 4,
+    #     vencimento: "30/03/20",
+    #     nf: "6848529",
+    #     valor: 12000,
+    #     method: "CREDIT_PRODUCT",
+    #     status: 1
+    #   },
+    #   %{
+    #     id: 5,
+    #     vencimento: "30/03/20",
+    #     nf: "6848529",
+    #     valor: 12000,
+    #     method: "BOLETO",
+    #     codigo_barra: "34191.79001 01043.510047 91020.150008 6 83820026000",
+    #     status: 2
+    #   }
+    # ]
 
     result = Enum.filter(payments, fn payment -> payment.status == String.to_integer(filtro) end)
     {:ok, result}

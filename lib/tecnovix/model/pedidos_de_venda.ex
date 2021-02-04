@@ -666,6 +666,26 @@ defmodule Tecnovix.PedidosDeVendaModel do
     }
   end
 
+  def get_payments(cliente_id) do
+    pedidos =
+      PedidosDeVendaSchema
+      |> preload(:items)
+      |> where([p], p.client_id == ^cliente_id and p.pago == "S")
+      |> Repo.all()
+
+    pedidos_ready =
+      Enum.flat_map(pedidos, fn pedido ->
+        Enum.reduce(pedido.items, [], fn items, acc ->
+          case (items.tipo_venda == "C" and items.operation == "06") or (items.tipo_venda == "A" and items.operation == "01") do
+            true -> acc ++ [pedido]
+            false -> acc
+          end
+        end)
+      end)
+
+    {:ok, pedidos_ready}
+  end
+
   def get_cliente_by_id(id) do
     case Repo.get_by(ClientesSchema, id: id) do
       nil -> :error

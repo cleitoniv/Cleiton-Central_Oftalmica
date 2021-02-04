@@ -162,7 +162,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/offers")
       |> json_response(200)
-      |> IO.inspect
 
     assert offers["success"] == true
 
@@ -204,6 +203,7 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/payments?filtro=1")
       |> json_response(200)
+      |> IO.inspect
 
     assert payments["success"] == true
 
@@ -284,11 +284,11 @@ defmodule Tecnovix.Test.App do
       |> post("/api/cliente/rescue_points", %{"points" => 100, "credit_finan" => 104})
       |> json_response(200)
 
-    endereco_entrega =
-      build_conn()
-      |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/endereco_entrega")
-      |> json_response(200)
+    # endereco_entrega =
+    #   build_conn()
+    #   |> Generator.put_auth(user_firebase["idToken"])
+    #   |> get("/api/cliente/endereco_entrega")
+    #   |> json_response(200)
   end
 
   test "email" do
