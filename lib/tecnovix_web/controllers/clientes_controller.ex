@@ -384,7 +384,7 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, creditsFinan} <- Tecnovix.CreditoFinanceiroModel.get_payments(cliente.id),
          {:ok, pedidos} <- Tecnovix.PedidosDeVendaModel.get_payments(cliente.id),
-         {:ok, payments} <- stub.get_payments(creditsFinan ++ pedidos, filtro) do
+         {:ok, payments} <- stub.get_payments(creditsFinan, pedidos, filtro) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: payments}))

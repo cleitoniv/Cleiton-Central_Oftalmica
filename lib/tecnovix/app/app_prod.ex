@@ -695,46 +695,40 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
-  def get_payments(payments, filtro) do
-    IO.inspect payments
-
-    IO.inspect "--------------------"
+  def get_payments(creditsFinans, pedidos, filtro) do
     payments =
-      Enum.reduce(payments, [], fn payment, acc ->
-        case Map.has_key?(payment, :items) do
-          true ->
-            payment =
-              Map.new()
-              |> Map.put(:id, payment.id)
-              |> Map.put(:vencimento, payment.inserted_at)
-              |> Map.put(:valor, payment.valor)
-              |> Map.put(:method, payment.tipo_pagamento)
-              |> Map.put(:status, 1)
+      Enum.reduce(creditsFinans, [], fn creditsFinan, acc ->
+        payment =
+          Map.new()
+          |> Map.put(:id, creditsFinan.id)
+          |> Map.put(:vencimento, creditsFinan.inserted_at)
+          |> Map.put(:valor, creditsFinan.valor)
+          |> Map.put(:method, creditsFinan.tipo_pagamento)
+          |> Map.put(:status, 1)
 
-              acc ++ [payment]
-          false ->
-            list =
-              Enum.map(payment.items, fn items ->
-                case items.operation == "01" do
-                  true ->
-                      Map.new()
-                      |> Map.put(:id, items.id)
-                      |> Map.put(:vencimento, items.inserted_at)
-                      |> Map.put(:valor, items.virtotal)
-                      |> Map.put(:method, "CREDIT_PRODUCT")
-                      |> Map.put(:status, 1)
-                  false ->
-                    Map.new()
-                      |> Map.put(:id, items.id)
-                      |> Map.put(:vencimento, items.inserted_at)
-                      |> Map.put(:valor, items.quantidade * items.valor_credito_finan)
-                      |> Map.put(:method, "CREDIT_FINAN")
-                      |> Map.put(:status, 1)
-                end
-              end)
+        list =
+          Enum.map(pedidos.items, fn items ->
+            case items.operation == "01" do
+              true ->
+                  Map.new()
+                  |> Map.put(:id, items.id)
+                  |> Map.put(:vencimento, items.inserted_at)
+                  |> Map.put(:valor, items.virtotal)
+                  |> Map.put(:method, "CREDIT_PRODUCT")
+                  |> Map.put(:status, 1)
+              false ->
+                Map.new()
+                  |> Map.put(:id, items.id)
+                  |> Map.put(:vencimento, items.inserted_at)
+                  |> Map.put(:valor, items.quantidade * items.valor_credito_finan)
+                  |> Map.put(:method, "CREDIT_FINAN")
+                  |> Map.put(:status, 1)
+            end
+          end)
+          |> IO.inspect
+          IO.inspect "Enum.map ----------"
 
-            list ++ acc
-        end
+        list ++ [payment] ++ acc
       end)
       |> IO.inspect
 
