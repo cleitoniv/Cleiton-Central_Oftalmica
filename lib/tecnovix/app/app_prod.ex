@@ -720,7 +720,6 @@ defmodule Tecnovix.App.ScreensProd do
             Enum.reduce(pedido.items, [], fn items, acc ->
               case items.operation == "01" do
                 true ->
-                  IO.inspect pedido
                   map =
                     Map.new()
                     |> Map.put(:id, items.id)
