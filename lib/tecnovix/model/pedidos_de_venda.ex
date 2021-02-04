@@ -672,7 +672,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> preload(:items)
       |> where([p], p.client_id == ^cliente_id and p.pago == "S")
       |> Repo.all()
-      |> IO.inspect
 
     pedidos_ready =
       Enum.flat_map(pedidos, fn pedido ->
