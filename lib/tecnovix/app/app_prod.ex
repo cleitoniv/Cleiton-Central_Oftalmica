@@ -701,7 +701,7 @@ defmodule Tecnovix.App.ScreensProd do
     IO.inspect "--------------------"
     payments =
       Enum.reduce(payments, [], fn payment, acc ->
-        case payment.items == nil do
+        case Map.has_key?(payment, :items) do
           true ->
             payment =
               Map.new()
