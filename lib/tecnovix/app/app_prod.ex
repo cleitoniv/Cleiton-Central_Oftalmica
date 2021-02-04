@@ -698,7 +698,7 @@ defmodule Tecnovix.App.ScreensProd do
   def get_payments(payments, filtro) do
     IO.inspect payments
 
-    IO.inspcet "--------------------"
+    IO.inspect "--------------------"
     payments =
       Enum.reduce(payments, [], fn payment, acc ->
         case payments.items == nil do
