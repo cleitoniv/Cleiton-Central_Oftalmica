@@ -64,7 +64,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   def get_payments(cliente_id) do
     pedidos =
       Credito
-      |> where([c], c.cliente_id == ^cliente_id and c.status == 1 or c.status == 3)
+      |> where([c], c.cliente_id == ^cliente_id and c.status == 1 or c.cliente_id == ^cliente_id and c.status == 3)
       |> Repo.all()
       |> Enum.reduce([], fn pedido, acc ->
         acc ++ [pedido]

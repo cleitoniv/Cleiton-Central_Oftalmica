@@ -801,7 +801,10 @@ defmodule Tecnovix.App.ScreensProd do
     #   }
     # ]
 
-    result = Enum.filter(payments, fn payment -> payment.status == String.to_integer(filtro) end)
+    result =
+      Enum.filter(payments, fn payment -> payment.status == String.to_integer(filtro) end)
+      |> Enum.sort_by(&(&1.vencimento), {:desc, Date})
+
     {:ok, result}
   end
 
