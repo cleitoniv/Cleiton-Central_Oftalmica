@@ -701,8 +701,9 @@ defmodule Tecnovix.App.ScreensProd do
         credits =
           Map.new()
           |> Map.put(:id, creditsFinan.id)
-          |> Map.put(:vencimento, creditsFinan.inserted_at)
+          |> Map.put(:vencimento, NaiveDateTime.to_date(creditsFinan.inserted_at))
           |> Map.put(:valor, creditsFinan.valor)
+          |> Map.put(:nf, "")
           |> Map.put(:method, creditsFinan.tipo_pagamento)
           |> Map.put(:status, 1)
 
@@ -714,7 +715,8 @@ defmodule Tecnovix.App.ScreensProd do
                   map =
                     Map.new()
                     |> Map.put(:id, items.id)
-                    |> Map.put(:vencimento, items.inserted_at)
+                    |> Map.put(:vencimento, NaiveDateTime.to_date(items.inserted_at))
+                    |> Map.put(:nf, "")
                     |> Map.put(:valor, items.virtotal)
                     |> Map.put(:method, "CREDIT_PRODUCT")
                     |> Map.put(:status, 1)
@@ -724,21 +726,19 @@ defmodule Tecnovix.App.ScreensProd do
                   map =
                     Map.new()
                     |> Map.put(:id, items.id)
-                    |> Map.put(:vencimento, items.inserted_at)
+                    |> Map.put(:vencimento, NaiveDateTime.to_date(items.inserted_at))
                     |> Map.put(:valor, items.quantidade * items.valor_credito_finan)
                     |> Map.put(:method, "CREDIT_FINAN")
+                    |> Map.put(:nf, "")
                     |> Map.put(:status, 1)
 
                   [map] ++ acc
               end
             end)
           end)
-          |> IO.inspect
-          IO.inspect "Enum.map ----------"
 
         orders ++ [credits] ++ acc
       end)
-      |> IO.inspect
 
     # payments = [
     #   %{
