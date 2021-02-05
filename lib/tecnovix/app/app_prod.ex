@@ -258,9 +258,10 @@ defmodule Tecnovix.App.ScreensProd do
 
       case Enum.empty?(products_invoiced) do
         false ->
+          IO.inspect products_invoiced
           Enum.flat_map(produtos, fn produto ->
             Enum.reduce(products_invoiced, [], fn product_invoiced, acc ->
-              case product_invoiced["grupo"] == produto.group do
+              case product_invoiced.grupo == produto.group do
                 true -> [Map.put(produto, "boxes", produto.boxes - product_invoiced.quantidade)] ++ acc
                 false -> acc ++ [produto]
               end
