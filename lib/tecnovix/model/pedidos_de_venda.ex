@@ -27,9 +27,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Repo.all()
       |> Enum.flat_map(fn pedido ->
         Enum.reduce(pedido.items, [], fn items, acc ->
-          case items.status != 3 and items.tipo_venda == "A" and items.operation == "07" do
+          case items.status != 3 and items.tipo_venda == "C" and items.operation == "07" do
             true ->
-              IO.inspect items
               map =
                 Map.new()
                 |> Map.put(:grupo, items.grupo)
@@ -40,7 +39,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
           end
         end)
       end)
-      |> IO.inspect
 
       {:ok, quantity_product_invoiced}
   end
