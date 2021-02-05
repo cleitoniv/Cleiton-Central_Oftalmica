@@ -28,12 +28,19 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Enum.flat_map(fn pedido ->
         Enum.reduce(pedido.items, [], fn items, acc ->
           case items.status != 3 and items.tipo_venda == "A" and items.operation == "07" do
-            true -> [%{"grupo" => items.grupo, "quantidade" => items.quantidade}] ++ acc |> IO.inspect
+            true ->
+              IO.inspect items
+              map =
+                Map.new()
+                |> Map.put(:grupo, items.grupo)
+                |> Map.put(:quantidade, items.quantidade)
+
+                [map] ++ acc
             false -> acc
           end
         end)
-        |> IO.inspect
       end)
+      |> IO.inspect
 
       {:ok, quantity_product_invoiced}
   end
