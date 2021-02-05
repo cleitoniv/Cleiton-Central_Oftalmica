@@ -19,6 +19,25 @@ defmodule Tecnovix.PedidosDeVendaModel do
     }
   end
 
+  def order_product_invoiced(cliente_id) do
+    quantity_product_invoiced =
+      PedidosDeVendaSchema
+      |> where([p], p.client_id == ^cliente_id and p.status_ped != 3)
+      |> Repo.all()
+      |> Enum.flat_map(fn pedido ->
+        Enum.reduce(pedido.items, [], fn items, acc ->
+          case items.status != 3 do
+            true -> [items.quantidade] ++ acc
+            false -> acc
+          end
+        end)
+      end)
+      |> Enum.sum()
+      |> IO.inspect
+
+      {:ok, quantity_product_invoiced}
+  end
+
   def sum_credits(cliente) do
     PedidosDeVendaSchema
     |> where([p], p.client_id == ^cliente.id)

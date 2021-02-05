@@ -287,6 +287,7 @@ defmodule TecnovixWeb.ClientesController do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
     with {:ok, auth} <- Auth.token(),
+         {:ok, product_invoiced} <- PedidosDeVendaModel.order_product_invoiced(cliente.id),
          {:ok, products} <-
            protheus.get_client_products(%{
              cliente: cliente.codigo,
