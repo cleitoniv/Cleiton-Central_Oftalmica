@@ -727,8 +727,8 @@ defmodule Tecnovix.App.ScreensProd do
         orders =
           Enum.flat_map(pedidos, fn pedido ->
             Enum.reduce(pedido.items, [], fn items, acc ->
-              case items.operation == "01" do
-                true ->
+              cond do
+                items.operation == "01" ->
                   map =
                     Map.new()
                     |> Map.put(:id, items.id)
@@ -740,22 +740,21 @@ defmodule Tecnovix.App.ScreensProd do
 
                   [map] ++ acc
 
-                false ->
-                  case items.operation == "06" do
-                    true ->
-                      map =
-                        Map.new()
-                        |> Map.put(:id, items.id)
-                        |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
-                        |> Map.put(:valor, items.virtotal)
-                        |> Map.put(:method, "CREDIT_PRODUCT")
-                        |> Map.put(:nf, "")
-                        |> Map.put(:status, 1)
+                items.opeartion == "06" ->
+                  map =
+                    Map.new()
+                    |> Map.put(:id, items.id)
+                    |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
+                    |> Map.put(:valor, items.virtotal)
+                    |> Map.put(:method, "CREDIT_PRODUCT")
+                    |> Map.put(:nf, "")
+                    |> Map.put(:status, 1)
+                    |> IO.inspect
 
-                      [map] ++ acc
+                  [map] ++ acc
 
-                    false -> acc
-                  end
+                true -> acc
+
               end
             end)
           end)
