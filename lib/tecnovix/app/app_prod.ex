@@ -713,7 +713,7 @@ defmodule Tecnovix.App.ScreensProd do
 
   @impl true
   def get_payments(creditsFinans, pedidos, filtro) do
-    payments =
+    paymentsCreditFinan =
       Enum.reduce(creditsFinans, [], fn creditsFinan, acc ->
         credits =
           Map.new()
@@ -724,44 +724,46 @@ defmodule Tecnovix.App.ScreensProd do
           |> Map.put(:method, "CREDIT_FINAN")
           |> Map.put(:status, 1)
 
-        orders =
-          Enum.flat_map(pedidos, fn pedido ->
-            Enum.reduce(pedido.items, [], fn items, acc ->
-              cond do
-                items.operation == "01" ->
-                  map =
-                    Map.new()
-                    |> Map.put(:id, items.id)
-                    |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
-                    |> Map.put(:nf, "")
-                    |> Map.put(:valor, items.virtotal)
-                    |> Map.put(:method, "CREDIT_CARD")
-                    |> Map.put(:status, 1)
-
-                  [map] ++ acc
-
-                items.operation == "06" ->
-                  map =
-                    Map.new()
-                    |> Map.put(:id, items.id)
-                    |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
-                    |> Map.put(:valor, items.virtotal)
-                    |> Map.put(:method, "CREDIT_PRODUCT")
-                    |> Map.put(:nf, "")
-                    |> Map.put(:status, 1)
-                    |> IO.inspect
-
-                  [map] ++ acc
-
-                true -> acc
-
-              end
-            end)
-          end)
-          |> Enum.uniq_by(fn item -> item.id end)
-
-        orders ++ [credits] ++ acc
+        [credits] ++ acc
       end)
+
+      ordersPaid =
+        Enum.flat_map(pedidos, fn pedido ->
+          Enum.reduce(pedido.items, [], fn items, acc ->
+            cond do
+              items.operation == "01" ->
+                map =
+                  Map.new()
+                  |> Map.put(:id, items.id)
+                  |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
+                  |> Map.put(:nf, "")
+                  |> Map.put(:valor, items.virtotal)
+                  |> Map.put(:method, "CREDIT_CARD")
+                  |> Map.put(:status, 1)
+
+                [map] ++ acc
+
+              items.operation == "06" ->
+                map =
+                  Map.new()
+                  |> Map.put(:id, items.id)
+                  |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
+                  |> Map.put(:valor, items.virtotal)
+                  |> Map.put(:method, "CREDIT_PRODUCT")
+                  |> Map.put(:nf, "")
+                  |> Map.put(:status, 1)
+                  |> IO.inspect
+
+                [map] ++ acc
+
+              true -> acc
+
+            end
+          end)
+        end)
+        |> IO.inspect
+
+       payments = paymentsCreditFinan ++ ordersPaid
 
     # payments = [
     #   %{
