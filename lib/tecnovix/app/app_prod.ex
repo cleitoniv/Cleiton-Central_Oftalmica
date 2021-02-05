@@ -256,13 +256,13 @@ defmodule Tecnovix.App.ScreensProd do
         end)
       end)
 
-    Enum.reduce(produtos, [], fn produto, acc ->
-      case Map.get(products_invoiced, produto["group"]) do
-        nil -> [produto] ++ acc
-        quantidades -> [Map.put(produto, "boxes", Enum.sum(quantidades) - produto["boxes"])] ++ acc
-      end
-    end)
-    |> IO.inspect
+    produtos =
+      Enum.reduce(produtos, [], fn produto, acc ->
+        case Map.get(products_invoiced, produto["group"]) do
+          nil -> [produto] ++ acc
+          quantidades -> [Map.put(produto, "boxes", Enum.sum(quantidades) - produto["boxes"])] ++ acc
+        end
+      end)
 
     filters = organize_filters_grid(produtos)
 
