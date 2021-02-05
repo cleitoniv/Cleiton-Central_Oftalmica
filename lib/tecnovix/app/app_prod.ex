@@ -258,6 +258,7 @@ defmodule Tecnovix.App.ScreensProd do
 
       Enum.flat_map(produtos, fn produto ->
         IO.inspect produto
+        IO.inspect products_invoiced
         # Enum.reduce(products_invoiced, [], fn product_invoiced, acc ->
         #   IO.inspect product_invoiced
         #   IO.inspect "------------"
