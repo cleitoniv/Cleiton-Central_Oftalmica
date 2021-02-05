@@ -757,6 +757,7 @@ defmodule Tecnovix.App.ScreensProd do
 
               end
             end)
+            |> Enum.uniq(fn item -> item.id end)
           end)
 
         orders ++ [credits] ++ acc
