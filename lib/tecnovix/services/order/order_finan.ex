@@ -19,7 +19,11 @@ defmodule Tecnovix.Services.OrderFinan do
 
         case order["status"] do
           "PAID" ->
-            CreditoFinanceiroModel.insert_or_update(%{"id" => map.id, "status" => 1, "saldo" => map.valor})
+            CreditoFinanceiroModel.insert_or_update(%{
+              "id" => map.id,
+              "status" => 1,
+              "saldo" => map.valor
+            })
 
           "NOT_PAID" ->
             CreditoFinanceiroModel.insert_or_update(%{"id" => map.id, "status" => 2})

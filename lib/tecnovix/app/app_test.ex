@@ -642,7 +642,8 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_payments(payments, filtro) do
-    IO.inspect payments
+    IO.inspect(payments)
+
     payments =
       Enum.reduce(payments, [], fn payment, acc ->
         case payments.items == nil do
@@ -655,25 +656,27 @@ defmodule Tecnovix.App.ScreensTest do
               |> Map.put(:method, payment.tipo_pagamento)
               |> Map.put(:status, 1)
 
-              acc ++ [payment]
+            acc ++ [payment]
+
           false ->
             list =
               Enum.map(payment.items, fn items ->
                 case items.operation == "01" do
                   true ->
-                      Map.new()
-                      |> Map.put(:id, items.id)
-                      |> Map.put(:vencimento, items.inserted_at)
-                      |> Map.put(:valor, items.virtotal)
-                      |> Map.put(:method, "CREDIT_PRODUCT")
-                      |> Map.put(:status, 1)
+                    Map.new()
+                    |> Map.put(:id, items.id)
+                    |> Map.put(:vencimento, items.inserted_at)
+                    |> Map.put(:valor, items.virtotal)
+                    |> Map.put(:method, "CREDIT_PRODUCT")
+                    |> Map.put(:status, 1)
+
                   false ->
                     Map.new()
-                      |> Map.put(:id, items.id)
-                      |> Map.put(:vencimento, items.inserted_at)
-                      |> Map.put(:valor, items.quantidade * items.valor_credito_finan)
-                      |> Map.put(:method, "CREDIT_FINAN")
-                      |> Map.put(:status, 1)
+                    |> Map.put(:id, items.id)
+                    |> Map.put(:vencimento, items.inserted_at)
+                    |> Map.put(:valor, items.quantidade * items.valor_credito_finan)
+                    |> Map.put(:method, "CREDIT_FINAN")
+                    |> Map.put(:status, 1)
                 end
               end)
 

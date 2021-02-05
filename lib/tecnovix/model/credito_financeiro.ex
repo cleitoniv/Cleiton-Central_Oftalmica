@@ -64,7 +64,11 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   def get_payments(cliente_id) do
     pedidos =
       Credito
-      |> where([c], c.cliente_id == ^cliente_id and c.status == 1 or c.cliente_id == ^cliente_id and c.status == 3)
+      |> where(
+        [c],
+        (c.cliente_id == ^cliente_id and c.status == 1) or
+          (c.cliente_id == ^cliente_id and c.status == 3)
+      )
       |> Repo.all()
       |> Enum.reduce([], fn pedido, acc ->
         acc ++ [pedido]
@@ -117,10 +121,21 @@ defmodule Tecnovix.CreditoFinanceiroModel do
         Enum.map(resource["models"], fn model ->
           Enum.reduce(model["fields"], %{}, fn package, acc ->
             case package["id"] do
-              "DA1_PRCVEN" -> Map.put(acc, :discount, transform_value(package["value"]))
-              "DA1_YCONDP" -> Map.put(acc, :installmentCount, String.at(package["value"], 0) |> String.to_integer())
-              "DA1_QTDLOT" -> Map.put(acc, :value, transform_value(package["value"]) * 100)
-              _ -> acc
+              "DA1_PRCVEN" ->
+                Map.put(acc, :discount, transform_value(package["value"]))
+
+              "DA1_YCONDP" ->
+                Map.put(
+                  acc,
+                  :installmentCount,
+                  String.at(package["value"], 0) |> String.to_integer()
+                )
+
+              "DA1_QTDLOT" ->
+                Map.put(acc, :value, transform_value(package["value"]) * 100)
+
+              _ ->
+                acc
             end
           end)
         end)

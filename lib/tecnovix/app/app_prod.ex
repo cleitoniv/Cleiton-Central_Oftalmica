@@ -255,15 +255,18 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end)
       end)
-      |> Enum.flat_map(fn produto ->
-          Enum.reduce(products_invoiced, [], fn product_invoiced, acc ->
-            case product_invoiced.grupo == produto["group"] do
-              true -> [Map.put(produto, "boxes", produto["boxes"] - product_invoiced.quantidade)] ++ acc
-              false -> acc ++ [produto]
-            end
-          end)
-        end)
 
+    Enum.flat_map(produtos, fn produto ->
+      Enum.reduce(products_invoiced, [], fn product_invoiced, acc ->
+        case product_invoiced.grupo == produto["group"] do
+          true ->
+            [Map.put(produto, "boxes", produto["boxes"] - product_invoiced.quantidade)] ++ acc |> IO.inspect
+
+          false ->
+            acc ++ [produto]
+        end
+      end)
+    end)
 
     filters = organize_filters_grid(produtos)
 
@@ -738,7 +741,8 @@ defmodule Tecnovix.App.ScreensProd do
                     |> Map.put(:method, "CREDIT_CARD")
                     |> Map.put(:status, 1)
 
-                    [map] ++ acc
+                  [map] ++ acc
+
                 false ->
                   map =
                     Map.new()
@@ -810,8 +814,7 @@ defmodule Tecnovix.App.ScreensProd do
     #   }
     # ]
 
-    result =
-      Enum.filter(payments, fn payment -> payment.status == String.to_integer(filtro) end)
+    result = Enum.filter(payments, fn payment -> payment.status == String.to_integer(filtro) end)
 
     {:ok, result}
   end

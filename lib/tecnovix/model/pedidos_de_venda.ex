@@ -34,13 +34,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
                 |> Map.put(:grupo, items.grupo)
                 |> Map.put(:quantidade, items.quantidade)
 
-                [map] ++ acc
-            false -> acc
+              [map] ++ acc
+
+            false ->
+              acc
           end
         end)
       end)
 
-      {:ok, quantity_product_invoiced}
+    {:ok, quantity_product_invoiced}
   end
 
   def sum_credits(cliente) do
@@ -700,7 +702,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
     pedidos_ready =
       Enum.flat_map(pedidos, fn pedido ->
         Enum.reduce(pedido.items, [], fn items, acc ->
-          case (items.tipo_venda == "C" and items.operation == "06") or (items.tipo_venda == "A" and items.operation == "01" and pedido.pago == "S") do
+          case (items.tipo_venda == "C" and items.operation == "06") or
+                 (items.tipo_venda == "A" and items.operation == "01" and pedido.pago == "S") do
             true -> acc ++ [pedido]
             false -> acc
           end
