@@ -741,16 +741,21 @@ defmodule Tecnovix.App.ScreensProd do
                   [map] ++ acc
 
                 false ->
-                  map =
-                    Map.new()
-                    |> Map.put(:id, items.id)
-                    |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
-                    |> Map.put(:valor, items.virtotal)
-                    |> Map.put(:method, "CREDIT_PRODUCT")
-                    |> Map.put(:nf, "")
-                    |> Map.put(:status, 1)
+                  case items.operation == "06" do
+                    true ->
+                      map =
+                        Map.new()
+                        |> Map.put(:id, items.id)
+                        |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
+                        |> Map.put(:valor, items.virtotal)
+                        |> Map.put(:method, "CREDIT_PRODUCT")
+                        |> Map.put(:nf, "")
+                        |> Map.put(:status, 1)
 
-                  [map] ++ acc
+                      [map] ++ acc
+
+                    false -> acc
+                  end
               end
             end)
           end)
