@@ -740,7 +740,7 @@ defmodule Tecnovix.App.ScreensProd do
 
                   [map] ++ acc
 
-                items.opeartion == "06" ->
+                items.operation == "06" ->
                   map =
                     Map.new()
                     |> Map.put(:id, items.id)
