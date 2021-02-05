@@ -263,7 +263,7 @@ defmodule Tecnovix.App.ScreensProd do
           quantidades -> [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades))] ++ acc
         end
       end)
-      |> Enum.sort(:desc)
+      |> Enum.sort(:asc)
 
     filters = organize_filters_grid(produtos)
 
