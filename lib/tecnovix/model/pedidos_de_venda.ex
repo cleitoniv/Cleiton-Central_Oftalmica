@@ -32,8 +32,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
             false -> acc
           end
         end)
+        |> IO.inspect
       end)
-      |> IO.inspect
 
       {:ok, quantity_product_invoiced}
   end
