@@ -22,6 +22,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def order_product_invoiced(cliente_id) do
     quantity_product_invoiced =
       PedidosDeVendaSchema
+      |> preload(:items)
       |> where([p], p.client_id == ^cliente_id and p.status_ped != 3)
       |> Repo.all()
       |> Enum.flat_map(fn pedido ->
