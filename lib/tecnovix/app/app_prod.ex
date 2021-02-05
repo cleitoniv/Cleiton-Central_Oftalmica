@@ -204,7 +204,7 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
-  def get_product_grid(products, cliente, filtro, product_invoiced) do
+  def get_product_grid(products, cliente, filtro, products_invoiced) do
     grid =
       Enum.flat_map(products["resources"], fn resource ->
         Enum.map(resource["models"], fn model ->
@@ -254,6 +254,15 @@ defmodule Tecnovix.App.ScreensProd do
             true -> value_cents_2(key, acc)
           end
         end)
+      end)
+      |> Enum.flat_map(fn produto ->
+        Enum.reduce(products_invoiced, [], fn product_invoiced, acc ->
+          case product_invoiced["grupo"] == produto.group do
+            true -> [Map.put(produto, "boxes", produto.boxes - product_invoiced.quantidade)] ++ acc
+            false -> acc ++ [produto]
+          end
+        end)
+        |> IO.inspect
       end)
       |> IO.inspect
 
