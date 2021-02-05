@@ -712,7 +712,7 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
-  def get_payments(creditsFinans, pedidos, filtro) do
+  def get_payments(creditsFinans, pedidos, pedidos_com_boleto, filtro) do
     paymentsCreditFinan =
       Enum.reduce(creditsFinans, [], fn creditsFinan, acc ->
         credits =
@@ -726,6 +726,28 @@ defmodule Tecnovix.App.ScreensProd do
 
         [credits] ++ acc
       end)
+
+      ordersBilletPaid =
+        Enum.flat_map(pedidos_com_boleto, fn pedido ->
+          Enum.reduce(pedido.items, [], fn items, acc ->
+            cond do
+              items.operation == "01" ->
+                map =
+                  Map.new()
+                  |> Map.put(:id, items.id)
+                  |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
+                  |> Map.put(:nf, "")
+                  |> Map.put(:valor, items.virtotal)
+                  |> Map.put(:method, "BOLETO")
+                  |> Map.put(:codigo_barra,"34191.79001 01043.510047 91020.150008 6 83820026000")
+                  |> Map.put(:status, 1)
+
+                [map] ++ acc
+
+              true -> acc
+            end
+          end)
+        end)
 
       ordersPaid =
         Enum.flat_map(pedidos, fn pedido ->
@@ -761,9 +783,8 @@ defmodule Tecnovix.App.ScreensProd do
             end
           end)
         end)
-        |> IO.inspect
 
-       payments = paymentsCreditFinan ++ ordersPaid
+       payments = paymentsCreditFinan ++ ordersPaid ++ ordersBilletPaid
 
     # payments = [
     #   %{

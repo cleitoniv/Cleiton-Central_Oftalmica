@@ -695,11 +695,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
     }
   end
 
-  def get_payments(cliente_id) do
+  def get_payments_credit_card(cliente_id) do
     pedidos =
       PedidosDeVendaSchema
       |> preload(:items)
-      |> where([p], p.client_id == ^cliente_id)
+      |> where([p], p.client_id == ^cliente_id and p.tipo_pagamento == "CREDIT_CARD")
       |> Repo.all()
 
     pedidos_ready =
@@ -707,6 +707,26 @@ defmodule Tecnovix.PedidosDeVendaModel do
         Enum.reduce(pedido.items, [], fn items, acc ->
           case (items.tipo_venda == "C" and items.operation == "06") or
                  (items.tipo_venda == "A" and items.operation == "01" and pedido.pago == "S") do
+            true -> acc ++ [pedido]
+            false -> acc
+          end
+        end)
+      end)
+
+    {:ok, pedidos_ready}
+  end
+
+  def get_payments_boleto(cliente_id) do
+    pedidos =
+      PedidosDeVendaSchema
+      |> preload(:items)
+      |> where([p], p.client_id == ^cliente_id and p.tipo_pagamento == "BOLETO")
+      |> Repo.all()
+
+    pedidos_ready =
+      Enum.flat_map(pedidos, fn pedido ->
+        Enum.reduce(pedido.items, [], fn items, acc ->
+          case items.tipo_venda == "A" and items.operation == "01" do
             true -> acc ++ [pedido]
             false -> acc
           end
