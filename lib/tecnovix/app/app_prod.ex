@@ -256,19 +256,21 @@ defmodule Tecnovix.App.ScreensProd do
         end)
       end)
 
-      Enum.flat_map(produtos, fn produto ->
-        IO.inspect produto
-        IO.inspect products_invoiced
-        # Enum.reduce(products_invoiced, [], fn product_invoiced, acc ->
-        #   IO.inspect product_invoiced
-        #   IO.inspect "------------"
-        #   IO.inspect produto
-        #   case product_invoiced["grupo"] == produto.group do
-        #     true -> [Map.put(produto, "boxes", produto.boxes - product_invoiced.quantidade)] ++ acc
-        #     false -> acc ++ [produto]
-        #   end
-        # end)
-      end)
+      case Enum.empty?(products_invoiced) do
+        true ->
+          Enum.flat_map(produtos, fn produto ->
+            Enum.reduce(products_invoiced, [], fn product_invoiced, acc ->
+              case product_invoiced["grupo"] == produto.group do
+                true -> [Map.put(produto, "boxes", produto.boxes - product_invoiced.quantidade)] ++ acc
+                false -> acc ++ [produto]
+              end
+            end)
+          end)
+          |> IO.inspect
+
+        false -> produtos
+      end
+
 
     filters = organize_filters_grid(produtos)
 
