@@ -27,14 +27,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Repo.all()
       |> Enum.flat_map(fn pedido ->
         Enum.reduce(pedido.items, [], fn items, acc ->
-          case items.status != 3 do
-            true -> [items.quantidade] ++ acc
+          case items.status != 3 and items.tipo_venda == "A" and items.operation == "07" do
+            true -> [%{"grupo" => items.grupo, "quantidade" => items.quantidade}] ++ acc
             false -> acc
           end
         end)
       end)
-      |> Enum.sum()
-      |> IO.inspect
 
       {:ok, quantity_product_invoiced}
   end
