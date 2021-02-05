@@ -757,9 +757,8 @@ defmodule Tecnovix.App.ScreensProd do
 
               end
             end)
-            |> Enum.uniq_by(fn item -> item.id end)
-            |> IO.inspect
           end)
+          |> Enum.uniq_by(fn item -> item.id end)
 
         orders ++ [credits] ++ acc
       end)
