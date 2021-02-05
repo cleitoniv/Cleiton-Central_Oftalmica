@@ -260,9 +260,10 @@ defmodule Tecnovix.App.ScreensProd do
       Enum.reduce(produtos, [], fn produto, acc ->
         case Map.get(products_invoiced, produto["group"]) do
           nil -> [produto] ++ acc
-          quantidades -> [Map.put(produto, "boxes", Enum.sum(quantidades) - produto["boxes"])] ++ acc
+          quantidades -> [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades))] ++ acc
         end
       end)
+      |> Enum.sort(:desc)
 
     filters = organize_filters_grid(produtos)
 
