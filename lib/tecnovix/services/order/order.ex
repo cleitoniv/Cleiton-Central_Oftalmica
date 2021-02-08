@@ -42,24 +42,18 @@ defmodule Tecnovix.Services.Order do
   end
 
   def init(_) do
+    {:ok, []}
+  end
+
+  def handle_info({:ok, msg}, state) do
     pedidos =
       PedidosDeVendaSchema
       |> where([p], p.status_ped == 0 and p.pago == "P" and not is_nil(p.order_id))
       |> Repo.all()
-      |> verify_pedidos()
       |> IO.inspect
+      |> verify_pedidos()
 
-    with {:ok, state} = resp <- pedidos do
-      Process.send_after(self(), {:ok, state}, 5000)
-      resp
-    else
-      {:error, reason} ->
-        {:stop, reason}
-    end
-  end
-
-  def handle_info({:ok, msg}, state) do
-    Process.send_after(self(), {:ok, state}, 5000)
-    {:noreply, msg}
+    Process.send_after(self(), pedidos, 5000)
+    {:noreply, pedidos}
   end
 end
