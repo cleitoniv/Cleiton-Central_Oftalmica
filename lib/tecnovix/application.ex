@@ -16,11 +16,11 @@ defmodule Tecnovix.Application do
       # Starts a worker by calling: Tecnovix.Worker.start_link(arg)
       # {Tecnovix.Worker, arg},
       {Absinthe.Subscription, [TecnovixWeb.Endpoint]},
-      # {Tecnovix.Services.Auth, []},
+      {Tecnovix.Services.Auth, []},
       {Tecnovix.Services.Devolucao, []},
       {Tecnovix.Services.ConfirmationSMS, []},
       {Tecnovix.Services.Order, []},
-      # {Tecnovix.Services.OrderFinan, []}
+      {Tecnovix.Services.OrderFinan, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

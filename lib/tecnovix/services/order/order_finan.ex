@@ -45,6 +45,7 @@ defmodule Tecnovix.Services.OrderFinan do
 
   def init(_) do
     Process.send(self(), {:ok, []}, [:noconnect])
+    {:ok, []}
   end
 
   def handle_info({:ok, msg}, state) do
