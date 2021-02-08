@@ -44,23 +44,17 @@ defmodule Tecnovix.Services.OrderFinan do
   end
 
   def init(_) do
+    Process.send(self(), {:ok, []}, [:noconnect])
+  end
+
+  def handle_info({:ok, msg}, state) do
     pedidos =
       CreditoFinanceiroSchema
       |> where([p], p.status == 0)
       |> Repo.all()
       |> verify_pedidos()
 
-    with {:ok, state} = resp <- pedidos do
-      Process.send_after(self(), {:ok, state}, 5000)
-      resp
-    else
-      {:error, reason} ->
-        {:stop, reason}
-    end
-  end
-
-  def handle_info({:ok, msg}, state) do
-    Process.send_after(self(), {:ok, state}, 5000)
+    Process.send_after(self(), pedidos, 5000)
     {:noreply, msg}
   end
 end
