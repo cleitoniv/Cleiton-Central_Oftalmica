@@ -44,9 +44,10 @@ defmodule Tecnovix.Services.Order do
   def init(_) do
     pedidos =
       PedidosDeVendaSchema
-      |> where([p], p.status_ped == 0 and p.pago == "P")
+      |> where([p], p.status_ped == 0 and p.pago == "P" and not is_nil(p.order_id))
       |> Repo.all()
       |> verify_pedidos()
+      |> IO.inspect
 
     with {:ok, state} = resp <- pedidos do
       Process.send_after(self(), {:ok, state}, 5000)

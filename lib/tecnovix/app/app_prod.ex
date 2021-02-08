@@ -774,7 +774,6 @@ defmodule Tecnovix.App.ScreensProd do
                   |> Map.put(:method, "CREDIT_PRODUCT")
                   |> Map.put(:nf, "")
                   |> Map.put(:status, 1)
-                  |> IO.inspect
 
                 [map] ++ acc
 

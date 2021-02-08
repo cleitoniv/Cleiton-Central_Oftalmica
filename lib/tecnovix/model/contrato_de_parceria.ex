@@ -182,7 +182,7 @@ defmodule Tecnovix.ContratoDeParceriaModel do
   end
 
   def get_package(resp) do
-    productPackages = Jason.decode!(resp.body) |> IO.inspect()
+    productPackages = Jason.decode!(resp.body)
 
     packages =
       Enum.flat_map(productPackages["resources"], fn resource ->

@@ -642,8 +642,6 @@ defmodule Tecnovix.App.ScreensTest do
 
   @impl true
   def get_payments(payments, filtro) do
-    IO.inspect(payments)
-
     payments =
       Enum.reduce(payments, [], fn payment, acc ->
         case payments.items == nil do
