@@ -52,7 +52,6 @@ defmodule Tecnovix.Services.Order do
       |> where([p], p.status_ped == 0 and p.pago == "P" and not is_nil(p.order_id))
       |> Repo.all()
       |> verify_pedidos()
-      |> IO.inspect()
 
     Process.send_after(self(), pedidos, 5000)
     {:noreply, pedidos}
