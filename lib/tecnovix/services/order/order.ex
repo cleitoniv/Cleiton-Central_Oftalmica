@@ -50,6 +50,7 @@ defmodule Tecnovix.Services.Order do
     pedidos =
       PedidosDeVendaSchema
       |> where([p], p.status_ped == 0 and p.pago == "P" and not is_nil(p.order_id))
+      |> limit(@order_limit)
       |> Repo.all()
       |> verify_pedidos()
 

@@ -6,6 +6,8 @@ defmodule Tecnovix.Services.OrderFinan do
   alias Tecnovix.Repo
   import Ecto.Query
 
+  @order_limit 100
+
   # Legenda de Pedidos
   #
   # "1" -> Sim foi pago.
@@ -52,6 +54,7 @@ defmodule Tecnovix.Services.OrderFinan do
     pedidos =
       CreditoFinanceiroSchema
       |> where([p], p.status == 0)
+      |> limit(@order_limit)
       |> Repo.all()
       |> verify_pedidos()
 
