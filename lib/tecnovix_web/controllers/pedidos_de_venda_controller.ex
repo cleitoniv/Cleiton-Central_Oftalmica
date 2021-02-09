@@ -46,14 +46,13 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   defp change_operation_and_tipo_venda(items) do
-    with true <- items["operation"] == "00",
-         true <- items["tipo_venda"] == "T" do
-      items
-      |> Map.put("operation", "07")
-      |> Map.put("tipo_venda", "C")
-    else
-    _ -> items
-    end
+    Enum.reduce(items, [], fn item, acc ->
+      cond do
+        item["operation"] == "00" -> acc ++ [Map.put(item, "operation", "07")]
+        item["tipo_venda"] == "T" -> acc ++ [Map.put(item, "tipo_venda", "T")]
+        true -> acc ++ [item]
+      end
+    end)
   end
 
   def pedido_produto(_conn, _params) do
