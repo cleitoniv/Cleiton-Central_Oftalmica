@@ -841,6 +841,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Enum.reduce([], fn pedido, acc ->
         pedido.items ++ acc
       end)
+      |> Enum.filter(fn item -> item.operation == "13" end)
   end
 
   def confirm_buy(money, [%{"operation" => "13"} = pedido]) do
