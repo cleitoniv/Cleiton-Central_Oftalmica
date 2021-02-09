@@ -14,9 +14,12 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   action_fallback Tecnovix.Resources.Fallback
 
   def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
+    IO.inspect(items)
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
     stub = Screens.stub()
+
+    items = change_operation_and_tipo_venda(items)
 
     ip =
       conn.remote_ip
@@ -39,6 +42,17 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> render("pedido.json", %{item: pedido})
     else
       {:ok, false} -> {:error, :credit_insufficient}
+    end
+  end
+
+  defp change_operation_and_tipo_venda(items) do
+    with true <- items["operation"] == "00",
+         true <- items["tipo_venda"] == "T" do
+      items
+      |> Map.put("operation", "07")
+      |> Map.put("tipo_venda", "C")
+    else
+    _ -> items
     end
   end
 
