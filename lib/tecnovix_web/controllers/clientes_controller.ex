@@ -28,7 +28,7 @@ defmodule TecnovixWeb.ClientesController do
   end
 
   def verify_email(conn, %{"email" => email}) do
-    with {:ok, email} <- ClientesModel.verify_email(email) do
+    with {:ok, _email} <- ClientesModel.verify_email(email) do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
@@ -387,7 +387,8 @@ defmodule TecnovixWeb.ClientesController do
 
     with {:ok, creditsFinan} <- Tecnovix.CreditoFinanceiroModel.get_payments(cliente.id),
          {:ok, pedidos} <- Tecnovix.PedidosDeVendaModel.get_payments_credit_card(cliente.id),
-         {:ok, pedidos_com_boleto} <- Tecnovix.PedidosDeVendaModel.get_payments_boleto(cliente.id),
+         {:ok, pedidos_com_boleto} <-
+           Tecnovix.PedidosDeVendaModel.get_payments_boleto(cliente.id),
          {:ok, payments} <- stub.get_payments(creditsFinan, pedidos, pedidos_com_boleto, filtro) do
       conn
       |> put_resp_content_type("application/json")
@@ -476,20 +477,6 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def devolution_continue(conn, %{"products" => products, "tipo" => tipo}) when products == [] do
-    {:error, :invalid_parameter}
-  end
-
-  def devolution_continue(conn, %{"products" => products, "tipo" => "T" = tipo}) do
-    {:ok, cliente} = verify_auth(conn.private.auth)
-
-    with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
-      conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{"success" => true, "data" => devolution}))
-    end
-  end
-
   def create_ticket(conn, %{"message" => message}) do
     {:ok, cliente} = conn.private.auth
 
@@ -503,7 +490,17 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def devolution_continue(conn, %{"products" => products, "tipo" => "C" = tipo}) do
+  def devolution_continue(conn, %{"products" => products, "tipo" => "T" = tipo}) do
+    {:ok, cliente} = verify_auth(conn.private.auth)
+
+    with {:ok, devolution} <- Devolucao.insert(products, cliente.id, tipo) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{"success" => true, "data" => devolution}))
+    end
+  end
+
+  def devolution_continue(conn, %{"products" => products, "tipo" => "C"}) do
     {:ok, cliente} = conn.private.auth
 
     with {:ok, _} <- PreDevolucaoModel.insert_dev(cliente, products) do
@@ -511,6 +508,11 @@ defmodule TecnovixWeb.ClientesController do
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{"success" => true, "data" => "Inserido."}))
     end
+  end
+
+  def devolution_continue(_conn, %{"products" => products, "tipo" => _tipo})
+      when is_list(products) do
+    {:error, :invalid_parameter}
   end
 
   def next_step(conn, %{"group" => group, "quantidade" => quantidade, "devolution" => devolution}) do
@@ -561,7 +563,7 @@ defmodule TecnovixWeb.ClientesController do
              count: 50,
              token: auth["access_token"]
            }),
-         {:ok, grid, filters} <- stub.get_product_grid(products, cliente, "Todos"),
+         {:ok, grid, _filters} <- stub.get_product_grid(products, cliente, "Todos"),
          {:ok, prod} <- stub.get_extrato_prod(cliente, grid) do
       conn
       |> put_resp_content_type("application/json")
@@ -576,7 +578,7 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def get_and_send_email_dev(conn, %{"email" => email}) when is_nil(email) or email == "" do
+  def get_and_send_email_dev(_conn, %{"email" => email}) when is_nil(email) or email == "" do
     {:error, :invalid_parameter}
   end
 

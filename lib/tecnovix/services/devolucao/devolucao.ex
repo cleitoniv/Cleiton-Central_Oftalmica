@@ -6,7 +6,7 @@ defmodule Tecnovix.Services.Devolucao do
     Enum.group_by(products, fn product -> product["group"] end)
     |> Enum.map(fn {group, products} ->
       quantidade =
-        Enum.reduce(products, 0, fn map, acc ->
+        Enum.reduce(products, 0, fn _map, acc ->
           acc + 1
         end)
 
@@ -24,7 +24,7 @@ defmodule Tecnovix.Services.Devolucao do
           {group, qty}
 
         _ ->
-          Enum.find(update_group, {:no_group, 0}, fn {c_group, quantidade} ->
+          Enum.find(update_group, {:no_group, 0}, fn {_c_group, quantidade} ->
             quantidade > 0
           end)
       end
@@ -50,7 +50,7 @@ defmodule Tecnovix.Services.Devolucao do
   end
 
   def init_devolution(products, groups) do
-    {group, quantidade} = Enum.find(groups, fn {group, quantidade} -> quantidade > 0 end)
+    {group, quantidade} = Enum.find(groups, fn {_group, quantidade} -> quantidade > 0 end)
     product = Enum.find(products, fn product -> product["group"] == group end)
 
     {product, quantidade}

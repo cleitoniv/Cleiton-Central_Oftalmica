@@ -54,7 +54,10 @@ defmodule Tecnovix.MixProject do
       {:cors_plug, "~> 1.5"},
       {:tesla, "~> 1.3.0"},
       {:decimal, "~> 2.0", override: true},
-      {:ets, "~> 0.8.1"}
+      {:ets, "~> 0.8.1"},
+      {:credo, "~> 1.5", only: [:test, :dev], runtime: false},
+      {:doctor, "~> 0.17.0", only: [:test, :dev], runtime: false},
+      {:git_hooks, "~> 0.4.0", only: [:test, :dev], runtime: false}
     ]
   end
 

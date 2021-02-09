@@ -12,8 +12,6 @@ defmodule Tecnovix.PointsModel do
   end
 
   def formatting_date(date) do
-    [data] = String.split(date)
-
     [dia, mes, ano] =
       String.replace(date, "/", "-")
       |> String.split(~r{-})

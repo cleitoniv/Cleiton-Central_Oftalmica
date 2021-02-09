@@ -15,7 +15,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, authorized} <- UsuariosClienteModel.unique_email(params),
+    with {:ok, _authorized} <- UsuariosClienteModel.unique_email(params),
          {:ok, %{status_code: 200}} <-
            Firebase.create_user(%{email: params["email"], password: params["password"]}),
          {:ok, user} <- UsuariosClienteModel.create(params),
@@ -63,8 +63,6 @@ defmodule TecnovixWeb.UsuariosClienteController do
          {:ok, user} <- UsuariosClienteModel.update(user, params),
          {:ok, _logs} <-
            LogsClienteModel.create(ip, usuario, cliente, "Atualizou o usuário #{user.nome}") do
-      {:ok, cliente} = conn.private.auth
-
       conn
       |> put_status(:ok)
       |> put_resp_content_type("application/json")
@@ -74,7 +72,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
     end
   end
 
-  def delete_users(conn, %{"id" => id} = params) do
+  def delete_users(conn, %{"id" => id}) do
     id = String.to_integer(id)
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
@@ -84,7 +82,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, token} <- Firebase.get_token(conn),
+    with {:ok, _token} <- Firebase.get_token(conn),
          {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
          {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Usuario cliente deletado") do
       conn

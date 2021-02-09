@@ -15,7 +15,7 @@ defmodule Tecnovix.Email do
   end
 
   def content_email(email, senha, nome) do
-    new_email
+    new_email()
     |> from(@remetente)
     |> to(email)
     |> subject("Central Oftalmica - Senha de acesso")
@@ -32,7 +32,7 @@ defmodule Tecnovix.Email do
   end
 
   def content_email_dev(email) do
-    new_email
+    new_email()
     |> from(@remetente)
     |> to(email)
     |> subject("Central Oftalmica - Devolução de Produto")

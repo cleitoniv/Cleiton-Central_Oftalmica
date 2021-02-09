@@ -3,7 +3,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaModel do
   alias Tecnovix.Repo
   alias Tecnovix.ItensDosPedidosDeVendaSchema, as: ItensSchema
 
-  def insert_or_update(%{"data" => data} = params) when is_list(data) do
+  def insert_or_update(%{"data" => data}) when is_list(data) do
     {:ok,
      Enum.map(data, fn itens ->
        with nil <-

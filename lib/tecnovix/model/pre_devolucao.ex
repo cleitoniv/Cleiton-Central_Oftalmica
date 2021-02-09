@@ -6,8 +6,7 @@ defmodule Tecnovix.PreDevolucaoModel do
     NotificacoesClienteModel,
     ClientesSchema,
     Repo,
-    ItensPreDevolucaoSchema,
-    LogsClienteModel
+    ItensPreDevolucaoSchema
   }
 
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
@@ -81,7 +80,7 @@ defmodule Tecnovix.PreDevolucaoModel do
     }
   end
 
-  def pre_devolucao(cliente, params) do
+  def pre_devolucao(cliente, _params) do
     %{
       "client_id" => cliente.id,
       "tipo_pre_dev" => "C",
@@ -125,7 +124,7 @@ defmodule Tecnovix.PreDevolucaoModel do
 
     items =
       Enum.map(products, fn product ->
-        old =
+        _old =
           old_product(product)
           |> Map.put("tipo", "C")
       end)
@@ -140,11 +139,11 @@ defmodule Tecnovix.PreDevolucaoModel do
   def insert_pre_devolucao(
         cliente_id,
         %{
-          groups: groups,
+          groups: _groups,
           devolutions: devolutions,
-          products: products,
+          products: _products,
           tipo: tipo
-        } = params
+        }
       ) do
     cliente = Repo.get(ClientesSchema, cliente_id)
 
@@ -170,7 +169,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   def serial_authorized?(num_serie) do
     case Repo.get_by(ItensPreDevolucaoSchema, num_de_serie: num_serie) do
       nil -> {:ok, true}
-      serial -> {:error, :repeated}
+      _serial -> {:error, :repeated}
     end
   end
 end

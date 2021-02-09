@@ -171,7 +171,7 @@ defmodule TecnovixWeb.Auth.Firebase do
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
   end
 
-  def delete_user_firebase(%{idToken: idToken} = params) do
+  def delete_user_firebase(%{idToken: _idToken} = params) do
     url = "https://identitytoolkit.googleapis.com/v1/accounts:delete?key=" <> @firebase_api_key
 
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])

@@ -24,8 +24,6 @@ defmodule TecnovixWeb.ProtheusController do
   def generate_boleto(conn, %{"valor" => valor}) do
     protheus = Protheus.stub()
 
-    {:ok, cliente} = conn.private.auth
-
     with {:ok, auth} <- Auth.token(),
          {:ok, boleto = %{status_code: 200}} <- protheus.generate_boleto(auth["access_token"]),
          {:ok, resp} <- protheus.organize_boleto(boleto, valor) do

@@ -1,8 +1,5 @@
 defmodule Tecnovix.Services.ConfirmationSMS do
   use GenServer
-  import Ecto.Query
-  alias Tecnovix.Repo
-  alias Tecnovix.ClientesSchema
 
   def delete_code(code_sms, phone_number) do
     {:ok, kvset} = ETS.KeyValueSet.wrap_existing(:code_confirmation)

@@ -6,6 +6,8 @@ defmodule Tecnovix.Services.Order do
   alias Tecnovix.Repo
   import Ecto.Query
 
+  @order_limit 100
+
   # Legenda de Pedidos
   #
   # "S" -> Sim foi pago.
@@ -46,7 +48,7 @@ defmodule Tecnovix.Services.Order do
     {:ok, []}
   end
 
-  def handle_info({:ok, msg}, _state) do
+  def handle_info({:ok, _msg}, _state) do
     pedidos =
       PedidosDeVendaSchema
       |> where([p], p.status_ped == 0 and p.pago == "P" and not is_nil(p.order_id))

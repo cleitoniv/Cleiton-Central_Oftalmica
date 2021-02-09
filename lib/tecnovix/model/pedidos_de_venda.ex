@@ -14,9 +14,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
   import Ecto.Query
 
   def taxa_entrega() do
-    %{
+    taxa = %{
       valor: 10
     }
+
+    {:ok, taxa}
   end
 
   def order_product_invoiced(cliente_id) do
@@ -41,9 +43,10 @@ defmodule Tecnovix.PedidosDeVendaModel do
           end
         end)
       end)
-      |> Enum.group_by(fn product -> product.grupo end, fn product_quantidade ->  product_quantidade.quantidade end)
-      |> IO.inspect
-
+      |> Enum.group_by(fn product -> product.grupo end, fn product_quantidade ->
+        product_quantidade.quantidade
+      end)
+      |> IO.inspect()
 
     {:ok, quantity_product_invoiced}
   end
@@ -437,7 +440,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "operation" => map["operation"],
       "codigo" => items["codigo"],
       "nocontrato" => items["nocontrato"],
-      "status" => items["status"],
+      # "status" => items["status"],
       "produto" => items["produto"],
       "quantidade" => items["quantidade"],
       "paciente" => map["paciente"]["nome"],
@@ -496,7 +499,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
-      "status" => items["status"],
+      # "status" => items["status"],
       "operation" => map["operation"],
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
@@ -535,7 +538,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "pedido_de_venda_id" => 1,
       "descricao_generica_do_produto_id" => items["descricao_generica_do_produto_id"],
       "filial" => items["filial"],
-      "status" => items["status"],
+      # "status" => items["status"],
       "operation" => map["operation"],
       "nocontrato" => items["nocontrato"],
       "codigo" => items["codigo"],
@@ -577,7 +580,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "operation" => map["operation"],
       "duracao" => formatting_duracao(items["duracao"]),
       "codigo" => items["codigo"],
-      "status" => items["status"],
+      # "status" => items["status"],
       "nocontrato" => items["nocontrato"],
       "produto" => items["produto"],
       "tests" => formatting_test(items["tests"]),
@@ -809,7 +812,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         get_pacientes_revisao(cliente_id)
 
       "0" ->
-        pedidos =
+        _pedidos =
           PedidosDeVendaSchema
           |> preload(:items)
           |> where(
@@ -820,7 +823,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           |> Repo.all()
 
       _ ->
-        pedidos =
+        _pedidos =
           PedidosDeVendaSchema
           |> preload(:items)
           |> where([p], p.client_id == ^cliente_id and p.status_ped == ^filtro)
@@ -830,7 +833,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos_finan(cliente_id) do
-    pedidos =
+    _pedidos =
       PedidosDeVendaSchema
       |> preload(:items)
       |> where([p], p.client_id == ^cliente_id)

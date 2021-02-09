@@ -1,5 +1,5 @@
 defmodule Tecnovix.App.ScreensProd do
-  @behavior Tecnovix.App.Screens
+  @behaviour Tecnovix.App.Screens
   alias Tecnovix.{
     ClientesModel,
     PedidosDeVendaModel,
@@ -21,7 +21,7 @@ defmodule Tecnovix.App.ScreensProd do
   def get_graus(grupo) do
     case DescricaoModel.get_graus(grupo) do
       nil -> {:error, :not_found}
-      {list, grupo} -> {:ok, grupo}
+      {_list, grupo} -> {:ok, grupo}
       _ -> {:error, :not_found}
     end
   end
@@ -33,6 +33,7 @@ defmodule Tecnovix.App.ScreensProd do
     HTTPoison.get(url, header)
   end
 
+  @impl true
   def get_endereco_entrega(cliente) do
     endereco = %{
       cep: parse_field("A1_CEPE", cliente),
@@ -53,7 +54,7 @@ defmodule Tecnovix.App.ScreensProd do
 
       value ->
         case String.split(value, ",") do
-          [endereco, num] -> num
+          [_endereco, num] -> num
           _ -> ""
         end
     end
@@ -66,7 +67,7 @@ defmodule Tecnovix.App.ScreensProd do
 
       value ->
         case String.split(value, ",") do
-          [endereco, num] -> endereco
+          [endereco, _num] -> endereco
           [endereco] -> endereco
           _ -> ""
         end
@@ -199,7 +200,7 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  def end_entrega(endereco, bairro, municipio, num, cep, complemento) do
+  def end_entrega(endereco, bairro, municipio, _num, cep, complemento) do
     "#{endereco}, #{complemento}, #{bairro}, #{municipio}. #{cep}"
   end
 
@@ -259,8 +260,11 @@ defmodule Tecnovix.App.ScreensProd do
     produtos =
       Enum.reduce(produtos, [], fn produto, acc ->
         case Map.get(products_invoiced, produto["group"]) do
-          nil -> [produto] ++ acc
-          quantidades -> [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades))] ++ acc
+          nil ->
+            [produto] ++ acc
+
+          quantidades ->
+            [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades))] ++ acc
         end
       end)
       |> Enum.sort_by(fn item -> item["group"] end)
@@ -288,7 +292,7 @@ defmodule Tecnovix.App.ScreensProd do
            nil ->
              product["type"]
 
-           type ->
+           _ ->
              product["type"]
              |> String.downcase()
              |> String.capitalize()
@@ -548,35 +552,35 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  defp taxa(valor, parcelado) do
-    list_taxa =
-      [
-        {1, 1.0},
-        {2, 4.5},
-        {3, 5.0},
-        {4, 5.5},
-        {5, 6.5},
-        {6, 7.5},
-        {7, 8.5},
-        {8, 9.5},
-        {9, 10.5},
-        {10, 11.5},
-        {11, 12.0},
-        {12, 12.5}
-      ]
-      |> Enum.filter(fn {parcela, taxa} -> parcela == parcelado end)
+  # defp taxa(valor, parcelado) do
+  #   list_taxa =
+  #     [
+  #       {1, 1.0},
+  #       {2, 4.5},
+  #       {3, 5.0},
+  #       {4, 5.5},
+  #       {5, 6.5},
+  #       {6, 7.5},
+  #       {7, 8.5},
+  #       {8, 9.5},
+  #       {9, 10.5},
+  #       {10, 11.5},
+  #       {11, 12.0},
+  #       {12, 12.5}
+  #     ]
+  #     |> Enum.filter(fn {parcela, _taxa} -> parcela == parcelado end)
 
-    resp =
-      Enum.map(list_taxa, fn {parcela, taxa} ->
-        result = PedidosDeVendaModel.calculo_taxa(valor, taxa)
+  #   resp =
+  #     Enum.map(list_taxa, fn {parcela, taxa} ->
+  #       result = PedidosDeVendaModel.calculo_taxa(valor, taxa)
 
-        case parcela do
-          _ -> %{"parcela#{parcela}" => result}
-        end
-      end)
+  #       case parcela do
+  #         _ -> %{"parcela#{parcela}" => result}
+  #       end
+  #     end)
 
-    {:ok, resp}
-  end
+  #   {:ok, resp}
+  # end
 
   @impl true
   def get_detail_order(cliente, filtro) do
@@ -588,7 +592,7 @@ defmodule Tecnovix.App.ScreensProd do
             "BOLETO" ->
               case filtro do
                 "2" ->
-                  resp = %{
+                  _resp = %{
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
@@ -614,7 +618,7 @@ defmodule Tecnovix.App.ScreensProd do
                   }
 
                 _ ->
-                  resp = %{
+                  _resp = %{
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
@@ -631,7 +635,7 @@ defmodule Tecnovix.App.ScreensProd do
             "CREDIT_CARD" ->
               case filtro do
                 "2" ->
-                  resp = %{
+                  _resp = %{
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
@@ -657,7 +661,7 @@ defmodule Tecnovix.App.ScreensProd do
                   }
 
                 _ ->
-                  resp = %{
+                  _resp = %{
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
@@ -690,7 +694,7 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   defp formartting_duracao(duracao) do
-    duracao =
+    _duracao =
       String.replace(duracao, ~r/[^\d]/, "")
       |> String.to_integer()
   end
@@ -703,7 +707,7 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  def format_date(date) do
+  defp format_date(date) do
     [ano, mes, dia] =
       Date.to_string(date)
       |> String.split("-")
@@ -727,63 +731,64 @@ defmodule Tecnovix.App.ScreensProd do
         [credits] ++ acc
       end)
 
-      ordersBilletPaid =
-        Enum.flat_map(pedidos_com_boleto, fn pedido ->
-          Enum.reduce(pedido.items, [], fn items, acc ->
-            cond do
-              items.operation == "01" ->
-                map =
-                  Map.new()
-                  |> Map.put(:id, items.id)
-                  |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
-                  |> Map.put(:nf, "")
-                  |> Map.put(:valor, items.virtotal)
-                  |> Map.put(:method, "BOLETO")
-                  |> Map.put(:codigo_barra,"34191.79001 01043.510047 91020.150008 6 83820026000")
-                  |> Map.put(:status, 1)
+    ordersBilletPaid =
+      Enum.flat_map(pedidos_com_boleto, fn pedido ->
+        Enum.reduce(pedido.items, [], fn items, acc ->
+          cond do
+            items.operation == "01" ->
+              map =
+                Map.new()
+                |> Map.put(:id, items.id)
+                |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
+                |> Map.put(:nf, "")
+                |> Map.put(:valor, items.virtotal)
+                |> Map.put(:method, "BOLETO")
+                |> Map.put(:codigo_barra, "34191.79001 01043.510047 91020.150008 6 83820026000")
+                |> Map.put(:status, 1)
 
-                [map] ++ acc
+              [map] ++ acc
 
-              true -> acc
-            end
-          end)
+            true ->
+              acc
+          end
         end)
+      end)
 
-      ordersPaid =
-        Enum.flat_map(pedidos, fn pedido ->
-          Enum.reduce(pedido.items, [], fn items, acc ->
-            cond do
-              items.operation == "01" ->
-                map =
-                  Map.new()
-                  |> Map.put(:id, items.id)
-                  |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
-                  |> Map.put(:nf, "")
-                  |> Map.put(:valor, items.virtotal)
-                  |> Map.put(:method, "CREDIT_CARD")
-                  |> Map.put(:status, 1)
+    ordersPaid =
+      Enum.flat_map(pedidos, fn pedido ->
+        Enum.reduce(pedido.items, [], fn items, acc ->
+          cond do
+            items.operation == "01" ->
+              map =
+                Map.new()
+                |> Map.put(:id, items.id)
+                |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
+                |> Map.put(:nf, "")
+                |> Map.put(:valor, items.virtotal)
+                |> Map.put(:method, "CREDIT_CARD")
+                |> Map.put(:status, 1)
 
-                [map] ++ acc
+              [map] ++ acc
 
-              items.operation == "06" ->
-                map =
-                  Map.new()
-                  |> Map.put(:id, items.id)
-                  |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
-                  |> Map.put(:valor, items.virtotal)
-                  |> Map.put(:method, "CREDIT_PRODUCT")
-                  |> Map.put(:nf, "")
-                  |> Map.put(:status, 1)
+            items.operation == "06" ->
+              map =
+                Map.new()
+                |> Map.put(:id, items.id)
+                |> Map.put(:vencimento, format_date(NaiveDateTime.to_date(items.inserted_at)))
+                |> Map.put(:valor, items.virtotal)
+                |> Map.put(:method, "CREDIT_PRODUCT")
+                |> Map.put(:nf, "")
+                |> Map.put(:status, 1)
 
-                [map] ++ acc
+              [map] ++ acc
 
-              true -> acc
-
-            end
-          end)
+            true ->
+              acc
+          end
         end)
+      end)
 
-       payments = paymentsCreditFinan ++ ordersPaid ++ ordersBilletPaid
+    payments = paymentsCreditFinan ++ ordersPaid ++ ordersBilletPaid
 
     # payments = [
     #   %{
@@ -865,7 +870,7 @@ defmodule Tecnovix.App.ScreensProd do
     |> Enum.map(fn paciente ->
       group_by =
         Enum.group_by(paciente.items, fn item -> item.codigo_item end)
-        |> Enum.map(fn {codigo, codigo_items} ->
+        |> Enum.map(fn {_codigo, codigo_items} ->
           Enum.reduce(codigo_items, %{}, fn codigo_item, acc ->
             p_olho = parse_olho(codigo_item)
 
@@ -935,7 +940,7 @@ defmodule Tecnovix.App.ScreensProd do
     |> Enum.map(fn paciente ->
       group_by =
         Enum.group_by(paciente.items, fn item -> item.codigo_item end)
-        |> Enum.map(fn {codigo, codigo_items} ->
+        |> Enum.map(fn {_codigo, codigo_items} ->
           Enum.reduce(codigo_items, %{}, fn codigo_item, acc ->
             p_olho = parse_olho(codigo_item)
 
@@ -1003,7 +1008,7 @@ defmodule Tecnovix.App.ScreensProd do
       case reposicao == nil do
         true ->
           with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
-            pedido = %{
+            _pedido = %{
               data_inclusao: pedido.inserted_at,
               num_pedido: pedido.id,
               valor:
@@ -1067,7 +1072,7 @@ defmodule Tecnovix.App.ScreensProd do
 
         false ->
           with {:ok, pedido} <- PedidosDeVendaModel.get_pedido_id(cliente_id, pedido_id) do
-            pedido = %{
+            _pedido = %{
               data_inclusao: pedido.inserted_at,
               num_pedido: pedido.id,
               valor:
@@ -1165,16 +1170,6 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   @impl true
-  def convert_points(_cliente, points) do
-    points =
-      case points do
-        x -> %{"credit_finan" => 104}
-      end
-
-    {:ok, points}
-  end
-
-  @impl true
   def get_product_serie(_cliente, product_serial, serial) do
     product_serial = Jason.decode!(product_serial.body)
 
@@ -1194,13 +1189,13 @@ defmodule Tecnovix.App.ScreensProd do
     product =
       case Enum.empty?(product) do
         true ->
-          product =
+          _product =
             Map.new()
             |> Map.put("mensagem", "Produto inexistente.")
             |> Map.put("success", false)
 
         false ->
-          product =
+          _product =
             Enum.reduce(product, %{}, fn map, _acc ->
               Map.put(
                 map,
@@ -1234,6 +1229,7 @@ defmodule Tecnovix.App.ScreensProd do
     "#{date.day}/#{date.month}/#{date.year}"
   end
 
+  @impl true
   def get_extrato_finan(cliente) do
     {:ok, creditos} =
       case CreditoFinanceiroModel.get_creditos_by_cliente(cliente.id) do
@@ -1276,7 +1272,8 @@ defmodule Tecnovix.App.ScreensProd do
     {:ok, extratos}
   end
 
-  def get_extrato_prod(cliente, produtos) do
+  @impl true
+  def get_extrato_prod(cliente, _produtos) do
     {:ok, items_pedido} = PedidosDeVendaModel.get_order_contrato(cliente.id)
     data_hoje = Date.utc_today()
 

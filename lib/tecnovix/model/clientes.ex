@@ -7,8 +7,6 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Changeset
   import Ecto.Query
 
-  @sms_token "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuZGlyZWN0Y2FsbHNvZnQuY29tIiwiYXVkIjoiMTkyLjE2OC4xNS4yNyIsImlhdCI6MTYwMzk5MjAwMCwibmJmIjoxNjAzOTkyMDAwLCJleHAiOjE2MDM5OTU2MDAsImRjdCI6IjMzMDI3NzQwMCIsImNsaWVudF9vYXV0aF9pZCI6IjM3NjA0OSJ9.B4gF3wAeOUkE9GNZSZCHBa8h_6touKQlrXebQrOocpw"
-  @header [{"Content-Type", "application/x-www-form-urlencoded"}]
   @ticket_key Application.fetch_env!(:tecnovix, :helpdesk_key)
 
   def get_period() do
@@ -93,7 +91,7 @@ defmodule Tecnovix.ClientesModel do
             |> formatting_telefone()
             |> Repo.insert()
 
-          changeset ->
+          _changeset ->
             error =
               %ClientesSchema{}
               |> change(%{})
@@ -152,8 +150,7 @@ defmodule Tecnovix.ClientesModel do
          {:ok, create} = create(cliente)
          create
        else
-         changeset ->
-           {:ok, update} = __MODULE__.update(changeset, cliente)
+         changeset -> __MODULE__.update(changeset, cliente)
        end
      end)}
   end
@@ -252,7 +249,7 @@ defmodule Tecnovix.ClientesModel do
     |> String.slice(2..11)
   end
 
-  defp formatting_telefone(changeset \\ %ClientesSchema{}) do
+  defp formatting_telefone(changeset) do
     update_change(changeset, :telefone, fn
       "55" <> telefone ->
         String.replace(telefone, "-", "")
@@ -266,19 +263,19 @@ defmodule Tecnovix.ClientesModel do
     end)
   end
 
-  defp formatting_ddd(changeset \\ %ClientesSchema{}) do
-    update_change(changeset, :ddd, fn
-      "55" <> telefone ->
-        String.replace(telefone, "-", "")
-        |> String.replace(" ", "")
-        |> String.slice(0..1)
+  # defp formatting_ddd(changeset \\ %ClientesSchema{}) do
+  #   update_change(changeset, :ddd, fn
+  #     "55" <> telefone ->
+  #       String.replace(telefone, "-", "")
+  #       |> String.replace(" ", "")
+  #       |> String.slice(0..1)
 
-      telefone ->
-        String.replace(telefone, "-", "")
-        |> String.replace(" ", "")
-        |> String.slice(0..1)
-    end)
-  end
+  #     telefone ->
+  #       String.replace(telefone, "-", "")
+  #       |> String.replace(" ", "")
+  #       |> String.slice(0..1)
+  #   end)
+  # end
 
   defp formatting_cnpj_cpf(changeset) do
     update_change(changeset, :cnpj_cpf, fn cnpj_cpf ->
@@ -297,7 +294,7 @@ defmodule Tecnovix.ClientesModel do
   def get_endereco_by_cep(cep) do
     url = "viacep.com.br/ws/#{cep}/json/"
 
-    {:ok, endereco} = HTTPoison.get(url, [{"Content-Type", "application/json"}])
+    HTTPoison.get(url, [{"Content-Type", "application/json"}])
   end
 
   def formatting_dtnasc(dtnasc) do
@@ -382,7 +379,7 @@ defmodule Tecnovix.ClientesModel do
   def phone_number_existing?(phone_number, ddd) do
     case Repo.get_by(ClientesSchema, telefone: phone_number, ddd: ddd) do
       nil -> {:ok, phone_number}
-      existing -> {:error, :number_found}
+      _existing -> {:error, :number_found}
     end
   end
 
@@ -415,7 +412,7 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def formatting_phone_number(phone_number) do
-    phone_number = String.slice(phone_number, 4..12)
+    String.slice(phone_number, 4..12)
   end
 
   def confirmation_code(code_sms, phone_number) do

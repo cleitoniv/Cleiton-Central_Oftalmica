@@ -42,7 +42,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def pedido_produto(conn, _params) do
+  def pedido_produto(_conn, _params) do
     {:error, :order_not_created}
   end
 
@@ -134,7 +134,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           "ccv" => ccv,
           "installment" => installment,
           "taxa_entrega" => taxa_entrega
-        } = params
+        }
       )
       when is_nil(ccv) == false and is_nil(id_cartao) == false do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
@@ -162,7 +162,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <-
            PedidosDeVendaModel.order(items_order, cliente, taxa_entrega, installment),
-         {:ok, payment} <-
+         {:ok, _payment} <-
            PedidosDeVendaModel.payment(%{"id_cartao" => id_cartao}, order, ccv, installment),
          {:ok, pedido} <-
            PedidosDeVendaModel.create_pedido(items, cliente, order, installment, taxa_entrega),
@@ -175,7 +175,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
                id_cartao
              }."
            ),
-         {:ok, notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
+         {:ok, _notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
@@ -185,7 +185,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     end
   end
 
-  def create(conn, params) do
+  def create(_conn, _params) do
     {:error, :order_not_created}
   end
 

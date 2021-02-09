@@ -12,7 +12,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   @impl true
-  def get_contract_table(%{cliente: cliente, loja: loja, grupo: grupo} = params, token) do
+  def get_contract_table(%{cliente: cliente, loja: loja, grupo: grupo}, token) do
     url =
       "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{
         loja
@@ -23,6 +23,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     HTTPoison.get(url, header)
   end
 
+  @impl true
   def get_contract_table_finan(%{cliente: cliente, loja: loja}, token) do
     url =
       "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{
@@ -35,17 +36,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   end
 
   @impl true
-  def get_address_by_cep(_params) do
-  end
-
-  @impl true
-  def get_delivery_prevision(_params) do
-  end
-
-  @impl true
-  def get_product_by_serial(
-        %{cliente: cliente, loja: loja, serial: serial, token: token} = params
-      ) do
+  def get_product_by_serial(%{cliente: cliente, loja: loja, serial: serial, token: token}) do
     header = Protheus.authenticate(@header, token)
 
     url =
@@ -53,7 +44,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         loja
       }&NUMSERIE=#{serial}"
 
-    {:ok, product_serial} = HTTPoison.get(url, header)
+    HTTPoison.get(url, header)
   end
 
   @impl true
@@ -68,10 +59,6 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     {:ok, get} = HTTPoison.get(url, header)
 
     {:ok, Jason.decode!(get.body)}
-  end
-
-  @impl true
-  def get_client_points(_params) do
   end
 
   @impl true
@@ -115,7 +102,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
       end)
       |> Enum.filter(fn map -> map != %{} end)
       |> Enum.map(fn map ->
-        [antes, depois] = String.split(map["parcela"], ".")
+        [_antes, depois] = String.split(map["parcela"], ".")
 
         case String.length(depois) < 2 do
           true -> %{"parcela" => map["parcela"] <> "0"}

@@ -73,7 +73,7 @@ defmodule Tecnovix.Test.Wirecard do
     |> post("/api/cliente/pedido_produto", %{"items" => items, "valor" => 0})
     |> json_response(200)
 
-    Tecnovix.Services.Order.init([]) |> IO.inspect
+    Tecnovix.Services.Order.init([]) |> IO.inspect()
   end
 
   test "Fazendo um pedido e inserindo o pedido no banco do pedido de produtos // USUARIO_CLIENTE" do

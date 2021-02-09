@@ -50,7 +50,7 @@ defmodule Tecnovix.Services.OrderFinan do
     {:ok, []}
   end
 
-  def handle_info({:ok, msg}, state) do
+  def handle_info({:ok, msg}, _state) do
     pedidos =
       CreditoFinanceiroSchema
       |> where([p], p.status == 0)

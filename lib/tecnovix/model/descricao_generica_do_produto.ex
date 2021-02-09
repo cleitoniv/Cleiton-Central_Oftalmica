@@ -12,6 +12,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     end
   end
 
+  @spec verify_eyes(map) :: {:error, any} | {:ok, true}
   def verify_eyes(params) do
     result =
       case Map.has_key?(params, "direito") and Map.has_key?(params, "esquerdo") do
@@ -36,7 +37,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
     case Enum.any?(result, fn
            {:ok, boolean} -> !boolean
-           {:ok, boolean, olho} -> !boolean
+           {:ok, boolean, _olho} -> !boolean
          end) do
       false ->
         {:ok, true}
@@ -45,7 +46,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
         {:error,
          Enum.reduce(result, [], fn
            {_, false, olho}, acc -> acc ++ ["Produto do olho #{olho} indisponivel"]
-           {_, true, olho}, acc -> acc
+           {_, true, _olho}, acc -> acc
          end)}
     end
   end
@@ -56,9 +57,12 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
       |> Enum.count()
 
     case count_keys <= 2 do
-      true -> product_not_parameters()
-      false -> verify_graus(map)
-      _ -> {:ok, false, "sem_olho"}
+      true ->
+        product_not_parameters()
+
+      false ->
+        verify_graus(map)
+        # _ -> {:ok, false, "sem_olho"}
     end
   end
 
@@ -90,7 +94,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
 
         {key, value}
       end)
-      |> Enum.filter(fn {key, value} -> value != nil end)
+      |> Enum.filter(fn {_key, value} -> value != nil end)
       |> Map.new()
       |> Enum.reduce(
         dynamic(true),
@@ -134,7 +138,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
     end
   end
 
-  def insert_or_update(%{"data" => data} = params) when is_list(data) do
+  def insert_or_update(%{"data" => data}) when is_list(data) do
     {:ok,
      Enum.map(data, fn descricao ->
        descricao = Map.put(descricao, "grupo", String.upcase(descricao["grupo"]))
@@ -151,7 +155,7 @@ defmodule Tecnovix.DescricaoGenericaDoProdutoModel do
      end)}
   end
 
-  def insert_or_update(%{"grupo" => grupo, "codigo" => codigo} = params) do
+  def insert_or_update(%{"grupo" => _grupo, "codigo" => codigo} = params) do
     params = Map.put(params, "grupo", String.upcase(params["grupo"]))
 
     with nil <- Repo.get_by(DescricaoSchema, codigo: codigo) do

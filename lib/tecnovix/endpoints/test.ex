@@ -29,15 +29,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   @impl true
-  def get_cliente(%{cnpj_cpf: "036012857201"}) do
-    {:ok,
-     %{
-       status_code: 404,
-       body: Jason.encode!(%{errorCode: 404, errorMessage: "Cliente nao encontrado!"})
-     }}
-  end
-
-  def get_contract_table_finan(%{cliente: cliente, loja: loja} = params, token) do
+  def get_contract_table_finan(%{cliente: _cliente, loja: _loja}, token) do
     url =
       "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=007480&LOJA=01&GRUPO=CRFI"
 
@@ -47,7 +39,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   @impl true
-  def get_contract_table(%{cliente: cliente, loja: loja, grupo: grupo} = params, token) do
+  def get_contract_table(%{cliente: _cliente, loja: _loja, grupo: grupo}, token) do
     url =
       "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{"007480"}&LOJA=#{
         "01"
@@ -67,17 +59,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   end
 
   @impl true
-  def get_address_by_cep(_params) do
-  end
-
-  @impl true
-  def get_delivery_prevision(_params) do
-  end
-
-  @impl true
-  def get_product_by_serial(
-        %{cliente: cliente, loja: loja, serial: serial, token: token} = params
-      ) do
+  def get_product_by_serial(%{cliente: _cliente, loja: _loja, serial: serial, token: token}) do
     header = Protheus.authenticate(@header, token)
 
     url =
@@ -85,7 +67,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
         serial
       }"
 
-    {:ok, product_serial} = HTTPoison.get(url, header)
+    HTTPoison.get(url, header)
   end
 
   @impl true
@@ -95,10 +77,6 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
       |> Jason.decode!()
 
     {:ok, resp}
-  end
-
-  @impl true
-  def get_client_points(_params) do
   end
 
   @impl true
@@ -142,7 +120,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
       end)
       |> Enum.filter(fn map -> map != %{} end)
       |> Enum.map(fn map ->
-        [antes, depois] = String.split(map["parcela"], ".")
+        [_antes, depois] = String.split(map["parcela"], ".")
 
         case String.length(depois) < 2 do
           true -> %{"parcela" => map["parcela"] <> "0"}

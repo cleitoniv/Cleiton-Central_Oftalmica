@@ -47,7 +47,7 @@ defmodule TecnovixWeb.PreDevolucaoController do
       |> Enum.join()
 
     with {:ok, devolucoes} <- PreDevolucaoModel.create(cliente, params),
-         {:ok, notifications} <-
+         {:ok, _notifications} <-
            NotificacoesClienteModel.solicitation_devolution(devolucoes, cliente),
          {:ok, _logs} <-
            LogsClienteModel.create(
