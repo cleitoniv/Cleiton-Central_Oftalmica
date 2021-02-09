@@ -261,7 +261,10 @@ defmodule Tecnovix.App.ScreensProd do
       Enum.reduce(produtos, [], fn produto, acc ->
         case Map.get(products_invoiced, produto["group"]) do
           nil ->
-            [produto] ++ acc
+            case Map.get(products_invoiced, produto["BM_YGRPTES"]) do
+              nil -> [produto] ++ acc
+              quantidades -> [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidades))] ++ acc
+            end
 
           quantidades ->
             [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades))] ++ acc
