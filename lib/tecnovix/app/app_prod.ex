@@ -899,6 +899,8 @@ defmodule Tecnovix.App.ScreensProd do
               |> Map.put(:grupo, codigo_item.grupo)
               |> Map.put(:type, codigo_item.type)
               |> Map.put(:operation, codigo_item.operation)
+              |> Map.put(:tests, codigo_item.tests)
+              |> IO.inspect
 
             Map.merge(map, p_olho)
           end)
@@ -1072,7 +1074,8 @@ defmodule Tecnovix.App.ScreensProd do
                       grupo: item.grupo,
                       url_image: "http://portal.centraloftalmica.com/images/#{item.grupo}.jpg",
                       codigo_item: item.codigo_item,
-                      duracao: item.duracao
+                      duracao: item.duracao,
+                      tests: item.tests
                     }
                   end
                 )
