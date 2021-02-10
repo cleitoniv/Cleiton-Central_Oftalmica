@@ -267,6 +267,8 @@ defmodule Tecnovix.App.ScreensProd do
             end
 
           quantidades ->
+            IO.inspect produto
+            IO.inspect quantidades
             [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades))] ++ acc
         end
       end)
@@ -591,7 +593,6 @@ defmodule Tecnovix.App.ScreensProd do
       Enum.map(
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
         fn map ->
-          IO.inspect map
           case map.tipo_pagamento do
             "BOLETO" ->
               case filtro do

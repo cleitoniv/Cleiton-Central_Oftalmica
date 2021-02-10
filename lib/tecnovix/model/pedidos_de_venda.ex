@@ -46,7 +46,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Enum.group_by(fn product -> product.grupo end, fn product_quantidade ->
         product_quantidade.quantidade
       end)
-      |> IO.inspect()
 
     {:ok, quantity_product_invoiced}
   end
@@ -805,12 +804,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
-    IO.inspect filtro
     case filtro do
       "2" ->
-        get_pacientes_revisao(cliente_id)
-
-      2 ->
         get_pacientes_revisao(cliente_id)
 
       "0" ->
