@@ -793,6 +793,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     {:ok, order_items}
   end
 
+  @spec get_cartao_cliente(any) :: {:error, :cartao_not_found} | {:ok, any}
   def get_cartao_cliente(id) do
     case Repo.get_by(CartaoSchema, id: id) do
       nil ->
@@ -804,6 +805,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
+    IO.inspect filtro
     case filtro do
       "2" ->
         get_pacientes_revisao(cliente_id)

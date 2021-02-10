@@ -591,6 +591,7 @@ defmodule Tecnovix.App.ScreensProd do
       Enum.map(
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
         fn map ->
+          IO.inspect map
           case map.tipo_pagamento do
             "BOLETO" ->
               case filtro do
