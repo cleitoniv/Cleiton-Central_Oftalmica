@@ -263,13 +263,14 @@ defmodule Tecnovix.App.ScreensProd do
           nil ->
             case Map.get(products_invoiced, produto["BM_YGRPTES"]) do
               nil -> [produto] ++ acc
-              quantidades -> [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidades))] ++ acc
+              quantidades_tests ->
+                IO.inspect produto
+                IO.inspect quantidades_tests
+                [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidades_tests))] ++ acc
             end
 
-          quantidades ->
-            IO.inspect produto
-            IO.inspect quantidades
-            [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades))] ++ acc
+          quantidades_boxes ->
+            [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
         end
       end)
       |> Enum.sort_by(fn item -> item["group"] end)
