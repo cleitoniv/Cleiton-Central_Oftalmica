@@ -30,12 +30,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Enum.flat_map(fn pedido ->
         Enum.reduce(pedido.items, [], fn items, acc ->
           case ((items.status == 0 or items.status == 4) and items.tipo_venda == "C" and
-                  items.operation == "07") or items.tests == "S" do
+                  items.operation == "07") do
             true ->
               map =
                 Map.new()
                 |> Map.put(:grupo, items.grupo)
-                |> Map.put(:tests, items.tests)
                 |> Map.put(:quantidade, items.quantidade)
 
               [map] ++ acc
@@ -45,7 +44,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
           end
         end)
       end)
-      |> Enum.group_by(fn product -> product.grupo end)
+      |> Enum.group_by(fn product -> product.grupo end, fn product_quantidade ->
+        product_quantidade.quantidade
+      end)
 
     {:ok, quantity_product_invoiced}
   end

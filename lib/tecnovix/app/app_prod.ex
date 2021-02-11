@@ -262,57 +262,19 @@ defmodule Tecnovix.App.ScreensProd do
         case Map.get(products_invoiced, produto["group"]) do
           nil ->
             case Map.get(products_invoiced, produto["BM_YGRPTES"]) do
-              nil ->
-                [produto] ++ acc
-
-              list_tests ->
+              nil -> [produto] ++ acc
+              quantidades_tests ->
                 cond do
                   Map.get(produto, "tests") > 0 ->
-                    [
-                      Map.put(
-                        produto,
-                        "tests",
-                        produto["tests"] -
-                          Enum.reduce(list_tests, 0, fn tests, acc -> tests.quantidade + acc end)
-                      )
-                    ] ++
-                      acc
+                    [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidades_tests))] ++ acc
 
-                  true ->
-                    [produto] ++ acc
+                  true -> [produto] ++ acc
                 end
+
             end
 
-          list_boxes ->
-            IO.inspect("list_boxes")
-            IO.inspect(list_boxes)
-
-            list =
-              Enum.reduce(list_boxes, [], fn box, acc ->
-                case box.tests == "S" and Map.get(produto, "tests") > 0 do
-                  true ->
-                    [
-                      Map.put(
-                        produto,
-                        "tests",
-                        produto["tests"] -
-                          Enum.reduce(list_boxes, 0, fn boxes, acc -> boxes.quantidade + acc end)
-                      )
-                    ] ++ acc
-
-                  false ->
-                    [
-                      Map.put(
-                        produto,
-                        "boxes",
-                        produto["boxes"] -
-                          Enum.reduce(list_boxes, 0, fn boxes, acc -> boxes.quantidade + acc end)
-                      )
-                    ] ++ acc
-                end
-              end)
-
-            list ++ acc
+            quantidades_boxes ->
+              [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
         end
       end)
       |> Enum.sort_by(fn item -> item["group"] end)
@@ -938,7 +900,7 @@ defmodule Tecnovix.App.ScreensProd do
               |> Map.put(:type, codigo_item.type)
               |> Map.put(:operation, codigo_item.operation)
               |> Map.put(:tests, codigo_item.tests)
-              |> IO.inspect()
+              |> IO.inspect
 
             Map.merge(map, p_olho)
           end)
