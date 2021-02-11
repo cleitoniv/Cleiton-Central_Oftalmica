@@ -279,16 +279,12 @@ defmodule Tecnovix.App.ScreensProd do
           quantidades_boxes ->
             cond do
               products_invoiced.tests == "S" and Map.get(produto, "tests") > 0 ->
-                IO.inspect "1"
                 [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidades_boxes))] ++ acc
               true ->
-                IO.inspect "3"
                 [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
             end
-            |> IO.inspect
         end
       end)
-      |> IO.inspect
       |> Enum.sort_by(fn item -> item["group"] end)
 
     filters = organize_filters_grid(produtos)
