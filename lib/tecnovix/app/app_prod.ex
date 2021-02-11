@@ -265,10 +265,10 @@ defmodule Tecnovix.App.ScreensProd do
               nil -> [produto] ++ acc
 
               quantidades_tests ->
-                IO.inspect Map.get(produto, "tests")
+                IO.inspect produto
                 cond do
                   Map.get(produto, "tests") > 0 ->
-                    [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidades_tests))] ++ acc |> IO.inspect
+                    [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidades_tests))] ++ acc
 
                   true -> [produto] ++ acc
                 end
