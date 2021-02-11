@@ -29,11 +29,13 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Repo.all()
       |> Enum.flat_map(fn pedido ->
         Enum.reduce(pedido.items, [], fn items, acc ->
-          case (items.status == 0 or items.status == 4) and items.tipo_venda == "C" and items.operation == "07" do
+          case ((items.status == 0 or items.status == 4) and items.tipo_venda == "C" and
+                  items.operation == "07") or items.tests == "S" do
             true ->
               map =
                 Map.new()
                 |> Map.put(:grupo, items.grupo)
+                |> Map.put(:tests, items.tests)
                 |> Map.put(:quantidade, items.quantidade)
 
               [map] ++ acc
