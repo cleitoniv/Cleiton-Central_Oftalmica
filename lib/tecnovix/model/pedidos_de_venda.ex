@@ -45,6 +45,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
           end
         end)
       end)
+      |> IO.inspect
       |> Enum.group_by(fn product -> product.grupo end, fn product_quantidade ->
         product_quantidade.quantidade
       end)
