@@ -259,30 +259,30 @@ defmodule Tecnovix.App.ScreensProd do
 
     produtos =
       Enum.reduce(produtos, [], fn produto, acc ->
-        IO.inspect "1"
         case Map.get(products_invoiced, produto["group"]) do
           nil ->
-            IO.inspect "2"
             case Map.get(products_invoiced, produto["BM_YGRPTES"]) do
               nil ->
                 [produto] ++ acc
 
               list_tests ->
-                IO.inspect list_tests
-                cond do
-                  Map.get(produto, "tests") > 0 ->
-                    [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_tests,0, fn tests, acc -> tests.quantidade + acc end))] ++
-                      acc
+                list =
+                  Enum.reduce(Map.get(products_invoiced, produto["group"]), [], fn product, acc ->
+                    cond do
+                      product.tests == "S" and Map.get(produto, "tests") > 0 ->
+                        [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_tests,0, fn tests, acc -> tests.quantidade + acc end))] ++
+                          acc
 
-                  true ->
-                    [produto] ++ acc
-                end
+                      true ->
+                        [produto] ++ acc
+                    end
+                  end)
+                list ++ acc
             end
 
           list_boxes ->
-            IO.inspect list_boxes
             cond do
-              products_invoiced.tests == "S" and Map.get(produto, "tests") > 0 ->
+              Map.get(produto, "tests") > 0 ->
                 [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
               true ->
                 [Map.put(produto, "boxes", produto["boxes"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
