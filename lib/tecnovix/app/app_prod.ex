@@ -266,27 +266,29 @@ defmodule Tecnovix.App.ScreensProd do
                 [produto] ++ acc
 
               list_tests ->
-                list =
-                  Enum.reduce(Map.get(products_invoiced, produto["BM_YGRPTES"]), [], fn product, acc ->
-                    cond do
-                      product.tests == "N" and Map.get(produto, "tests") > 0 ->
-                        [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_tests,0, fn tests, acc -> tests.quantidade + acc end))] ++
-                          acc
+                cond do
+                  Map.get(produto, "tests") > 0 ->
+                    [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_tests,0, fn tests, acc -> tests.quantidade + acc end))] ++
+                      acc
 
-                      true ->
-                        [produto] ++ acc
-                    end
-                  end)
-                list ++ acc
+                  true ->
+                    [produto] ++ acc
+                end
             end
 
           list_boxes ->
-            cond do
-              Map.get(produto, "tests") > 0 ->
-                [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
-              true ->
-                [Map.put(produto, "boxes", produto["boxes"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
-            end
+            list =
+              Enum.reduce(Map.get(products_invoiced, produto["BM_YGRPTES"]), [], fn product, acc ->
+                IO.inspect product
+                cond do
+                  product.tests == "S" and Map.get(produto, "tests") > 0 ->
+                    [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
+                  true ->
+                    [Map.put(produto, "boxes", produto["boxes"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
+                end
+              end)
+
+            list ++ acc
         end
       end)
       |> Enum.sort_by(fn item -> item["group"] end)
