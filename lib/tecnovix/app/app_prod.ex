@@ -269,7 +269,7 @@ defmodule Tecnovix.App.ScreensProd do
                 list =
                   Enum.reduce(Map.get(products_invoiced, produto["BM_YGRPTES"]), [], fn product, acc ->
                     cond do
-                      product.tests == "S" and Map.get(produto, "tests") > 0 ->
+                      Map.get(produto, "tests") > 0 ->
                         [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_tests,0, fn tests, acc -> tests.quantidade + acc end))] ++
                           acc
 
