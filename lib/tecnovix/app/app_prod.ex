@@ -266,29 +266,26 @@ defmodule Tecnovix.App.ScreensProd do
                 [produto] ++ acc
 
               list_tests ->
+                IO.inspect "list_tests"
+                IO.inspect list_tests
                 cond do
                   Map.get(produto, "tests") > 0 ->
                     [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_tests,0, fn tests, acc -> tests.quantidade + acc end))] ++
                       acc
 
-                  true ->
-                    [produto] ++ acc
+                  true -> [produto] ++ acc
                 end
             end
 
           list_boxes ->
-            list =
-              Enum.reduce(Map.get(products_invoiced, produto["BM_YGRPTES"]), [], fn product, acc ->
-                IO.inspect product
-                cond do
-                  product.tests == "S" and Map.get(produto, "tests") > 0 ->
-                    [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
-                  true ->
-                    [Map.put(produto, "boxes", produto["boxes"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
-                end
-              end)
-
-            list ++ acc
+            IO.inspect "list_boxes"
+            IO.inspect list_boxes
+            cond do
+              Map.get(produto, "tests") > 0 ->
+                [Map.put(produto, "tests", produto["tests"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
+              true ->
+                [Map.put(produto, "boxes", produto["boxes"] - Enum.reduce(list_boxes,0, fn boxes, acc -> boxes.quantidade + acc end))] ++ acc
+            end
         end
       end)
       |> Enum.sort_by(fn item -> item["group"] end)
