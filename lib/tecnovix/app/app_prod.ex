@@ -298,11 +298,16 @@ defmodule Tecnovix.App.ScreensProd do
         case Map.has_key?(products_invoiced, String.replace_suffix(produto["BM_YGRPTES"], "", "S")) do
           true ->
 
+            grupo = String.replace_suffix(produto["BM_YGRPTES"], "", "S")
+
+            |> IO.inspect
+
+            IO.inspect products_invoiced[produto[grupo]]
             [
               Map.put(
                 produto,
                 "tests",
-                produto["tests"] - Enum.sum(products_invoiced[produto[String.replace_suffix(produto["BM_YGRPTES"], "", "S")]])
+                produto["tests"] - Enum.sum(products_invoiced[produto[grupo]])
               )
             ] ++ acc
 
