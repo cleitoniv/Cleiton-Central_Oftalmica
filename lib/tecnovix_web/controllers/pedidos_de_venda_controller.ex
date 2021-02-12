@@ -49,7 +49,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     Enum.reduce(items, [], fn item, acc ->
       with true <- item["operation"] == "00",
            true <- item["type"] == "T" do
-        acc ++ [Map.put(item, "type", "C") |> Map.put("operation", "07")]
+        acc ++ [Map.put(item, "type", "C") |> Map.put("operation", "07") |> Map.put("tests", "S")]
       else
         _ -> acc ++ [item]
       end

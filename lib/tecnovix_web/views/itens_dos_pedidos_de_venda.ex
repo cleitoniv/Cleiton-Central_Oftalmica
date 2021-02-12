@@ -36,7 +36,8 @@ defmodule TecnovixWeb.ItensDosPedidosDeVendaView do
       grupo: item.grupo,
       percentage_test: item.percentage_test,
       num_pedido: item.num_pedido,
-      inserted_at: item.inserted_at
+      inserted_at: item.inserted_at,
+      produto_teste: item.produto_teste
     }
   end
 

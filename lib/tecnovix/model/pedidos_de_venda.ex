@@ -466,7 +466,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
       "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10),
-      "status" => 0
+      "status" => 0,
+      "produto_teste" => items["produto_teste"]
     }
   end
 
@@ -528,7 +529,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
       "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10),
-      "status" => 0
+      "status" => 0,
+      "produto_teste" => items["produto_teste"]
     }
   end
 
@@ -567,7 +569,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
       "grupo" => items["grupo"],
       "codigo_item" => items["codigo_item"],
-      "status" => 0
+      "status" => 0,
+      "produto_teste" => items["produto_teste"]
     }
   end
 
@@ -606,7 +609,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "url_image" => "http://portal.centraloftalmica.com/images/#{items["grupo"]}.jpg",
       "grupo" => items["grupo"],
       "codigo_item" => items["codigo_item"],
-      "status" => 0
+      "status" => 0,
+      "produto_teste" => items["produto_teste"]
     }
   end
 
