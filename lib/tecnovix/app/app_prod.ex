@@ -297,6 +297,8 @@ defmodule Tecnovix.App.ScreensProd do
       |> Enum.reduce([], fn produto, acc ->
         case Map.has_key?(products_invoiced, String.replace_suffix(produto["BM_YGRPTES"], "", "S")) do
           true ->
+            IO.inspcet produto
+            IO.inspect produto["BM_YGRPTES"]
             grupo = String.replace_suffix(produto["BM_YGRPTES"], "", "S")
 
             quantidade = Map.get(products_invoiced, grupo)
