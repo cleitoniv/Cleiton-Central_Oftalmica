@@ -14,7 +14,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   action_fallback Tecnovix.Resources.Fallback
 
   def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
-    IO.inspect items
+    IO.inspect(items)
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
     stub = Screens.stub()

@@ -259,23 +259,41 @@ defmodule Tecnovix.App.ScreensProd do
 
     produtos =
       Enum.reduce(produtos, [], fn produto, acc ->
-        case Map.get(products_invoiced, produto["group"]) do
-          nil -> [produto] ++ acc
+        case Map.get(String.replace_suffix(products_invoiced, "N", ""), produto["group"]) do
+          nil ->
+            case Map.get(String.replace_suffix(products_invoiced, "S", ""), produto["group"]) do
+              nil ->
+                [produto] ++ acc
+
+              quantidades_boxes ->
+                [
+                  Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))
+                  |> Map.put("tests", produto["tests"] - Enum.sum(quantidades_boxes))
+                ] ++ acc
+            end
 
           quantidades_boxes ->
-
             [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
         end
       end)
       |> Enum.reduce([], fn produto, acc ->
         case Map.get(products_invoiced, produto["BM_YGRPTES"]) do
-          nil -> [produto] ++ acc
+          nil ->
+            [produto] ++ acc
 
           _ ->
             case Map.has_key?(products_invoiced, produto["BM_YGRPTES"]) and produto["tests"] > 0 do
               true ->
-                [Map.put(produto, "tests", produto["tests"] - Enum.sum(products_invoiced[produto["BM_YGRPTES"]]))] ++ acc
-              false -> [produto] ++ acc
+                [
+                  Map.put(
+                    produto,
+                    "tests",
+                    produto["tests"] - Enum.sum(products_invoiced[produto["BM_YGRPTES"]])
+                  )
+                ] ++ acc
+
+              false ->
+                [produto] ++ acc
             end
         end
       end)
@@ -903,7 +921,7 @@ defmodule Tecnovix.App.ScreensProd do
               |> Map.put(:operation, codigo_item.operation)
               |> Map.put(:tests, codigo_item.tests)
               |> Map.put(:produto_teste, codigo_item.produto_teste)
-              |> IO.inspect
+              |> IO.inspect()
 
             Map.merge(map, p_olho)
           end)
@@ -1062,14 +1080,17 @@ defmodule Tecnovix.App.ScreensProd do
                       quantidade: item.quantidade,
                       valor_total:
                         case item.operation do
-                          "13" -> item.valor_credito_finan * item.quantidade
+                          "13" ->
+                            item.valor_credito_finan * item.quantidade
+
                           "07" ->
                             case item.tipo_venda == "C" and item.tests == "S" do
                               true -> 0
                               false -> item.valor_credito_prod * item.quantidade
                             end
 
-                          _ -> item.prc_unitario * item.quantidade
+                          _ ->
+                            item.prc_unitario * item.quantidade
                         end,
                       olho: item.olho,
                       adicao: item.adicao,
