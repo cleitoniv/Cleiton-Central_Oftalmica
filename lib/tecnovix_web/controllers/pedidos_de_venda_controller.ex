@@ -14,7 +14,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   action_fallback Tecnovix.Resources.Fallback
 
   def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
-    IO.inspect(items)
+    IO.inspect items
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
     stub = Screens.stub()
@@ -46,11 +46,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   defp change_operation_and_tipo_venda(items) do
-    IO.inspect items
     Enum.reduce(items, [], fn item, acc ->
       with true <- item["operation"] == "00",
            true <- item["type"] == "T" do
-        acc ++ [Map.put(item, "type", "C") |> Map.put("operation", "07") |> Map.put("tests", "S") |> IO.inspect]
+        acc ++ [Map.put(item, "type", "C") |> Map.put("operation", "07")]
       else
         _ -> acc ++ [item]
       end
