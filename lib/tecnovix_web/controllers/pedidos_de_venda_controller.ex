@@ -109,6 +109,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       }) do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
+    items = change_operation_and_tipo_venda(items)
+
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
@@ -152,6 +154,8 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       )
       when is_nil(ccv) == false and is_nil(id_cartao) == false do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
+
+    items = change_operation_and_tipo_venda(items)
 
     {:ok, cliente} =
       case conn.private.auth do
