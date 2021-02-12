@@ -1031,7 +1031,6 @@ defmodule Tecnovix.App.ScreensProd do
                   case map.operation do
                     "07" -> 0 + acc
                     "13" -> 0 + acc
-                    "00" -> 0 + acc
                     _ -> map.virtotal + acc
                   end
                 end),
@@ -1040,7 +1039,6 @@ defmodule Tecnovix.App.ScreensProd do
                   case map.operation do
                     "07" -> 0 + acc
                     "13" -> 0 + acc
-                    "00" -> 0 + acc
                     _ -> map.virtotal + acc
                   end
                 end) + pedido.taxa_entrega + pedido.taxa_wirecard,
@@ -1065,8 +1063,12 @@ defmodule Tecnovix.App.ScreensProd do
                       valor_total:
                         case item.operation do
                           "13" -> item.valor_credito_finan * item.quantidade
-                          "07" -> item.valor_credito_prod * item.quantidade
-                          "00" -> item.valor_test * item.quantidade
+                          "07" ->
+                            case item.tipo_venda == "C" and item.tests == "S" do
+                              true -> 0
+                              false -> item.valor_credito_prod * item.quantidade
+                            end
+
                           _ -> item.prc_unitario * item.quantidade
                         end,
                       olho: item.olho,
