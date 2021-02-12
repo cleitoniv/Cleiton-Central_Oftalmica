@@ -259,6 +259,7 @@ defmodule Tecnovix.App.ScreensProd do
 
     produtos =
       Enum.reduce(produtos, [], fn produto, acc ->
+        IO.inspect products_invoiced
         case Map.get(String.replace_suffix(products_invoiced, "N", ""), produto["group"]) do
           nil ->
             case Map.get(String.replace_suffix(products_invoiced, "S", ""), produto["group"]) do
