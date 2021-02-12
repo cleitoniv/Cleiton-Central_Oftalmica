@@ -34,7 +34,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             true ->
               map =
                 Map.new()
-                |> Map.put(:grupo, items.grupo)
+                |> Map.put(:grupo, items.grupo <> items.tests)
                 |> Map.put(:quantidade, items.quantidade)
 
               [map] ++ acc

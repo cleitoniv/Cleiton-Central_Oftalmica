@@ -259,22 +259,38 @@ defmodule Tecnovix.App.ScreensProd do
 
     produtos =
       Enum.reduce(produtos, [], fn produto, acc ->
-        case Map.get(products_invoiced, produto["group"]) do
-          nil ->
-            case Map.get(products_invoiced, produto["group"]) do
-              nil ->
-                [produto] ++ acc
+        case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "S")) do
+          true ->
+            quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "S"))
 
-              quantidades_boxes ->
-                [
-                  Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))
-                  |> Map.put("tests", produto["tests"] - Enum.sum(quantidades_boxes))
-                ] ++ acc
+            [
+              Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))
+              |> Map.put("tests", produto["tests"] - Enum.sum(quantidades_boxes))
+            ] ++ acc
+
+          false ->
+            case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "N")) do
+              true ->
+                quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "N"))
+
+                [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
+
+              false -> [produto] ++ acc
             end
-
-          quantidades_boxes ->
-            [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
         end
+
+        # case Map.get(products_invoiced, produto["group"]) do
+        #   nil ->
+        #     case Map.get(products_invoiced, produto["group"]) do
+        #       nil -> [produto] ++ acc
+
+        #       quantidades_boxes ->
+        #         [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
+        #     end
+
+        #   quantidades_boxes ->
+        #     [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
+        # end
       end)
       |> Enum.reduce([], fn produto, acc ->
         case Map.get(products_invoiced, produto["BM_YGRPTES"]) do
