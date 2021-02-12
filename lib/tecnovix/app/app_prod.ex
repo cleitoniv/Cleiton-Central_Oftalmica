@@ -259,7 +259,6 @@ defmodule Tecnovix.App.ScreensProd do
 
     produtos =
       Enum.reduce(produtos, [], fn produto, acc ->
-        IO.inspect products_invoiced
         case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "S")) do
           true ->
             quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "S"))
@@ -269,15 +268,7 @@ defmodule Tecnovix.App.ScreensProd do
               |> Map.put("tests", produto["tests"] - Enum.sum(quantidades_boxes))
             ] ++ acc
 
-          false ->
-            case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "N")) do
-              true ->
-                quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "N"))
-
-                [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
-
-              false -> [produto] ++ acc
-            end
+          false -> [produto] ++ acc
         end
 
         # case Map.get(products_invoiced, produto["group"]) do
@@ -292,6 +283,16 @@ defmodule Tecnovix.App.ScreensProd do
         #   quantidades_boxes ->
         #     [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
         # end
+      end)
+      |> Enum.reduce([], fn produto, acc ->
+        case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "N")) do
+          true ->
+            quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "N"))
+
+            [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
+
+          false -> [produto] ++ acc
+        end
       end)
       |> Enum.reduce([], fn produto, acc ->
         case Map.has_key?(products_invoiced, String.replace_suffix(produto["BM_YGRPTES"], "", "S")) do
