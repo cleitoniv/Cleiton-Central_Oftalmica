@@ -294,25 +294,40 @@ defmodule Tecnovix.App.ScreensProd do
         # end
       end)
       |> Enum.reduce([], fn produto, acc ->
-        case Map.get(products_invoiced, produto["BM_YGRPTES"]) do
-          nil ->
-            [produto] ++ acc
+        case Map.has_key?(products_invoiced, String.replace_suffix(produto["BM_YGRPTES"], "", "S")) do
+          true ->
 
-          _ ->
-            case Map.has_key?(products_invoiced, produto["BM_YGRPTES"]) and produto["tests"] > 0 do
-              true ->
-                [
-                  Map.put(
-                    produto,
-                    "tests",
-                    produto["tests"] - Enum.sum(products_invoiced[produto["BM_YGRPTES"]])
-                  )
-                ] ++ acc
+            [
+              Map.put(
+                produto,
+                "tests",
+                produto["tests"] - Enum.sum(products_invoiced[produto[String.replace_suffix(produto["BM_YGRPTES"], "", "S")]])
+              )
+            ] ++ acc
 
-              false ->
-                [produto] ++ acc
-            end
+          false -> [produto] ++ acc
         end
+
+
+        # case Map.get(products_invoiced, produto["BM_YGRPTES"]) do
+        #   nil ->
+        #     [produto] ++ acc
+
+        #   _ ->
+        #     case Map.has_key?(products_invoiced, produto["BM_YGRPTES"]) and produto["tests"] > 0 do
+        #       true ->
+        #         [
+        #           Map.put(
+        #             produto,
+        #             "tests",
+        #             produto["tests"] - Enum.sum(products_invoiced[produto["BM_YGRPTES"]])
+        #           )
+        #         ] ++ acc
+
+        #       false ->
+        #         [produto] ++ acc
+        #     end
+        # end
       end)
       |> Enum.sort_by(fn item -> item["group"] end)
 
