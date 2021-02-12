@@ -301,7 +301,7 @@ defmodule Tecnovix.App.ScreensProd do
             value -> value
           end
 
-        case Map.has_key?(products_invoiced, String.replace_suffix(valor, "", "S")) do
+        case Map.has_key?(products_invoiced, String.replace_suffix(valor, "", "S")) and produto["tests"] > 0 do
           true ->
             grupo = String.replace_suffix(produto["BM_YGRPTES"], "", "S")
 
