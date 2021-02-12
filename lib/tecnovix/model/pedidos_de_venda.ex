@@ -298,7 +298,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     case teste do
       "Sim" -> "S"
       "Não" -> "N"
-      _ -> "N"
+      _ -> teste
     end
   end
 
@@ -425,6 +425,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def olho_direito(items, map) do
+    IO.inspect items
     olho =
       cond do
         map["olho_direito"] != nil -> "olho_direito"
@@ -467,7 +468,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10),
       "status" => 0,
-      "produto_teste" => items["produto_teste"]
+      "produto_teste" => items["produtoTeste"]
     }
   end
 
@@ -530,7 +531,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "grupo" => items["grupo"],
       "codigo_item" => String.slice(Ecto.UUID.autogenerate(), 0..10),
       "status" => 0,
-      "produto_teste" => items["produto_teste"]
+      "produto_teste" => items["produtoTeste"]
     }
   end
 
@@ -570,7 +571,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "grupo" => items["grupo"],
       "codigo_item" => items["codigo_item"],
       "status" => 0,
-      "produto_teste" => items["produto_teste"]
+      "produto_teste" => items["produtoTeste"]
     }
   end
 
@@ -610,7 +611,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       "grupo" => items["grupo"],
       "codigo_item" => items["codigo_item"],
       "status" => 0,
-      "produto_teste" => items["produto_teste"]
+      "produto_teste" => items["produtoTeste"]
     }
   end
 
