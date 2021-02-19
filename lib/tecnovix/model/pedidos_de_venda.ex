@@ -22,27 +22,31 @@ defmodule Tecnovix.PedidosDeVendaModel do
     {:ok, taxa}
   end
 
+  @spec handle_items_with_test(nil | maybe_improper_list | map) :: nil | maybe_improper_list | map
   def handle_items_with_test(items) do
-    case items["operation"] == "07" or items["operation"] == "01" do
-      true ->
-        item =
-          Enum.reduce(items["items"], [], fn item, acc ->
-            case item["tests"] == "S" do
-              true ->
-                item_teste =
-                  Map.put(item, "produto", item["produto_teste"])
-                  |> Map.put("grupo", item["grupo_teste"])
+    Enum.map(items, fn items ->
+      case items["operation"] == "07" or items["operation"] == "01" do
+        true ->
+          item =
+            Enum.reduce(items["items"], [], fn item, acc ->
+              case item["tests"] == "S" do
+                true ->
+                  item_teste =
+                    Map.put(item, "produto", item["produto_teste"])
+                    |> Map.put("grupo", item["grupo_teste"])
 
-                acc ++ [item |> Map.put("tests", "N")] ++ [item_teste]
+                  acc ++ [item |> Map.put("tests", "N")] ++ [item_teste]
 
-              false -> acc ++ item
-            end
-          end)
+                false -> acc ++ item
+              end
+            end)
 
-        Map.put(items, "items", item)
+          Map.put(items, "items", item)
 
-      false -> items
-    end
+        false -> items
+      end
+    end)
+    |> IO.inspect
   end
 
   def order_product_invoiced(cliente_id) do
