@@ -29,17 +29,18 @@ defmodule Tecnovix.PedidosDeVendaModel do
         true ->
           item =
             Enum.reduce(items["items"], [], fn item, acc ->
-              case item["tests"] == "S" do
+              case item["tests"] == "Sim" do
                 true ->
                   item_teste =
                     Map.put(item, "produto", item["produto_teste"])
                     |> Map.put("grupo", item["grupo_teste"])
 
-                  acc ++ [item |> Map.put("tests", "N")] ++ [item_teste]
+                  acc ++ [item |> Map.put("tests", "Não")] ++ [item_teste]
 
                 false -> acc ++ item
               end
             end)
+            |> IO.inspect
 
           Map.put(items, "items", item)
 
