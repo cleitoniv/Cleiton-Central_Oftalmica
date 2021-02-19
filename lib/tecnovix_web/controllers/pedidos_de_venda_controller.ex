@@ -14,7 +14,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   action_fallback Tecnovix.Resources.Fallback
 
   def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
-    IO.inspect(items)
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
     stub = Screens.stub()
@@ -155,8 +154,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       when is_nil(ccv) == false and is_nil(id_cartao) == false do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
-    items = change_operation_and_tipo_venda(items)
-
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
@@ -177,7 +174,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
         taxa_entrega -> taxa_entrega
       end
 
-    with {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
+    with  items_handled <- PedidosDeVendaModel.handle_items_with_test(items),
+          items <- change_operation_and_tipo_venda(items_handled),
+         {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <-
            PedidosDeVendaModel.order(items_order, cliente, taxa_entrega, installment),
          {:ok, _payment} <-

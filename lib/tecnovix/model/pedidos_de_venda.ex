@@ -13,12 +13,36 @@ defmodule Tecnovix.PedidosDeVendaModel do
   alias Tecnovix.CartaoCreditoClienteSchema, as: CartaoSchema
   import Ecto.Query
 
+  @spec taxa_entrega :: {:ok, %{valor: 10}}
   def taxa_entrega() do
     taxa = %{
       valor: 10
     }
 
     {:ok, taxa}
+  end
+
+  def handle_items_with_test(items) do
+    case items["operation"] == "07" or items["operation"] == "01" do
+      true ->
+        item =
+          Enum.reduce(items["items"], [], fn item, acc ->
+            case item["tests"] == "S" do
+              true ->
+                item_teste =
+                  Map.put(item, "produto", item["produto_teste"])
+                  |> Map.put("grupo", item["grupo_teste"])
+
+                acc ++ [item |> Map.put("tests", "N")] ++ [item_teste]
+
+              false -> acc ++ item
+            end
+          end)
+
+        Map.put(items, "items", item)
+
+      false -> items
+    end
   end
 
   def order_product_invoiced(cliente_id) do
