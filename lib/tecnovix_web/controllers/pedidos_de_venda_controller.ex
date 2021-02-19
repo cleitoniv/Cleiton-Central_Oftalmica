@@ -25,7 +25,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with %{money: money} <- stub.get_credits(cliente),
+    with items_handled <- PedidosDeVendaModel.handle_items_with_test(items),
+        items <- change_operation_and_tipo_venda(items_handled),
+        %{money: money} <- stub.get_credits(cliente),
          {:ok, true} <- PedidosDeVendaModel.confirm_buy(money, items),
          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
          {:ok, _logs} <-
@@ -124,7 +126,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, pedido} <-
+    with items_handled <- PedidosDeVendaModel.handle_items_with_test(items),
+         items <- change_operation_and_tipo_venda(items_handled),
+         {:ok, pedido} <-
            PedidosDeVendaModel.create_pedido(items, cliente, installment, taxa_entrega),
          {:ok, _logs} <-
            LogsClienteModel.create(
