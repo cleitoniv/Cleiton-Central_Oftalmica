@@ -40,7 +40,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
                 false -> acc ++ item
               end
             end)
-            |> IO.inspect
 
           Map.put(items, "items", item)
 
@@ -796,6 +795,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             case item["operation"] do
               "01" ->
                 Enum.map(item["items"], fn order ->
+                  IO.inspect order
                   %{
                     "product" => order["produto"],
                     "category" => "OTHER_CATEGORIES",

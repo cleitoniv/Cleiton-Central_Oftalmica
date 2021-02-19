@@ -173,7 +173,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
         nil -> 0
         taxa_entrega -> taxa_entrega
       end
-
+    IO.inspect items
     with  items_handled <- PedidosDeVendaModel.handle_items_with_test(items),
           items <- change_operation_and_tipo_venda(items_handled),
          {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
