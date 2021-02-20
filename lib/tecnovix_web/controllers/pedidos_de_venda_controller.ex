@@ -18,16 +18,13 @@ defmodule TecnovixWeb.PedidosDeVendaController do
     {:ok, usuario} = conn.private.auth_user
     stub = Screens.stub()
 
-    items = change_operation_and_tipo_venda(items)
-
     ip =
       conn.remote_ip
       |> Tuple.to_list()
       |> Enum.join()
 
-    with items_handled <- PedidosDeVendaModel.handle_items_with_test(items),
-        items <- change_operation_and_tipo_venda(items_handled),
-        %{money: money} <- stub.get_credits(cliente),
+    with items <- change_operation_and_tipo_venda(items),
+         %{money: money} <- stub.get_credits(cliente),
          {:ok, true} <- PedidosDeVendaModel.confirm_buy(money, items),
          {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
          {:ok, _logs} <-
@@ -110,8 +107,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       }) do
     {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
-    items = change_operation_and_tipo_venda(items)
-
     {:ok, cliente} =
       case conn.private.auth do
         {:ok, %ClientesSchema{} = cliente} ->
@@ -126,8 +121,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with items_handled <- PedidosDeVendaModel.handle_items_with_test(items),
-         items <- change_operation_and_tipo_venda(items_handled),
+    with items <- change_operation_and_tipo_venda(items),
          {:ok, pedido} <-
            PedidosDeVendaModel.create_pedido(items, cliente, installment, taxa_entrega),
          {:ok, _logs} <-
@@ -177,9 +171,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
         nil -> 0
         taxa_entrega -> taxa_entrega
       end
-    IO.inspect items
-    with  items_handled <- PedidosDeVendaModel.handle_items_with_test(items),
-          items <- change_operation_and_tipo_venda(items_handled),
+
+
+    with items <- change_operation_and_tipo_venda(items),
          {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <-
            PedidosDeVendaModel.order(items_order, cliente, taxa_entrega, installment),
