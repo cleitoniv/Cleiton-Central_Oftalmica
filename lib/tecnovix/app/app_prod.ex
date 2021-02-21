@@ -186,7 +186,8 @@ defmodule Tecnovix.App.ScreensProd do
 
   def value_cents_1(key, acc) do
     case key do
-      "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
+      "boxes" -> Map.put(acc, key, 20)
+      # "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
       "tests" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
       _ -> Map.put(acc, key, (String.to_float(acc[key]) * 100) |> ceil())
     end
@@ -257,48 +258,48 @@ defmodule Tecnovix.App.ScreensProd do
         end)
       end)
 
-    produtos =
-      Enum.reduce(produtos, [], fn produto, acc ->
-        case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "S")) do
-          true ->
-            quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "S"))
+    # produtos =
+    #   Enum.reduce(produtos, [], fn produto, acc ->
+    #     case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "S")) do
+    #       true ->
+    #         quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "S"))
 
-            [
-              Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))
-              |> Map.put("tests", produto["tests"] - Enum.sum(quantidades_boxes))
-            ] ++ acc
+    #         [
+    #           Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))
+    #           |> Map.put("tests", produto["tests"] - Enum.sum(quantidades_boxes))
+    #         ] ++ acc
 
-          false -> [produto] ++ acc
-        end
-      end)
-      |> Enum.reduce([], fn produto, acc ->
-        case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "N")) do
-          true ->
-            quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "N"))
+    #       false -> [produto] ++ acc
+    #     end
+    #   end)
+    #   |> Enum.reduce([], fn produto, acc ->
+    #     case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "N")) do
+    #       true ->
+    #         quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "N"))
 
-            [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
+    #         [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
 
-          false -> [produto] ++ acc
-        end
-      end)
-      |> Enum.reduce([], fn produto, acc ->
-        valor =
-          case produto["BM_YGRPTES"] do
-            nil -> ""
-            value -> value
-          end
+    #       false -> [produto] ++ acc
+    #     end
+    #   end)
+    #   |> Enum.reduce([], fn produto, acc ->
+    #     valor =
+    #       case produto["BM_YGRPTES"] do
+    #         nil -> ""
+    #         value -> value
+    #       end
 
-        case Map.has_key?(products_invoiced, String.replace_suffix(valor, "", "S")) and produto["tests"] > 0 do
-          true ->
-            grupo = String.replace_suffix(produto["BM_YGRPTES"], "", "S")
+    #     case Map.has_key?(products_invoiced, String.replace_suffix(valor, "", "S")) and produto["tests"] > 0 do
+    #       true ->
+    #         grupo = String.replace_suffix(produto["BM_YGRPTES"], "", "S")
 
-            quantidade = Map.get(products_invoiced, grupo)
-            [Map.put(produto,"tests",produto["tests"] - Enum.sum(quantidade))] ++ acc
+    #         quantidade = Map.get(products_invoiced, grupo)
+    #         [Map.put(produto,"tests",produto["tests"] - Enum.sum(quantidade))] ++ acc
 
-          false -> [produto] ++ acc
-        end
-      end)
-      |> Enum.sort_by(fn item -> item["group"] end)
+    #       false -> [produto] ++ acc
+    #     end
+    #   end)
+    #   |> Enum.sort_by(fn item -> item["group"] end)
 
     filters = organize_filters_grid(produtos)
 
