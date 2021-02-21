@@ -195,7 +195,8 @@ defmodule Tecnovix.App.ScreensProd do
 
   def value_cents_2(key, acc) do
     case key do
-      "boxes" -> Map.put(acc, key, String.to_integer(acc[key]))
+      "boxes" -> Map.put(acc, key, 20)
+    #  "boxes" -> Map.put(acc, key, String.to_ integer(acc[key]))
       "tests" -> Map.put(acc, key, String.to_integer(acc[key]))
       _ -> Map.put(acc, key, (String.to_float(acc[key]) * 100) |> ceil())
     end
