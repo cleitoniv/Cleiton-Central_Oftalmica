@@ -20,7 +20,6 @@ defmodule Tecnovix.App.ScreensProd do
 
   def get_graus(grupo) do
     case DescricaoModel.get_graus(grupo) do
-      nil -> {:error, :not_found}
       {_list, grupo} -> {:ok, grupo}
       _ -> {:error, :not_found}
     end
