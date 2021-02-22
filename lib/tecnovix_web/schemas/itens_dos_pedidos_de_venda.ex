@@ -37,7 +37,6 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
     field :grupo, :string
     field :percentage_test, :integer, default: 0
     field :produto_teste, :string
-    field :produto_com_teste, :string, default: "N"
     belongs_to :pedido_de_venda, Tecnovix.PedidosDeVendaSchema
 
     timestamps()
@@ -80,8 +79,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :url_image,
       :valor_test,
       :percentage_test,
-      :produto_teste,
-      :produto_com_teste
+      :produto_teste
     ])
     |> validate_required([
       :pedido_de_venda_id
@@ -123,8 +121,7 @@ defmodule Tecnovix.ItensDosPedidosDeVendaSchema do
       :url_image,
       :valor_test,
       :percentage_test,
-      :produto_teste,
-      :produto_com_teste
+      :produto_teste
     ])
   end
 end

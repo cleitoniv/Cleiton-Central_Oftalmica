@@ -920,7 +920,6 @@ defmodule Tecnovix.App.ScreensProd do
               |> Map.put(:operation, codigo_item.operation)
               |> Map.put(:tests, codigo_item.tests)
               |> Map.put(:produto_teste, codigo_item.produto_teste)
-              |> Map.put(:produto_com_teste, codigo_item.produto_com_teste)
               |> IO.inspect()
 
             Map.merge(map, p_olho)
@@ -1067,7 +1066,6 @@ defmodule Tecnovix.App.ScreensProd do
                   pedido.items,
                   fn item ->
                     %{
-                      produto_com_teste: item.produto_com_teste,
                       produto_teste: item.produto_teste,
                       type: item.tipo_venda,
                       operation: item.operation,
@@ -1137,7 +1135,6 @@ defmodule Tecnovix.App.ScreensProd do
                   pedido.items,
                   fn item ->
                     %{
-                      produto_com_teste: item.produto_com_teste,
                       produto_teste: item.produto_teste,
                       type: item.tipo_venda,
                       operation: item.operation,
