@@ -229,7 +229,6 @@ defmodule Tecnovix.App.ScreensProd do
           )
         end)
       end)
-      |> IO.inspect
 
     list = ["boxes", "tests", "value", "value_produto", "value_finan"]
 
@@ -241,7 +240,11 @@ defmodule Tecnovix.App.ScreensProd do
             "image_url",
             "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg"
           )
-          |> Map.put("image_url_test", "http://portal.centraloftalmica.com/images/#{map["BM_YGRPTES"]}.jpg")
+        map =
+          case map["BM_YGRPTES"] do
+            nil -> map
+            _ -> Map.put(map, "image_url_test", "http://portal.centraloftalmica.com/images/#{map["BM_YGRPTES"]}.jpg")
+          end
 
         map =
           case map["type"] do
@@ -257,6 +260,7 @@ defmodule Tecnovix.App.ScreensProd do
           end
         end)
       end)
+      |> IO.inspect
 
     produtos =
       Enum.reduce(produtos, [], fn produto, acc ->
