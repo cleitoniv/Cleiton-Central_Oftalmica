@@ -229,6 +229,7 @@ defmodule Tecnovix.App.ScreensProd do
           )
         end)
       end)
+      |> IO.inspect
 
     list = ["boxes", "tests", "value", "value_produto", "value_finan"]
 
@@ -240,6 +241,7 @@ defmodule Tecnovix.App.ScreensProd do
             "image_url",
             "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg"
           )
+          |> Map.put("image_url_test", "http://portal.centraloftalmica.com/images/#{map["BM_YGRPTES"]}.jpg")
 
         map =
           case map["type"] do
