@@ -301,7 +301,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def credito_items(items, map) do
+    IO.inspect "oi"
+    IO.inspect items
+    IO.inspect "oi"
     %{
+      "percentage_test" => items["percentage_test"],
       "tipo_venda" => "C",
       "operation" => map["operation"],
       "pedido_de_venda_id" => 1,

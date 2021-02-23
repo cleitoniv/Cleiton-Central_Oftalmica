@@ -40,8 +40,6 @@ defmodule TecnovixWeb.ContratoDeParceriaController do
       }) do
     {:ok, cliente} = verify_auth(conn.private.auth)
 
-    IO.inspect items
-
     with {:ok, items_order} <- ContratoDeParceriaModel.items_order(items),
          {:ok, order} <- ContratoDeParceriaModel.order(cliente, items_order),
          {:ok, _payment} <- ContratoDeParceriaModel.payment(id_cartao, order, ccv, installment),

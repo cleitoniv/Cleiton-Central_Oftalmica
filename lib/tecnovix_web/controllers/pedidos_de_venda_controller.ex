@@ -161,8 +161,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
           PedidosDeVendaModel.get_cliente_by_id(usuario.cliente_id)
       end
 
-      IO.inspect items
-
     ip =
       conn.remote_ip
       |> Tuple.to_list()
