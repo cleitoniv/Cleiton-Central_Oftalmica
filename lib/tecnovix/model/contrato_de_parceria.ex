@@ -147,6 +147,7 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           items["items"],
           fn item ->
             %{
+              "percentage_test" => item["percentage_test"],
               "contrato_de_parceria_id" => 1,
               "descricao_generica_do_produto_id" => item["descricao_generica_do_produto_id"],
               "filial" => item["filial"],
@@ -183,7 +184,6 @@ defmodule Tecnovix.ContratoDeParceriaModel do
 
   def get_package(resp) do
     productPackages = Jason.decode!(resp.body)
-    |> IO.inspect
 
     packages =
       Enum.flat_map(productPackages["resources"], fn resource ->
@@ -201,7 +201,6 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           Map.put(productPackages2, :total, productPackages2.price * productPackages2.quantity)
         end)
       end)
-      |> IO.inspect
 
     {:ok, packages}
   end
