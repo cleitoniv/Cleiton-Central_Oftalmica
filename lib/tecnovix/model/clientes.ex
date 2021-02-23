@@ -8,7 +8,7 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Query
 
   @ticket_key Application.fetch_env!(:tecnovix, :helpdesk_key)
-
+  @proxy_url "https://276q4s75ug9b6s:prp1jniecgiys78qoshh1c3l0oy@us-east-shield-02.quotaguard.com:9294"
   def get_period() do
     period = ["Manhã - Tarde", "Manhã", "Tarde"]
 
@@ -141,10 +141,17 @@ defmodule Tecnovix.ClientesModel do
 
       url = "https://162.214.116.118/suporte/api/tickets.json"
 
-      HTTPoison.post(url, Jason.encode!(params), header, ssl: [verify: :verify_none]) |> IO.inspect
+      HTTPoison.post(url, Jason.encode!(params), header, options) |> IO.inspect
     end)
   end
 
+  defp options do
+    [{:proxy, @proxy_url},
+     {:proxy_auth, {"276q4s75ug9b6s", "prp1jniecgiys78qoshh1c3l0oy"}},
+     {:ssl, [verify: :verify_none]}]
+  end
+
+  @spec insert_or_update(any) :: any
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(params["data"], fn cliente ->
