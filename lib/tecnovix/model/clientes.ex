@@ -129,18 +129,20 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create_ticket(cliente, message) do
-    params =
-      Map.new()
-      |> Map.put(:name, cliente.nome)
-      |> Map.put(:email, cliente.email)
-      |> Map.put(:subject, "Testing API")
-      |> Map.put(:message, message)
+    Enum.map(@ticket_key, fn key ->
+      params =
+        Map.new()
+        |> Map.put(:name, cliente.nome)
+        |> Map.put(:email, cliente.email)
+        |> Map.put(:subject, "Testing API")
+        |> Map.put(:message, message)
 
-    header = [{"X-API-Key", @ticket_key}]
+      header = [{"X-API-Key", key}]
 
-    url = "https://162.214.116.118/suporte/api/tickets.json"
+      url = "https://centraloftalmica.com"
 
-    HTTPoison.post(url, Jason.encode!(params), header)
+      HTTPoison.post(url, Jason.encode!(params), header) |> IO.inspect
+    end)
   end
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do

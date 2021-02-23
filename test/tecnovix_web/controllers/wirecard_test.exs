@@ -29,6 +29,7 @@ defmodule Tecnovix.Test.Wirecard do
       |> get("/api/cliente/get_pacote", %{"grupo" => "CRFI"})
       |> json_response(200)
 
+
     {:ok, items_json} = TestHelp.items("items.json")
 
     items =

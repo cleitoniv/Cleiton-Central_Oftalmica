@@ -201,13 +201,19 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           Map.put(productPackages2, :total, productPackages2.price * productPackages2.quantity)
         end)
       end)
+      |> IO.inspect
 
     {:ok, packages}
   end
 
   def transform_value(string) do
-    String.to_float(string)
-    |> Float.ceil(0)
-    |> Kernel.round()
+    case string do
+      "0" ->
+          String.to_integer(string)
+      _ ->
+        String.to_float(string)
+        |> Float.ceil(0)
+        |> Kernel.round()
+    end
   end
 end
