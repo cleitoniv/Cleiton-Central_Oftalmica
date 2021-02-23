@@ -139,9 +139,9 @@ defmodule Tecnovix.ClientesModel do
 
       header = [{"X-API-Key", key}]
 
-      url = "https://centraloftalmica.com"
+      url = "https://162.214.116.118/suporte/api/tickets.json"
 
-      HTTPoison.post(url, Jason.encode!(params), header) |> IO.inspect
+      HTTPoison.post(url, Jason.encode!(params), header, ssl: [verify: :verify_none]) |> IO.inspect
     end)
   end
 
