@@ -1066,7 +1066,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Repo.all()
       |> Enum.flat_map(fn pedido ->
         Enum.filter(pedido.items, fn filter ->
-          filter.tipo_venda == "C"
+          filter.tipo_venda == "C" and filter.tests == "N"
         end)
       end)
 
