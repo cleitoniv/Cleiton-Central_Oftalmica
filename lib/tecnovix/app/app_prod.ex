@@ -1341,7 +1341,10 @@ defmodule Tecnovix.App.ScreensProd do
                 quantidade:
                   case pedido.operation do
                     "06" -> pedido.quantidade
-                    "07" -> pedido.quantidade * -1
+                    "07" -> case pedido.tests do
+                      "S" -> 0
+                      "N" -> pedido.quantidade * -1
+                    end
                     _ -> 0
                   end
               }
