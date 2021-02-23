@@ -183,6 +183,7 @@ defmodule Tecnovix.ContratoDeParceriaModel do
 
   def get_package(resp) do
     productPackages = Jason.decode!(resp.body)
+    |> IO.inspect
 
     packages =
       Enum.flat_map(productPackages["resources"], fn resource ->
@@ -190,6 +191,7 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           productPackages2 =
             Enum.reduce(model["fields"], %{}, fn package, acc ->
               case package["id"] do
+                "DA1_YPRCTE" -> Map.put(acc, :percentage_test, transform_value((package["value"])))
                 "DA1_PRCVEN" -> Map.put(acc, :price, transform_value(package["value"]) * 100)
                 "DA1_QTDLOT" -> Map.put(acc, :quantity, transform_value(package["value"]))
                 _ -> acc
@@ -199,6 +201,7 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           Map.put(productPackages2, :total, productPackages2.price * productPackages2.quantity)
         end)
       end)
+      |> IO.inspect
 
     {:ok, packages}
   end
