@@ -130,14 +130,12 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create_ticket(cliente, message) do
-    {:ok, res} = HTTPoison.get("ip.quotaguard.com", proxy: [@proxy_url_http, @proxy_url_https])
-    IO.inspect Jason.decode!(res.body)
+    System.cmd("curl", ~w[-L ip.quotaguard.com -x #{@proxy_url_https}])
+    |> IO.inspect
 
-    {:ok, res} = HTTPoison.get("ip.quotaguard.com")
-    IO.inspect Jason.decode!(res.body)
+    HTTPoison.get("ip.quotaguard.com", [], options())
+    |> IO.inspect
 
-    # {:ok, res} = HTTPoison.get("ip.quotaguard.com", options())
-    # IO.inspect Jason.decode!(res.body)
     # Enum.map(@ticket_key, fn key ->
     #   params =
     #     Map.new()
@@ -150,13 +148,12 @@ defmodule Tecnovix.ClientesModel do
 
     #   url = "https://162.214.116.118/suporte/api/tickets.json"
 
-    #   HTTPoison.post(url, Jason.encode!(params), header, options()) |> IO.inspect
+    #   HTTPoison.post(url, Jason.encode!(params), header, proxy: @proxy_url_https) |> IO.inspect
     # end)
   end
 
   defp options do
-    [{:proxy, [@proxy_url_http, @proxy_url_https]},
-     {:proxy_auth, {"276q4s75ug9b6s", "prp1jniecgiys78qoshh1c3l0oy"}}]
+    [ssl: [verify: :verify_none], follow_redirect: false, hackney: [pool: false, insecure: true], proxy: @proxy_url_https]
   end
 
   @spec insert_or_update(any) :: any
