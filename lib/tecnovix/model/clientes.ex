@@ -8,7 +8,8 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Query
 
   @ticket_key Application.fetch_env!(:tecnovix, :helpdesk_key)
-  @proxy_url "https://276q4s75ug9b6s:prp1jniecgiys78qoshh1c3l0oy@us-east-shield-02.quotaguard.com:9294"
+  @proxy_url_https "https://276q4s75ug9b6s:prp1jniecgiys78qoshh1c3l0oy@us-east-shield-02.quotaguard.com:9294"
+  @proxy_url_http "http://276q4s75ug9b6s:prp1jniecgiys78qoshh1c3l0oy@us-east-shield-02.quotaguard.com:9294"
   def get_period() do
     period = ["Manhã - Tarde", "Manhã", "Tarde"]
 
@@ -129,7 +130,14 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create_ticket(cliente, message) do
-    HTTPoison.get("http://ip.jsontest.com", proxy: @proxy_url) |> IO.inspect
+    {:ok, res} = HTTPoison.get("ip.quotaguard.com", proxy: [@proxy_url_http, @proxy_url_https])
+    IO.inspect Jason.decode!(res.body)
+
+    {:ok, res} = HTTPoison.get("ip.quotaguard.com")
+    IO.inspect Jason.decode!(res.body)
+
+    # {:ok, res} = HTTPoison.get("ip.quotaguard.com", options())
+    # IO.inspect Jason.decode!(res.body)
     # Enum.map(@ticket_key, fn key ->
     #   params =
     #     Map.new()
@@ -147,8 +155,8 @@ defmodule Tecnovix.ClientesModel do
   end
 
   defp options do
-    [{:proxy, @proxy_url},
-     {:ssl, [verify: :verify_none]}]
+    [{:proxy, [@proxy_url_http, @proxy_url_https]},
+     {:proxy_auth, {"276q4s75ug9b6s", "prp1jniecgiys78qoshh1c3l0oy"}}]
   end
 
   @spec insert_or_update(any) :: any
