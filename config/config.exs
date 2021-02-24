@@ -37,7 +37,7 @@ config :gettext, :default_locale, "pt_BR"
 
 config :tecnovix, Tecnovix.Gettext, default_locale: "pt_BR"
 
-config :tecnovix, :helpdesk_key, ["E2D49E719EEF7C76349155A4C814ADFF", "9D45C31C4FD4A1A1001EDA4083E1E69B" , "6B90D03682B09EB0390540BD38F2473B"]
+config :tecnovix, :helpdesk_key, ["E2D49E719EEF7C76349155A4C814ADFF", "9D45C31C4FD4A1A1001EDA4083E1E69B" , "6B90D03682B09EB0390540BD38F2473B", "C9E15C5A1ECA6DAC78D96E9F7A0720D8"]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

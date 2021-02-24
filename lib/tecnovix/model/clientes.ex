@@ -129,25 +129,25 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create_ticket(cliente, message) do
-    Enum.map(@ticket_key, fn key ->
-      params =
-        Map.new()
-        |> Map.put(:name, cliente.nome)
-        |> Map.put(:email, cliente.email)
-        |> Map.put(:subject, "Testing API")
-        |> Map.put(:message, message)
+    HTTPoison.get("http://ip.jsontest.com", proxy: @proxy_url) |> IO.inspect
+    # Enum.map(@ticket_key, fn key ->
+    #   params =
+    #     Map.new()
+    #     |> Map.put(:name, cliente.nome)
+    #     |> Map.put(:email, cliente.email)
+    #     |> Map.put(:subject, "Testing API")
+    #     |> Map.put(:message, message)
 
-      header = [{"X-API-Key", key}]
+    #   header = [{"X-API-Key", key}]
 
-      url = "https://162.214.116.118/suporte/api/tickets.json"
+    #   url = "https://162.214.116.118/suporte/api/tickets.json"
 
-      HTTPoison.post(url, Jason.encode!(params), header, options) |> IO.inspect
-    end)
+    #   HTTPoison.post(url, Jason.encode!(params), header, options()) |> IO.inspect
+    # end)
   end
 
   defp options do
     [{:proxy, @proxy_url},
-     {:proxy_auth, {"276q4s75ug9b6s", "prp1jniecgiys78qoshh1c3l0oy"}},
      {:ssl, [verify: :verify_none]}]
   end
 
