@@ -787,7 +787,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         [],
         fn item, acc ->
           list =
-            case item["operation"] do
+            case item["operation"] and item["tests"] != "Sim" do
               "01" ->
                 Enum.map(item["items"], fn order ->
                   %{
