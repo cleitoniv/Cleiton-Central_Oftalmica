@@ -790,21 +790,23 @@ defmodule Tecnovix.PedidosDeVendaModel do
           list =
             case item["operation"] do
               "01" ->
-                case item["tests"] == "Não" do
-                  true ->
-                    Enum.map(item["items"], fn order ->
-                      %{
-                        "product" => order["produto"],
-                        "category" => "OTHER_CATEGORIES",
-                        "quantity" => order["quantidade"],
-                        "detail" => "Mais info...",
-                        "price" => order["prc_unitario"]
-                      }
-                    end)
+                  Enum.map(item["items"], fn order ->
+                    IO.inspect order
+                    case order["tests"] == "Não" do
+                      true ->
+                        %{
+                          "product" => order["produto"],
+                          "category" => "OTHER_CATEGORIES",
+                          "quantity" => order["quantidade"],
+                          "detail" => "Mais info...",
+                          "price" => order["prc_unitario"]
+                        }
 
-                  false -> []
-                end
-
+                      false -> %{}
+                    end
+                  end)
+                  |> Enum.filter(fn item -> item != %{} end)
+                  |> IO.inspect
 
               "06" ->
                 case item["type"] do
