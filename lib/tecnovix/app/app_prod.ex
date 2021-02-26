@@ -634,6 +634,10 @@ defmodule Tecnovix.App.ScreensProd do
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
+                          "01" -> case item.tests do
+                            "S" -> 0 + acc
+                            "N" -> item.virtotal + acc
+                          end
                           "13" -> 0 + acc
                           "07" -> 0 + acc
                           _ -> item.virtotal + acc
@@ -660,6 +664,10 @@ defmodule Tecnovix.App.ScreensProd do
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
+                          "01" -> case item.tests do
+                            "S" -> 0 + acc
+                            "N" -> item.virtotal + acc
+                          end
                           "13" -> 0 + acc
                           "07" -> 0 + acc
                           _ -> item.virtotal + acc
@@ -677,6 +685,10 @@ defmodule Tecnovix.App.ScreensProd do
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
+                          "01" -> case item.tests do
+                            "S" -> 0 + acc
+                            "N" -> item.virtotal + acc
+                          end
                           "13" -> 0 + acc
                           "07" -> 0 + acc
                           _ -> item.virtotal + acc
@@ -703,6 +715,10 @@ defmodule Tecnovix.App.ScreensProd do
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
+                          "01" -> case item.tests do
+                            "S" -> 0 + acc
+                            "N" -> item.virtotal + acc
+                          end
                           "13" -> 0 + acc
                           "07" -> 0 + acc
                           "00" -> 0 + acc
@@ -1054,6 +1070,11 @@ defmodule Tecnovix.App.ScreensProd do
               valor:
                 Enum.reduce(pedido.items, 0, fn map, acc ->
                   case map.operation do
+                    "01" ->
+                      case map.tests do
+                        "S" -> 0 + acc
+                        "N" -> map.virtotal + acc
+                      end
                     "07" -> 0 + acc
                     "13" -> 0 + acc
                     _ -> map.virtotal + acc
@@ -1062,6 +1083,11 @@ defmodule Tecnovix.App.ScreensProd do
               valor_total:
                 Enum.reduce(pedido.items, 0, fn map, acc ->
                   case map.operation do
+                    "01" ->
+                      case map.tests do
+                        "S" -> 0 + acc
+                        "N" -> map.virtotal + acc
+                      end
                     "07" -> 0 + acc
                     "13" -> 0 + acc
                     _ -> map.virtotal + acc
@@ -1087,6 +1113,11 @@ defmodule Tecnovix.App.ScreensProd do
                       quantidade: item.quantidade,
                       valor_total:
                         case item.operation do
+                          "01" ->
+                            case item.tests do
+                              "S" -> 0
+                              "N" -> item.prc_unitario * item.quantidade
+                            end
                           "13" ->
                             item.valor_credito_finan * item.quantidade
 

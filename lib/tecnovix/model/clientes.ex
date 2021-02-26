@@ -130,25 +130,29 @@ defmodule Tecnovix.ClientesModel do
   end
 
   def create_ticket(cliente, message) do
-    System.cmd("curl", ~w[-L ip.quotaguard.com -x #{@proxy_url_https}])
-    |> IO.inspect
+    # System.cmd("curl", ~w[-L ip.quotaguard.com -x #{@proxy_url_https}])
+    # |> IO.inspect
 
-    HTTPoison.get("ip.quotaguard.com", [], options())
-    |> IO.inspect
+    # test2="{\"name\":\"victor\", \"email\":\"victor@gmail.com\", \"subject\":\"Testing API\", \"message\":\"teste\"}"
+
+    # HTTPoison.get("ip.quotaguard.com", [], options())
+    # |> IO.inspect
 
     # Enum.map(@ticket_key, fn key ->
-    #   params =
-    #     Map.new()
-    #     |> Map.put(:name, cliente.nome)
-    #     |> Map.put(:email, cliente.email)
-    #     |> Map.put(:subject, "Testing API")
-    #     |> Map.put(:message, message)
+    #   # params =
+    #   #   Map.new()
+    #   #   |> Map.put(:name, cliente.nome)
+    #   #   |> Map.put(:email, cliente.email)
+    #   #   |> Map.put(:subject, "Testing API")
+    #   #   |> Map.put(:message, message)
 
-    #   header = [{"X-API-Key", key}]
+    # System.cmd("curl", ~w[--insecure https://162.214.116.118/suporte/api/tickets.json -H 'X-API-Key: #{key}' -d "#{test2}" -x #{@proxy_url_https}])
 
-    #   url = "https://162.214.116.118/suporte/api/tickets.json"
+    #   # header = [{"X-API-Key", key}]
 
-    #   HTTPoison.post(url, Jason.encode!(params), header, proxy: @proxy_url_https) |> IO.inspect
+    #   # url = "https://162.214.116.118/suporte/api/tickets.json"
+
+    #   # HTTPoison.post(url, Jason.encode!(params), header, proxy: @proxy_url_https) |> IO.inspect
     # end)
   end
 
