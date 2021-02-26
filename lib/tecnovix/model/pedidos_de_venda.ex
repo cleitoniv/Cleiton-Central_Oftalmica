@@ -781,6 +781,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def items_order(items) do
+    IO.inspect items
     order_items =
       Enum.reduce(
         items,
