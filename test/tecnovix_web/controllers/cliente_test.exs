@@ -440,12 +440,16 @@ defmodule TecnovixWeb.UsersTest do
     |> post("/api/cliente", %{"param" => user_param})
     |> json_response(201)
 
-    message = %{"message" => "Quero abrir um TICKET"}
+    ticket = %{
+      "descricao" => "Quero abrir um TICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaa",
+      "categoria" => "ola",
+      "email" => "victor@gmail.com",
+      "nome" => "Victor"
+    }
 
     build_conn()
     |> Generator.put_auth(user_firebase["idToken"])
-    |> post("/api/cliente/create_ticket", message)
+    |> post("/api/cliente/create_ticket", %{"param" => ticket})
     |> json_response(200)
-    |> IO.inspect()
   end
 end

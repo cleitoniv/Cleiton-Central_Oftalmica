@@ -477,19 +477,6 @@ defmodule TecnovixWeb.ClientesController do
     end
   end
 
-  def create_ticket(conn, %{"message" => message}) do
-    {:ok, cliente} = conn.private.auth
-
-    with {:ok, %{status_code: 200}} <- ClientesModel.create_ticket(cliente, message) do
-      conn
-      |> put_resp_content_type("application/json")
-      |> send_resp(200, Jason.encode!(%{success: true}))
-    else
-      {:ok, %{status_code: 401}} -> {:error, :not_authorized}
-      _ -> {:error, :system_fail}
-    end
-  end
-
   def devolution_continue(conn, %{"products" => products, "tipo" => "T" = tipo}) do
     {:ok, cliente} = verify_auth(conn.private.auth)
 

@@ -172,7 +172,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
         taxa_entrega -> taxa_entrega
       end
 
-
     with items <- change_operation_and_tipo_venda(items),
          {:ok, items_order} <- PedidosDeVendaModel.items_order(items),
          {:ok, order} <-

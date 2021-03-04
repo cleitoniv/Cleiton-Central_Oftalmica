@@ -157,7 +157,12 @@ defmodule Tecnovix.ClientesModel do
   end
 
   defp options do
-    [ssl: [verify: :verify_none], follow_redirect: false, hackney: [pool: false, insecure: true], proxy: @proxy_url_https]
+    [
+      ssl: [verify: :verify_none],
+      follow_redirect: false,
+      hackney: [pool: false, insecure: true],
+      proxy: @proxy_url_https
+    ]
   end
 
   @spec insert_or_update(any) :: any

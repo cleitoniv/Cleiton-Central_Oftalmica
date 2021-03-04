@@ -191,7 +191,7 @@ defmodule Tecnovix.ContratoDeParceriaModel do
           productPackages2 =
             Enum.reduce(model["fields"], %{}, fn package, acc ->
               case package["id"] do
-                "DA1_YPRCTE" -> Map.put(acc, :percentage_test, transform_value((package["value"])))
+                "DA1_YPRCTE" -> Map.put(acc, :percentage_test, transform_value(package["value"]))
                 "DA1_PRCVEN" -> Map.put(acc, :price, transform_value(package["value"]) * 100)
                 "DA1_QTDLOT" -> Map.put(acc, :quantity, transform_value(package["value"]))
                 _ -> acc
@@ -208,7 +208,8 @@ defmodule Tecnovix.ContratoDeParceriaModel do
   def transform_value(string) do
     case string do
       "0" ->
-          String.to_integer(string)
+        String.to_integer(string)
+
       _ ->
         String.to_float(string)
         |> Float.ceil(0)

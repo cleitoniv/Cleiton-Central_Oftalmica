@@ -54,6 +54,7 @@ defmodule TecnovixWeb.Router do
       post "/atend_pref_cliente", TecnovixWeb.AtendPrefClienteController, :insert_or_update
       post "/contas_a_receber", TecnovixWeb.ContasAReceberController, :insert_or_update
       post "/contrato_de_parceria", TecnovixWeb.ContratoDeParceriaController, :insert_or_update
+      post "/ticket", TecnovixWeb.TicketController, :insert_or_update
 
       post "/descricao_generica_do_produto",
            TecnovixWeb.DescricaoGenericaDoProdutoController,
@@ -76,6 +77,7 @@ defmodule TecnovixWeb.Router do
       get "/creditos", TecnovixWeb.CreditoFinanceiroController, :get_creditos
       get "/pre_devolucao", TecnovixWeb.PreDevolucaoController, :get_devolucoes
       post "/creditos", TecnovixWeb.CreditoFinanceiroController, :insert_or_update
+      get "/tickets", TecnovixWeb.TicketController, :get_tickets
     end
 
     scope "/atend_pref_cliente" do
@@ -101,7 +103,7 @@ defmodule TecnovixWeb.Router do
       post "/verify_phone", TecnovixWeb.ClientesController, :verify_phone
 
       pipe_through :cliente
-      post "/create_ticket", TecnovixWeb.ClientesController, :create_ticket
+      post "/create_ticket", TecnovixWeb.TicketController, :create_ticket
       get "/current_user", TecnovixWeb.ClientesController, :current_user
       post "/update_password", TecnovixWeb.ClientesController, :update_password
       get "/", TecnovixWeb.ClientesController, :show

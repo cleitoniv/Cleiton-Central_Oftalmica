@@ -240,10 +240,18 @@ defmodule Tecnovix.App.ScreensProd do
             "image_url",
             "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg"
           )
+
         map =
           case map["BM_YGRPTES"] do
-            nil -> map
-            _ -> Map.put(map, "image_url_test", "http://portal.centraloftalmica.com/images/#{map["BM_YGRPTES"]}.jpg")
+            nil ->
+              map
+
+            _ ->
+              Map.put(
+                map,
+                "image_url_test",
+                "http://portal.centraloftalmica.com/images/#{map["BM_YGRPTES"]}.jpg"
+              )
           end
 
         map =
@@ -282,24 +290,28 @@ defmodule Tecnovix.App.ScreensProd do
     Enum.reduce(produtos, [], fn produto, acc ->
       case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "S")) do
         true ->
-          quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "S"))
+          quantidades_boxes =
+            Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "S"))
 
           [
             Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))
             |> Map.put("tests", produto["tests"] - Enum.sum(quantidades_boxes))
           ] ++ acc
 
-        false -> [produto] ++ acc
+        false ->
+          [produto] ++ acc
       end
     end)
     |> Enum.reduce([], fn produto, acc ->
       case Map.has_key?(products_invoiced, String.replace_suffix(produto["group"], "", "N")) do
         true ->
-          quantidades_boxes = Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "N"))
+          quantidades_boxes =
+            Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "N"))
 
           [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
 
-        false -> [produto] ++ acc
+        false ->
+          [produto] ++ acc
       end
     end)
     |> Enum.reduce([], fn produto, acc ->
@@ -309,14 +321,16 @@ defmodule Tecnovix.App.ScreensProd do
           value -> value
         end
 
-      case Map.has_key?(products_invoiced, String.replace_suffix(valor, "", "S")) and produto["tests"] > 0 do
+      case Map.has_key?(products_invoiced, String.replace_suffix(valor, "", "S")) and
+             produto["tests"] > 0 do
         true ->
           grupo = String.replace_suffix(produto["BM_YGRPTES"], "", "S")
 
           quantidade = Map.get(products_invoiced, grupo)
-          [Map.put(produto,"tests",produto["tests"] - Enum.sum(quantidade))] ++ acc
+          [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidade))] ++ acc
 
-        false -> [produto] ++ acc
+        false ->
+          [produto] ++ acc
       end
     end)
     |> Enum.sort_by(fn item -> item["group"] end)
@@ -634,13 +648,20 @@ defmodule Tecnovix.App.ScreensProd do
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
-                          "01" -> case item.tests do
-                            "S" -> 0 + acc
-                            "N" -> item.virtotal + acc
-                          end
-                          "13" -> 0 + acc
-                          "07" -> 0 + acc
-                          _ -> item.virtotal + acc
+                          "01" ->
+                            case item.tests do
+                              "S" -> 0 + acc
+                              "N" -> item.virtotal + acc
+                            end
+
+                          "13" ->
+                            0 + acc
+
+                          "07" ->
+                            0 + acc
+
+                          _ ->
+                            item.virtotal + acc
                         end
                       end),
                     data_inclusao: map.inserted_at,
@@ -664,13 +685,20 @@ defmodule Tecnovix.App.ScreensProd do
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
-                          "01" -> case item.tests do
-                            "S" -> 0 + acc
-                            "N" -> item.virtotal + acc
-                          end
-                          "13" -> 0 + acc
-                          "07" -> 0 + acc
-                          _ -> item.virtotal + acc
+                          "01" ->
+                            case item.tests do
+                              "S" -> 0 + acc
+                              "N" -> item.virtotal + acc
+                            end
+
+                          "13" ->
+                            0 + acc
+
+                          "07" ->
+                            0 + acc
+
+                          _ ->
+                            item.virtotal + acc
                         end
                       end),
                     data_inclusao: map.inserted_at,
@@ -685,13 +713,20 @@ defmodule Tecnovix.App.ScreensProd do
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
-                          "01" -> case item.tests do
-                            "S" -> 0 + acc
-                            "N" -> item.virtotal + acc
-                          end
-                          "13" -> 0 + acc
-                          "07" -> 0 + acc
-                          _ -> item.virtotal + acc
+                          "01" ->
+                            case item.tests do
+                              "S" -> 0 + acc
+                              "N" -> item.virtotal + acc
+                            end
+
+                          "13" ->
+                            0 + acc
+
+                          "07" ->
+                            0 + acc
+
+                          _ ->
+                            item.virtotal + acc
                         end
                       end) + map.taxa_wirecard,
                     data_inclusao: map.inserted_at,
@@ -715,14 +750,23 @@ defmodule Tecnovix.App.ScreensProd do
                     valor:
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
-                          "01" -> case item.tests do
-                            "S" -> 0 + acc
-                            "N" -> item.virtotal + acc
-                          end
-                          "13" -> 0 + acc
-                          "07" -> 0 + acc
-                          "00" -> 0 + acc
-                          _ -> item.virtotal + acc
+                          "01" ->
+                            case item.tests do
+                              "S" -> 0 + acc
+                              "N" -> item.virtotal + acc
+                            end
+
+                          "13" ->
+                            0 + acc
+
+                          "07" ->
+                            0 + acc
+
+                          "00" ->
+                            0 + acc
+
+                          _ ->
+                            item.virtotal + acc
                         end
                       end) + map.taxa_wirecard,
                     data_inclusao: map.inserted_at,
@@ -748,8 +792,8 @@ defmodule Tecnovix.App.ScreensProd do
   end
 
   defp formartting_duracao(duracao) do
-      String.replace(duracao, ~r/[^\d]/, "")
-      |> String.to_integer()
+    String.replace(duracao, ~r/[^\d]/, "")
+    |> String.to_integer()
   end
 
   @impl true
@@ -1075,9 +1119,15 @@ defmodule Tecnovix.App.ScreensProd do
                         "S" -> 0 + acc
                         "N" -> map.virtotal + acc
                       end
-                    "07" -> 0 + acc
-                    "13" -> 0 + acc
-                    _ -> map.virtotal + acc
+
+                    "07" ->
+                      0 + acc
+
+                    "13" ->
+                      0 + acc
+
+                    _ ->
+                      map.virtotal + acc
                   end
                 end),
               valor_total:
@@ -1088,9 +1138,15 @@ defmodule Tecnovix.App.ScreensProd do
                         "S" -> 0 + acc
                         "N" -> map.virtotal + acc
                       end
-                    "07" -> 0 + acc
-                    "13" -> 0 + acc
-                    _ -> map.virtotal + acc
+
+                    "07" ->
+                      0 + acc
+
+                    "13" ->
+                      0 + acc
+
+                    _ ->
+                      map.virtotal + acc
                   end
                 end) + pedido.taxa_entrega + pedido.taxa_wirecard,
               previsao_entrega: pedido.previsao_entrega,
@@ -1118,6 +1174,7 @@ defmodule Tecnovix.App.ScreensProd do
                               "S" -> 0
                               "N" -> item.prc_unitario * item.quantidade
                             end
+
                           "13" ->
                             item.valor_credito_finan * item.quantidade
 
@@ -1371,11 +1428,16 @@ defmodule Tecnovix.App.ScreensProd do
                 pedido: pedido.pedido_de_venda_id,
                 quantidade:
                   case pedido.operation do
-                    "06" -> pedido.quantidade
-                    "07" -> case pedido.tests do
-                      "N" -> pedido.quantidade * -1
-                    end
-                    _ -> 0
+                    "06" ->
+                      pedido.quantidade
+
+                    "07" ->
+                      case pedido.tests do
+                        "N" -> pedido.quantidade * -1
+                      end
+
+                    _ ->
+                      0
                   end
               }
 

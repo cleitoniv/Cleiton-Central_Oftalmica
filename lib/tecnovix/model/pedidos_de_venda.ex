@@ -37,13 +37,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
                   acc ++ [item |> Map.put("tests", "Não")] ++ [item_teste]
 
-                false -> acc ++ [item]
+                false ->
+                  acc ++ [item]
               end
             end)
 
           Map.put(items, "items", item)
 
-        false -> items
+        false ->
+          items
       end
     end)
   end
@@ -781,7 +783,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def items_order(items) do
-    IO.inspect items
+    IO.inspect(items)
+
     order_items =
       Enum.reduce(
         items,
@@ -790,23 +793,22 @@ defmodule Tecnovix.PedidosDeVendaModel do
           list =
             case item["operation"] do
               "01" ->
-                  Enum.map(item["items"], fn order ->
-                    IO.inspect order
-                    case order["tests"] == "Não" do
-                      true ->
-                        %{
-                          "product" => order["produto"],
-                          "category" => "OTHER_CATEGORIES",
-                          "quantity" => order["quantidade"],
-                          "detail" => "Mais info...",
-                          "price" => order["prc_unitario"]
-                        }
+                Enum.map(item["items"], fn order ->
+                  case order["tests"] == "Não" do
+                    true ->
+                      %{
+                        "product" => order["produto"],
+                        "category" => "OTHER_CATEGORIES",
+                        "quantity" => order["quantidade"],
+                        "detail" => "Mais info...",
+                        "price" => order["prc_unitario"]
+                      }
 
-                      false -> %{}
-                    end
-                  end)
-                  |> Enum.filter(fn item -> item != %{} end)
-                  |> IO.inspect
+                    false ->
+                      %{}
+                  end
+                end)
+                |> Enum.filter(fn item -> item != %{} end)
 
               "06" ->
                 case item["type"] do
