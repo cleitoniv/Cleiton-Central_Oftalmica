@@ -18,7 +18,7 @@ defmodule Tecnovix.Repo.Migrations.AlterVendedor do
       add :nome, :string
     end
 
-    create unique_index(:vendedores, [:ddd, :telefone], name: :telefone_ddd)
+    create unique_index(:vendedores, [:ddd, :telefone], name: :telefone_ddd_vendedor)
     create unique_index(:vendedores, :cnpj_cpf)
     create unique_index(:vendedores, :email)
   end

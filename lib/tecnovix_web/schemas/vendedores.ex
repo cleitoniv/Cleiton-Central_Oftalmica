@@ -37,7 +37,7 @@ defmodule Tecnovix.VendedoresSchema do
     |> unique_constraint(:email, message: "Esse email já existe.")
     |> unique_constraint([:ddd, :telefone],
       message: "Esse número de telefone já existe.",
-      name: :telefone_ddd
+      name: :telefone_ddd_vendedor
     )
   end
 end
