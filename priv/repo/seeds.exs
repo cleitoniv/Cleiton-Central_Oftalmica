@@ -21,7 +21,7 @@ params = %{
   "sit_app" => "A",
   "cnpj_cpf" => "167-939-737-03",
   "regiao" => "Norte ES",
-  "celular" => "27 99621 1804",
+  "telefone" => "27 99621 1804",
   "status" => 1
 }
 
