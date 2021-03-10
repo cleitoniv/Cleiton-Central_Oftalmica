@@ -13,7 +13,8 @@ defmodule TecnovixWeb.VendedoresView do
       regiao: item.regiao,
       ddd: item.ddd,
       telefone: item.telefone,
-      status: item.status
+      status: item.status,
+      data_nascimento: item.data_nascimento
     }
   end
 

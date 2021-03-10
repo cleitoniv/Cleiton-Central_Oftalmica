@@ -13,6 +13,7 @@ defmodule Tecnovix.VendedoresSchema do
     field :ddd, :string
     field :telefone, :string
     field :status, :integer, default: 1
+    field :data_nascimento, :string
 
     timestamps()
   end
@@ -29,7 +30,8 @@ defmodule Tecnovix.VendedoresSchema do
       :regiao,
       :ddd,
       :telefone,
-      :status
+      :status,
+      :data_nascimento
     ])
     |> validate_required([:cnpj_cpf, :email, :telefone, :ddd, :nome, :regiao], message: "Não pode ficar em branco.")
     |> unique_constraint(:vendedores_constraint)
