@@ -25,8 +25,6 @@ params = %{
   "status" => 1
 }
 
-with false <- VendedoresModel.email_exist(params["email"]),
-     {:ok, seller} <- VendedoresModel.create(params),
-     {:ok, %{status_code: 200}} <-
-       FirebaseVendedor.create_user(%{email: params["email"], password: params["password"]}) do
-end
+Tecnovix.VendedoresModel.create(params)
+
+TecnovixWeb.Auth.FirebaseVendedor.create_user(%{email: params["email"], password: params["password"]})

@@ -14,6 +14,17 @@ defmodule TecnovixWeb.Support.Generator do
     |> json_response(200)
   end
 
+  def vendedor_params() do
+    %{
+      "email" => "victorasilva0707#{ECTO.UUID.autogenerate()}@gmail.com",
+      "password" => "123456",
+      "nome" => "Victor Augusto",
+      "cnpj_cpf" => "167-939-737-03",
+      "regiao" => "Norte ES",
+      "celular" => "27 99621 1804"
+    }
+  end
+
   def logs_param() do
     %{
       "data" => "2018-11-15 11:00:00",

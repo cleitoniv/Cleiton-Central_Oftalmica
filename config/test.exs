@@ -23,7 +23,7 @@ config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"
 config :tecnovix, :salt, "SALT"
 config :tecnovix, :firebase_api_key_client, "AIzaSyADayA3jTgwWee7_3C2h4YSTo6nScuAQaI"
-config :tecnovix, :firebase_api_key_vendedor, "AIzaSyAmXRFayu4waaLkhgLvSO2w41M--PwoIHQ"
+config :tecnovix, :firebase_api_key_vendedor, "AIzaSyC76yu3gONK-twporVGue4X4_nk42k-R30"
 
 config :tecnovix,
        :sync_users_salt,

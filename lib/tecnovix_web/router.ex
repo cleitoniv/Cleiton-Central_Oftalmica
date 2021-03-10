@@ -161,6 +161,11 @@ defmodule TecnovixWeb.Router do
       get "/period", TecnovixWeb.ClientesController, :get_period
     end
 
+    scope "/vendedor" do
+      pipe_through :firebase_auth_vendedor
+      get "/current_seller", TecnovixWeb.VendedoresController, :current_seller
+    end
+
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,

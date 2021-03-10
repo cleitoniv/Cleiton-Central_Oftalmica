@@ -93,7 +93,7 @@ defmodule TecnovixWeb.Auth.FirebaseVendedor do
   def firebase_auth_vendedor(conn = %Plug.Conn{}, _opts) do
     with {:ok, token} <- get_token(conn),
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
-         {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]) do
+         {:ok, user} <- Tecnovix.VendedoresModel.search_register_email(jwt.fields["email"]) do
       put_private(conn, :auth, {:ok, user})
     else
       _ ->

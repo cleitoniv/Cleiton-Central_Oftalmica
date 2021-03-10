@@ -11,7 +11,8 @@ defmodule TecnovixWeb.VendedoresView do
       cnpj_cpf: item.cnpj_cpf,
       email: item.email,
       regiao: item.regiao,
-      celular: item.celular,
+      ddd: item.ddd,
+      telefone: item.telefone,
       status: item.status
     }
   end
