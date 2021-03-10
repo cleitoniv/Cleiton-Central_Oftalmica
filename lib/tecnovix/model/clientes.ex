@@ -7,9 +7,6 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Changeset
   import Ecto.Query
 
-  @ticket_key Application.fetch_env!(:tecnovix, :helpdesk_key)
-  @proxy_url_https "https://276q4s75ug9b6s:prp1jniecgiys78qoshh1c3l0oy@us-east-shield-02.quotaguard.com:9294"
-  @proxy_url_http "http://276q4s75ug9b6s:prp1jniecgiys78qoshh1c3l0oy@us-east-shield-02.quotaguard.com:9294"
   def get_period() do
     period = ["Manhã - Tarde", "Manhã", "Tarde"]
 

@@ -441,7 +441,8 @@ defmodule TecnovixWeb.UsersTest do
     |> json_response(201)
 
     ticket = %{
-      "descricao" => "Quero abrir um TICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaa",
+      "descricao" =>
+        "Quero abrir um TICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaa",
       "categoria" => "ola",
       "email" => "victor@gmail.com",
       "nome" => "Victor"

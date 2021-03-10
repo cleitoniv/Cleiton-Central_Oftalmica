@@ -2,6 +2,7 @@ defmodule TecnovixWeb.Router do
   use TecnovixWeb, :router
   import TecnovixWeb.Auth.SyncUsers
   import TecnovixWeb.Auth.Firebase
+  import TecnovixWeb.Auth.FirebaseVendedor
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -29,6 +30,10 @@ defmodule TecnovixWeb.Router do
 
   pipeline :guest do
     plug :firebase_auth
+  end
+
+  pipeline :vendedor do
+    plug :firebase_auth_vendedor
   end
 
   scope "/", TecnovixWeb do

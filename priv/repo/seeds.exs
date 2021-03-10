@@ -13,3 +13,20 @@ Tecnovix.SyncUsersModel.create(%{
   "username" => "centralof_api",
   "password" => "centralof_api08082020"
 })
+
+params = %{
+  "email" => "victorasilva0707@gmail.com",
+  "password" => "123456",
+  "nome" => "Victor",
+  "sit_app" => "A",
+  "cnpj_cpf" => "167-939-737-03",
+  "regiao" => "Norte ES",
+  "celular" => "27 99621 1804",
+  "status" => 1
+}
+
+with false <- VendedoresModel.email_exist(params["email"]),
+     {:ok, seller} <- VendedoresModel.create(params),
+     {:ok, %{status_code: 200}} <-
+       FirebaseVendedor.create_user(%{email: params["email"], password: params["password"]}) do
+end

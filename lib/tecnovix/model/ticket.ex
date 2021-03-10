@@ -20,7 +20,8 @@ defmodule Tecnovix.TicketModel do
       nil ->
         create(params)
 
-      changeset -> __MODULE__.update(changeset, params)
+      changeset ->
+        __MODULE__.update(changeset, params)
     end
   end
 

@@ -12,9 +12,7 @@ defmodule TecnovixWeb.VendedoresView do
       email: item.email,
       regiao: item.regiao,
       celular: item.celular,
-      status: item.status,
-      moip_account_id: item.moip_account_id,
-      moip_acess_token: item.moip_acess_token
+      status: item.status
     }
   end
 

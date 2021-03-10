@@ -6,7 +6,7 @@ defmodule Tecnovix.VendedoresSchema do
     field :uid, :string
     field :codigo, :string
     field :nome, :string
-    field :sit_app, :string
+    field :sit_app, :string, default: "E"
     field :cnpj_cpf, :string
     field :email, :string
     field :regiao, :string

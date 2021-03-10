@@ -88,7 +88,7 @@ defmodule Tecnovix.SyncUsers do
 
   test "Pegar todos os ticket de status 0" do
     Generator.sync_user("thiagoboeker", "123456")
-    user_param = Generator.user_param
+    user_param = Generator.user_param()
     user_firebase = Generator.user()
 
     # criando o cliente
@@ -102,33 +102,32 @@ defmodule Tecnovix.SyncUsers do
       |> post("/api/user_sync/login", %{"username" => "thiagoboeker", "password" => "123456"})
       |> json_response(200)
 
-      ticket = %{
-        "descricao" => "Quero abrir um TICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaa",
-        "categoria" => "ola",
-        "email" => "victor@gmail.com",
-        "nome" => "Victor"
-      }
+    ticket = %{
+      "descricao" =>
+        "Quero abrir um TICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaaTICKETaaaaaaaaaaaaaaaaa",
+      "categoria" => "ola",
+      "email" => "victor@gmail.com",
+      "nome" => "Victor"
+    }
 
-      ticket =
+    ticket =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
       |> post("/api/cliente/create_ticket", %{"param" => ticket})
       |> json_response(200)
       |> Map.get("data")
 
-      build_conn()
-      |> Generator.put_auth(user_login["access_token"])
-      |> get("/api/sync/tickets")
-      |> json_response(200)
+    build_conn()
+    |> Generator.put_auth(user_login["access_token"])
+    |> get("/api/sync/tickets")
+    |> json_response(200)
 
-
-      build_conn()
-      |> Generator.put_auth(user_login["access_token"])
-      |> post("/api/sync/ticket", Map.put(ticket, "status", 1))
-      |> json_response(200)
-      |> IO.inspect
-
-    end
+    build_conn()
+    |> Generator.put_auth(user_login["access_token"])
+    |> post("/api/sync/ticket", Map.put(ticket, "status", 1))
+    |> json_response(200)
+    |> IO.inspect()
+  end
 
   test "O Protheus pegar os pedidos do APP" do
     Generator.sync_user("thiagoboeker", "123456")
