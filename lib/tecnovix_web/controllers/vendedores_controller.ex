@@ -3,6 +3,10 @@ defmodule TecnovixWeb.VendedoresController do
   use Tecnovix.Resource.Routes, model: Tecnovix.VendedoresModel
   alias Tecnovix.VendedoresModel
   alias TecnovixWeb.Auth.FirebaseVendedor
+  alias Tecnovix.Services.ProductsByClient
+  alias Tecnovix.ClientesModel
+  alias Tecnovix.Endpoints.Protheus
+  alias Tecnovix.App.Screens
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -36,6 +40,46 @@ defmodule TecnovixWeb.VendedoresController do
     else
       true -> {:error, :email_invalid}
       error -> error
+    end
+  end
+
+  def show_products_by_client(conn, %{"current_client" => current_client, "filtro" => filtro}) do
+    stub = Screens.stub()
+    protheus = Protheus.stub()
+
+    with {:ok, auth} <- Auth.token(),
+         {:ok, cliente} <- ClientesModel.get_client(current_client),
+         {:ok, product_invoiced} <-
+           Tecnovix.PedidosDeVendaModel.order_product_invoiced(cliente.id),
+         {:ok, products} <-
+           protheus.get_client_products(%{
+             cliente: cliente.codigo,
+             loja: cliente.loja,
+             count: 50,
+             token: auth["access_token"]
+           }),
+         {:ok, grid, filters} <-
+           stub.get_product_grid(products, cliente, filtro, product_invoiced) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(
+        200,
+        Jason.encode!(%{success: true, data: grid, filters: filters})
+      )
+    else
+      _ -> {:error, :not_found}
+    end
+  end
+
+  def get_all_clients_by_seller(conn, _params) do
+    {:ok, seller} = conn.private.auth
+
+    with {:ok, clients} <- ClientesModel.get_all_clients_by_seller(seller.codigo) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> put_view(TecnovixWeb.ClientesView)
+      |> render("app_clientes.json", %{item: clients})
     end
   end
 end

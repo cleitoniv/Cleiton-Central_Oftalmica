@@ -113,6 +113,15 @@ defmodule Tecnovix.ClientesModel do
     end
   end
 
+  def get_all_clients_by_seller(seller_codigo) do
+    clients =
+      ClientesSchema
+      |> where([c], c.vendedor == ^seller_codigo)
+      |> Repo.all()
+
+    {:ok, clients}
+  end
+
   def get_clientes_app(filtro) do
     clientes =
       ClientesSchema
@@ -250,6 +259,13 @@ defmodule Tecnovix.ClientesModel do
 
   def verify_sit_app(id) do
     Repo.get_by(ClientesSchema, id: id)
+  end
+
+  def get_client(id) do
+    case Repo.get_by(ClientesSchema, id: id) do
+      nil -> {:error, :not_found}
+      client -> {:ok, client}
+    end
   end
 
   def search_register_email(email) do

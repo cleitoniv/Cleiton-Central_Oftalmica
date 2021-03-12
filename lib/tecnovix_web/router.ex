@@ -164,6 +164,8 @@ defmodule TecnovixWeb.Router do
     scope "/vendedor" do
       pipe_through :firebase_auth_vendedor
       get "/current_seller", TecnovixWeb.VendedoresController, :current_seller
+      get "/my_clients", TecnovixWeb.VendedoresController, :get_all_clients_by_seller
+      get "/products_client", TecnovixWeb.VendedoresController, :show_products_by_client
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
