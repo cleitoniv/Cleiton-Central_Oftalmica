@@ -45,8 +45,6 @@ defmodule TecnovixWeb.VendedoresController do
   end
 
   def show_products_by_client(conn, %{"current_client" => current_client, "filtro" => filtro}) do
-    IO.inspect current_client
-    IO.inspect filtro
     stub = Screens.stub()
     protheus = Protheus.stub()
 
@@ -76,13 +74,14 @@ defmodule TecnovixWeb.VendedoresController do
 
   def get_all_clients_by_seller(conn, _params) do
     {:ok, seller} = conn.private.auth
+    IO.inspect seller
 
-    with {:ok, clients} <- ClientesModel.get_all_clients_by_seller(seller.codigo) do
+    with {:ok, clients} <- ClientesModel.get_all_clients_by_seller(seller.codigo) |> IO.inspect do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> put_view(TecnovixWeb.ClientesView)
-      |> render("app_clientes.json", %{item: clients})
+      |> render("clientes_seller.json", %{clientes: clients})
     end
   end
 end

@@ -57,6 +57,53 @@ defmodule TecnovixWeb.ClientesView do
     render_many(clientes, __MODULE__, "clientes.json", as: :item)
   end
 
+  def render("clientes_seller.json", %{clientes: clientes}) do
+    %{
+      success: true,
+      data: render_many(clientes, __MODULE__, "cliente.json", as: :item)
+    }
+  end
+
+  def render("cliente.json", item: item) do
+    %{
+      id: item.id,
+      uid: item.uid,
+      role: item.role,
+      codigo: item.codigo,
+      loja: item.loja,
+      cadastrado: item.cadastrado,
+      fisica_jurid: item.fisica_jurid,
+      cnpj_cpf: item.cnpj_cpf,
+      nome: item.nome,
+      email: item.email,
+      email_fiscal: item.email_fiscal,
+      data_nascimento: formatting_dtnasc(item.data_nascimento),
+      nome_empresarial: item.nome_empresarial,
+      endereco: item.endereco,
+      numero: item.numero,
+      complemento: item.complemento,
+      bairro: item.bairro,
+      cep: item.cep,
+      cdmunicipio: item.cdmunicipio,
+      municipio: item.municipio,
+      estado: item.estado,
+      ddd: item.ddd,
+      telefone: item.telefone,
+      bloqueado: item.bloqueado,
+      sit_app: item.sit_app,
+      cod_cnae: item.cod_cnae,
+      ramo: item.ramo,
+      vendedor: item.vendedor,
+      crm_medico: item.crm_medico,
+      dia_remessa: item.dia_remessa,
+      wirecard_cliente_id: item.wirecard_cliente_id,
+      fcm_token: item.fcm_token,
+      status: item.status,
+      nome_usuario: item.nome_usuario,
+      apelido: item.apelido
+    }
+  end
+
   def render("show_cliente.json", %{item: item}) do
     %{
       success: true,
