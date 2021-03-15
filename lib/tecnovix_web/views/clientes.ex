@@ -59,7 +59,7 @@ defmodule TecnovixWeb.ClientesView do
   def render("clientes_seller.json", %{clientes: clientes}) do
     %{
       success: true,
-      data: render_many(clientes, __MODULE__, "current_user.json", as: :item)
+      data: render_many(clientes, __MODULE__, "cliente.json", as: :item)
     }
   end
 
