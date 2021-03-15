@@ -7,6 +7,7 @@ defmodule TecnovixWeb.VendedoresController do
   alias Tecnovix.ClientesModel
   alias Tecnovix.Endpoints.Protheus
   alias Tecnovix.App.Screens
+  alias Tecnovix.Services.Auth
 
   action_fallback Tecnovix.Resources.Fallback
 
