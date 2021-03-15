@@ -74,7 +74,7 @@ defmodule TecnovixWeb.ClientesView do
       fisica_jurid: item.fisica_jurid,
       cnpj_cpf: item.cnpj_cpf,
       data_nascimento: item.data_nascimento,
-      nome: item.nome,
+      nome: String.capitalize(item.nome),
       nome_empresarial: item.nome_empresarial,
       email: item.email,
       email_fiscal: item.email_fiscal,
