@@ -3,11 +3,11 @@ defmodule TecnovixWeb.VendedoresController do
   use Tecnovix.Resource.Routes, model: Tecnovix.VendedoresModel
   alias Tecnovix.VendedoresModel
   alias TecnovixWeb.Auth.FirebaseVendedor
-  alias Tecnovix.Services.ProductsByClient
   alias Tecnovix.ClientesModel
   alias Tecnovix.Endpoints.Protheus
   alias Tecnovix.App.Screens
   alias Tecnovix.Services.Auth
+  alias Tecnovix.PedidosDeVendaModel
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -74,14 +74,23 @@ defmodule TecnovixWeb.VendedoresController do
 
   def get_all_clients_by_seller(conn, _params) do
     {:ok, seller} = conn.private.auth
-    IO.inspect seller
 
-    with {:ok, clients} <- ClientesModel.get_all_clients_by_seller(seller.codigo) |> IO.inspect do
+    with {:ok, clients} <- ClientesModel.get_all_clients_by_seller(seller.codigo) do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
       |> put_view(TecnovixWeb.ClientesView)
       |> render("clientes_seller.json", %{clientes: clients})
+    end
+  end
+
+  def get_orders_by_clients(conn, %{"filtro" => filtro, "cliente" => cliente}) do
+    with {:ok, pedidos} <- PedidosDeVendaModel.get_pedidos(cliente, filtro) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> put_view(TecnovixWeb.PedidosDeVendaView)
+      |> render("pedidos.json", %{item: pedidos})
     end
   end
 end

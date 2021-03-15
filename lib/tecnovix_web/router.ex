@@ -166,6 +166,7 @@ defmodule TecnovixWeb.Router do
       get "/current_seller", TecnovixWeb.VendedoresController, :current_seller
       get "/my_clients", TecnovixWeb.VendedoresController, :get_all_clients_by_seller
       get "/products_client", TecnovixWeb.VendedoresController, :show_products_by_client
+      get "/orders_client", TecnovixWeb.VendedoresController, :get_orders_by_clients
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
