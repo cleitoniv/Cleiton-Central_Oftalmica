@@ -44,6 +44,8 @@ defmodule TecnovixWeb.VendedoresController do
   end
 
   def show_products_by_client(conn, %{"current_client" => current_client, "filtro" => filtro}) do
+    IO.inspect current_client
+    IO.inspect filtro
     stub = Screens.stub()
     protheus = Protheus.stub()
 
