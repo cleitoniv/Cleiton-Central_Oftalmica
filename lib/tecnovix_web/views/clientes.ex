@@ -64,7 +64,7 @@ defmodule TecnovixWeb.ClientesView do
     }
   end
 
-  def render("cliente.json", item: item) do
+  def render("cliente.json", %{item: item}) do
     %{
       id: item.id,
       uid: item.uid,
