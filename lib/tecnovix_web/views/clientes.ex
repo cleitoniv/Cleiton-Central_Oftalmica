@@ -37,7 +37,6 @@ defmodule TecnovixWeb.ClientesView do
       wirecard_cliente_id: item.wirecard_cliente_id,
       fcm_token: item.fcm_token,
       status: item.status,
-      nome_usuario: item.nome_usuario,
       apelido: item.apelido
     }
   end
@@ -68,25 +67,25 @@ defmodule TecnovixWeb.ClientesView do
     %{
       id: item.id,
       uid: item.uid,
-      role: item.role,
       codigo: item.codigo,
-      loja: item.loja,
       cadastrado: item.cadastrado,
+      role: item.role,
+      loja: item.loja,
       fisica_jurid: item.fisica_jurid,
       cnpj_cpf: item.cnpj_cpf,
+      data_nascimento: item.data_nascimento,
       nome: item.nome,
+      nome_empresarial: item.nome_empresarial,
       email: item.email,
       email_fiscal: item.email_fiscal,
-      data_nascimento: formatting_dtnasc(item.data_nascimento),
-      nome_empresarial: item.nome_empresarial,
       endereco: item.endereco,
       numero: item.numero,
       complemento: item.complemento,
       bairro: item.bairro,
       cep: item.cep,
+      estado: item.estado,
       cdmunicipio: item.cdmunicipio,
       municipio: item.municipio,
-      estado: item.estado,
       ddd: item.ddd,
       telefone: item.telefone,
       bloqueado: item.bloqueado,
@@ -98,7 +97,6 @@ defmodule TecnovixWeb.ClientesView do
       dia_remessa: item.dia_remessa,
       wirecard_cliente_id: item.wirecard_cliente_id,
       fcm_token: item.fcm_token,
-      nome_usuario: item.nome_usuario,
       apelido: item.apelido
     }
   end
