@@ -7,7 +7,6 @@ defmodule TecnovixWeb.VendedoresController do
   alias Tecnovix.Endpoints.Protheus
   alias Tecnovix.App.Screens
   alias Tecnovix.Services.Auth
-  alias Tecnovix.PedidosDeVendaModel
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -84,13 +83,13 @@ defmodule TecnovixWeb.VendedoresController do
     end
   end
 
-  def get_orders_by_clients(conn, %{"filtro" => filtro, "cliente" => cliente}) do
-    with {:ok, pedidos} <- PedidosDeVendaModel.get_pedidos(cliente, filtro) do
+  def get_orders_by_clients(conn, %{"filtro" => filtro, "id" => id}) do
+    stub = Screens.stub()
+
+    with {:ok, pedidos} <- stub.get_detail_order(%{id: id}, filtro) do
       conn
-      |> put_status(200)
       |> put_resp_content_type("application/json")
-      |> put_view(TecnovixWeb.PedidosDeVendaView)
-      |> render("pedidos.json", %{item: pedidos})
+      |> send_resp(200, Jason.encode!(%{success: true, data: pedidos}))
     end
   end
 end
