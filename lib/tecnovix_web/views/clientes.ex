@@ -1,6 +1,7 @@
 defmodule TecnovixWeb.ClientesView do
   use Tecnovix.Resource.View, model: Tecnovix.ClientesModel
   import TecnovixWeb.ErrorParserView
+  alias Tecnovix.App.Screens
 
   def build(%{item: item}) do
     %{
@@ -64,41 +65,50 @@ defmodule TecnovixWeb.ClientesView do
   end
 
   def render("cliente.json", %{item: item}) do
-    %{
-      id: item.id,
-      uid: item.uid,
-      codigo: item.codigo,
-      cadastrado: item.cadastrado,
-      role: item.role,
-      loja: item.loja,
-      fisica_jurid: item.fisica_jurid,
-      cnpj_cpf: item.cnpj_cpf,
-      data_nascimento: item.data_nascimento,
-      nome: String.capitalize(item.nome),
-      nome_empresarial: item.nome_empresarial,
-      email: item.email,
-      email_fiscal: item.email_fiscal,
-      endereco: item.endereco,
-      numero: item.numero,
-      complemento: item.complemento,
-      bairro: item.bairro,
-      cep: item.cep,
-      estado: item.estado,
-      cdmunicipio: item.cdmunicipio,
-      municipio: item.municipio,
-      ddd: item.ddd,
-      telefone: item.telefone,
-      bloqueado: item.bloqueado,
-      sit_app: item.sit_app,
-      cod_cnae: item.cod_cnae,
-      ramo: item.ramo,
-      vendedor: item.vendedor,
-      crm_medico: item.crm_medico,
-      dia_remessa: item.dia_remessa,
-      wirecard_cliente_id: item.wirecard_cliente_id,
-      fcm_token: item.fcm_token,
-      apelido: item.apelido
-    }
+    stub = Screens.stub()
+
+    with credits <- stub.get_credits(item),
+    {:ok, notifications} <- stub.get_notifications(item) do
+      %{
+        id: item.id,
+        uid: item.uid,
+        codigo: item.codigo,
+        cadastrado: item.cadastrado,
+        role: item.role,
+        loja: item.loja,
+        fisica_jurid: item.fisica_jurid,
+        cnpj_cpf: item.cnpj_cpf,
+        data_nascimento: item.data_nascimento,
+        nome: String.capitalize(item.nome),
+        nome_empresarial: item.nome_empresarial,
+        email: item.email,
+        email_fiscal: item.email_fiscal,
+        endereco: item.endereco,
+        numero: item.numero,
+        complemento: item.complemento,
+        bairro: item.bairro,
+        cep: item.cep,
+        estado: item.estado,
+        cdmunicipio: item.cdmunicipio,
+        municipio: item.municipio,
+        ddd: item.ddd,
+        telefone: item.telefone,
+        bloqueado: item.bloqueado,
+        sit_app: item.sit_app,
+        cod_cnae: item.cod_cnae,
+        ramo: item.ramo,
+        vendedor: item.vendedor,
+        crm_medico: item.crm_medico,
+        dia_remessa: item.dia_remessa,
+        wirecard_cliente_id: item.wirecard_cliente_id,
+        fcm_token: item.fcm_token,
+        apelido: item.apelido
+      }
+      |> Map.put(:points, credits.points)
+      |> Map.put(:money, credits.money)
+      |> Map.put(:notifications, notifications)
+      |> IO.inspect
+    end
   end
 
   def render("show_cliente.json", %{item: item}) do

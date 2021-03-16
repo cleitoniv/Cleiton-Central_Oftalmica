@@ -71,6 +71,7 @@ defmodule TecnovixWeb.VendedoresController do
     end
   end
 
+  @spec get_all_clients_by_seller(Plug.Conn.t(), any) :: Plug.Conn.t()
   def get_all_clients_by_seller(conn, _params) do
     {:ok, seller} = conn.private.auth
 
