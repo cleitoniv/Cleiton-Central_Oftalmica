@@ -167,6 +167,13 @@ defmodule TecnovixWeb.Router do
       get "/my_clients", TecnovixWeb.VendedoresController, :get_all_clients_by_seller
       get "/products_client", TecnovixWeb.VendedoresController, :show_products_by_client
       get "/orders_client", TecnovixWeb.VendedoresController, :get_orders_by_clients
+
+      scope "/agenda" do
+        post "/create", TecnovixWeb.AgendaController, :create
+        get "/get_schedules", TecnovixWeb.AgendaController, :get_all_schedules
+        get "/get_schedule", TecnovixWeb.AgendaController, :get_schedule_by_seller
+        get "/get_citys", TecnovixWeb.AgendaController, :get_citys
+      end
     end
 
     forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
