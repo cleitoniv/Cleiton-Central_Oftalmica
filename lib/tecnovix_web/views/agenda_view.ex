@@ -35,7 +35,7 @@ defmodule TecnovixWeb.AgendaView do
       success: true,
       data:
       render_many(schedules, __MODULE__, "schedule.json", as: :item)
-      |> Enum.group_by(fn schedule -> schedule.cidade end)
+      # |> Enum.group_by(fn schedule -> schedule.cidade end)
     }
   end
 end
