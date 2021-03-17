@@ -107,7 +107,6 @@ defmodule TecnovixWeb.ClientesView do
       |> Map.put(:points, credits.points)
       |> Map.put(:money, credits.money)
       |> Map.put(:notifications, notifications)
-      |> IO.inspect
     end
   end
 

@@ -360,7 +360,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
         Enum.reduce(items, [], fn map, acc ->
           array =
             Enum.flat_map(map["items"], fn items ->
-              IO.inspect(map)
 
               cond do
                 map["olho_direito"] != nil ->
@@ -783,7 +782,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def items_order(items) do
-    IO.inspect(items)
 
     order_items =
       Enum.reduce(
