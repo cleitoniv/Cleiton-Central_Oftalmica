@@ -27,4 +27,7 @@ params = %{
 
 Tecnovix.VendedoresModel.create(params)
 
-TecnovixWeb.Auth.FirebaseVendedor.create_user(%{email: params["email"], password: params["password"]})
+TecnovixWeb.Auth.FirebaseVendedor.create_user(%{
+  email: params["email"],
+  password: params["password"]
+})

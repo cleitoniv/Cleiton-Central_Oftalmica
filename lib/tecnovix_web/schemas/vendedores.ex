@@ -33,7 +33,9 @@ defmodule Tecnovix.VendedoresSchema do
       :status,
       :data_nascimento
     ])
-    |> validate_required([:cnpj_cpf, :email, :telefone, :ddd, :nome, :regiao], message: "Não pode ficar em branco.")
+    |> validate_required([:cnpj_cpf, :email, :telefone, :ddd, :nome, :regiao],
+      message: "Não pode ficar em branco."
+    )
     |> unique_constraint(:vendedores_constraint)
     |> unique_constraint(:cnpj_cpf, message: "Esse CNPJ ou CPF já existe.")
     |> unique_constraint(:email, message: "Esse email já existe.")

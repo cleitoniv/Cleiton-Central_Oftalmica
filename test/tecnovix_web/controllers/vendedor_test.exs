@@ -17,13 +17,17 @@ defmodule Tecnovix.Test.VendedorTest do
       "codigo" => "033"
     }
 
-   Tecnovix.VendedoresModel.create(params)
+    Tecnovix.VendedoresModel.create(params)
 
-   :ok
+    :ok
   end
 
   test "Get a current seller" do
-    {:ok, resp} = TecnovixWeb.Auth.FirebaseVendedor.sign_in(%{email: "victorasilva0707@gmail.com", password: "123123"})
+    {:ok, resp} =
+      TecnovixWeb.Auth.FirebaseVendedor.sign_in(%{
+        email: "victorasilva0707@gmail.com",
+        password: "123123"
+      })
 
     {:ok, seller} = Jason.decode(resp.body)
 
@@ -31,11 +35,15 @@ defmodule Tecnovix.Test.VendedorTest do
     |> Generator.put_auth(seller["idToken"])
     |> get("/api/vendedor/current_seller")
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 
   test "Get all clients of seller" do
-    {:ok, resp} = TecnovixWeb.Auth.FirebaseVendedor.sign_in(%{email: "victorasilva0707@gmail.com", password: "123456"})
+    {:ok, resp} =
+      TecnovixWeb.Auth.FirebaseVendedor.sign_in(%{
+        email: "victorasilva0707@gmail.com",
+        password: "123456"
+      })
 
     {:ok, seller} = Jason.decode(resp.body)
 
@@ -43,7 +51,7 @@ defmodule Tecnovix.Test.VendedorTest do
     |> Generator.put_auth(seller["idToken"])
     |> get("/api/vendedor/my_clients")
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 
   test "CRUD of the schedule" do
@@ -59,18 +67,23 @@ defmodule Tecnovix.Test.VendedorTest do
       |> json_response(201)
       |> Map.get("data")
 
-    {:ok, resp} = TecnovixWeb.Auth.FirebaseVendedor.sign_in(%{email: "victorasilva0707@gmail.com", password: "123456"})
+    {:ok, resp} =
+      TecnovixWeb.Auth.FirebaseVendedor.sign_in(%{
+        email: "victorasilva0707@gmail.com",
+        password: "123456"
+      })
 
     {:ok, seller} = Jason.decode(resp.body)
 
-    seller_database = Tecnovix.Repo.get_by(Tecnovix.VendedoresSchema, email: "victorasilva0707@gmail.com")
+    seller_database =
+      Tecnovix.Repo.get_by(Tecnovix.VendedoresSchema, email: "victorasilva0707@gmail.com")
 
     params = %{
       "vendedor_id" => seller_database.id,
       "temporizador" => "2131231231",
       "date" => "02/02/2020",
       "turno_manha" => true,
-      "cliente_id" => cliente["id"],
+      "cliente_id" => cliente["id"]
     }
 
     agenda =

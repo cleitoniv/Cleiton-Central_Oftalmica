@@ -16,7 +16,15 @@ defmodule Tecnovix.AgendaSchema do
 
   def changeset(changeset, params \\ %{}) do
     changeset
-    |> cast(params, [:cliente_id, :date, :turno_manha, :turno_tarde, :temporizador, :visitado, :vendedor_id])
+    |> cast(params, [
+      :cliente_id,
+      :date,
+      :turno_manha,
+      :turno_tarde,
+      :temporizador,
+      :visitado,
+      :vendedor_id
+    ])
     |> validate_required([:date, :cliente_id, :vendedor_id])
   end
 end

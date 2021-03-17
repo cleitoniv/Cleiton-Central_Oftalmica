@@ -68,7 +68,7 @@ defmodule TecnovixWeb.ClientesView do
     stub = Screens.stub()
 
     with credits <- stub.get_credits(item),
-    {:ok, notifications} <- stub.get_notifications(item) do
+         {:ok, notifications} <- stub.get_notifications(item) do
       %{
         id: item.id,
         uid: item.uid,

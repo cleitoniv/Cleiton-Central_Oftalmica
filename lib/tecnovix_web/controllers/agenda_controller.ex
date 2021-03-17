@@ -5,6 +5,30 @@ defmodule TecnovixWeb.AgendaController do
 
   action_fallback Tecnovix.Resources.Fallback
 
+  def create(conn, %{"param" => params}) do
+    {:ok, seller} = conn.private.auth
+
+    params =
+      Map.new()
+      |> Map.put("cliente_id", params["id"])
+      |> Map.put("temporizador", params["temporizador"])
+      |> Map.put("date", params["date"])
+      |> Map.put("vendedor_id", seller.id)
+      |> Map.put("turno_manha", params["manha"])
+      |> Map.put("turno_tarde", params["tarde"])
+
+    case AgendaModel.create(params) do
+      {:ok, schedule} ->
+        conn
+        |> put_status(200)
+        |> put_resp_content_type("application/json")
+        |> render("show.json", %{item: schedule})
+
+      error ->
+        error
+    end
+  end
+
   def get_all_schedules(conn, _params) do
     {:ok, seller} = conn.private.auth
 
@@ -34,12 +58,11 @@ defmodule TecnovixWeb.AgendaController do
     with {:ok, ufs} <- AgendaModel.get_ufs(),
          {:ok, uf} <- AgendaModel.get_uf_by_region(seller.regiao, ufs),
          {:ok, resp} <- AgendaModel.get_citys(uf) do
-
       citys = Jason.decode!(resp.body)
 
       citys =
-        Enum.reduce(citys,[], fn city, acc ->
-        [city["nome"]] ++ acc
+        Enum.reduce(citys, [], fn city, acc ->
+          [city["nome"]] ++ acc
         end)
 
       conn
