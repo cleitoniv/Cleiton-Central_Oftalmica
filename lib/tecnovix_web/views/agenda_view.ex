@@ -23,7 +23,9 @@ defmodule TecnovixWeb.AgendaView do
       turno_tarde: item.turno_tarde,
       visitado: item.visitado,
       cliente_id: item.cliente_id,
-      vendedor_id: item.vendedor_id
+      vendedor_id: item.vendedor_id,
+      bairro: item.cliente.bairro,
+      cidade: item.cliente.municipio
     }
   end
 

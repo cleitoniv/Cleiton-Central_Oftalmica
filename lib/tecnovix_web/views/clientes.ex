@@ -37,7 +37,6 @@ defmodule TecnovixWeb.ClientesView do
       dia_remessa: item.dia_remessa,
       wirecard_cliente_id: item.wirecard_cliente_id,
       fcm_token: item.fcm_token,
-      status: item.status,
       apelido: item.apelido
     }
   end

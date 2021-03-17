@@ -7,7 +7,8 @@ defmodule Tecnovix.AgendaModel do
   def get_all_schedules(seller_id) do
     agendamentos =
       AgendaSchema
-      |> where([a], a.vendedor_id == ^seller_id)
+      |> where([a], a.vendedor_id == ^seller_id and a.visitado == 0)
+      |> preload(:cliente)
       |> Repo.all()
 
     {:ok, agendamentos}

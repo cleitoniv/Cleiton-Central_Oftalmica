@@ -79,24 +79,24 @@ defmodule Tecnovix.Test.VendedorTest do
       Tecnovix.Repo.get_by(Tecnovix.VendedoresSchema, email: "victorasilva0707@gmail.com")
 
     params = %{
-      "vendedor_id" => seller_database.id,
       "temporizador" => "2131231231",
       "date" => "02/02/2020",
       "turno_manha" => true,
-      "cliente_id" => cliente["id"]
+      "id" => cliente["id"]
     }
 
     agenda =
       build_conn()
       |> Generator.put_auth(seller["idToken"])
       |> post("/api/vendedor/agenda/create", %{"param" => params})
-      |> json_response(201)
+      |> json_response(200)
       |> Map.get("data")
 
     build_conn()
     |> Generator.put_auth(seller["idToken"])
     |> get("/api/vendedor/agenda/get_schedules")
     |> json_response(200)
+    |> IO.inspect
 
     build_conn()
     |> Generator.put_auth(seller["idToken"])
