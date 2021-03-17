@@ -4,6 +4,10 @@ defmodule Tecnovix.AgendaModel do
   alias Tecnovix.Repo
   import Ecto.Query
 
+  def create(params) do
+    IO.inspect params
+  end
+
   def get_all_schedules(seller_id) do
     agendamentos =
       AgendaSchema
