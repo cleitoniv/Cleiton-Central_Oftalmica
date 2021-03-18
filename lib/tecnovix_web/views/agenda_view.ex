@@ -27,7 +27,9 @@ defmodule TecnovixWeb.AgendaView do
       bairro: item.cliente.bairro,
       cidade: item.cliente.municipio,
       estado: item.cliente.estado,
-      nome: item.cliente.nome
+      nome: item.cliente.nome,
+      numero: item.cliente.numero,
+      endereco: item.cliente.endereco
     }
   end
 
