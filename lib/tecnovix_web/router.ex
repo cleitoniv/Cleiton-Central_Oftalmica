@@ -167,7 +167,7 @@ defmodule TecnovixWeb.Router do
       get "/my_clients", TecnovixWeb.VendedoresController, :get_all_clients_by_seller
       get "/products_client", TecnovixWeb.VendedoresController, :show_products_by_client
       get "/orders_client", TecnovixWeb.VendedoresController, :get_orders_by_clients
-
+      get "/address_position", TecnovixWeb.AgendaController, :get_geocoding_by_cep
       scope "/agenda" do
         post "/create", TecnovixWeb.AgendaController, :create
         get "/get_schedules", TecnovixWeb.AgendaController, :get_all_schedules

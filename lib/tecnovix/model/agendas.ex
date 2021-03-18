@@ -4,6 +4,8 @@ defmodule Tecnovix.AgendaModel do
   alias Tecnovix.Repo
   import Ecto.Query
 
+  @map_key "AIzaSyDg1rtJCEGDKDcMcktZnk6TcQX3MNqspu8"
+
   def get_all_schedules(seller_id) do
     agendamentos =
       AgendaSchema
@@ -44,5 +46,12 @@ defmodule Tecnovix.AgendaModel do
       end)
 
     {:ok, uf["id"]}
+  end
+
+  def get_geocoding_by_cep(cep) do
+    url_base = "https://maps.googleapis.com/maps/api/geocode/json?&address=#{cep}&key=#{@map_key}"
+
+    {:ok, resp} = HTTPoison.get(url_base)
+    {:ok, Jason.decode!(resp.body)}
   end
 end

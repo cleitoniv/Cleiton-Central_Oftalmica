@@ -70,4 +70,18 @@ defmodule TecnovixWeb.AgendaController do
       |> send_resp(200, Jason.encode!(%{success: true, data: citys}))
     end
   end
+
+  def get_geocoding_by_cep(conn, %{"CEP" => cep}) do
+
+    with {:ok, response} <- AgendaModel.get_geocoding_by_cep(cep) do
+      location =
+        Enum.find(response["results"], fn result ->
+          result["geometry"]["location"]
+        end)
+
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: location["geometry"]["location"]}))
+    end
+  end
 end

@@ -96,7 +96,6 @@ defmodule Tecnovix.Test.VendedorTest do
     |> Generator.put_auth(seller["idToken"])
     |> get("/api/vendedor/agenda/get_schedules")
     |> json_response(200)
-    |> IO.inspect
 
     build_conn()
     |> Generator.put_auth(seller["idToken"])
@@ -107,5 +106,11 @@ defmodule Tecnovix.Test.VendedorTest do
     |> Generator.put_auth(seller["idToken"])
     |> get("/api/vendedor/agenda/get_citys")
     |> json_response(200)
+
+    build_conn()
+    |> Generator.put_auth(seller["idToken"])
+    |> get("/api/vendedor/address_position", %{"CEP" => "29027445"})
+    |> json_response(200)
+    |> IO.inspect
   end
 end

@@ -29,7 +29,8 @@ defmodule TecnovixWeb.AgendaView do
       estado: item.cliente.estado,
       nome: item.cliente.nome,
       numero: item.cliente.numero,
-      endereco: item.cliente.endereco
+      endereco: item.cliente.endereco,
+      cep: item.cliente.cep
     }
   end
 
