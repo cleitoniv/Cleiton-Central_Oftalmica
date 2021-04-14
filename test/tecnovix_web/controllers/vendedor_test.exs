@@ -111,6 +111,6 @@ defmodule Tecnovix.Test.VendedorTest do
     |> Generator.put_auth(seller["idToken"])
     |> get("/api/vendedor/address_position", %{"CEP" => "29027445"})
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 end

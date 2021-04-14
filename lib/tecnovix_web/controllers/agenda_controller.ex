@@ -72,7 +72,6 @@ defmodule TecnovixWeb.AgendaController do
   end
 
   def get_geocoding_by_cep(conn, %{"CEP" => cep}) do
-
     with {:ok, response} <- AgendaModel.get_geocoding_by_cep(cep) do
       location =
         Enum.find(response["results"], fn result ->
