@@ -848,7 +848,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   def get_pedidos(cliente_id, filtro) do
     case filtro do
       "2" ->
-        get_pacientes_revisao(cliente_id)
+        get_pacientes_revisao(cliente_id) |> IO.inspect
 
       "0" ->
         _pedidos =
@@ -941,7 +941,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
       count_range = Date.diff(duracao_mais_data_insercao(pedido, duracao), data_hoje) |> IO.inspect
 
-      count_range <= 30 and count_range >= 0 |> IO.inspect
+      count_range <= 30 and count_range >= 0
     end)
     |> Enum.map(fn map ->
       Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
