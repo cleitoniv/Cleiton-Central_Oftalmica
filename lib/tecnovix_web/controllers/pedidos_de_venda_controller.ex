@@ -121,10 +121,9 @@ defmodule TecnovixWeb.PedidosDeVendaController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with items <- change_operation_and_tipo_venda(items) |> IO.inspect(),
+    with items <- change_operation_and_tipo_venda(items),
          {:ok, pedido} <-
-           PedidosDeVendaModel.create_pedido(items, cliente, installment, taxa_entrega)
-           |> IO.inspect(),
+           PedidosDeVendaModel.create_pedido(items, cliente, installment, taxa_entrega),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,

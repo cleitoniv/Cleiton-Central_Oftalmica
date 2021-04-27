@@ -530,6 +530,7 @@ defmodule Tecnovix.App.ScreensTest do
   # end
 
   @impl true
+  @spec get_detail_order(atom | %{:id => any, optional(any) => any}, any) :: {:ok, list}
   def get_detail_order(cliente, filtro) do
     detail =
       Enum.map(

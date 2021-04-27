@@ -117,6 +117,7 @@ defmodule Tecnovix.Test.App do
         end
       )
 
+
     pedido =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
@@ -184,9 +185,10 @@ defmodule Tecnovix.Test.App do
     detail_order =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
-      |> get("/api/cliente/detail_order?filtro=0")
+      |> get("/api/cliente/detail_order?filtro=2")
       |> json_response(200)
       |> Map.get("data")
+      |> IO.inspect
 
     pedido_por_id =
       build_conn()
@@ -203,7 +205,6 @@ defmodule Tecnovix.Test.App do
       |> Generator.put_auth(user_firebase["idToken"])
       |> get("/api/cliente/payments?filtro=1")
       |> json_response(200)
-      |> IO.inspect()
 
     assert payments["success"] == true
 

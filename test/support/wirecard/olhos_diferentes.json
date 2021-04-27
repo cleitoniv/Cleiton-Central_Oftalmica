@@ -17,7 +17,7 @@
     "numero": "132",
     "data_nascimento": "1998-07-07"
   },
-  "type": "C",
+  "type": "A",
   "operation": "01",
   "items": [
     {
@@ -27,7 +27,7 @@
       },
       "type": "A",
       "filial": "teste",
-      "tests": "Sim",
+      "tests": "Não",
       "nocontrato": "teste",
       "produto": "BIOVIEW ASFERICA CX6",
       "quantidade": 1,

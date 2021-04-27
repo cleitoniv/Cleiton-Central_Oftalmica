@@ -939,9 +939,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
         String.replace(hd(duracao), ~r/[^\d]/, "")
         |> String.to_integer()
 
-      count_range = Date.diff(duracao_mais_data_insercao(pedido, duracao), data_hoje)
+      count_range = Date.diff(duracao_mais_data_insercao(pedido, duracao), data_hoje) |> IO.inspect
 
-      count_range <= 30 and count_range >= 0
+      count_range <= 30 and count_range >= 0 |> IO.inspect
     end)
     |> Enum.map(fn map ->
       Map.put(map, :item_pedido, Enum.at(map.items, 0).id)
