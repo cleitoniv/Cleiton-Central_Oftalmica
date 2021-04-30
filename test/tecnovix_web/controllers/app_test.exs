@@ -188,7 +188,6 @@ defmodule Tecnovix.Test.App do
       |> get("/api/cliente/detail_order?filtro=#{2}")
       |> json_response(200)
       |> Map.get("data")
-      |> IO.inspect
 
     pedido_por_id =
       build_conn()
@@ -199,6 +198,7 @@ defmodule Tecnovix.Test.App do
         "nome" => "Victor"
       })
       |> json_response(200)
+      |> IO.inspect
 
     payments =
       build_conn()
