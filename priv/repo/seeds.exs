@@ -15,13 +15,13 @@ Tecnovix.SyncUsersModel.create(%{
 })
 
 params = %{
-  "email" => "victorasilva0707@gmail.com",
+  "email" => "teste@centraloftalmica.com",
   "password" => "123456",
-  "nome" => "Victor",
+  "nome" => "Teste",
   "sit_app" => "A",
-  "cnpj_cpf" => "167-939-737-03",
+  "cnpj_cpf" => "000-000-000-00",
   "regiao" => "Norte ES",
-  "telefone" => "27 99621 1804",
+  "telefone" => "27 00000 0000",
   "status" => 1
 }
 

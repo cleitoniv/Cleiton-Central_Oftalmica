@@ -9,7 +9,7 @@ defmodule Tecnovix.VendedoresModel do
       Map.put(params, "cnpj_cpf", format_params(params["cnpj_cpf"]))
       |> Map.put("ddd", format_ddd(params["telefone"]))
       |> Map.put("telefone", format_telefone(params["telefone"]))
-      |> Map.put("data_nascimento", format_params(params["data_nascimento"]))
+      # |> Map.put("data_nascimento", format_params(params["data_nascimento"]))
 
     %VendedoresSchema{}
     |> VendedoresSchema.changeset(params)
