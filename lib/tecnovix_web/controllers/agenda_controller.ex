@@ -29,6 +29,11 @@ defmodule TecnovixWeb.AgendaController do
     end
   end
 
+  # def update(conn, %{"id" => id}) do
+  #   with {:ok, _} <- AgendaModel.show(id),
+  #        {:ok}
+  # end
+
   def get_all_schedules(conn, _params) do
     {:ok, seller} = conn.private.auth
 

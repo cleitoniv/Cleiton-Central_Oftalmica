@@ -78,29 +78,44 @@ defmodule Tecnovix.Test.VendedorTest do
     seller_database =
       Tecnovix.Repo.get_by(Tecnovix.VendedoresSchema, email: "victorasilva0707@gmail.com")
 
-    params = %{
-      "temporizador" => "2131231231",
+    angenda_one = %{
+      "temporizador" => "00:00:00.00",
       "date" => "02/02/2020",
       "turno_manha" => true,
+      "id" => cliente["id"]
+    }
+
+    agenda_two = %{
+      "temporizador" => "00:00:00.00",
+      "date" => "03/02/2020",
+      "turno_manha" => true,
+      "visitado" => 1,
       "id" => cliente["id"]
     }
 
     agenda =
       build_conn()
       |> Generator.put_auth(seller["idToken"])
-      |> post("/api/vendedor/agenda/create", %{"param" => params})
+      |> post("/api/vendedor/agenda/create", %{"param" => angenda_one})
+      |> recycle()
+      |> post("/api/vendedor/agenda/create", %{"param" => agenda_two})
       |> json_response(200)
       |> Map.get("data")
+
+    build_conn()
+    |> Generator.put_auth(seller["idToken"])
+    |> put("/api/vendedor/agenda/update", %{"id" => agenda["id"], "param" => %{"visitado" => 1}})
+    |> json_response(200)
 
     build_conn()
     |> Generator.put_auth(seller["idToken"])
     |> get("/api/vendedor/agenda/get_schedules")
     |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(seller["idToken"])
-    |> get("/api/vendedor/agenda/get_schedule")
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(seller["idToken"])
+    # |> get("/api/vendedor/agenda/get_schedule")
+    # |> json_response(200)
 
     build_conn()
     |> Generator.put_auth(seller["idToken"])
@@ -111,6 +126,12 @@ defmodule Tecnovix.Test.VendedorTest do
     |> Generator.put_auth(seller["idToken"])
     |> get("/api/vendedor/address_position", %{"CEP" => "29027445"})
     |> json_response(200)
-    |> IO.inspect()
+
+    # IO.inspect(Tecnovix.Repo.all(Tecnovix.AgendaSchema))
+
+    build_conn()
+    |> Generator.put_auth(seller["idToken"])
+    |> get("api/vendedor/reports")
+    |> json_response(200)
   end
 end

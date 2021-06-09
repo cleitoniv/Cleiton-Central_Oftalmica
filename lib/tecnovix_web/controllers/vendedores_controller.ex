@@ -7,6 +7,7 @@ defmodule TecnovixWeb.VendedoresController do
   alias Tecnovix.Endpoints.Protheus
   alias Tecnovix.App.Screens
   alias Tecnovix.Services.Auth
+  alias Tecnovix.AgendaModel
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -91,6 +92,20 @@ defmodule TecnovixWeb.VendedoresController do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true, data: pedidos}))
+    end
+  end
+
+  def reports(conn, _params) do
+    {:ok, seller} = conn.private.auth
+
+    with {:ok, report_schedule} <- AgendaModel.report_schedule(seller) do
+      data = %{
+        schedule: report_schedule
+      }
+
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true, data: data}))
     end
   end
 end

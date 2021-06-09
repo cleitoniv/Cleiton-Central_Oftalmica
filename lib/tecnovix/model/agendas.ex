@@ -1,6 +1,8 @@
 defmodule Tecnovix.AgendaModel do
   use Tecnovix.DAO, schema: Tecnovix.AgendaSchema
+
   alias Tecnovix.AgendaSchema
+  alias Tecnovix.ClientesSchema
   alias Tecnovix.Repo
   import Ecto.Query
 
@@ -53,5 +55,23 @@ defmodule Tecnovix.AgendaModel do
 
     {:ok, resp} = HTTPoison.get(url_base)
     {:ok, Jason.decode!(resp.body)}
+  end
+
+  def report_schedule(seller) do
+    report =
+      AgendaSchema
+      |> join(:inner, [a], c in ClientesSchema)
+      |> where([a, c], a.vendedor_id == ^seller.id or c.vendedor == ^seller.codigo)
+      |> select(
+        [a, c],
+        %{
+          total_clientes: count(c.id),
+          visitas_agendadas: count(a.id)
+        }
+      )
+      |> Repo.all()
+      |> Enum.at(0)
+
+    {:ok, report}
   end
 end

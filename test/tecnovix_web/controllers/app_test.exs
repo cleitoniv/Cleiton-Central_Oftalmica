@@ -117,7 +117,6 @@ defmodule Tecnovix.Test.App do
         end
       )
 
-
     pedido =
       build_conn()
       |> Generator.put_auth(user_firebase["idToken"])
@@ -198,7 +197,7 @@ defmodule Tecnovix.Test.App do
         "nome" => "Victor"
       })
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
 
     payments =
       build_conn()

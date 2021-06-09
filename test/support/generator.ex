@@ -55,6 +55,7 @@ defmodule TecnovixWeb.Support.Generator do
 
   def user_param() do
     %{
+      "vendedor" => "033",
       "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
       "email_fiscal" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
       "fisica_jurid" => "F",

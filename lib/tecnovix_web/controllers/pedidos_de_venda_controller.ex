@@ -227,7 +227,6 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
     with {:ok, pedido} <-
            stub.get_pedido_id(pedido_id, cliente.id, data_nascimento, reposicao, nome) do
-
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")
