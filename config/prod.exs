@@ -65,7 +65,8 @@ config :tecnovix,
        :sync_users_salt,
        "B9cwPTrRRrk/W+4psbuf2AI7Z6G/ncMDdunFXp52LqpwgiBTVUCYyBbjbre90S2v"
 
-config :tecnovix, :central_endpoint, "10.101.109.1:8080"
+config :tecnovix, :central_endpoint, "http://10.101.109.1:8080"
+
 # config :tecnovix, :central_endpoint, "http://hom.app.centraloftalmica.com:8080"
 
 config :tecnovix, :protheus_username, "TECNOVIX"
