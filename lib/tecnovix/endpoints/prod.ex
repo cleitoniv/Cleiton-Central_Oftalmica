@@ -7,7 +7,9 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   @impl true
   def token(%{username: _username, password: _password} = params) do
     params = Map.put(params, :grant_type, "password")
+
     url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
+
     IO.inspect url
     HTTPoison.post(url, [], @header)
   end
