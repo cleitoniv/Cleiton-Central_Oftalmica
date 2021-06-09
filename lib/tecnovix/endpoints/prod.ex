@@ -8,6 +8,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   def token(%{username: _username, password: _password} = params) do
     params = Map.put(params, :grant_type, "password")
     url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
+    IO.inspect url
     HTTPoison.post(url, [], @header)
   end
 
@@ -83,7 +84,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
     url = Protheus.generate_url("/rest/fwmodel/SE4REST")
 
-    # url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SE4REST"
+    # url = "httmp://hom.app.centraloftalmica.com:8080/rest/fwmodel/SE4REST"
 
     HTTPoison.get(url, header)
   end
