@@ -10,7 +10,7 @@ defmodule Tecnovix.Services.Auth do
 
   def get_token() do
     protheus = Protheus.stub()
-    {:ok, token} = protheus.token(%{username: @username, password: @password}) |> IO.inspect
+    {:ok, token} = protheus.token(%{username: @username, password: @password}) |> IO.inspect()
 
     case token.status_code do
       201 ->

@@ -8,8 +8,9 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   @impl true
   def token(params) do
     params = Map.put(params, :grant_type, "password")
+
     url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
-    HTTPoison.post(url, [], @header) |> IO.inspect
+    HTTPoison.post(url, [], @header) |> IO.inspect()
   end
 
   @impl true
@@ -30,8 +31,9 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
   @impl true
   def get_contract_table_finan(%{cliente: _cliente, loja: _loja}, token) do
-    url =
-      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=007480&LOJA=01&GRUPO=CRFI"
+    url = Protheus.generate_url("/rest/fwmodel/TBPRREST/?CLIENTE=007480&LOJA=01&GRUPO=CRFI")
+    # url =
+    # "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=007480&LOJA=01&GRUPO=CRFI"
 
     header = Protheus.authenticate(@header, token)
 
@@ -41,9 +43,14 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   @impl true
   def get_contract_table(%{cliente: _cliente, loja: _loja, grupo: grupo}, token) do
     url =
-      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{"007480"}&LOJA=#{
-        "01"
-      }&GRUPO=#{grupo}"
+      Protheus.generate_url(
+        "/rest/fwmodel/TBPRREST/?CLIENTE=#{"007480"}&LOJA=#{"01"}&GRUPO=#{grupo}"
+      )
+
+    # url =
+    #   "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{"007480"}&LOJA=#{
+    #     "01"
+    #   }&GRUPO=#{grupo}"
 
     header = Protheus.authenticate(@header, token)
 
@@ -62,10 +69,12 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   def get_product_by_serial(%{cliente: _cliente, loja: _loja, serial: serial, token: token}) do
     header = Protheus.authenticate(@header, token)
 
-    url =
-      "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=005087&LOJA=01&NUMSERIE=#{
-        serial
-      }"
+    url = Protheus.generate_url("rest/fwmodel/SERREST/?CLIENTE=005087&LOJA=01&NUMSERIE=#{serial}")
+
+    # url =
+    #   "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=005087&LOJA=01&NUMSERIE=#{
+    #     serial
+    #   }"
 
     HTTPoison.get(url, header)
   end
@@ -83,7 +92,9 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   def generate_boleto(token) do
     header = Protheus.authenticate(@header, token)
 
-    url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SE4REST"
+    url = Protheus.generate_url("/rest/fwmodel/SE4REST")
+
+    # url = "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SE4REST"
 
     HTTPoison.get(url, header)
   end
