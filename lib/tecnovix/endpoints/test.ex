@@ -9,7 +9,7 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
   def token(params) do
     params = Map.put(params, :grant_type, "password")
     url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
-    HTTPoison.post(url, [], @header)
+    HTTPoison.post(url, [], @header) |> IO.inspect
   end
 
   @impl true
