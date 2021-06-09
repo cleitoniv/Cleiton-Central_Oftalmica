@@ -37,7 +37,7 @@ config :gettext, :default_locale, "pt_BR"
 
 config :tecnovix, Tecnovix.Gettext, default_locale: "pt_BR"
 
-config :tecnovix, :central_endpoint, "10.101.109.1:8080"
+# config :tecnovix, :central_endpoint, "10.101.109.1:8080"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

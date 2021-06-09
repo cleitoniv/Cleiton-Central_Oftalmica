@@ -84,9 +84,9 @@ config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"
 config :tecnovix, :salt, "SALT"
 config :tecnovix, :firebase_api_key_client, "AIzaSyADayA3jTgwWee7_3C2h4YSTo6nScuAQaI"
 config :tecnovix, :firebase_api_key_vendedor, "AIzaSyC76yu3gONK-twporVGue4X4_nk42k-R30"
-config :tecnovix, :central_endpoint, "10.101.109.1:8080"
+# config :tecnovix, :central_endpoint, "10.101.109.1:8080"
 
-# config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
+config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
 
 config :tecnovix, :protheus_username, "TECNOVIX"
 config :tecnovix, :protheus_password, "TecnoVix200505"
