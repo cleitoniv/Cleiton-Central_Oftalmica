@@ -44,12 +44,10 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   defp change_operation_and_tipo_venda(items) do
-    IO.inspect items
     Enum.reduce(items, [], fn item, acc ->
-      with true <- item["operation"] == "01",
-           true <- item["type"] == "A",
-           true <- item["tests"] == "Sim" do
-        acc ++ [Map.put(item, "type", "A") |> Map.put("operation", "04")]
+      with true <- item["operation"] == "00",
+           true <- item["type"] == "T" do
+        acc ++ [Map.put(item, "type", "C") |> Map.put("operation", "07")]
       else
         _ -> acc ++ [item]
       end
