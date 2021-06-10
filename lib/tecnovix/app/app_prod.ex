@@ -1125,6 +1125,9 @@ defmodule Tecnovix.App.ScreensProd do
                     "13" ->
                       0 + acc
 
+                    "04" ->
+                        0 + acc
+
                     _ ->
                       map.virtotal + acc
                   end
@@ -1142,6 +1145,9 @@ defmodule Tecnovix.App.ScreensProd do
                       0 + acc
 
                     "13" ->
+                      0 + acc
+
+                    "04" ->
                       0 + acc
 
                     _ ->
@@ -1173,6 +1179,7 @@ defmodule Tecnovix.App.ScreensProd do
                               "S" -> 0
                               "N" -> item.prc_unitario * item.quantidade
                             end
+                          "04" -> 0
 
                           "13" ->
                             item.valor_credito_finan * item.quantidade
