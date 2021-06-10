@@ -86,12 +86,11 @@ config :tecnovix, :firebase_api_key_client, "AIzaSyADayA3jTgwWee7_3C2h4YSTo6nScu
 config :tecnovix, :firebase_api_key_vendedor, "AIzaSyC76yu3gONK-twporVGue4X4_nk42k-R30"
 # config :tecnovix, :central_endpoint, "10.101.109.1:8080"
 
-config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
+# config :tecnovix, :central_endpoint, "http://hom.app.centraloftalmica.com:8080"
 
 config :tecnovix, :protheus_username, "TECNOVIX"
 config :tecnovix, :protheus_password, "TecnoVix200505"
 
-config :tecnovix, :central_endpoint, "http://hom.app.centraloftalmica.com:8080"
 
 config :tecnovix,
        :sync_users_salt,
