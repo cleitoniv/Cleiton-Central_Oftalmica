@@ -12,7 +12,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
   import Ecto.Query
 
-  def insert_or_update(%{"data" => data} = params) when is_list(data) |> IO.inspect do
+  def insert_or_update(%{"data" => data} = params) when is_list(data) do
     {:ok,
      Enum.map(params["data"], fn devolucao ->
        with nil <-
