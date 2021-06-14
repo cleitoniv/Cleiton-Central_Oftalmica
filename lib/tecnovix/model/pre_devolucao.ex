@@ -29,8 +29,8 @@ defmodule Tecnovix.PreDevolucaoModel do
      end)}
   end
 
-  def insert_or_update(%{"filial" => filial, "cod_pre_dev" => cod_pre_dev} = params) do
-    with nil <- Repo.get_by(PreDevolucaoSchema, filial: filial, cod_pre_dev: cod_pre_dev) |> IO.inspect do
+  def insert_or_update(%{"id" => id} = params) do
+    with nil <- Repo.get(PreDevolucaoSchema, id) |> IO.inspect do
       {:ok, changeset} = __MODULE__.create(params)
       {:ok, Repo.preload(changeset, :items)}
     else

@@ -176,13 +176,18 @@ defmodule TecnovixWeb.InsertOrUpdate do
       |> Map.get("data")
       |> IO.inspect
 
+    dev_1 =
     build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pre_devolucao", single_param |> Map.put("client_id", cliente["id"]))
-    |> recycle()
-    |> post("/api/sync/pre_devolucao", single_param |> Map.put("cliente", "Vittor"))
+      |> Generator.put_auth(token)
+      |> post("/api/sync/pre_devolucao", single_param |> Map.put("client_id", cliente["id"]))
+      |> json_response(200)
+      |> IO.inspect
 
-    |> json_response(200)
+      build_conn()
+      |> Generator.put_auth(token)
+      |> post("/api/sync/pre_devolucao", dev_1 |> Map.put("cliente", "vitt"))
+      |> json_response(200)
+      |> IO.inspect
 
     IO.inspect(Tecnovix.Repo.all(Tecnovix.PreDevolucaoSchema))
   end
