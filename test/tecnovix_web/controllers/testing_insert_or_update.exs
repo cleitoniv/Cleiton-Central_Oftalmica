@@ -165,14 +165,26 @@ defmodule TecnovixWeb.InsertOrUpdate do
     single_param = TestHelp.single_json("single_pre_devolucao.json")
     multi_param = TestHelp.multi_json("multi_pre_devolucao.json")
     multi_param = %{"data" => multi_param}
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+      |> IO.inspect
 
     build_conn()
     |> Generator.put_auth(token)
-    |> post("/api/sync/pre_devolucao", single_param)
+    |> post("/api/sync/pre_devolucao", single_param |> Map.put("client_id", cliente["id"]))
     |> recycle()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pre_devolucao", multi_param)
+    |> post("/api/sync/pre_devolucao", single_param |> Map.put("cliente", "Vittor"))
+
     |> json_response(200)
+
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.PreDevolucaoSchema))
   end
 
   test "insert or update of the table VENDEDORES" do
