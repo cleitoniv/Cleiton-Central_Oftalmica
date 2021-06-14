@@ -12,7 +12,7 @@ defmodule Tecnovix.PreDevolucaoModel do
   alias Tecnovix.ContratoDeParceriaSchema, as: Contrato
   import Ecto.Query
 
-  def insert_or_update(%{"data" => data} = params) when is_list(data) do
+  def insert_or_update(%{"data" => data} = params) when is_list(data) |> IO.inspect do
     {:ok,
      Enum.map(params["data"], fn devolucao ->
        with nil <-
@@ -30,7 +30,8 @@ defmodule Tecnovix.PreDevolucaoModel do
   end
 
   def insert_or_update(%{"filial" => filial, "cod_pre_dev" => cod_pre_dev} = params) do
-    with nil <- Repo.get_by(PreDevolucaoSchema, filial: filial, cod_pre_dev: cod_pre_dev) do
+    IO.inspect params
+    with nil <- Repo.get_by(PreDevolucaoSchema, filial: filial, cod_pre_dev: cod_pre_dev) |> IO.inspect do
       __MODULE__.create(params)
     else
       devolucao ->
@@ -38,7 +39,8 @@ defmodule Tecnovix.PreDevolucaoModel do
     end
   end
 
-  def insert_or_update(_params) do
+  def insert_or_update(params) do
+    IO.inspect params
     {:error, :invalid_parameter}
   end
 
