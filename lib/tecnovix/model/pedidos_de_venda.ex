@@ -197,6 +197,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.order_params(items)
       |> PedidosDeVendaModel.wirecard_order(taxa_entrega, taxa)
       |> Wirecard.create_order()
+      |> IO.inspect
 
     case order do
       {:ok, %{status_code: 201}} -> order

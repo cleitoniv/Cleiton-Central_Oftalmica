@@ -153,10 +153,11 @@ defmodule TecnovixWeb.InsertOrUpdate do
     build_conn()
     |> Generator.put_auth(token)
     |> post("/api/sync/pedidos_de_venda", single_param)
-    |> recycle()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pedidos_de_venda", multi_param)
+    # |> recycle()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/pedidos_de_venda", multi_param)
     |> json_response(200)
+    |> IO.inspect
   end
 
   test "insert or update of the table PRE_DEVOLUCAO" do
@@ -225,30 +226,31 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/pedidos_de_venda", single_pedido)
     |> json_response(200)
+    |> IO.inspect
 
     build_conn()
     |> Generator.put_auth(token)
     |> post("/api/sync/pedidos_de_venda", multi_pedido)
     |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pre_devolucao", single_devolucao)
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/pre_devolucao", single_devolucao)
+    # |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pre_devolucao", multi_devolucao)
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/pre_devolucao", multi_devolucao)
+    # |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/contrato_de_parceria", single_contrato)
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/contrato_de_parceria", single_contrato)
+    # |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/contrato_de_parceria", multi_contrato)
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/contrato_de_parceria", multi_contrato)
+    # |> json_response(200)
   end
 end
