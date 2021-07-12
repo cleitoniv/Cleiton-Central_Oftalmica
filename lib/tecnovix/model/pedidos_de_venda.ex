@@ -847,6 +847,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
+  IO.inspect filtro
     case filtro do
       "2" ->
         get_pacientes_revisao(cliente_id) |> IO.inspect()
@@ -857,10 +858,11 @@ defmodule Tecnovix.PedidosDeVendaModel do
           |> preload(:items)
           |> where(
             [p],
-            (p.client_id == ^cliente_id and p.status_ped == ^filtro) or p.status_ped == 3
+            (p.client_id == ^cliente_id and p.status_ped == ^filtro) or (p.client_id == ^cliente_id and p.status_ped == 3)
           )
           |> order_by([p], desc: p.inserted_at)
           |> Repo.all()
+          |> IO.inspect
 
       _ ->
         _pedidos =
