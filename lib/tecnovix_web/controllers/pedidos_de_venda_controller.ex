@@ -89,7 +89,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   end
 
   def insert_or_update(conn, params) do
-    with {:ok, pedido} <- PedidosDeVendaModel.insert_or_update(params) |> IO.inspect do
+    with {:ok, pedido} <- PedidosDeVendaModel.insert_or_update(params) |> IO.inspect() do
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

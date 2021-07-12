@@ -2,7 +2,7 @@
 {
   "cliente_id": 1,
   "nome_titular": "Victor Augusto",
-  "cpf_titular": "123456789012",
+  "cpf_cnpj_titular": "123456789012",
   "telefone_titular": "Estou escrevendo isso somente para testar!",
   "data_nascimento_titular": "01-01-2020",
   "primeiros_6_digitos": "123456",

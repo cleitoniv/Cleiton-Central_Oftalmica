@@ -242,7 +242,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
             "birthdate" => Date.to_string(cartao.data_nascimento_titular),
             "taxDocument" => %{
               "type" => "CPF",
-              "number" => cartao.cpf_titular
+              "number" => cartao.cpf_cnpj_titular
             },
             "phone" => %{
               "countryCode" => "55",

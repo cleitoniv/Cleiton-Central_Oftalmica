@@ -119,7 +119,7 @@ defmodule TecnovixWeb.Support.Generator do
     %{
       "cliente_id" => cliente_id,
       "nome_titular" => "Tecnovix",
-      "cpf_titular" => "78994193600",
+      "cpf_cnpj_titular" => "78994193600",
       "telefone_titular" => "5527996211804",
       "data_nascimento_titular" => "2020-08-08",
       "primeiros_6_digitos" => "123456",
@@ -144,7 +144,7 @@ defmodule TecnovixWeb.Support.Generator do
     %{
       "cliente_id" => cliente_id,
       "nome_titular" => "CANCEL",
-      "cpf_titular" => "78994193600",
+      "cpf_cnpj_titular" => "78994193600",
       "telefone_titular" => "5527996211804",
       "data_nascimento_titular" => "2020-08-08",
       "primeiros_6_digitos" => "123456",

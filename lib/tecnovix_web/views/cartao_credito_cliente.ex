@@ -6,7 +6,7 @@ defmodule TecnovixWeb.CartaoCreditoClienteView do
       id: item.id,
       cliente_id: item.cliente_id,
       nome_titular: item.nome_titular,
-      cpf_titular: item.cpf_titular,
+      cpf_cnpj_titular: item.cpf_cnpj_titular,
       telefone_titular: item.telefone_titular,
       data_nascimento_titular: item.data_nascimento_titular,
       primeiros_6_digitos: item.primeiros_6_digitos,

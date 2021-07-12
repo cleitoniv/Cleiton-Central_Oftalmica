@@ -157,7 +157,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
     # |> Generator.put_auth(token)
     # |> post("/api/sync/pedidos_de_venda", multi_param)
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
   end
 
   test "insert or update of the table PRE_DEVOLUCAO" do
@@ -175,20 +175,20 @@ defmodule TecnovixWeb.InsertOrUpdate do
       |> post("/api/cliente", %{"param" => user_param})
       |> json_response(201)
       |> Map.get("data")
-      |> IO.inspect
+      |> IO.inspect()
 
     dev_1 =
-    build_conn()
+      build_conn()
       |> Generator.put_auth(token)
       |> post("/api/sync/pre_devolucao", single_param |> Map.put("client_id", cliente["id"]))
       |> json_response(200)
-      |> IO.inspect
+      |> IO.inspect()
 
-      build_conn()
-      |> Generator.put_auth(token)
-      |> post("/api/sync/pre_devolucao", dev_1 |> Map.put("cliente", "vitt"))
-      |> json_response(200)
-      |> IO.inspect
+    build_conn()
+    |> Generator.put_auth(token)
+    |> post("/api/sync/pre_devolucao", dev_1 |> Map.put("cliente", "vitt"))
+    |> json_response(200)
+    |> IO.inspect()
 
     IO.inspect(Tecnovix.Repo.all(Tecnovix.PreDevolucaoSchema))
   end
@@ -226,7 +226,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/pedidos_de_venda", single_pedido)
     |> json_response(200)
-    |> IO.inspect
+    |> IO.inspect()
 
     build_conn()
     |> Generator.put_auth(token)

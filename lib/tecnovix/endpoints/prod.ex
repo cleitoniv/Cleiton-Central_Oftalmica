@@ -10,16 +10,16 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
     url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
 
-    IO.inspect url
+    IO.inspect(url)
     HTTPoison.post(url, [], @header)
   end
 
   @impl true
   def get_contract_table(%{cliente: cliente, loja: loja, grupo: grupo}, token) do
-
-    url = Protheus.generate_url("/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{
-      loja
-    }&GRUPO=#{grupo}")
+    url =
+      Protheus.generate_url(
+        "/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{loja}&GRUPO=#{grupo}"
+      )
 
     # url =
     #   "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{
@@ -33,9 +33,8 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
   @impl true
   def get_contract_table_finan(%{cliente: cliente, loja: loja}, token) do
-    url = Protheus.generate_url("/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{
-      loja
-    }&GRUPO=CRFI")
+    url =
+      Protheus.generate_url("/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{loja}&GRUPO=CRFI")
 
     # url =
     #   "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/TBPRREST/?CLIENTE=#{cliente}&LOJA=#{
@@ -50,9 +49,11 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   @impl true
   def get_product_by_serial(%{cliente: cliente, loja: loja, serial: serial, token: token}) do
     header = Protheus.authenticate(@header, token)
-    url = Protheus.generate_url("/rest/fwmodel/SERREST/?CLIENTE=#{cliente}&LOJA=#{
-      loja
-    }&NUMSERIE=#{serial}")
+
+    url =
+      Protheus.generate_url(
+        "/rest/fwmodel/SERREST/?CLIENTE=#{cliente}&LOJA=#{loja}&NUMSERIE=#{serial}"
+      )
 
     # url =
     #   "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/SERREST/?CLIENTE=#{cliente}&LOJA=#{
@@ -66,9 +67,10 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   def get_client_products(%{cliente: cliente, loja: loja, count: count, token: token}) do
     header = Protheus.authenticate(@header, token)
 
-    url = Protheus.generate_url("/rest/fwmodel/GRIDREST/?CLIENTE=#{cliente}&LOJA=#{
-      loja
-    }&COUNT=#{count}")
+    url =
+      Protheus.generate_url(
+        "/rest/fwmodel/GRIDREST/?CLIENTE=#{cliente}&LOJA=#{loja}&COUNT=#{count}"
+      )
 
     # url =
     #   "http://hom.app.centraloftalmica.com:8080/rest/fwmodel/GRIDREST/?CLIENTE=#{cliente}&LOJA=#{

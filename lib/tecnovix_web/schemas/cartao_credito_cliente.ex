@@ -4,7 +4,7 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
 
   schema "cartao_credito_cliente" do
     field :nome_titular, :string
-    field :cpf_titular, :string
+    field :cpf_cnpj_titular, :string
     field :telefone_titular, :string
     field :data_nascimento_titular, :date
     field :primeiros_6_digitos, :string
@@ -33,7 +33,7 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
     |> cast(params, [
       :cliente_id,
       :nome_titular,
-      :cpf_titular,
+      :cpf_cnpj_titular,
       :telefone_titular,
       :data_nascimento_titular,
       :primeiros_6_digitos,
@@ -56,7 +56,7 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
     |> validate_required([
       :cliente_id,
       :nome_titular,
-      :cpf_titular,
+      :cpf_cnpj_titular,
       :mes_validade,
       :ano_validade
     ])

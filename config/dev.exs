@@ -91,7 +91,6 @@ config :tecnovix, :firebase_api_key_vendedor, "AIzaSyC76yu3gONK-twporVGue4X4_nk4
 config :tecnovix, :protheus_username, "TECNOVIX"
 config :tecnovix, :protheus_password, "TecnoVix200505"
 
-
 config :tecnovix,
        :sync_users_salt,
        "B9cwPTrRRrk/W+4psbuf2AI7Z6G/ncMDdunFXp52LqpwgiBTVUCYyBbjbre90S2v"

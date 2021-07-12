@@ -197,7 +197,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> PedidosDeVendaModel.order_params(items)
       |> PedidosDeVendaModel.wirecard_order(taxa_entrega, taxa)
       |> Wirecard.create_order()
-      |> IO.inspect
+      |> IO.inspect()
 
     case order do
       {:ok, %{status_code: 201}} -> order
@@ -711,7 +711,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             "birthdate" => Date.to_string(cartao.data_nascimento_titular),
             "taxDocument" => %{
               "type" => "CPF",
-              "number" => cartao.cpf_titular
+              "number" => cartao.cpf_cnpj_titular
             },
             "phone" => %{
               "countryCode" => "55",
@@ -847,7 +847,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def get_pedidos(cliente_id, filtro) do
-  IO.inspect filtro
+    IO.inspect(filtro)
+
     case filtro do
       "2" ->
         get_pacientes_revisao(cliente_id) |> IO.inspect()
@@ -858,11 +859,12 @@ defmodule Tecnovix.PedidosDeVendaModel do
           |> preload(:items)
           |> where(
             [p],
-            (p.client_id == ^cliente_id and p.status_ped == ^filtro) or (p.client_id == ^cliente_id and p.status_ped == 3)
+            (p.client_id == ^cliente_id and p.status_ped == ^filtro) or
+              (p.client_id == ^cliente_id and p.status_ped == 3)
           )
           |> order_by([p], desc: p.inserted_at)
           |> Repo.all()
-          |> IO.inspect
+          |> IO.inspect()
 
       _ ->
         _pedidos =
