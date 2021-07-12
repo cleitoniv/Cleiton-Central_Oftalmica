@@ -83,7 +83,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       |> __MODULE__.order_params(params)
       |> CreditoFinanceiroModel.wirecard_order()
       |> Wirecard.create_order()
-      |> IO.inspect
+      |> IO.inspect()
 
     case order do
       {:ok, %{status_code: 201}} -> order
@@ -228,6 +228,12 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   end
 
   def payment_params({:ok, cartao = %CartaoSchema{}}, params) do
+    case(length(cartao.cpf_cnpj_titular)) do
+      14 -> "CNPJ"
+      11 -> "CPF"
+    end
+    |> IO.inspect()
+
     %{
       "installmentCount" => Enum.reduce(params, 0, fn map, _acc -> map["prestacoes"] end),
       "statementDescriptor" => "central",
@@ -242,10 +248,11 @@ defmodule Tecnovix.CreditoFinanceiroModel do
             "fullname" => cartao.nome_titular,
             "birthdate" => Date.to_string(cartao.data_nascimento_titular),
             "taxDocument" => %{
-              "type" => case(length(cartao.cpf_cnpj_titular)) |> IO.inspect do
-              14 -> "CNPJ"
-              11 -> "CPF"
-              end,
+              "type" =>
+                case(length(cartao.cpf_cnpj_titular)) do
+                  14 -> "CNPJ"
+                  11 -> "CPF"
+                end,
               "number" => cartao.cpf_cnpj_titular
             },
             "phone" => %{
