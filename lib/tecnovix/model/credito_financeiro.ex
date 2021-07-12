@@ -83,6 +83,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       |> __MODULE__.order_params(params)
       |> CreditoFinanceiroModel.wirecard_order()
       |> Wirecard.create_order()
+      |> IO.inspect
 
     case order do
       {:ok, %{status_code: 201}} -> order
