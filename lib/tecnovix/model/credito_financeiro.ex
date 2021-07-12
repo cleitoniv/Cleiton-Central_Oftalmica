@@ -83,7 +83,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       |> __MODULE__.order_params(params)
       |> CreditoFinanceiroModel.wirecard_order()
       |> Wirecard.create_order()
-      |> IO.inspect
+      |> IO.inspect()
 
     case order do
       {:ok, %{status_code: 201}} -> order
@@ -206,7 +206,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
         "birthDate" => cliente.data_nascimento,
         "taxDocument" => %{
           "type" => fisica_jurid,
-          "number" => "12345678901"
+          "number" => cliente.cpf_cnpj_titular
         },
         "phone" => %{
           "countryCode" => "55",
@@ -220,7 +220,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
           "street" => cliente.endereco,
           "streetNumber" => cliente.numero,
           "zipCode" => cliente.cep,
-          "state" => "SP",
+          "state" => cliente.estado,
           "country" => "BRA"
         }
       }
@@ -242,7 +242,11 @@ defmodule Tecnovix.CreditoFinanceiroModel do
             "fullname" => cartao.nome_titular,
             "birthdate" => Date.to_string(cartao.data_nascimento_titular),
             "taxDocument" => %{
-              "type" => "CPF",
+              "type" =>
+                case(length(cartao.cpf_cnpj_titular)) do
+                  14 -> "CNPJ"
+                  11 -> "CPF"
+                end,
               "number" => cartao.cpf_cnpj_titular
             },
             "phone" => %{

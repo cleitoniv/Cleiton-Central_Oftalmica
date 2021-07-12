@@ -63,10 +63,12 @@ defmodule TecnovixWeb.CreditoFinanceiroController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, items_order} <- CreditoFinanceiroModel.items_order(params) |> IO.inspect,
-         {:ok, order} <- CreditoFinanceiroModel.order(items_order, cliente) |> IO.inspect,
-         {:ok, payment} <- CreditoFinanceiroModel.payment(id_cartao, order, params) |> IO.inspect,
-         {:ok, credito} <- CreditoFinanceiroModel.insert(params, order, payment, cliente.id) |> IO.inspect,
+    with {:ok, items_order} <- CreditoFinanceiroModel.items_order(params) |> IO.inspect(),
+         {:ok, order} <- CreditoFinanceiroModel.order(items_order, cliente) |> IO.inspect(),
+         {:ok, payment} <-
+           CreditoFinanceiroModel.payment(id_cartao, order, params) |> IO.inspect(),
+         {:ok, credito} <-
+           CreditoFinanceiroModel.insert(params, order, payment, cliente.id) |> IO.inspect(),
          {:ok, _notifications} <-
            NotificacoesClienteModel.credit_finan_adquired(credito, cliente),
          {:ok, _logs} <-
