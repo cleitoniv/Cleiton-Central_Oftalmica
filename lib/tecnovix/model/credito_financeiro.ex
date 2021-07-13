@@ -228,7 +228,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
   end
 
   def payment_params({:ok, cartao = %CartaoSchema{}}, params) do
-    case(length(cartao.cpf_cnpj_titular)) do
+    case(String.length(cartao.cpf_cnpj_titular)) do
       14 -> "CNPJ"
       11 -> "CPF"
     end
@@ -249,7 +249,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
             "birthdate" => Date.to_string(cartao.data_nascimento_titular),
             "taxDocument" => %{
               "type" =>
-                case(length(cartao.cpf_cnpj_titular)) do
+                case(String.length(cartao.cpf_cnpj_titular)) do
                   14 -> "CNPJ"
                   11 -> "CPF"
                 end,
