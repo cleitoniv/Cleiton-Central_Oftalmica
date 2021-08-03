@@ -27,7 +27,7 @@ defmodule Tecnovix.Resource.Wirecard.Actions do
   @doc """
   Cria uma ordem de compra na wirecard
   """
-  def create_order(order_params) do
+  def create_order({:ok, order_params}) do
     %Order{}
     |> Order.changeset(order_params)
     |> SDK.create(:orders)
@@ -45,7 +45,7 @@ defmodule Tecnovix.Resource.Wirecard.Actions do
   @doc """
   Cria um pagamento na wirecard baseado no order id.
   """
-  def create_payment(params, order_id) do
+  def create_payment({:ok, params}, order_id) do
     %Payment{}
     |> Payment.changeset(params)
     |> SDK.create(order_id, :payment)

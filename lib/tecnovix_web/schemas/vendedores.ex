@@ -6,14 +6,14 @@ defmodule Tecnovix.VendedoresSchema do
     field :uid, :string
     field :codigo, :string
     field :nome, :string
-    field :sit_app, :string
+    field :sit_app, :string, default: "E"
     field :cnpj_cpf, :string
     field :email, :string
     field :regiao, :string
-    field :celular, :string
-    field :status, :string
-    field :moip_account_id, :string
-    field :moip_acess_token, :string
+    field :ddd, :string
+    field :telefone, :string
+    field :status, :integer, default: 1
+    field :data_nascimento, :string
 
     timestamps()
   end
@@ -28,11 +28,20 @@ defmodule Tecnovix.VendedoresSchema do
       :cnpj_cpf,
       :email,
       :regiao,
-      :celular,
+      :ddd,
+      :telefone,
       :status,
-      :moip_account_id,
-      :moip_acess_token
+      :data_nascimento
     ])
-    |> validate_required([:codigo, :cnpj_cpf])
+    |> validate_required([:cnpj_cpf, :email, :telefone, :ddd, :nome, :regiao],
+      message: "Não pode ficar em branco."
+    )
+    |> unique_constraint(:vendedores_constraint)
+    |> unique_constraint(:cnpj_cpf, message: "Esse CNPJ ou CPF já existe.")
+    |> unique_constraint(:email, message: "Esse email já existe.")
+    |> unique_constraint([:ddd, :telefone],
+      message: "Esse número de telefone já existe.",
+      name: :telefone_ddd_vendedor
+    )
   end
 end

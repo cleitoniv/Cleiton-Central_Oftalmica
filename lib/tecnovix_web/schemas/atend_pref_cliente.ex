@@ -19,7 +19,7 @@ defmodule Tecnovix.AtendPrefClienteSchema do
     field :sab_tarde, :integer, default: 0
     field :observacoes, :string
     belongs_to :cliente, Tecnovix.ClientesSchema
-    
+
     timestamps()
   end
 

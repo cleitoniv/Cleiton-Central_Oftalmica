@@ -1,0 +1,42 @@
+Exercicio Banco
+
+Passo 1 - Criar uma funcao criar_conta/3
+Essa funcao recebe 3 parametros, nome tipo string, email tipo string e saldo tipo inteiro
+Essa funcao retorna um hashmap. ex:
+
+  %{
+    nome: nome,
+    email: email,
+    saldo: saldo
+  }
+
+Passo 2 - Criar uma funcao deposito/2
+Essa funcao recebe os parametros conta que é um hashmap igual ao do exemplo acima, e um numero inteiro
+Essa funcao deve reduzir a conta do cliente com o valor do deposito acrescentado no saldo
+
+Exemplo:
+
+Tenho uma conta. ex: 
+%{
+  nome: "Thiago", 
+  email: "thiago2kboeker@gmail.com", 
+  saldo: 100
+}
+
+Que criei usando a funcao criar_conta/3.
+
+Dai chamo a funcao deposito/2. ex: 
+
+Banco.deposito(conta, 50)
+
+A funcao deve retornar um novo hashmap com o saldo aumentado. 
+ex: 
+
+%{
+  nome: "Thiago", 
+  email: "thiago2kboeker@gmail.com", 
+  saldo: 150
+}
+
+Passo 3 - Criar uma funcao saque/2 e fazer o mesmo processo que no deposito, porem debitando o valor do saldo
+do cliente.

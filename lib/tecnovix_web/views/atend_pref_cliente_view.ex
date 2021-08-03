@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.AtendPrefClienteView do
   use Tecnovix.Resource.View, model: Tecnovix.AtendPrefClienteModel
+  import TecnovixWeb.ErrorParserView
 
   def build(%{item: item}) do
     %{
@@ -17,7 +18,14 @@ defmodule TecnovixWeb.AtendPrefClienteView do
       sex_manha: item.sex_manha,
       sex_tarde: item.sex_tarde,
       sab_manha: item.sab_manha,
-      sab_tarde: item.sab_tarde
+      sab_tarde: item.sab_tarde,
+      success: true
     }
+  end
+
+  multi_parser("atends.json", [:cliente_id, :cod_cliente, :loja_cliente])
+
+  def render("atends.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
   end
 end

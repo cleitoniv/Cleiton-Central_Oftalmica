@@ -27,11 +27,17 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :tecnovix, :remetente, "thiago2kboeker@gmail.com"
+config :tecnovix, :remetente, "victorasilva0707@gmail.com"
 
 config :tecnovix, Tecnovix.Mailer,
   adapter: Bamboo.SendGridAdapter,
-  api_key: "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"
+  api_key: "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"
+
+config :gettext, :default_locale, "pt_BR"
+
+config :tecnovix, Tecnovix.Gettext, default_locale: "pt_BR"
+
+# config :tecnovix, :central_endpoint, "10.101.109.1:8080"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -49,7 +49,7 @@ defmodule Tecnovix.Resource.Wirecard.Order do
     |> cast_embed(:items, with: &item_changeset/2)
     |> cast_embed(:customer)
     |> cast_embed(:receivers, with: &receiver_changeset/2)
-    |> validate_required([:ownId, :amount, :items, :customer, :receivers])
+    |> validate_required([:ownId, :amount, :items, :customer])
   end
 
   defp amount_changeset(changeset, params) do
@@ -63,8 +63,6 @@ defmodule Tecnovix.Resource.Wirecard.Order do
   defp subtotals_changeset(changeset, params) do
     changeset
     |> cast(params, [:shipping, :addition, :discount])
-    |> validate_number(:shipping, greater_than: 0)
-    |> validate_number(:addition, greater_than: 0)
     |> validate_number(:discount, greater_than: 0)
   end
 

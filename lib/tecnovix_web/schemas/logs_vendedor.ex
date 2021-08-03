@@ -3,7 +3,7 @@ defmodule Tecnovix.LogsVendedorSchema do
   import Ecto.Changeset
 
   schema "logs_vendedor" do
-    field :vendedor_id, :integer
+    belongs_to :vendedor, Tecnovix.VendedoresSchema
     field :data, :utc_datetime
     field :ip, :string
     field :dispositivo, :string

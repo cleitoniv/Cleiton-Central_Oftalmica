@@ -9,8 +9,33 @@ defmodule Tecnovix.TestHelp do
     |> Jason.decode!()
   end
 
+  def error_multi(path) do
+    File.read!("test/support/erros_multi_insert/" <> path)
+    |> Jason.decode!()
+  end
+
+  def sms() do
+    File.read!("test/support/protheus/sms_json.json")
+    |> Jason.decode!()
+  end
+
   def cliente() do
     File.read!("test/support/protheus/cliente.json")
+    |> Jason.decode!()
+  end
+
+  def cliente_cnpj() do
+    File.read!("test/support/protheus/cliente_cnpj.json")
+    |> Jason.decode!()
+  end
+
+  def product_client() do
+    File.read!("test/support/protheus/product_client.json")
+    |> Jason.decode!()
+  end
+
+  def serial_product() do
+    File.read!("test/support/protheus/product_serial.json")
     |> Jason.decode!()
   end
 

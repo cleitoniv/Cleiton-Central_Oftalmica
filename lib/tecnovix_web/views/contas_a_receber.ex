@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.ContasAReceberView do
   use Tecnovix.Resource.View, model: Tecnovix.ContasAReceberModel
+  import TecnovixWeb.ErrorParserView
 
   def build(%{item: item}) do
     %{
@@ -15,5 +16,11 @@ defmodule TecnovixWeb.ContasAReceberView do
       saldo: item.saldo,
       cod_barras: item.cod_barras
     }
+  end
+
+  multi_parser("contas.json", [:cliente, :loja])
+
+  def render("contas.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
   end
 end

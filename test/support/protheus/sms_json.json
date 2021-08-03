@@ -1,0 +1,22 @@
+{
+  "api": "sms",
+  "modulo": "enviar",
+  "status": "ok",
+  "codigo": "000",
+  "msg": "001 - Mensagem enviada com sucessso - CALLER-ID: 55694775188625",
+  "destino": [
+      "5541987654321",
+      "5541912345678"
+  ],
+  "callerid": "55694775188625",
+  "detalhe": [
+    {
+        "id_mensagem": 55694762999823,
+        "destino": "5541987654321"
+    },
+    {
+        "id_mensagem": 55694775188733,
+        "destino": "5541912345678"
+    }
+  ]
+}

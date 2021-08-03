@@ -1,17 +1,22 @@
 defmodule TecnovixWeb.ClientesView do
   use Tecnovix.Resource.View, model: Tecnovix.ClientesModel
+  import TecnovixWeb.ErrorParserView
+  alias Tecnovix.App.Screens
 
   def build(%{item: item}) do
     %{
       id: item.id,
       uid: item.uid,
+      role: item.role,
       codigo: item.codigo,
       loja: item.loja,
+      cadastrado: item.cadastrado,
       fisica_jurid: item.fisica_jurid,
       cnpj_cpf: item.cnpj_cpf,
       nome: item.nome,
       email: item.email,
-      data_nascimento: item.data_nascimento,
+      email_fiscal: item.email_fiscal,
+      data_nascimento: formatting_dtnasc(item.data_nascimento),
       nome_empresarial: item.nome_empresarial,
       endereco: item.endereco,
       numero: item.numero,
@@ -19,6 +24,8 @@ defmodule TecnovixWeb.ClientesView do
       bairro: item.bairro,
       cep: item.cep,
       cdmunicipio: item.cdmunicipio,
+      municipio: item.municipio,
+      estado: item.estado,
       ddd: item.ddd,
       telefone: item.telefone,
       bloqueado: item.bloqueado,
@@ -29,8 +36,77 @@ defmodule TecnovixWeb.ClientesView do
       crm_medico: item.crm_medico,
       dia_remessa: item.dia_remessa,
       wirecard_cliente_id: item.wirecard_cliente_id,
-      fcm_token: item.fcm_token
+      fcm_token: item.fcm_token,
+      apelido: item.apelido
     }
+  end
+
+  def formatting_dtnasc(data) do
+    case data do
+      nil ->
+        ""
+
+      data ->
+        [ano, mes, dia] = String.split(Date.to_string(data), ["/", "-"])
+        "#{dia}-#{mes}-#{ano}"
+    end
+  end
+
+  def render("app_clientes.json", %{clientes: clientes}) do
+    render_many(clientes, __MODULE__, "clientes.json", as: :item)
+  end
+
+  def render("clientes_seller.json", %{clientes: clientes}) do
+    %{
+      success: true,
+      data: render_many(clientes, __MODULE__, "cliente.json", as: :item)
+    }
+  end
+
+  def render("cliente.json", %{item: item}) do
+    stub = Screens.stub()
+
+    with credits <- stub.get_credits(item),
+         {:ok, notifications} <- stub.get_notifications(item) do
+      %{
+        id: item.id,
+        uid: item.uid,
+        codigo: item.codigo,
+        cadastrado: item.cadastrado,
+        role: item.role,
+        loja: item.loja,
+        fisica_jurid: item.fisica_jurid,
+        cnpj_cpf: item.cnpj_cpf,
+        data_nascimento: item.data_nascimento,
+        nome: String.capitalize(item.nome),
+        nome_empresarial: item.nome_empresarial,
+        email: item.email,
+        email_fiscal: item.email_fiscal,
+        endereco: item.endereco,
+        numero: item.numero,
+        complemento: item.complemento,
+        bairro: item.bairro,
+        cep: item.cep,
+        estado: item.estado,
+        cdmunicipio: item.cdmunicipio,
+        municipio: item.municipio,
+        ddd: item.ddd,
+        telefone: item.telefone,
+        bloqueado: item.bloqueado,
+        sit_app: item.sit_app,
+        cod_cnae: item.cod_cnae,
+        ramo: item.ramo,
+        vendedor: item.vendedor,
+        crm_medico: item.crm_medico,
+        dia_remessa: item.dia_remessa,
+        wirecard_cliente_id: item.wirecard_cliente_id,
+        fcm_token: item.fcm_token,
+        apelido: item.apelido
+      }
+      |> Map.put(:points, credits.points)
+      |> Map.put(:money, credits.money)
+      |> Map.put(:notifications, notifications)
+    end
   end
 
   def render("show_cliente.json", %{item: item}) do
@@ -39,7 +115,10 @@ defmodule TecnovixWeb.ClientesView do
       data: %{
         id: item.id,
         uid: item.uid,
+        apelido: item.apelido,
+        role: item.role,
         codigo: item.codigo,
+        cadastrado: item.cadastrado,
         loja: item.loja,
         fisica_jurid: item.fisica_jurid,
         cnpj_cpf: item.cnpj_cpf,
@@ -47,10 +126,12 @@ defmodule TecnovixWeb.ClientesView do
         nome: item.nome,
         nome_empresarial: item.nome_empresarial,
         email: item.email,
+        email_fiscal: item.email_fiscal,
         endereco: item.endereco,
         numero: item.numero,
         complemento: item.complemento,
         bairro: item.bairro,
+        estado: item.estado,
         cep: item.cep,
         cdmunicipio: item.cdmunicipio,
         municipio: item.municipio,
@@ -98,6 +179,7 @@ defmodule TecnovixWeb.ClientesView do
           id: item.cliente.id,
           uid: item.cliente.uid,
           codigo: item.cliente.codigo,
+          role: item.role,
           loja: item.cliente.loja,
           fisica_jurid: item.cliente.fisica_jurid,
           cnpj_cpf: item.cliente.cnpj_cpf,
@@ -105,10 +187,12 @@ defmodule TecnovixWeb.ClientesView do
           nome: item.cliente.nome,
           nome_empresarial: item.cliente.nome_empresarial,
           email: item.cliente.email,
+          email_fiscal: item.email_fiscal,
           endereco: item.cliente.endereco,
           numero: item.cliente.numero,
           complemento: item.cliente.complemento,
           bairro: item.cliente.bairro,
+          estado: item.cliente.estado,
           cep: item.cliente.cep,
           cdmunicipio: item.cliente.cdmunicipio,
           municipio: item.cliente.municipio,
@@ -118,6 +202,7 @@ defmodule TecnovixWeb.ClientesView do
           sit_app: item.cliente.sit_app,
           cod_cnae: item.cliente.cod_cnae,
           ramo: item.cliente.ramo,
+          apelido: item.apelido,
           vendedor: item.cliente.vendedor,
           crm_medico: item.cliente.crm_medico,
           dia_remessa: item.cliente.dia_remessa,
@@ -143,5 +228,71 @@ defmodule TecnovixWeb.ClientesView do
         }
       }
     }
+  end
+
+  multi_parser("clientes.json", [:loja, :codigo, :cnpj_cpf])
+
+  def render("clientes.json", %{item: item}) do
+    %{
+      success: true,
+      data: %{
+        id: item.id,
+        uid: item.uid,
+        codigo: item.codigo,
+        cadastrado: item.cadastrado,
+        role: item.role,
+        loja: item.loja,
+        fisica_jurid: item.fisica_jurid,
+        cnpj_cpf: item.cnpj_cpf,
+        data_nascimento: item.data_nascimento,
+        nome: item.nome,
+        nome_empresarial: item.nome_empresarial,
+        email: item.email,
+        email_fiscal: item.email_fiscal,
+        endereco: item.endereco,
+        numero: item.numero,
+        complemento: item.complemento,
+        bairro: item.bairro,
+        cep: item.cep,
+        estado: item.estado,
+        cdmunicipio: item.cdmunicipio,
+        municipio: item.municipio,
+        ddd: item.ddd,
+        telefone: item.telefone,
+        bloqueado: item.bloqueado,
+        sit_app: item.sit_app,
+        cod_cnae: item.cod_cnae,
+        ramo: item.ramo,
+        vendedor: item.vendedor,
+        crm_medico: item.crm_medico,
+        dia_remessa: item.dia_remessa,
+        wirecard_cliente_id: item.wirecard_cliente_id,
+        fcm_token: item.fcm_token,
+        apelido: item.apelido
+      }
+    }
+  end
+
+  def render("current_user.json", %{
+        item: item,
+        credits: credits,
+        notifications: notifications,
+        dia_remessa: dia_remessa
+      }) do
+    case item do
+      %Tecnovix.UsuariosClienteSchema{} ->
+        TecnovixWeb.UsuariosClienteView.build(%{item: item})
+        |> Map.put(:points, credits.points)
+        |> Map.put(:money, credits.money)
+        |> Map.put(:notifications, notifications)
+        |> Map.put(:dia_remessa, dia_remessa)
+
+      _ ->
+        __MODULE__.build(%{item: item})
+        |> Map.put(:points, credits.points)
+        |> Map.put(:money, credits.money)
+        |> Map.put(:notifications, notifications)
+        |> Map.put(:dia_remessa, dia_remessa)
+    end
   end
 end

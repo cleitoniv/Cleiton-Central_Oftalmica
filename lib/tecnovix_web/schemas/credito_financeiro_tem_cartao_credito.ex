@@ -3,8 +3,8 @@ defmodule Tecnovix.CreditoFinanceiroTemCartaoCreditoSchema do
   import Ecto.Changeset
 
   schema "credito_financeiro_tem_cartao_credito" do
-    field :credito_financeiro_id, :integer
-    field :cartao_credito_id, :integer
+    belongs_to :credito_financeiro, Tecnovix.CreditoFinanceiroSchema
+    belongs_to :cartao_credito, Tecnovix.CartaoCreditoClienteSchema
 
     timestamps()
   end

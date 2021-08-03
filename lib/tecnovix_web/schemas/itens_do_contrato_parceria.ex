@@ -3,14 +3,14 @@ defmodule Tecnovix.ItensDoContratoParceriaSchema do
   import Ecto.Changeset
 
   schema "itens_do_contrato_parceria" do
-    field :descricao_generica_do_produto_id, :integer
+    belongs_to :descricao_generica_do_produto, Tecnovix.DescricaoGenericaDoProdutoSchema
     field :filial, :string
     field :contrato_n, :string
     field :item, :string
     field :produto, :string
-    field :quantidade, :decimal
-    field :preco_venda, :decimal
-    field :total, :decimal
+    field :quantidade, :integer
+    field :preco_venda, :integer
+    field :total, :integer
     field :cliente, :string
     field :loja, :string
     belongs_to :contrato_de_parceria, Tecnovix.ContratoDeParceriaSchema
@@ -18,6 +18,7 @@ defmodule Tecnovix.ItensDoContratoParceriaSchema do
     timestamps()
   end
 
+  # retirei o campo filial
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [
@@ -33,6 +34,6 @@ defmodule Tecnovix.ItensDoContratoParceriaSchema do
       :cliente,
       :loja
     ])
-    |> validate_required([:contrato_de_parceria_id, :descricao_generica_do_produto_id, :filial])
+    |> validate_required([:contrato_de_parceria_id, :descricao_generica_do_produto_id])
   end
 end

@@ -14,6 +14,17 @@ defmodule TecnovixWeb.Support.Generator do
     |> json_response(200)
   end
 
+  def vendedor_params() do
+    %{
+      "email" => "victorasilva0707#{ECTO.UUID.autogenerate()}@gmail.com",
+      "password" => "123456",
+      "nome" => "Victor Augusto",
+      "cnpj_cpf" => "167-939-737-03",
+      "regiao" => "Norte ES",
+      "celular" => "27 99621 1804"
+    }
+  end
+
   def logs_param() do
     %{
       "data" => "2018-11-15 11:00:00",
@@ -23,28 +34,84 @@ defmodule TecnovixWeb.Support.Generator do
     }
   end
 
+  def desc_generica() do
+    %{
+      "grupo" => "010C",
+      "codigo" => "005678",
+      "descricao" => "Testando",
+      "esferico" => 1.25,
+      "cilindrico" => 1.50,
+      "eixo" => 1,
+      "cor" => "Azul",
+      "diametro" => 1.0,
+      "curva_base" => 1.5,
+      "adic_padrao" => "1",
+      "adicao" => 1,
+      "raio_curva" => "1.5",
+      "link_am_app" => "http",
+      "blo_de_tela" => "1"
+    }
+  end
+
   def user_param() do
+    %{
+      "vendedor" => "033",
+      "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
+      "email_fiscal" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
+      "fisica_jurid" => "F",
+      "cnpj_cpf" => String.slice(Float.to_string(:rand.uniform()), 2..12),
+      "sit_app" => "A",
+      "nome" => "Victor",
+      "ddd" => "27",
+      "telefone" => "27996211804",
+      "data_nascimento" => "07/07/1998",
+      "ramo" => "1",
+      "endereco" => "Rua Benedito Barcelos",
+      "numero" => "111",
+      "bairro" => "Bela Vista",
+      "estado" => "ES",
+      "cep" => "29027445",
+      "cdmunicipio" => "teste",
+      "municipio" => "Serra",
+      "crm_medico" => "teste",
+      "cod_cliente" => "nil",
+      "dia_remessa" => "3",
+      "loja" => "01",
+      "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
+      "complemento" => "Casa",
+      "cep_entrega" => "29027445",
+      "complemento_entrega" => "Sem Complemento",
+      "bairro_entrega" => "Bela Vista",
+      "endereco_entrega" => "Rua Benedito Barcelos",
+      "estado_entrega" => "ES",
+      "cidade_entrega" => "Vitória",
+      "numero_entrega" => "111"
+    }
+  end
+
+  def user_param_N() do
     %{
       "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
       "fisica_jurid" => "F",
       "cnpj_cpf" => String.slice(Ecto.UUID.autogenerate(), 1..12),
-      "sit_app" => "A",
+      "sit_app" => "N",
       "nome" => "Victor",
       "ddd" => "27",
-      "telefone" => "55996211804",
-      "data_nascimento" => "2020-07-07",
+      "telefone" => "5527996211804",
+      "data_nascimento" => "07/07/2020",
       "ramo" => "1",
       "endereco" => "Rua Benedito Barcelos",
       "numero" => "111",
       "bairro" => "Bela Vista",
       "cep" => "29027445",
       "cdmunicipio" => "teste",
-      "municipio" => "Vitoria",
+      "municipio" => "Serra",
       "crm_medico" => "teste",
-      "cod_cliente" => "nil",
+      "cod_cliente" => "123",
       "loja_cliente" => "12",
-      "codigo" => "1231",
-      "complemento" => "Casa"
+      "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
+      "complemento" => "Casa",
+      "estado" => "ES"
     }
   end
 
@@ -52,23 +119,48 @@ defmodule TecnovixWeb.Support.Generator do
     %{
       "cliente_id" => cliente_id,
       "nome_titular" => "Tecnovix",
-      "cpf_titular" => "99999999999",
-      "telefone_titular" => "999999999",
+      "cpf_cnpj_titular" => "78994193600",
+      "telefone_titular" => "5527996211804",
       "data_nascimento_titular" => "2020-08-08",
       "primeiros_6_digitos" => "123456",
       "ultimos_4_digitos" => "1234",
-      "mes_validade" => "08",
-      "ano_validade" => "2020",
-      "bandeira" => "M",
-      "status" => "1",
+      "mes_validade" => "06",
+      "ano_validade" => "2022",
+      "cartao_number" => "5555666677778884",
+      "bandeira" => "Mastercard",
       "wirecard_cartao_credito_id" => "12",
       "wirecard_cartao_credito_hash" => "1232131231",
-      "cep_endereco_cobranca" => "6666666",
+      "cep_endereco_cobranca" => "29027445",
       "logradouro_endereco_cobranca" => "Rua Helena",
       "numero_endereco_cobranca" => "550",
       "complemento_endereco_cobranca" => "casa",
       "bairro_endereco_cobranca" => "Enseada do sua",
-      "cidade_endereco_cobranca" => "Vitória",
+      "cidade_endereco_cobranca" => "Belo Horizonte",
+      "estado_endereco_cobranca" => "ES"
+    }
+  end
+
+  def cartao_reject(cliente_id) do
+    %{
+      "cliente_id" => cliente_id,
+      "nome_titular" => "CANCEL",
+      "cpf_cnpj_titular" => "78994193600",
+      "telefone_titular" => "5527996211804",
+      "data_nascimento_titular" => "2020-08-08",
+      "primeiros_6_digitos" => "123456",
+      "ultimos_4_digitos" => "1234",
+      "mes_validade" => "06",
+      "ano_validade" => "2022",
+      "cartao_number" => "5555666677778884",
+      "bandeira" => "Mastercard",
+      "wirecard_cartao_credito_id" => "12",
+      "wirecard_cartao_credito_hash" => "1232131231",
+      "cep_endereco_cobranca" => "29027445",
+      "logradouro_endereco_cobranca" => "Rua Helena",
+      "numero_endereco_cobranca" => "550",
+      "complemento_endereco_cobranca" => "casa",
+      "bairro_endereco_cobranca" => "Enseada do sua",
+      "cidade_endereco_cobranca" => "Belo Horizonte",
       "estado_endereco_cobranca" => "ES"
     }
   end
@@ -111,6 +203,33 @@ defmodule TecnovixWeb.Support.Generator do
       "email" => "teste#{Ecto.UUID.autogenerate()}@gmail.com",
       "cargo" => "Administrativo",
       "status" => 1
+    }
+  end
+
+  def user_reject() do
+    %{
+      "email" => "thiagoboeker#{Ecto.UUID.autogenerate()}@gmail.com",
+      "fisica_jurid" => "F",
+      "cnpj_cpf" => String.slice(Float.to_string(:rand.uniform()), 2..12),
+      "sit_app" => "A",
+      "nome" => "REJECT",
+      "ddd" => "27",
+      "telefone" => "33225111",
+      "data_nascimento" => "07/07/1998",
+      "ramo" => "1",
+      "endereco" => "Rua Benedito Barcelos",
+      "numero" => "111",
+      "bairro" => "Bela Vista",
+      "estado" => "ES",
+      "cep" => "29027445",
+      "cdmunicipio" => "teste",
+      "municipio" => "Serra",
+      "crm_medico" => "teste",
+      "cod_cliente" => "nil",
+      "dia_remessa" => "3",
+      "loja" => "01",
+      "codigo" => String.slice(Ecto.UUID.autogenerate(), 0..4),
+      "complemento" => "Casa"
     }
   end
 

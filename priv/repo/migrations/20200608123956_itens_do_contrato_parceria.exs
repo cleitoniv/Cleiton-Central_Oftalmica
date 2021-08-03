@@ -4,7 +4,7 @@ defmodule Tecnovix.Repo.Migrations.ItensDoContratoParceria do
   def change do
     create table(:itens_do_contrato_parceria) do
       add :contrato_de_parceria_id, :integer
-      add :descricao_generica_do_produto_id, :integer
+      add :descricao_generica_do_produto_id, references(:descricao_generica_do_produto)
       add :filial, :string, size: 4
       add :contrato_n, :string, size: 6
       add :item, :string, size: 2

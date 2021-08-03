@@ -3,7 +3,7 @@ defmodule Tecnovix.Repo.Migrations.NotificacoesCliente do
 
   def change do
     create table(:notificacoes_cliente) do
-      add :cliente_id, :integer
+      add :cliente_id, references(:clientes)
       add :data, :utc_datetime
       add :titulo, :string, size: 255
       add :descricao, :string

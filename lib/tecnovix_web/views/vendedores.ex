@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.VendedoresView do
   use Tecnovix.Resource.View, model: Tecnovix.VendedoresModel
+  import TecnovixWeb.ErrorParserView
 
   def build(%{item: item}) do
     %{
@@ -10,10 +11,16 @@ defmodule TecnovixWeb.VendedoresView do
       cnpj_cpf: item.cnpj_cpf,
       email: item.email,
       regiao: item.regiao,
-      celular: item.celular,
+      ddd: item.ddd,
+      telefone: item.telefone,
       status: item.status,
-      moip_account_id: item.moip_account_id,
-      moip_acess_token: item.moip_acess_token
+      data_nascimento: item.data_nascimento
     }
+  end
+
+  multi_parser("vendedores.json", [:nome])
+
+  def render("vendedores.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
   end
 end

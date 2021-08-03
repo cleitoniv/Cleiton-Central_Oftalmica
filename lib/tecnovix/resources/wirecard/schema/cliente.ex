@@ -62,7 +62,6 @@ defmodule Tecnovix.Resource.Wirecard.Cliente do
     changeset
     |> cast(params, [:type, :number])
     |> validate_required([:type, :number])
-    |> validate_length(:number, max: 11)
     |> validate_length(:type, max: 4)
     |> validate_inclusion(:type, ["CPF", "CNPJ"])
   end
@@ -85,7 +84,6 @@ defmodule Tecnovix.Resource.Wirecard.Cliente do
     |> validate_length(:zipCode, max: 20)
     |> validate_required([
       :streetNumber,
-      :complement,
       :state,
       :district,
       :city,

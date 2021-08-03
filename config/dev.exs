@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :tecnovix, Tecnovix.Repo,
   username: "postgres",
-  password: "vitinho01",
+  password: "postgres",
   database: "tecnovix_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
@@ -55,6 +55,7 @@ config :tecnovix, TecnovixWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
+
 config :tecnovix, TecnovixWeb.Endpoint,
   live_reload: [
     patterns: [
@@ -81,13 +82,24 @@ config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 
 config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"
 config :tecnovix, :salt, "SALT"
-config :tecnovix, :firebase_api_key_client, "AIzaSyB48TsW9wZvwqfclaygSlW83WXNukqR45o"
-config :tecnovix, :firebase_api_key_vendor, "AIzaSyAw-mBe2kkFmslL0ryrgYY0_9jIbKWWkJQ"
+config :tecnovix, :firebase_api_key_client, "AIzaSyADayA3jTgwWee7_3C2h4YSTo6nScuAQaI"
+config :tecnovix, :firebase_api_key_vendedor, "AIzaSyC76yu3gONK-twporVGue4X4_nk42k-R30"
+# config :tecnovix, :central_endpoint, "10.101.109.1:8080"
+
+# config :tecnovix, :central_endpoint, "http://hom.app.centraloftalmica.com:8080"
+
+config :tecnovix, :protheus_username, "TECNOVIX"
+config :tecnovix, :protheus_password, "TecnoVix200505"
 
 config :tecnovix,
        :sync_users_salt,
        "B9cwPTrRRrk/W+4psbuf2AI7Z6G/ncMDdunFXp52LqpwgiBTVUCYyBbjbre90S2v"
 
+config :tecnovix, :protheus_username, "TECNOVIX"
+config :tecnovix, :protheus_password, "TecnoVix200505"
+
 config :tecnovix, Tecnovix.Mailer,
-  adapter: Bamboo.LocalAdapter,
-  api_key: "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"
+  adapter: Bamboo.SendGridAdapter,
+  api_key: "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"
+
+config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"

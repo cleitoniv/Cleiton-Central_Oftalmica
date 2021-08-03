@@ -13,3 +13,21 @@ Tecnovix.SyncUsersModel.create(%{
   "username" => "centralof_api",
   "password" => "centralof_api08082020"
 })
+
+params = %{
+  "email" => "teste@centraloftalmica.com",
+  "password" => "123456",
+  "nome" => "Teste",
+  "sit_app" => "A",
+  "cnpj_cpf" => "000-000-000-00",
+  "regiao" => "Norte ES",
+  "telefone" => "27 00000 0000",
+  "status" => 1
+}
+
+Tecnovix.VendedoresModel.create(params)
+
+TecnovixWeb.Auth.FirebaseVendedor.create_user(%{
+  email: params["email"],
+  password: params["password"]
+})

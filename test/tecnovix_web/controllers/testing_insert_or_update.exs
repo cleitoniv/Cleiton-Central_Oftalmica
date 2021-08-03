@@ -8,19 +8,24 @@ defmodule TecnovixWeb.InsertOrUpdate do
     %{"access_token" => token} = Generator.sync_user("thiagoboeker", "123456")
 
     single_param = TestHelp.single_json("single_clientes.json")
+
     multi_param = TestHelp.multi_json("multi_clientes.json")
     multi_param = %{"data" => multi_param}
+    # single insert
+    single =
+      build_conn()
+      |> Generator.put_auth(token)
+      |> post("/api/sync/clientes", single_param)
+      |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/clientes", single_param)
-    |> IO.inspect
-    |> recycle()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/clientes", multi_param)
-    |> json_response(200)
+    # multi insert
+    multi =
+      build_conn()
+      |> Generator.put_auth(token)
+      |> post("/api/sync/clientes", multi_param)
+      |> json_response(200)
 
-    IO.inspect Tecnovix.ClientesSchema |> Repo.all()
+    assert single["success"] == true
   end
 
   test "insert or update of the table ATEND_PREF_CLIENTES" do
@@ -38,7 +43,7 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> post("/api/sync/atend_pref_cliente", multi_param)
     |> json_response(200)
 
-    IO.inspect Tecnovix.Repo.all(Tecnovix.AtendPrefClienteSchema)
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.AtendPrefClienteSchema))
   end
 
   test "insert or update of the table CONTAS_A_RECEBER" do
@@ -84,9 +89,10 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/descricao_generica_do_produto", single_param)
     |> recycle()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/descricao_generica_do_produto", multi_param)
+    |> post("/api/sync/descricao_generica_do_produto", Map.put(single_param, "grupo", "dsa"))
     |> json_response(200)
+
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.DescricaoGenericaDoProdutoSchema))
   end
 
   test "insert or update of the table ITENS_DO_CONTRATO_DE_PARCERIA" do
@@ -140,17 +146,18 @@ defmodule TecnovixWeb.InsertOrUpdate do
   test "insert or update of the table PEDIDOS_DE_VENDA" do
     %{"access_token" => token} = Generator.sync_user("thiagoboeker", "123456")
 
-    single_param = TestHelp.single_json("single_pedidos_de_venda.json")
-    multi_param = TestHelp.multi_json("multi_pedidos_de_venda.json")
+    single_param = TestHelp.single_json("single_pedidos_and_items.json")
+    multi_param = TestHelp.multi_json("multi_pedidos_and_items.json")
     multi_param = %{"data" => multi_param}
 
     build_conn()
     |> Generator.put_auth(token)
     |> post("/api/sync/pedidos_de_venda", single_param)
-    |> recycle()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pedidos_de_venda", multi_param)
+    # |> recycle()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/pedidos_de_venda", multi_param)
     |> json_response(200)
+    |> IO.inspect()
   end
 
   test "insert or update of the table PRE_DEVOLUCAO" do
@@ -159,14 +166,31 @@ defmodule TecnovixWeb.InsertOrUpdate do
     single_param = TestHelp.single_json("single_pre_devolucao.json")
     multi_param = TestHelp.multi_json("multi_pre_devolucao.json")
     multi_param = %{"data" => multi_param}
+    user_firebase = Generator.user()
+    user_param = Generator.user_param()
+
+    cliente =
+      build_conn()
+      |> Generator.put_auth(user_firebase["idToken"])
+      |> post("/api/cliente", %{"param" => user_param})
+      |> json_response(201)
+      |> Map.get("data")
+      |> IO.inspect()
+
+    dev_1 =
+      build_conn()
+      |> Generator.put_auth(token)
+      |> post("/api/sync/pre_devolucao", single_param |> Map.put("client_id", cliente["id"]))
+      |> json_response(200)
+      |> IO.inspect()
 
     build_conn()
     |> Generator.put_auth(token)
-    |> post("/api/sync/pre_devolucao", single_param)
-    |> recycle()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pre_devolucao", multi_param)
+    |> post("/api/sync/pre_devolucao", dev_1 |> Map.put("cliente", "vitt"))
     |> json_response(200)
+    |> IO.inspect()
+
+    IO.inspect(Tecnovix.Repo.all(Tecnovix.PreDevolucaoSchema))
   end
 
   test "insert or update of the table VENDEDORES" do
@@ -202,30 +226,31 @@ defmodule TecnovixWeb.InsertOrUpdate do
     |> Generator.put_auth(token)
     |> post("/api/sync/pedidos_de_venda", single_pedido)
     |> json_response(200)
+    |> IO.inspect()
 
     build_conn()
     |> Generator.put_auth(token)
     |> post("/api/sync/pedidos_de_venda", multi_pedido)
     |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pre_devolucao", single_devolucao)
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/pre_devolucao", single_devolucao)
+    # |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/pre_devolucao", multi_devolucao)
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/pre_devolucao", multi_devolucao)
+    # |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/contrato_de_parceria", single_contrato)
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/contrato_de_parceria", single_contrato)
+    # |> json_response(200)
 
-    build_conn()
-    |> Generator.put_auth(token)
-    |> post("/api/sync/contrato_de_parceria", multi_contrato)
-    |> json_response(200)
+    # build_conn()
+    # |> Generator.put_auth(token)
+    # |> post("/api/sync/contrato_de_parceria", multi_contrato)
+    # |> json_response(200)
   end
 end

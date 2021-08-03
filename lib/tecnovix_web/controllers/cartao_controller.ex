@@ -1,56 +1,92 @@
-defmodule TecnovixWeb.CartaoController do
+defmodule TecnovixWeb.CartaoCreditoClienteController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.CartaoDeCreditoModel
   alias Tecnovix.CartaoDeCreditoModel, as: CartaoModel
-  alias Tecnovix.Resource.Wirecard.Actions, as: Wirecard
+  alias Tecnovix.UsuariosClienteSchema
+  alias Tecnovix.LogsClienteModel
 
-  def create_order(conn, %{"items" => items}) do
-    IO.inspect {:ok, cliente} = conn.private.auth
+  action_fallback Tecnovix.Resources.Fallback
 
-    with order_params <- CartaoModel.order_params(cliente, items),
-          wirecard_order <- __MODULE__.wirecard_order(order_params),
-         {:ok, %{status_code: 201} = _order} <- Wirecard.create_order(wirecard_order) do
+  def create(conn, %{"param" => params}) do
+    {:ok, cliente} = verify_auth(conn.private.auth)
+    {:ok, usuario} = usuario_auth(conn.private.auth_user)
 
-           conn
-           |> put_resp_content_type("application/json")
-           |> send_resp(200, Jason.encode!(%{sucess: true}))
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
+
+    with {:ok, _result} <- CartaoModel.get_cc(%{"cliente_id" => cliente.id}),
+         {:ok, cartao} <- CartaoModel.primeiro_cartao(params, cliente.id),
+         {:ok, detail_card} <- CartaoModel.detail_card(cartao, cliente),
+         {:ok, card} <- CartaoModel.create(detail_card),
+         {:ok, _logs} <-
+           LogsClienteModel.create(
+             ip,
+             usuario,
+             cliente,
+             "Cartão de crédito #{params["cartao_number"]} adicionado."
+           ) do
+      conn
+      |> put_status(200)
+      |> put_resp_content_type("application/json")
+      |> render("show.json", %{item: card})
     else
-      _ ->
-        {:error, :not_created}
+      {:error, %Ecto.Changeset{}} = error -> error
+      _ -> {:error, :card_not_created}
     end
   end
 
-  def wirecard_order(params) do
-    %{
-      "ownId" => params["ownId"],
-      "amount" => %{
-        "currency" => "BRL",
-        "subtotals" => %{
-          "shipping" => 1000
-        }
-      },
-      "items" => params["items"],
-      "customer" => %{
-          "ownId" => params["customers"]["ownId"],
-          "fullname" => params["customers"]["fullname"],
-          "email" => params["customers"]["email"],
-          "birthDate" => params["customers"]["birthDate"],
-          "taxDocument" => params["customers"]["taxDocument"],
-          "phone" => params["customers"]["phone"],
-          "shippingAddress" => params["customers"]["shippingAddress"]
-      },
-      "receivers" => [
-        %{
-          "type" => "PRIMARY",
-          "feePayor" => false,
-          "moipAccount" => %{
-            "id" => "MPA-E3C8493A06AE"
-          },
-          "amount" => %{
-            "fixed" => params["fixed"]
-          }
-        }
-      ]
-    }
+  def delete_card(conn, %{"id" => id}) do
+    {:ok, cliente} = verify_auth(conn.private.auth)
+    {:ok, usuario} = conn.private.auth_user
+
+    ip =
+      conn.remote_ip
+      |> Tuple.to_list()
+      |> Enum.join()
+
+    with {:ok, card} <- CartaoModel.delete_card(id, cliente),
+         {:ok, _logs} <-
+           LogsClienteModel.create(
+             ip,
+             usuario,
+             cliente,
+             "Cartão de crédito #{card.cartao_number} deletado."
+           ) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true}))
+    else
+      _ -> {:error, :invalid_parameter}
+    end
+  end
+
+  def select_card(conn, %{"id" => id}) do
+    {:ok, cliente} = conn.private.auth
+
+    with {:ok, cartao} <- CartaoModel.select_card(id, cliente) do
+      conn
+      |> put_resp_content_type("application/json")
+      |> send_resp(200, Jason.encode!(%{success: true}))
+    end
+  end
+
+  defp usuario_auth(auth) do
+    case auth do
+      nil -> ""
+      usuario -> usuario
+    end
+  end
+
+  def verify_auth({:ok, cliente}) do
+    case cliente do
+      %UsuariosClienteSchema{} ->
+        user = Tecnovix.Repo.preload(cliente, :cliente)
+        {:ok, user.cliente}
+
+      v ->
+        {:ok, v}
+    end
   end
 end

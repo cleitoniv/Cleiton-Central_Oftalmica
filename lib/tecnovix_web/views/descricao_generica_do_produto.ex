@@ -1,5 +1,6 @@
 defmodule TecnovixWeb.DescricaoGenericaDoProdutoView do
   use Tecnovix.Resource.View, model: Tecnovix.DescricaoGenericaDoProdutoModel
+  import TecnovixWeb.ErrorParserView
 
   def build(%{item: item}) do
     %{
@@ -18,5 +19,13 @@ defmodule TecnovixWeb.DescricaoGenericaDoProdutoView do
       link_am_app: item.link_am_app,
       blo_de_tela: item.blo_de_tela
     }
+  end
+
+  def render("descricao.json", %{item: items}) when is_list(items) do
+    render_many(items, __MODULE__, "descricao.json", as: :item)
+  end
+
+  def render("descricao.json", %{item: item}) do
+    __MODULE__.build(%{item: item})
   end
 end

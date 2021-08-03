@@ -1,20 +1,20 @@
-defmodule TecnovixWeb.Auth.FirebaseVendor do
+defmodule TecnovixWeb.Auth.FirebaseVendedor do
   @moduledoc """
   Autentica o usuario do Firebase. Esta no formato de Plug
 
   ## Usage
 
     `
-    import TecnovixWeb.Auth.FirebaseVendor
+    import TecnovixWeb.Auth.FirebaseVendedor
     #...
     pipeline "api" do
-      plug :firebase_auth_vendor
+      plug :firebase_auth_vendedor
     end
     `
   """
   use Plug.Builder
 
-  @firebase_api_key Application.fetch_env!(:tecnovix, :firebase_api_key_vendor)
+  @firebase_api_key Application.fetch_env!(:tecnovix, :firebase_api_key_vendedor)
 
   def get_firebase_keys() do
     with {:ok, resp} <-
@@ -90,10 +90,11 @@ defmodule TecnovixWeb.Auth.FirebaseVendor do
   Caso contrario para o resto do lifecycle da requisiçao, os dados do JWT estaram na key `:auth` do campo
   private da `%Plug.Conn{}`.
   """
-  def firebase_auth_vendor(conn = %Plug.Conn{}, _opts) do
+  def firebase_auth_vendedor(conn = %Plug.Conn{}, _opts) do
     with {:ok, token} <- get_token(conn),
-         {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}) do
-      put_private(conn, :auth, {:ok, jwt})
+         {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
+         {:ok, user} <- Tecnovix.VendedoresModel.search_register_email(jwt.fields["email"]) do
+      put_private(conn, :auth, {:ok, user})
     else
       _ ->
         halt(conn)

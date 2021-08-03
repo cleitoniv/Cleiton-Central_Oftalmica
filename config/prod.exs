@@ -11,8 +11,9 @@ use Mix.Config
 # before starting your production server.
 config :tecnovix, TecnovixWeb.Endpoint,
   url: [schema: "https", host: "example.com", port: 443],
-  force_ssl: [rewrite_on: [:x_forwarded_proto]],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  force_ssl: [rewrite_on: [:x_forwarded_proto]]
+
+# cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :ssl, protocol_version: :"tlsv1.2"
 
@@ -57,14 +58,16 @@ config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 
 config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"
 config :tecnovix, :salt, "SALT"
-config :tecnovix, :firebase_api_key_client, "AIzaSyB48TsW9wZvwqfclaygSlW83WXNukqR45o"
-config :tecnovix, :firebase_api_key_vendor, "AIzaSyAw-mBe2kkFmslL0ryrgYY0_9jIbKWWkJQ"
+config :tecnovix, :firebase_api_key_client, "AIzaSyADayA3jTgwWee7_3C2h4YSTo6nScuAQaI"
+config :tecnovix, :firebase_api_key_vendedor, "AIzaSyC76yu3gONK-twporVGue4X4_nk42k-R30"
 
 config :tecnovix,
        :sync_users_salt,
        "B9cwPTrRRrk/W+4psbuf2AI7Z6G/ncMDdunFXp52LqpwgiBTVUCYyBbjbre90S2v"
 
-config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
+config :tecnovix, :central_endpoint, "http://177.39.232.201:8080"
+
+# config :tecnovix, :central_endpoint, "http://hom.app.centraloftalmica.com:8080"
 
 config :tecnovix, :protheus_username, "TECNOVIX"
 config :tecnovix, :protheus_password, "TecnoVix200505"

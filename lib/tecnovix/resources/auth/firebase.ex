@@ -110,26 +110,29 @@ defmodule TecnovixWeb.Auth.Firebase do
          {:ok, user} <- Tecnovix.ClientesModel.search_register_email(jwt.fields["email"]),
          true <- user.sit_app != "D" do
       put_private(conn, :auth, {:ok, user})
+      |> put_private(:auth_user, {:ok, nil})
     else
       false ->
-        {:error, :cliente_desativado}
+        conn
+        |> put_resp_content_type("application/json")
+        |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Cliente desativado."}))
+        |> halt()
 
       _ ->
         conn
-        |> user_cliente_auth()
+        |> user_cliente_auth(nil)
     end
   end
 
-  def user_cliente_auth(conn) do
+  def user_cliente_auth(conn, _opts) do
     with {:ok, token} <- get_token(conn),
          {true, jwt = %JOSE.JWT{}, _jws} <- verify_jwt({:init, token}),
-         {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]),
-         true <- user.status == 1 do
-      put_private(conn, :auth, {:ok, user})
-    else
-      false ->
-        {:error, :inatived}
+         {:ok, user} <- Tecnovix.UsuariosClienteModel.search_register_email(jwt.fields["email"]) do
+      user = Tecnovix.Repo.preload(user, :cliente)
 
+      put_private(conn, :auth, {:ok, user.cliente})
+      |> put_private(:auth_user, {:ok, user})
+    else
       _ ->
         halt(conn)
         {:error, :not_authorized}
@@ -157,6 +160,20 @@ defmodule TecnovixWeb.Auth.Firebase do
   def update_profile(%{idToken: _idToken, displayName: _displayName} = params) do
     params = Map.put(params, :returnSecureToken, true)
     url = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" <> @firebase_api_key
+    HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
+  end
+
+  def update_password(%{idToken: _idToken, password: _password} = params) do
+    params = Map.put(params, :returnSecureToken, true)
+
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" <> @firebase_api_key
+
+    HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
+  end
+
+  def delete_user_firebase(%{idToken: _idToken} = params) do
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:delete?key=" <> @firebase_api_key
+
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
   end
 end

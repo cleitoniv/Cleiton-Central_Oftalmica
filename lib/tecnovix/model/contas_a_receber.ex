@@ -4,20 +4,21 @@ defmodule Tecnovix.ContasAReceberModel do
   alias Tecnovix.ContasAReceberSchema
 
   def insert_or_update(%{"data" => data} = params) when is_list(data) do
-    Enum.reduce(params["data"], %{}, fn contas, _acc ->
-      with nil <-
-             Repo.get_by(ContasAReceberSchema,
-               filial: contas["filial"],
-               no_titulo: contas["no_titulo"],
-               cliente: contas["cliente"],
-               loja: contas["loja"]
-             ) do
-        create(contas)
-      else
-        changeset ->
-          __MODULE__.update(changeset, contas)
-      end
-    end)
+    {:ok,
+     Enum.map(params["data"], fn contas ->
+       with nil <-
+              Repo.get_by(ContasAReceberSchema,
+                filial: contas["filial"],
+                no_titulo: contas["no_titulo"],
+                cliente: contas["cliente"],
+                loja: contas["loja"]
+              ) do
+         create(contas)
+       else
+         changeset ->
+           __MODULE__.update(changeset, contas)
+       end
+     end)}
   end
 
   def insert_or_update(

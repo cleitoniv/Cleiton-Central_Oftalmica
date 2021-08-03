@@ -5,7 +5,7 @@ defmodule Tecnovix.MixProject do
     [
       app: :tecnovix,
       version: "0.1.0",
-      elixir: "~> 1.10.3",
+      elixir: "~> 1.11.2",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -51,7 +51,13 @@ defmodule Tecnovix.MixProject do
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 2.0"},
       {:bamboo, "~> 1.5"},
-      {:cors_plug, "~> 1.5"}
+      {:cors_plug, "~> 1.5"},
+      {:tesla, "~> 1.3.0"},
+      {:decimal, "~> 2.0", override: true},
+      {:ets, "~> 0.8.1"},
+      {:credo, "~> 1.5", only: [:test, :dev], runtime: false},
+      {:doctor, "~> 0.17.0", only: [:test, :dev], runtime: false},
+      {:git_hooks, "~> 0.4.0", only: [:test, :dev], runtime: false}
     ]
   end
 

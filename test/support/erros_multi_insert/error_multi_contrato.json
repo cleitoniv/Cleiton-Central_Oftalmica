@@ -1,0 +1,25 @@
+[
+{
+  "cliente_id": 1,
+  "filial": "",
+  "contrato_n": "123456",
+  "docto_orig": "123456789",
+  "emissao": "2020-01-01",
+  "cliente": "654321",
+  "loja": "RJ",
+  "items": [
+    {
+      "contrato_de_parceria_id": 3,
+      "descricao_generica_do_produto_id": 3,
+      "filial": "4321",
+      "contrato_n": "11111",
+      "item": "12",
+      "produto": "Lente",
+      "preco_venda": "1.5",
+      "total": "1.5",
+      "cliente": "Tecnovix",
+      "loja": "Alphaville"
+    }
+  ]
+}
+]

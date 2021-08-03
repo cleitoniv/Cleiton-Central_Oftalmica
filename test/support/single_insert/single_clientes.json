@@ -2,7 +2,7 @@
   "loja": "12",
 	"codigo": "1234",
 	"cnpj_cpf": "51678331082",
-	"fisica_jurid": "M",
+	"fisica_jurid": "F",
 	"nome": "Central Of",
 	"email": "central@tecnovix.com.br",
 	"ddd": "027",
@@ -18,9 +18,10 @@
 	"municipio": "Vitória",
 	"bloqueado": "2",
 	"sit_app": "N",
-	"cod_cnae": "",
-	"ramo": "1",
+	"cod_cnae": "12323",
+	"ramo": "2",
+  "crm_medico": "123",
 	"vendedor": "null",
-	"crm_medico": "null",
-	"dia_remessa": "2"
+	"dia_remessa": "2",
+  "estado": "ES"
 }

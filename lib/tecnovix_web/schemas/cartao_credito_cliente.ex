@@ -4,15 +4,16 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
 
   schema "cartao_credito_cliente" do
     field :nome_titular, :string
-    field :cpf_titular, :string
+    field :cpf_cnpj_titular, :string
     field :telefone_titular, :string
     field :data_nascimento_titular, :date
     field :primeiros_6_digitos, :string
     field :ultimos_4_digitos, :string
-    field :mes_validade, :integer
-    field :ano_validade, :integer
+    field :mes_validade, :string
+    field :cartao_number, :string
+    field :ano_validade, :string
     field :bandeira, :string
-    field :status, :integer
+    field :status, :integer, default: 1
     field :wirecard_cartao_credito_id, :string
     field :wirecard_cartao_credito_hash, :string
     field :cep_endereco_cobranca, :string
@@ -32,7 +33,7 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
     |> cast(params, [
       :cliente_id,
       :nome_titular,
-      :cpf_titular,
+      :cpf_cnpj_titular,
       :telefone_titular,
       :data_nascimento_titular,
       :primeiros_6_digitos,
@@ -49,17 +50,16 @@ defmodule Tecnovix.CartaoCreditoClienteSchema do
       :complemento_endereco_cobranca,
       :bairro_endereco_cobranca,
       :cidade_endereco_cobranca,
-      :estado_endereco_cobranca
+      :estado_endereco_cobranca,
+      :cartao_number
     ])
     |> validate_required([
       :cliente_id,
       :nome_titular,
-      :cpf_titular,
-      :primeiros_6_digitos,
-      :ultimos_4_digitos,
+      :cpf_cnpj_titular,
       :mes_validade,
-      :ano_validade,
-      :status
+      :ano_validade
     ])
+    |> unique_constraint(:cartao_number, message: "Já existe um cartão com esse número.")
   end
 end

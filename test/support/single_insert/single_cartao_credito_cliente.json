@@ -1,7 +1,7 @@
 {
   "cliente_id": 1,
   "nome_titular": "Victor Augusto",
-  "cpf_titular": "123456789012",
+  "cpf_cnpj_titular": "123456789012",
   "telefone_titular": "Estou escrevendo isso somente para testar!",
   "data_nascimento_titular": "01-01-2020",
   "primeiros_6_digitos": "123456",
@@ -11,7 +11,7 @@
   "bandeira": "VISA",
   "status": 1,
   "wirecard_cartao_credito_id": "123456789",
-  "cep_endereco_cobranca", "12345678",
+  "cep_endereco_cobranca": "12345678",
   "logradouro_endereco_cobranca": "Rua Franco Aguiar",
   "numero_endereco_cobranca": "529",
   "complemento_endereco_cobranca": "Antes do pavilhão",

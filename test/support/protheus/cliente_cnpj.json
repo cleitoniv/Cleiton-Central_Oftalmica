@@ -1,0 +1,125 @@
+{
+  "total": 1,
+  "count": 1,
+  "startindex": 1,
+  "resources": [
+    {
+      "id": "WSAPPCLIENTE",
+      "operation": 1,
+      "pk": "ICAgIDAzNjAxMjg1NzIwICAg",
+      "models": [
+        {
+          "id": "FCLIENTES",
+          "modeltype": "FIELDS",
+          "fields": [
+            {
+              "id": "A1_COD",
+              "order": 1,
+              "value": "000063"
+            },
+            {
+              "id": "A1_EST",
+              "order": 2,
+              "value": "ES"
+            },
+            {
+              "id": "A1_LOJA",
+              "order": 2,
+              "value": "01"
+            },
+            {
+              "id": "A1_PESSOA",
+              "order": 3,
+              "value": "F"
+            },
+            {
+              "id": "A1_NOME",
+              "order": 4,
+              "value": "WALACE TIRONI"
+            },
+            {
+              "id": "A1_END",
+              "order": 5,
+              "value": "AVE EXPEDITO GARCIA, 55"
+            },
+            {
+              "id": "A1_COMPLEM",
+              "order": 6,
+              "value": "SL 202"
+            },
+            {
+              "id": "A1_BAIRRO",
+              "order": 7,
+              "value": "CAMPO GRANDE"
+            },
+            {
+              "id": "A1_CEP",
+              "order": 8,
+              "value": "29146201"
+            },
+            {
+              "id": "A1_COD_MUN",
+              "order": 9,
+              "value": "01308"
+            },
+            {
+              "id": "A1_MUN",
+              "order": 10,
+              "value": "CARIACICA"
+            },
+            {
+              "id": "A1_DDD",
+              "order": 11,
+              "value": "27"
+            },
+            {
+              "id": "A1_CNAE",
+              "order": 18,
+              "value": "7319-0/02"
+            },
+            {
+              "id": "A1_TEL",
+              "order": 12,
+              "value": "32265581"
+            },
+            {
+              "id": "A1_CGC",
+              "order": 13,
+              "value": "03601285720"
+            },
+            {
+              "id": "A1_DTNASC",
+              "order": 14,
+              "value": "20130612"
+            },
+            {
+              "id": "A1_MSBLQL",
+              "order": 15,
+              "value": "1"
+            },
+            {
+              "id": "A1_YRAMO",
+              "order": 18,
+              "value": "2"
+            },
+            {
+              "id": "A1_VEND",
+              "order": 19,
+              "value": "000069"
+            },
+            {
+              "id": "A1_TABELA",
+              "order": 20,
+              "value": "001"
+            },
+            {
+              "id": "A1_EMAIL",
+              "order": 21,
+              "value": "walacetironi@hotmail.com"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

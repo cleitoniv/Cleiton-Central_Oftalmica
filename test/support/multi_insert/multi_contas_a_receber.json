@@ -1,4 +1,5 @@
-[{
+[
+{
   "cliente_id": 1,
   "filial": "123",
   "no_titulo": "65413",
@@ -9,6 +10,19 @@
   "virtitulo": "1.25",
   "saldo": "1.5",
   "loja": "ES",
+  "cod_barras": "Estou escrevendo isso somente para testar!"
+},
+{
+  "cliente_id": 21,
+  "filial": "123",
+  "no_titulo": "12345",
+  "tipo": "321",
+  "cliente": "654321",
+  "dt_emissao": "2020-11-11",
+  "vencto_real": "2020-12-01",
+  "virtitulo": "2.25",
+  "saldo": "4.5",
+  "loja": "RJ",
   "cod_barras": "Estou escrevendo isso somente para testar!"
 }
 ]

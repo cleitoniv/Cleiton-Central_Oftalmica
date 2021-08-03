@@ -1,8 +1,7 @@
 defmodule TecnovixWeb.LogsClienteController do
   use TecnovixWeb, :controller
   use Tecnovix.Resource.Routes, model: Tecnovix.LogsClienteModel
-  alias Tecnovix.ClientesSchema
-  alias Tecnovix.UsuariosClienteSchema
+  alias Tecnovix.{ClientesSchema, UsuariosClienteSchema}
 
   action_fallback Tecnovix.Resources.Fallback
 
@@ -20,12 +19,12 @@ defmodule TecnovixWeb.LogsClienteController do
 
   def create_logs(conn, %{"param" => params}) do
     case conn.private.auth do
-      # logs para o cliente
+      # logs do cliente
       {:ok, %ClientesSchema{} = user} ->
         params = Map.put(params, "cliente_id", user.id)
         __MODULE__.create(conn, %{"param" => params})
 
-      # logs para o usuario_cliente
+      # logs do usuario_cliente
       {:ok, %UsuariosClienteSchema{} = client_user} ->
         params = Map.put(params, "cliente_id", client_user.cliente_id)
         params = Map.put(params, "usuario_cliente_id", client_user.id)

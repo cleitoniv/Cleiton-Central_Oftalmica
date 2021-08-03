@@ -1,0 +1,18 @@
+[
+{
+  "grupo": "1234",
+  "codigo": "12345678789",
+  "descricao": "Estou escrevendo isso somente para testar!",
+  "esferico": "1.5",
+  "cilindrico": "0.5",
+  "eixo": 1,
+  "cor": "Marrom",
+  "diametro": "1.5",
+  "curva_base": "1.5",
+  "adic_padrao": "123456",
+  "adicao": "1.5",
+  "raio_curva": "12345678987",
+  "link_am_app": "Estou escrevendo isso somente para testar!",
+  "blo_de_tela": "1"
+}
+]

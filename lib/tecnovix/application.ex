@@ -6,6 +6,7 @@ defmodule Tecnovix.Application do
   use Application
 
   def start(_type, _args) do
+    {:ok, _kvset} = ETS.KeyValueSet.new(name: :code_confirmation, protection: :public)
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
@@ -15,7 +16,11 @@ defmodule Tecnovix.Application do
       # Starts a worker by calling: Tecnovix.Worker.start_link(arg)
       # {Tecnovix.Worker, arg},
       {Absinthe.Subscription, [TecnovixWeb.Endpoint]},
-      {Tecnovix.Services.Auth, []}
+      {Tecnovix.Services.Auth, []},
+      {Tecnovix.Services.Devolucao, []},
+      {Tecnovix.Services.ConfirmationSMS, []},
+      {Tecnovix.Services.Order, []},
+      {Tecnovix.Services.OrderFinan, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

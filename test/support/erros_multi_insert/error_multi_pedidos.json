@@ -1,0 +1,61 @@
+[
+  {
+  "client_id": 1,
+  "filial": "123",
+  "numero": "123256",
+  "cliente": "teste",
+  "tipo_venda": "1",
+  "tipo_venda_ret_id": 1,
+  "pd_correios": "1",
+  "vendedor_1": "teste",
+  "status_ped": 1,
+  "items": [
+      {
+        "pedido_de_venda_id": 1,
+        "descricao_generica_do_produto_id": 1,
+        "filial": "teste",
+        "nocontrato": "teste",
+        "produto": "Lente",
+        "quantidade": 1,
+        "prc_unitario": 15100,
+        "olho": "E",
+        "paciente": "Victor",
+        "num_pac": "123654",
+        "dt_nas_pac": "2020-07-07",
+        "virtotal": 15100,
+        "esferico": 1.5,
+        "cilindrico": 0.5,
+        "eixo": 10,
+        "cor": "teste",
+        "adc_padrao": "teste",
+        "adicao": 1.5,
+        "nota_fiscal": "123456789",
+        "serie_nf": "123",
+        "num_pedido": "123456"
+      },
+      {
+        "pedido_de_venda_id": 1,
+        "descricao_generica_do_produto_id": 1,
+        "filial": "teste",
+        "nocontrato": "teste",
+        "produto": "Lente",
+        "quantidade": 1,
+        "prc_unitario": 15100,
+        "olho": "E",
+        "paciente": "Victor",
+        "num_pac": "123654",
+        "dt_nas_pac": "2020-07-07",
+        "virtotal": 15100,
+        "esferico": 1.5,
+        "cilindrico": 0.5,
+        "eixo": 10,
+        "cor": "teste",
+        "adc_padrao": "teste",
+        "adicao": 1.5,
+        "nota_fiscal": "123456789",
+        "serie_nf": "123",
+        "num_pedido": "123456"
+      }
+    ]
+  }
+]
