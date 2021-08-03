@@ -8,7 +8,7 @@ defmodule Tecnovix.ClientesModel do
   import Ecto.Query
 
   def get_period() do
-    period = ["Manhã - Tarde", "Manhã", "Tarde"]
+    period = ["Manhã e Tarde", "Manhã", "Tarde"]
 
     {:ok, period}
   end
