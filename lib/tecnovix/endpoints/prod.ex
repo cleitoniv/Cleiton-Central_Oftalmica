@@ -112,9 +112,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
               "E4_CODIGO" ->
                 %{
                   "parcela" =>
-                    "#{string_to_integer(field["value"])}x de #{
-                      (valor / 100 / string_to_integer(field["value"])) |> Float.ceil(2)
-                    }"
+                    "#{string_to_integer(field["value"])}x de #{(valor / 100 / string_to_integer(field["value"])) |> Float.ceil(2)}"
                 }
 
               _ ->

@@ -5,7 +5,7 @@ defmodule Tecnovix.Repo.Migrations.CartaoCreditoCliente do
     create table(:cartao_credito_cliente) do
       add :cliente_id, :integer
       add :nome_titular, :string, size: 255
-      add :cpf_cnpj_titular, :string, size: 11
+      add :cpf_titular, :string, size: 11
       add :telefone_titular, :string, size: 45
       add :data_nascimento_titular, :date
       add :primeiros_6_digitos, :string, size: 6

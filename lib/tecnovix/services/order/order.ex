@@ -18,21 +18,23 @@ defmodule Tecnovix.Services.Order do
   def verify_pedidos(pedidos) do
     verify =
       Enum.map(pedidos, fn map ->
-        {:ok, order_json} = Wirecard.get(map.order_id, :orders)
-        order = Jason.decode!(order_json.body)
+        with {:ok, order_json} <- Wirecard.get(map.order_id, :orders),
+             order <- Jason.decode!(order_json.body) do
+          case order["status"] do
+            "PAID" ->
+              PedidosDeVendaModel.update_order(map, "S")
 
-        case order["status"] do
-          "PAID" ->
-            PedidosDeVendaModel.update_order(map, "S")
+            "NOT_PAID" ->
+              PedidosDeVendaModel.update_order(map, "N")
 
-          "NOT_PAID" ->
-            PedidosDeVendaModel.update_order(map, "N")
+            "REVERTED" ->
+              PedidosDeVendaModel.update_order(map, "R")
 
-          "REVERTED" ->
-            PedidosDeVendaModel.update_order(map, "R")
-
-          _ ->
-            []
+            _ ->
+              []
+          end
+        else
+          _ -> %{}
         end
       end)
 

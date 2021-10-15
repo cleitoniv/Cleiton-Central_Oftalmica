@@ -13,8 +13,6 @@ defmodule Tecnovix.Repo do
   def generate_event_id() do
     {:ok, date} = DateTime.now("Etc/UTC")
 
-    "#{date.year}#{date.month}#{date.day}#{date.second}#{
-      String.slice(Ecto.UUID.autogenerate(), 0..5)
-    }"
+    "#{date.year}#{date.month}#{date.day}#{date.second}#{String.slice(Ecto.UUID.autogenerate(), 0..5)}"
   end
 end

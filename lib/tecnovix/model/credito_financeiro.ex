@@ -161,7 +161,7 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       |> CreditoFinanceiroModel.payment_params(params)
       |> CreditoFinanceiroModel.wirecard_payment()
       |> Wirecard.create_payment(order_id)
-      |> IO.inspect
+      |> IO.inspect()
 
     case payment do
       {:ok, %{status_code: 201}} -> payment

@@ -185,9 +185,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              ip,
              usuario,
              cliente,
-             "Pedido id #{pedido.id} feito. Em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete e cartão de credito id #{
-               id_cartao
-             }."
+             "Pedido id #{pedido.id} feito. Em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete e cartão de credito id #{id_cartao}."
            ),
          {:ok, _notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
       conn
