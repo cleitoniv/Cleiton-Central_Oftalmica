@@ -1045,7 +1045,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
       Enum.map(list_taxa, fn {parcela, taxa} ->
         result =
           ((calculo_taxa(valor, taxa) / 100 + valor / 100) / parcela)
+          |> IO.inspect
           |> Float.round(2)
+          |> IO.inspect
 
         case parcela do
           1 ->
