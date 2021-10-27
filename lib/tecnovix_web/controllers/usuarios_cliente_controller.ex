@@ -44,9 +44,10 @@ defmodule TecnovixWeb.UsuariosClienteController do
         |> put_resp_content_type("application/json")
         |> render("show.json", %{item: user})
 
-      v ->
+      {:ok, %{status_code: 400}} ->
+        {:error, :email_invalid}
 
-        IO.inspect v
+      _ ->
         {:error, :invalid_parameter}
     end
   end
