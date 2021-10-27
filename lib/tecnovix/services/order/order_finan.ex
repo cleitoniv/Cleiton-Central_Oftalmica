@@ -16,7 +16,8 @@ defmodule Tecnovix.Services.OrderFinan do
   def verify_pedidos(pedidos) do
     verify =
       Enum.map(pedidos, fn map ->
-        with {:ok, %{status_code: 200} = order_json} <- Wirecard.get(map.wirecard_pedido_id, :orders),
+        with {:ok, %{status_code: 200} = order_json} <-
+               Wirecard.get(map.wirecard_pedido_id, :orders),
              order <- Jason.decode!(order_json.body) do
           case order["status"] do
             "PAID" ->
