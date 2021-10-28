@@ -20,7 +20,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
            Firebase.create_user(%{email: params["email"], password: params["password"]}),
          {:ok, user} <- UsuariosClienteModel.create(params),
          {_, %{status_code: code}} when code == 200 or code == 202 <-
-           Email.send_email({user.nome, user.email}, params["password"], params["nome"]),
+           Email.send_email({user.nome, user.email}, params["password"], params["nome"]) |> IO.inspect,
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,

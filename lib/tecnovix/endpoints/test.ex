@@ -121,8 +121,9 @@ defmodule Tecnovix.Endpoints.ProtheusTest do
 
                 result =
                   (valor / string_to_integer(field["value"]))
-                  |> Float.ceil(2)
+                  |> Float.round(2)
                   |> :erlang.float_to_binary(decimals: 2)
+                  |> IO.inspect
 
                 %{
                   "parcela" => "#{string_to_integer(field["value"])}x de #{result}"
