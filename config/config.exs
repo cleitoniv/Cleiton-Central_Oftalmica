@@ -32,9 +32,10 @@ config :tecnovix, :remetente, "victorlokiinho@gmail.com"
 config :tecnovix, Tecnovix.Mailer,
   adapter: Bamboo.SendGridAdapter,
   api_key: "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"
-  # api_key: "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"
 
-  # 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
+# api_key: "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"
+
+# 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
 
 config :gettext, :default_locale, "pt_BR"
 
