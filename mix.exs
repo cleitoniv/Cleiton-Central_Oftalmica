@@ -57,7 +57,7 @@ defmodule Tecnovix.MixProject do
       {:credo, "~> 1.5", only: [:test, :dev], runtime: false},
       {:doctor, "~> 0.17.0", only: [:test, :dev], runtime: false},
       {:git_hooks, "~> 0.4.0", only: [:test, :dev], runtime: false}
-    ]
+        ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

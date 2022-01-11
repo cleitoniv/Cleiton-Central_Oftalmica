@@ -13,12 +13,14 @@ defmodule Tecnovix.UsuariosClienteModel do
       usuario ->
         case usuario.status == 0 and usuario.email == email do
           true ->
+            new_password = String.slice(Repo.generate_event_id(), 6..11)
+
             UsuariosClienteSchema
             |> where([u], u.email == ^email)
             |> update([u], set: [status: 1, cargo: ^params["cargo"], nome: ^params["nome"]])
             |> Repo.update_all([])
 
-            {:ativo, usuario}
+            {:ativo, usuario, new_password}
 
           false ->
             error =
@@ -81,12 +83,22 @@ defmodule Tecnovix.UsuariosClienteModel do
   end
 
   def delete_users(id, cliente) do
-    usuarios =
+    # usuarios =
+    #   UsuariosClienteSchema
+    #   |> where([u], u.cliente_id == ^cliente.id and u.id == ^id)
+    #   |> update([u], set: [status: 0])
+    #   |> Repo.update_all([])
+
+    # {:ok, usuarios}
+
+    usuario =
       UsuariosClienteSchema
       |> where([u], u.cliente_id == ^cliente.id and u.id == ^id)
-      |> update([u], set: [status: 0])
-      |> Repo.update_all([])
+      |> preload(:logs_cliente)
+      |> first()
+      |> Repo.one()
+      |> IO.inspect
 
-    {:ok, usuarios}
+    Repo.delete(usuario)
   end
 end

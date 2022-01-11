@@ -16,18 +16,18 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Enum.join()
 
     with {:ok, _authorized} <- UsuariosClienteModel.unique_email(params),
-         {:ok, %{status_code: 200}} <-
+         {:ok, %{status_code: 200} =  response} <-
            Firebase.create_user(%{email: params["email"], password: params["password"]}),
-         {:ok, user} <- UsuariosClienteModel.create(params),
-         {_, %{status_code: code}} when code == 200 or code == 202 <-
-           Email.send_email({user.nome, user.email}, params["password"], params["nome"])
-           |> IO.inspect(),
+          {:ok, body_decode} = Jason.decode(response.body),
+         {:ok, user} <- UsuariosClienteModel.create(params |> Map.put("uid", body_decode["localId"])),
+         _ <-
+           Email.send_email({user.nome, user.email}, params["password"], params["nome"]),
          {:ok, _logs} <-
            LogsClienteModel.create(
              ip,
              usuario,
              cliente,
-             "Usuario cliente #{user.nome} cadastrado."
+             "Usuário cliente #{user.nome} cadastrado."
            ) do
       UsuariosClienteModel.update_senha(user, %{"senha_enviada" => 1})
 
@@ -39,7 +39,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
       {:error, %Ecto.Changeset{} = error} ->
         {:error, error}
 
-      {:ativo, user} ->
+      {:ativo, user, new_password} ->
+
         conn
         |> put_status(:created)
         |> put_resp_content_type("application/json")
@@ -48,7 +49,9 @@ defmodule TecnovixWeb.UsuariosClienteController do
       {:ok, %{status_code: 400}} ->
         {:error, :email_invalid}
 
-      _ ->
+      v ->
+        IO.inspect v
+        IO.inspect "OLA"
         {:error, :invalid_parameter}
     end
   end
@@ -87,8 +90,8 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Enum.join()
 
     with {:ok, _token} <- Firebase.get_token(conn),
-         {:ok, _user} <- UsuariosClienteModel.delete_users(id, cliente),
-         {:ok, _logs} <- LogsClienteModel.create(ip, usuario, cliente, "Usuario cliente deletado") do
+         {:ok, user} <- UsuariosClienteModel.delete_users(id, cliente),
+         {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario cliente #{user.nome} deletado") do
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(200, Jason.encode!(%{success: true}))
