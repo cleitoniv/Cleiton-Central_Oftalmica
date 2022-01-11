@@ -13,6 +13,7 @@ defmodule Tecnovix.UsuariosClienteSchema do
     field :status, :integer, default: 1
     field :senha_enviada, :integer, default: 0
     field :role, :string, default: "USUARIO"
+    has_many :logs_cliente, Tecnovix.LogsClienteSchema, foreign_key: :usuario_cliente_id, on_delete: :nilify_all
 
     timestamps()
   end

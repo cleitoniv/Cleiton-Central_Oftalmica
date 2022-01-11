@@ -179,10 +179,10 @@ defmodule TecnovixWeb.Router do
       end
     end
 
-    forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
+    # forward "/api", Absinthe.Plug, schema: TecnovixWeb.Graphql.Schema
 
-    forward "/graphiql", Absinthe.Plug.GraphiQL,
-      schema: TecnovixWeb.Graphql.Schema,
-      interface: :simple
+    # forward "/graphiql", Absinthe.Plug.GraphiQL,
+    #   schema: TecnovixWeb.Graphql.Schema,
+    #   interface: :simple
   end
 end

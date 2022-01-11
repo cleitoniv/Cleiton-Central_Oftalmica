@@ -7,7 +7,7 @@ defmodule Tecnovix.LogsClienteSchema do
   schema "logs_cliente" do
     belongs_to :cliente, ClientesSchema
     field :uid, :string, autogenerate: {Ecto.UUID, :autogenerate, []}
-    belongs_to :usuario_cliente, UsuariosClienteSchema
+    belongs_to :usuario_cliente, UsuariosClienteSchema, on_replace: :delete
     field :data, :utc_datetime, autogenerate: {DateTime, :truncate, [DateTime.utc_now(), :second]}
     field :ip, :string
     field :dispositivo, :string

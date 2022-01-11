@@ -9,13 +9,14 @@ defmodule Tecnovix.Application do
     {:ok, _kvset} = ETS.KeyValueSet.new(name: :code_confirmation, protection: :public)
     # List all child processes to be supervised
     children = [
+      # {Phoenix.PubSub, [name: Tecnovix.PubSub, adapter: Phoenix.PubSub.PG2]},
       # Start the Ecto repository
       Tecnovix.Repo,
       # Start the endpoint when the application starts
       TecnovixWeb.Endpoint,
       # Starts a worker by calling: Tecnovix.Worker.start_link(arg)
       # {Tecnovix.Worker, arg},
-      {Absinthe.Subscription, [TecnovixWeb.Endpoint]},
+      # {Absinthe.Subscription, [TecnovixWeb.Endpoint]},
       {Tecnovix.Services.Auth, []},
       {Tecnovix.Services.Devolucao, []},
       {Tecnovix.Services.ConfirmationSMS, []},

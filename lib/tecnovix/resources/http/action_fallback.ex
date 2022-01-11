@@ -101,7 +101,10 @@ defmodule Tecnovix.Resources.Fallback do
   def call(conn, {:error, :email_invalid}) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(400, Jason.encode!(%{"success" => false, "data" => "Email Existente."}))
+    |> send_resp(
+      400,
+      Jason.encode!(%{"success" => false, "data" => "Esse email já foi cadastrado."})
+    )
     |> halt()
   end
 

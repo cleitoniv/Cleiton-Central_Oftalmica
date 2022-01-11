@@ -286,6 +286,7 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
+        |> Map.put(:status, item.status)
 
       _ ->
         __MODULE__.build(%{item: item})
@@ -293,6 +294,7 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:money, credits.money)
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
+        |> Map.put(:status, item.status)
     end
   end
 end

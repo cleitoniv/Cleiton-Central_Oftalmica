@@ -110,11 +110,15 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
           Enum.map(models["fields"], fn field ->
             case field["id"] do
               "E4_CODIGO" ->
+                valor = (valor / 100) |> trunc()
+
+                result =
+                  (valor / string_to_integer(field["value"]))
+                  |> Float.round(2)
+                  |> :erlang.float_to_binary(decimals: 2)
+
                 %{
-                  "parcela" =>
-                    "#{string_to_integer(field["value"])}x de #{
-                      (valor / 100 / string_to_integer(field["value"])) |> Float.ceil(2)
-                    }"
+                  "parcela" => "#{string_to_integer(field["value"])}x de #{result}"
                 }
 
               _ ->

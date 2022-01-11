@@ -146,6 +146,7 @@ defmodule TecnovixWeb.UsersTest do
       |> post("/api/cliente/cliente_user", %{"param" => user_client_param})
       |> json_response(201)
       |> Map.get("data")
+      |> IO.inspect
 
     {:ok, usuarioAuth} =
       Firebase.sign_in(%{email: usuario_cliente["email"], password: usuario_cliente["password"]})
