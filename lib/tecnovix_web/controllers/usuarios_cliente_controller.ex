@@ -44,13 +44,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
         |> render("show.json", %{item: user})
 
       {:ok, %{status_code: 400}} ->
-        with {:ok, user} <- UsuariosClienteModel.create(params) |> IO.inspect,
-             {:ok, %{status_code: 200}} <- Firebase.send_reset_password(%{email: params["email"]}) |> IO.inspect do
-            conn
-            |> put_status(:created)
-            |> put_resp_content_type("application/json")
-            |> render("show.json", %{item: user})
-        end
+        {:error, :email_invalid}
       _ ->
         {:error, :invalid_parameter}
     end
@@ -83,7 +77,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
   def delete_users(conn, %{"id" => id}) do
     with {:ok, user} <- UsuariosClienteModel.search_user(id),
-         {:ok, user} <- UsuariosClienteModel.update_status(user, %{"status" => 0}) do
+         {:ok, user} <- UsuariosClienteModel.update(user, %{"status" => 0}) do
       {:ok, cliente} = conn.private.auth
 
       LogsClienteModel.create(%{
