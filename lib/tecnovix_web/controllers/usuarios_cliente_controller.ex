@@ -6,6 +6,19 @@ defmodule TecnovixWeb.UsuariosClienteController do
   action_fallback Tecnovix.Resources.Fallback
 
   def create(conn, %{"param" => params}) do
+    with user when not is_nil(user) <- UsuariosClienteModel.get_by([email: params["email"]]),
+         {:ok, %{status_code: 200}} <- Firebase.send_reset_password(%{email: params["email"]}),
+         {:ok, user} <- UsuariosClienteModel.update(user, %{"status" => 1}) do
+      conn
+      |> put_status(:created)
+      |> put_resp_content_type("application/json")
+      |> render("show.json", %{item: user})
+    else
+      nil -> createp(conn, %{"param" => params})
+    end
+  end
+
+  def createp(conn, %{"param" => params}) do
     with {:ok, user} <- UsuariosClienteModel.create(params) do
       # verificando se o email foi enviado com sucesso
       case Email.send_email({user.nome, user.email}) do
