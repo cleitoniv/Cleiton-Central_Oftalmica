@@ -6,31 +6,32 @@ defmodule Tecnovix.UsuariosClienteModel do
   import Ecto.Query
 
   def unique_email(%{"email" => email} = params) do
-    with nil <- Repo.get_by(UsuariosClienteSchema, email: email),
-         nil <- Repo.get_by(ClientesSchema, email: email) do
-      {:ok, email}
-    else
-      usuario ->
-        case usuario.status == 0 and usuario.email == email do
-          true ->
-            new_password = String.slice(Repo.generate_event_id(), 6..11)
-
-            UsuariosClienteSchema
-            |> where([u], u.email == ^email)
-            |> update([u], set: [status: 1, cargo: ^params["cargo"], nome: ^params["nome"]])
-            |> Repo.update_all([])
-
-            {:ativo, usuario, new_password}
-
-          false ->
-            error =
-              %Tecnovix.UsuariosClienteSchema{}
-              |> Ecto.Changeset.change(%{})
-              |> Ecto.Changeset.add_error(:email, "Esse email já esta cadastrado.")
-
-            {:error, error}
-        end
-    end
+    # with nil <- Repo.get_by(UsuariosClienteSchema, email: email),
+    #      nil <- Repo.get_by(ClientesSchema, email: email) do
+    #   {:ok, email}
+    # else
+    #   usuario ->
+    #     case usuario.status == 0 and usuario.email == email do
+    #       true ->
+    #         new_password = String.slice(Repo.generate_event_id(), 6..11)
+    #
+    #         UsuariosClienteSchema
+    #         |> where([u], u.email == ^email)
+    #         |> update([u], set: [status: 1, cargo: ^params["cargo"], nome: ^params["nome"]])
+    #         |> Repo.update_all([])
+    #
+    #         {:ativo, usuario, new_password}
+    #
+    #       false ->
+    #         error =
+    #           %Tecnovix.UsuariosClienteSchema{}
+    #           |> Ecto.Changeset.change(%{})
+    #           |> Ecto.Changeset.add_error(:email, "Esse email já esta cadastrado.")
+    #
+    #         {:error, error}
+    #     end
+    # end
+    {:ok, email}
   end
 
   def show_users(cliente_id) do
