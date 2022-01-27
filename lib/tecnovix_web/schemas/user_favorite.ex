@@ -5,7 +5,6 @@ defmodule Tecnovix.UserFavoriteSchema do
   schema "user_favorite" do
     belongs_to :user, Tecnovix.ClientesSchema
     field :group, :string
-    timestamps()
   end
 
   def changeset(changeset, params \\ %{}) do
