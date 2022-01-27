@@ -277,7 +277,7 @@ defmodule TecnovixWeb.ClientesView do
         item: item,
         credits: credits,
         notifications: notifications,
-        dia_remessa: dia_remessa
+        dia_remessa: dia_remessa,
       }) do
     case item do
       %Tecnovix.UsuariosClienteSchema{} ->
@@ -287,7 +287,6 @@ defmodule TecnovixWeb.ClientesView do
         |> Map.put(:notifications, notifications)
         |> Map.put(:dia_remessa, dia_remessa)
         |> Map.put(:status, item.status)
-
       _ ->
         __MODULE__.build(%{item: item})
         |> Map.put(:points, credits.points)

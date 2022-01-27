@@ -248,7 +248,7 @@ defmodule TecnovixWeb.ClientesController do
             |> Map.put(:nome_usuario, auth_user.nome),
           credits: credits_info,
           notifications: notifications,
-          dia_remessa: dia_remessa
+          dia_remessa: dia_remessa,
         })
 
       _ ->
@@ -264,7 +264,7 @@ defmodule TecnovixWeb.ClientesController do
           item: user |> Map.put(:status, nil) |> Map.put(:nome_usuario, nil),
           credits: credits_info,
           notifications: notifications,
-          dia_remessa: dia_remessa
+          dia_remessa: dia_remessa,
         })
     end
   end
