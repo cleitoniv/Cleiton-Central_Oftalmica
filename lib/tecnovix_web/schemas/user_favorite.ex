@@ -2,7 +2,7 @@ defmodule Tecnovix.UserFavoriteSchema do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "ticket" do
+  schema "user_favorite" do
     belongs_to :user, Tecnovix.ClientesSchema
     field :group, :string
     timestamps()
