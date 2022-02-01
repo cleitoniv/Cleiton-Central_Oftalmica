@@ -10,7 +10,9 @@ defmodule Tecnovix.UserFavoriteModel do
         %Tecnovix.UserFavoriteSchema{}
         |> Tecnovix.UserFavoriteSchema.changeset(params)
         |> Repo.insert()
-      v -> {:ok, v}
+      v ->
+        __MODULE__.delete(v) 
+        {:ok, v}
     end
   end
 
