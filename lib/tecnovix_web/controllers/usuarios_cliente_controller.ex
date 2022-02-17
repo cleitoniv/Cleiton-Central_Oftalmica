@@ -47,12 +47,12 @@ defmodule TecnovixWeb.UsuariosClienteController do
         |> render("show.json", %{item: user})
 
       {:ok, %{status_code: 400}} ->
-        with {:ok, user} <- UsuariosClienteModel.create(params |> Map.put("uid", body_decode["localId"])),
-             _ <- Firebase.reset_password(%{email: params["email"]}) do
-         conn
-         |> put_status(:created)
-         |> put_resp_content_type("application/json")
-         |> render("show.json", %{item: user})
+        with  {:ok, user} <- UsuariosClienteModel.create(params),
+              _ <- Firebase.reset_password(%{email: params["email"]}) do
+           conn
+           |> put_status(:created)
+           |> put_resp_content_type("application/json")
+           |> render("show.json", %{item: user})
         end
 
       v ->
