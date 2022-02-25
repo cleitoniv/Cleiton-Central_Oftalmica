@@ -28,30 +28,42 @@ defmodule TecnovixWeb.PedidosDeVendaController do
   def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
-    stub = Screens.stub()
 
-    ip =
-      conn.remote_ip
-      |> Tuple.to_list()
-      |> Enum.join()
+    case cliente.sit_app do
+      "B" -> conn
+            |> put_resp_content_type("application/json")
+            |> send_resp(
+              400,
+              Jason.encode!(%{
+                "success" => false,
+                "data" => "Você não tem crédito suficiente para essa operação."
+              }))
+      _ ->
+        stub = Screens.stub()
 
-    with items <- change_operation_and_tipo_venda(items),
-         %{money: money} <- stub.get_credits(cliente),
-         {:ok, true} <- PedidosDeVendaModel.confirm_buy(money, items),
-         {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
-         {:ok, _logs} <-
-           LogsClienteModel.create(
-             ip,
-             usuario,
-             cliente,
-             "Pedido feito com a remessa de contrato de produto/financeiro no valor de #{valor}."
-           ) do
-      conn
-      |> put_status(200)
-      |> put_resp_content_type("application/json")
-      |> render("pedido.json", %{item: pedido})
-    else
-      {:ok, false} -> {:error, :credit_insufficient}
+        ip =
+          conn.remote_ip
+          |> Tuple.to_list()
+          |> Enum.join()
+
+        with items <- change_operation_and_tipo_venda(items),
+             %{money: money} <- stub.get_credits(cliente),
+             {:ok, true} <- PedidosDeVendaModel.confirm_buy(money, items),
+             {:ok, pedido} <- PedidosDeVendaModel.create_pedido(items, cliente, nil, nil, nil),
+             {:ok, _logs} <-
+               LogsClienteModel.create(
+                 ip,
+                 usuario,
+                 cliente,
+                 "Pedido feito com a remessa de contrato de produto/financeiro no valor de #{valor}."
+               ) do
+          conn
+          |> put_status(200)
+          |> put_resp_content_type("application/json")
+          |> render("pedido.json", %{item: pedido})
+        else
+          {:ok, false} -> {:error, :credit_insufficient}
+        end
     end
   end
 
