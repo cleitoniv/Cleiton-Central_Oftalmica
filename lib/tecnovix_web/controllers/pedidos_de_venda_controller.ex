@@ -13,6 +13,18 @@ defmodule TecnovixWeb.PedidosDeVendaController do
 
   action_fallback Tecnovix.Resources.Fallback
 
+  def pedido_produto(conn, %{"items" => []}) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(
+      400,
+      Jason.encode!(%{
+        "success" => false,
+        "data" => "Você não tem crédito suficiente para essa operação."
+      })
+    )
+  end
+
   def pedido_produto(conn, %{"items" => items, "valor" => valor}) when valor == 0 do
     {:ok, cliente} = conn.private.auth
     {:ok, usuario} = conn.private.auth_user
