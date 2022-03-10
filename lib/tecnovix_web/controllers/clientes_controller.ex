@@ -254,9 +254,9 @@ defmodule TecnovixWeb.ClientesController do
       _ ->
         stub = Screens.stub()
 
-        credits_info = stub.get_credits(user)
-        {:ok, notifications} = stub.get_notifications(user)
-        dia_remessa = stub.get_dia_remessa(user)
+        credits_info = stub.get_credits(user) |> IO.inspect
+        {:ok, notifications} = stub.get_notifications(user) |> IO.inspect
+        dia_remessa = stub.get_dia_remessa(user) |> IO.inspect
 
         conn
         |> put_view(TecnovixWeb.ClientesView)

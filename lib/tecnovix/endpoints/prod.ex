@@ -77,7 +77,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
     #     loja
     #   }&COUNT=#{count}"
 
-    {:ok, get} = HTTPoison.get(url, header, recv_timeout: 10_000)
+    {:ok, get} = HTTPoison.get(url, header, recv_timeout: 20_000)
 
     {:ok, Jason.decode!(get.body)}
   end
