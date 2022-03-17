@@ -9,9 +9,10 @@ defmodule Tecnovix.Services.OrderFinan do
   @order_limit 100
 
   # Legenda de Pedidos
-  #
+  # 
   # "1" -> Sim foi pago.
   # "2" -> Não foi pago.
+
 
   def verify_pedidos(pedidos) do
     verify =
@@ -23,12 +24,11 @@ defmodule Tecnovix.Services.OrderFinan do
             "PAID" ->
               CreditoFinanceiroModel.insert_or_update(%{
                 "id" => map.id,
-                "status" => 1,
-                "saldo" => map.valor
+                "pago" => 1
               })
 
             "NOT_PAID" ->
-              CreditoFinanceiroModel.insert_or_update(%{"id" => map.id, "status" => 2})
+              CreditoFinanceiroModel.insert_or_update(%{"id" => map.id, "pago" => 2})
 
             # "REVERTED" ->
             #   CreditoFinanceiroModel.insert_or_update(map)
@@ -56,7 +56,7 @@ defmodule Tecnovix.Services.OrderFinan do
   def handle_info({:ok, msg}, _state) do
     pedidos =
       CreditoFinanceiroSchema
-      |> where([p], p.status == 0)
+      |> where([p], p.pago == 0)
       |> limit(@order_limit)
       |> Repo.all()
       |> verify_pedidos()
