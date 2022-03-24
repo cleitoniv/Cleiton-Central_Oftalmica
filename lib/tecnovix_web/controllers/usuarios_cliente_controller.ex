@@ -93,8 +93,10 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, _token} <- Firebase.get_token(conn),
-         {:ok, user} <- UsuariosClienteModel.update(usuario, %{"email" => "#{usuario.email}_old"}),
+    with
+         {:ok, user} <- UsuarioClienteModel.show(id),
+         {:ok, _token} <- Firebase.get_token(conn),
+         {:ok, user} <- UsuariosClienteModel.update(user, %{"email" => "#{user.email}_old", "status" => 0, "sit_app" => "D"}),
          {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario cliente #{user.nome} deletado") do
       conn
       |> put_resp_content_type("application/json")
