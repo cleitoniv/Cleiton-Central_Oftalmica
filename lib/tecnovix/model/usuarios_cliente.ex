@@ -97,7 +97,6 @@ defmodule Tecnovix.UsuariosClienteModel do
       |> preload(:logs_cliente)
       |> first()
       |> Repo.one()
-      |> IO.inspect
 
     Repo.delete(usuario)
   end
