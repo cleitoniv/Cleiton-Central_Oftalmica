@@ -15,11 +15,11 @@ defmodule TecnovixWeb.UsuariosClienteController do
       |> Tuple.to_list()
       |> Enum.join()
 
-    with {:ok, _authorized} <- UsuariosClienteModel.unique_email(params),
-         {:ok, %{status_code: 200} =  response} <-
+    with  user_active? when is_nil(user_active?) <- UsuariosClienteModel.get_by([email: params["email"], status: 1]),
+          {:ok, %{status_code: 200} =  response} <-
            Firebase.create_user(%{email: params["email"], password: params["password"]}),
           {:ok, body_decode} = Jason.decode(response.body),
-         {:ok, user} <- UsuariosClienteModel.create(params |> Map.put("uid", body_decode["localId"])),
+          {:ok, user} <- UsuariosClienteModel.create(params |> Map.put("uid", body_decode["localId"])),
          _ <-
            Email.send_email({user.nome, user.email}, params["password"], params["nome"]),
          {:ok, _logs} <-
@@ -47,7 +47,6 @@ defmodule TecnovixWeb.UsuariosClienteController do
         |> render("show.json", %{item: user})
 
       {:ok, %{status_code: 400}} ->
-        IO.inspect("firebase error------")
         with  {:ok, user} <- UsuariosClienteModel.create(params),
               _ <- Firebase.reset_password(%{email: params["email"]}) |> IO.inspect do
            conn
@@ -56,7 +55,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
            |> render("show.json", %{item: user})
         end
 
-      v ->
+      _ ->
         {:error, :invalid_parameter}
     end
   end
