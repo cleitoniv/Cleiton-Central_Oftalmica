@@ -55,7 +55,9 @@ defmodule TecnovixWeb.UsuariosClienteController do
            |> render("show.json", %{item: user})
         end
 
-      _ ->
+      v ->
+        IO.inspect("error----------")
+        IO.inspect(v)
         {:error, :invalid_parameter}
     end
   end
