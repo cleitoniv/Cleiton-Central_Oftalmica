@@ -10,6 +10,7 @@ defmodule Tecnovix.UsuariosClienteSchema do
     field :email, :string
     field :password, :string, virtual: true
     field :cargo, :string
+    field :sit_app, :string
     field :status, :integer, default: 1
     field :senha_enviada, :integer, default: 0
     field :role, :string, default: "USUARIO"
