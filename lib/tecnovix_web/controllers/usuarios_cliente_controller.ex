@@ -97,7 +97,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
     with {:ok, user} <- UsuariosClienteModel.show(id),
          {:ok, _token} <- Firebase.get_token(conn),
-         {:ok, user} <- UsuariosClienteModel.update(user, %{"email" => "#{user.email}_old", "status" => 0, "sit_app" => "D"}),
+         {:ok, user} <- UsuariosClienteModel.update(user, %{"email" => "#{user.email}_#{Ecto.UUID.autogenerate()}", "status" => 0, "sit_app" => "D"}),
          {:ok, _logs} <- LogsClienteModel.create(ip, nil, cliente, "Usuario cliente #{user.nome} deletado") do
       conn
       |> put_resp_content_type("application/json")
