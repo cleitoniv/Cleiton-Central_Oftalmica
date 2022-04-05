@@ -719,6 +719,12 @@ defmodule Tecnovix.App.ScreensProd do
                               "N" -> item.virtotal + acc
                             end
 
+                          "04" ->
+                            case item.tests do
+                              "S" -> 0 + acc
+                              "N" -> item.virtotal + acc
+                            end
+
                           "13" ->
                             0 + acc
 

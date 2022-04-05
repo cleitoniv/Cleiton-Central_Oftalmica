@@ -932,7 +932,6 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
       paciente != [nil]
     end)
-    |> IO.inspect()
     |> Enum.filter(fn pedido ->
       duracao =
         Enum.map(pedido.items, fn item ->
