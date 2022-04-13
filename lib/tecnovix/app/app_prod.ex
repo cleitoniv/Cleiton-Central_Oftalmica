@@ -636,6 +636,7 @@ defmodule Tecnovix.App.ScreensProd do
 
   @impl true
   def get_detail_order(cliente, filtro) do
+    IO.inspect("detail order---")
     detail =
       Enum.map(
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
@@ -796,7 +797,7 @@ defmodule Tecnovix.App.ScreensProd do
               end
           end
         end
-      )
+      ) |> IO.inspect
 
     detail =
       case filtro do

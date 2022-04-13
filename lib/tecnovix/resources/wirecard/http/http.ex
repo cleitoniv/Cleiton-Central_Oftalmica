@@ -52,6 +52,8 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
   end
 
   def create(changeset = %Ecto.Changeset{valid?: true}, order_id, :payment) do
+    IO.inspect("payment params----")
+    IO.inspect(changeset.params)
     http_post(changeset.params, url(:orders) <> "/#{order_id}/payments")
   end
 
