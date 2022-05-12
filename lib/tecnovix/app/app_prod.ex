@@ -636,6 +636,7 @@ defmodule Tecnovix.App.ScreensProd do
 
   @impl true
   def get_detail_order(cliente, filtro) do
+    IO.inspect("detail order---")
     detail =
       Enum.map(
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
@@ -649,6 +650,11 @@ defmodule Tecnovix.App.ScreensProd do
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
                           "01" ->
+                            case item.tests do
+                              "S" -> 0 + acc
+                              "N" -> item.virtotal + acc
+                            end
+                          "04" ->
                             case item.tests do
                               "S" -> 0 + acc
                               "N" -> item.virtotal + acc
@@ -686,6 +692,11 @@ defmodule Tecnovix.App.ScreensProd do
                       Enum.reduce(map.items, 0, fn item, acc ->
                         case item.operation do
                           "01" ->
+                            case item.tests do
+                              "S" -> 0 + acc
+                              "N" -> item.virtotal + acc
+                            end
+                          "04" ->
                             case item.tests do
                               "S" -> 0 + acc
                               "N" -> item.virtotal + acc
@@ -719,6 +730,12 @@ defmodule Tecnovix.App.ScreensProd do
                               "N" -> item.virtotal + acc
                             end
 
+                          "04" ->
+                            case item.tests do
+                              "S" -> 0 + acc
+                              "N" -> item.virtotal + acc
+                            end
+
                           "13" ->
                             0 + acc
 
@@ -755,6 +772,11 @@ defmodule Tecnovix.App.ScreensProd do
                               "S" -> 0 + acc
                               "N" -> item.virtotal + acc
                             end
+                          "04" ->
+                            case item.tests do
+                              "S" -> 0 + acc
+                              "N" -> item.virtotal + acc
+                            end
 
                           "13" ->
                             0 + acc
@@ -775,7 +797,7 @@ defmodule Tecnovix.App.ScreensProd do
               end
           end
         end
-      )
+      ) |> IO.inspect
 
     detail =
       case filtro do

@@ -248,15 +248,15 @@ defmodule TecnovixWeb.ClientesController do
             |> Map.put(:nome_usuario, auth_user.nome),
           credits: credits_info,
           notifications: notifications,
-          dia_remessa: dia_remessa
+          dia_remessa: dia_remessa,
         })
 
       _ ->
         stub = Screens.stub()
 
-        credits_info = stub.get_credits(user)
-        {:ok, notifications} = stub.get_notifications(user)
-        dia_remessa = stub.get_dia_remessa(user)
+        credits_info = stub.get_credits(user) |> IO.inspect
+        {:ok, notifications} = stub.get_notifications(user) |> IO.inspect
+        dia_remessa = stub.get_dia_remessa(user) |> IO.inspect
 
         conn
         |> put_view(TecnovixWeb.ClientesView)
@@ -264,7 +264,7 @@ defmodule TecnovixWeb.ClientesController do
           item: user |> Map.put(:status, nil) |> Map.put(:nome_usuario, nil),
           credits: credits_info,
           notifications: notifications,
-          dia_remessa: dia_remessa
+          dia_remessa: dia_remessa,
         })
     end
   end

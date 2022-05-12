@@ -13,7 +13,7 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
     field(:wirecard_reembolso_id, :string)
     field(:status, :integer, default: 0)
     field(:saldo, :integer, default: 0)
-
+    field(:pago, :integer, default: 0)
     timestamps()
   end
 
@@ -33,7 +33,8 @@ defmodule Tecnovix.CreditoFinanceiroSchema do
       :wirecard_pagamento_id,
       :wirecard_reembolso_id,
       :status,
-      :saldo
+      :saldo,
+      :pago
     ])
   end
 end

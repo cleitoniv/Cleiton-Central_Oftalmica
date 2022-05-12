@@ -10,6 +10,7 @@ defmodule Tecnovix.UsuariosClienteSchema do
     field :email, :string
     field :password, :string, virtual: true
     field :cargo, :string
+    field :sit_app, :string
     field :status, :integer, default: 1
     field :senha_enviada, :integer, default: 0
     field :role, :string, default: "USUARIO"
@@ -21,14 +22,14 @@ defmodule Tecnovix.UsuariosClienteSchema do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:cliente_id, :uid, :nome, :email, :cargo, :status, :password, :role])
-    |> validate_required([:cliente_id, :nome, :email, :status])
+    |> validate_required([:cliente_id, :nome, :email, :status, :password])
     |> validate_length(:nome, max: 15, message: "Não pode ser maior que 15 caracteres")
     |> unique_constraint(:email, message: "Esse email ja esta cadastrado.")
   end
 
   def update(struct, params \\ %{}) do
     struct
-    |> cast(params, [:nome, :cargo, :status])
+    |> cast(params, [:nome, :cargo, :status, :email, :sit_app])
   end
 
   def update_senha(struct, params \\ %{}) do
