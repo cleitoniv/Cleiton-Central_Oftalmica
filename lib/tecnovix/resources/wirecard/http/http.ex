@@ -10,7 +10,7 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
     HTTPoison.post(url, Jason.encode!(data), [
       {"Authorization", "OAuth " <> @access_token},
       {"Content-Type", "application/json"}
-    ])
+    ], recv_timeout: 30_000) |> IO.inspect
   end
 
   def http_post(_data, {:error, :not_supported} = error), do: error
