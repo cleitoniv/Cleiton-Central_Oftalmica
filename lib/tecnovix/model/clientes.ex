@@ -35,18 +35,7 @@ defmodule Tecnovix.ClientesModel do
         end
 
       email ->
-        case email.sit_app == "A" do
-          true ->
-            {:ok, email}
-
-          false ->
-            error =
-              %ClientesSchema{}
-              |> change(%{})
-              |> add_error(:email, "Usuario bloqueado não pode redefinir senha.")
-
-            {:error, error}
-        end
+        {:ok, email}
     end
   end
 
