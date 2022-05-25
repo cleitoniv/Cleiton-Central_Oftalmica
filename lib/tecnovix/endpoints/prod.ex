@@ -118,7 +118,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
                   |> :erlang.float_to_binary(decimals: 2)
 
                 %{
-                  "parcela" => "#{string_to_integer(field["value"])}x de #{result}"
+                  "parcela" => {string_to_integer(field["value"]), "#{string_to_integer(field["value"])}x de #{result}"}
                 }
 
               _ ->
@@ -128,6 +128,8 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
         end)
       end)
       |> Enum.filter(fn map -> map != %{} end)
+      |> Enum.sort_by(fn %{"parcela" => {v, _}} -> v end, :asc)
+      |> Enum.map(fn %{"parcela" => {_, res}} -> %{"parcela" => res} end)
       |> Enum.map(fn map ->
         [_antes, depois] = String.split(map["parcela"], ".")
 
