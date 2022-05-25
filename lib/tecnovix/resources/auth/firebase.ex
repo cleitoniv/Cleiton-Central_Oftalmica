@@ -182,4 +182,10 @@ defmodule TecnovixWeb.Auth.Firebase do
 
     HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
   end
+
+  def send_reset_password(%{email: email} = params) do
+    url = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" <> @firebase_api_key
+
+    HTTPoison.post(url, Jason.encode!(params), [{"Content-Type", "application/json"}])
+  end
 end
