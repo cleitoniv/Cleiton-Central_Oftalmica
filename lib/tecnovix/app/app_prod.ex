@@ -234,6 +234,8 @@ defmodule Tecnovix.App.ScreensProd do
 
     produtos =
       Enum.map(grid, fn map ->
+        IO.inspect("grid ----")
+        IO.inspect(grid)
         map =
           Map.put(
             map,
