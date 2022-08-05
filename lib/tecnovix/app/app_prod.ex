@@ -183,10 +183,10 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
-  defp convert_n(n) do
-    n = String.to_float(n)
-    n = String.replace("#{n}", ".", "")
-    String.to_integer(n)
+  def convert_n(n) do
+    n
+    |> Decimal.mult(100)
+    |> Decimal.to_integer()
   end
 
   def value_cents_1(key, acc) do
