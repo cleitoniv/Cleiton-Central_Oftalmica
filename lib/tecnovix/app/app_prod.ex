@@ -183,11 +183,17 @@ defmodule Tecnovix.App.ScreensProd do
     end
   end
 
+  defp convert_n(n) do
+    n = String.to_float(n)
+    n = String.replace("#{n}", ".", "")
+    String.to_integer(n)
+  end
+
   def value_cents_1(key, acc) do
     case key do
       "boxes" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
       "tests" -> Map.put(acc, key, String.to_float(acc[key]) |> floor())
-      _ -> Map.put(acc, key, (String.to_float(acc[key]) * 100) |> trunc())
+      _ -> Map.put(acc, key, (convert_n(acc[key]))
     end
   end
 
@@ -195,7 +201,7 @@ defmodule Tecnovix.App.ScreensProd do
     case key do
       "boxes" -> Map.put(acc, key, String.to_integer(acc[key]))
       "tests" -> Map.put(acc, key, String.to_integer(acc[key]))
-      _ -> Map.put(acc, key, (String.to_float(acc[key]) * 100) |> trunc())
+      _ -> Map.put(acc, key, convert_n(acc[key]))
     end
   end
 
