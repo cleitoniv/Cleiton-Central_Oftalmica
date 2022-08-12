@@ -131,6 +131,7 @@ defmodule TecnovixWeb.Router do
       get "/payments", TecnovixWeb.ClientesController, :get_payments
       get "/points", TecnovixWeb.ClientesController, :get_mypoints
       get "/notifications", TecnovixWeb.ClientesController, :get_notifications
+      delete "/notifications/:id", TecnovixWeb.NotificacoesController, :delete
       get "/product_serie/:num_serie", TecnovixWeb.ClientesController, :get_product_serie
       post "/devolution_continue", TecnovixWeb.ClientesController, :devolution_continue
       post "/next_step", TecnovixWeb.ClientesController, :next_step
