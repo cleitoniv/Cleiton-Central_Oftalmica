@@ -946,12 +946,18 @@ defmodule Tecnovix.App.ScreensProd do
       group_by =
         Enum.group_by(paciente.items, fn item -> item.codigo_item end)
         |> Enum.map(fn {_codigo, codigo_items} ->
+          quantity = Enum.reduce(codigo_items, 0,
+          fn
+            %{quantidade: qtd}, acc when is_integer(qtd) -> acc + qtd
+            _ -> acc
+          end)
+
           Enum.reduce(codigo_items, %{}, fn codigo_item, acc ->
             p_olho = parse_olho(codigo_item)
 
             map =
               Map.put(acc, :valor_produto, codigo_item.valor_produto)
-              |> Map.put(:quantidade, codigo_item.quantidade)
+              |> Map.put(:quantidade, quantity)
               |> Map.put(:valor_total, codigo_item.valor_total)
               |> Map.put(:olho, codigo_item.olho)
               |> Map.put(
