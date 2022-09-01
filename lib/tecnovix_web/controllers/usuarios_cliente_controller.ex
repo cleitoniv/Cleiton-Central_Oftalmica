@@ -48,7 +48,7 @@ defmodule TecnovixWeb.UsuariosClienteController do
 
       {:ok, %{status_code: 400}} ->
         with  {:ok, user} <- UsuariosClienteModel.create(params),
-              _ <- Firebase.reset_password(%{email: params["email"]}) |> IO.inspect do
+              _ <- Firebase.send_reset_password(%{email: params["email"]}) |> IO.inspect do
            conn
            |> put_status(:created)
            |> put_resp_content_type("application/json")
