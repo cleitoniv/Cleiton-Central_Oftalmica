@@ -949,7 +949,7 @@ defmodule Tecnovix.App.ScreensProd do
           quantity = Enum.reduce(codigo_items, 0,
           fn
             %{quantidade: qtd}, acc when is_integer(qtd) -> acc + qtd
-            _ -> acc
+            _, acc -> acc
           end)
 
           Enum.reduce(codigo_items, %{}, fn codigo_item, acc ->
