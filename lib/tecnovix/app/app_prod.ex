@@ -1063,7 +1063,8 @@ defmodule Tecnovix.App.ScreensProd do
           eixo_d: item.eixo,
           cilindro_d: item.cilindro,
           adicao_d: item.adicao,
-          cor_d: item.cor
+          cor_d: item.cor,
+          qtd_e: item.quantidade
         }
 
       "E" ->
@@ -1072,7 +1073,8 @@ defmodule Tecnovix.App.ScreensProd do
           eixo_e: item.eixo,
           cilindro_e: item.cilindro,
           adicao_e: item.adicao,
-          cor_e: item.cor
+          cor_e: item.cor,
+          qtd_d: item.quantidade
         }
 
       _ ->
@@ -1081,7 +1083,8 @@ defmodule Tecnovix.App.ScreensProd do
           eixo_e: nil,
           cilindro_e: nil,
           adicao_e: nil,
-          cor_e: nil
+          cor_e: nil,
+          qtd_e: nil
         }
     end
   end
