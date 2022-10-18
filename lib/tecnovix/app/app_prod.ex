@@ -1064,7 +1064,7 @@ defmodule Tecnovix.App.ScreensProd do
           cilindro_d: item.cilindro,
           adicao_d: item.adicao,
           cor_d: item.cor,
-          qtd_e: item.quantidade
+          qtd_d: item.quantidade
         }
 
       "E" ->
@@ -1074,7 +1074,7 @@ defmodule Tecnovix.App.ScreensProd do
           cilindro_e: item.cilindro,
           adicao_e: item.adicao,
           cor_e: item.cor,
-          qtd_d: item.quantidade
+          qtd_e: item.quantidade
         }
 
       _ ->
