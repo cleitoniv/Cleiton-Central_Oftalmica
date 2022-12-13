@@ -96,6 +96,7 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
   defp string_to_integer(string) do
     string
     |> String.replace("X", "")
+    |> String.replace("C", "")
     |> String.to_integer()
   end
 
