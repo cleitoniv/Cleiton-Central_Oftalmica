@@ -648,6 +648,28 @@ defmodule Tecnovix.App.ScreensProd do
   #   {:ok, resp}
   # end
 
+  defp calculate_value(items) do
+    Enum.reduce(items, 0, fn item, acc ->
+      case item.operation do
+        "01" ->
+          case item.tests do
+            "S" -> acc
+            "N" -> item.virtotal + acc
+          end
+        "04" ->
+          case item.tests do
+            "S" -> 0 + acc
+            "N" -> item.virtotal + acc
+          end
+        "13" -> acc
+        "07" -> acc
+        "03" -> acc
+        _ ->
+          item.virtotal + acc
+      end
+    end)
+  end
+
   @impl true
   def get_detail_order(cliente, filtro) do
     IO.inspect("detail order---")
@@ -660,30 +682,7 @@ defmodule Tecnovix.App.ScreensProd do
               case filtro do
                 "2" ->
                   _resp = %{
-                    valor:
-                      Enum.reduce(map.items, 0, fn item, acc ->
-                        case item.operation do
-                          "01" ->
-                            case item.tests do
-                              "S" -> 0 + acc
-                              "N" -> item.virtotal + acc
-                            end
-                          "04" ->
-                            case item.tests do
-                              "S" -> 0 + acc
-                              "N" -> item.virtotal + acc
-                            end
-
-                          "13" ->
-                            0 + acc
-
-                          "07" ->
-                            0 + acc
-
-                          _ ->
-                            item.virtotal + acc
-                        end
-                      end),
+                    valor: calculate_value(map.items),
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id,
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
@@ -702,30 +701,7 @@ defmodule Tecnovix.App.ScreensProd do
 
                 _ ->
                   _resp = %{
-                    valor:
-                      Enum.reduce(map.items, 0, fn item, acc ->
-                        case item.operation do
-                          "01" ->
-                            case item.tests do
-                              "S" -> 0 + acc
-                              "N" -> item.virtotal + acc
-                            end
-                          "04" ->
-                            case item.tests do
-                              "S" -> 0 + acc
-                              "N" -> item.virtotal + acc
-                            end
-
-                          "13" ->
-                            0 + acc
-
-                          "07" ->
-                            0 + acc
-
-                          _ ->
-                            item.virtotal + acc
-                        end
-                      end),
+                    valor: calculate_value(map.items),
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id
                   }
@@ -735,31 +711,7 @@ defmodule Tecnovix.App.ScreensProd do
               case filtro do
                 "2" ->
                   _resp = %{
-                    valor:
-                      Enum.reduce(map.items, 0, fn item, acc ->
-                        case item.operation do
-                          "01" ->
-                            case item.tests do
-                              "S" -> 0 + acc
-                              "N" -> item.virtotal + acc
-                            end
-
-                          "04" ->
-                            case item.tests do
-                              "S" -> 0 + acc
-                              "N" -> item.virtotal + acc
-                            end
-
-                          "13" ->
-                            0 + acc
-
-                          "07" ->
-                            0 + acc
-
-                          _ ->
-                            item.virtotal + acc
-                        end
-                      end) + map.taxa_wirecard,
+                    valor: calculate_value(map.items) + map.taxa_wirecard,
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id,
                     paciente: Enum.reduce(map.items, "", fn item, _acc -> item.paciente end),
@@ -778,33 +730,7 @@ defmodule Tecnovix.App.ScreensProd do
 
                 _ ->
                   _resp = %{
-                    valor:
-                      Enum.reduce(map.items, 0, fn item, acc ->
-                        case item.operation do
-                          "01" ->
-                            case item.tests do
-                              "S" -> 0 + acc
-                              "N" -> item.virtotal + acc
-                            end
-                          "04" ->
-                            case item.tests do
-                              "S" -> 0 + acc
-                              "N" -> item.virtotal + acc
-                            end
-
-                          "13" ->
-                            0 + acc
-
-                          "07" ->
-                            0 + acc
-
-                          "00" ->
-                            0 + acc
-
-                          _ ->
-                            item.virtotal + acc
-                        end
-                      end) + map.taxa_wirecard,
+                    valor: calculate_value(map.items) + map.taxa_wirecard,
                     data_inclusao: map.inserted_at,
                     num_pedido: map.id
                   }
