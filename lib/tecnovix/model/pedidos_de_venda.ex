@@ -54,7 +54,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     quantity_product_invoiced =
       PedidosDeVendaSchema
       |> preload(:items)
-      |> where([p], p.client_id == ^cliente_id and (p.status_ped != 0 or p.status_ped != 4))
+      |> where([p], p.client_id == ^cliente_id and (p.status_ped != 0 and p.status_ped != 4))
       |> Repo.all()
       |> Enum.flat_map(fn pedido ->
         Enum.reduce(pedido.items, [], fn items, acc ->

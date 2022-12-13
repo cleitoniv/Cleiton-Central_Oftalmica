@@ -302,9 +302,13 @@ defmodule Tecnovix.App.ScreensProd do
           quantidades_boxes =
             Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "S"))
 
+          # [
+          #   Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))
+          #   |> Map.put("tests", produto["tests"] - Enum.sum(quantidades_boxes))
+          # ] ++ acc
           [
-            Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))
-            |> Map.put("tests", produto["tests"] - Enum.sum(quantidades_boxes))
+            Map.put(produto, "boxes", produto["boxes"])
+            |> Map.put("tests", produto["tests"])
           ] ++ acc
 
         false ->
@@ -317,8 +321,8 @@ defmodule Tecnovix.App.ScreensProd do
           quantidades_boxes =
             Map.get(products_invoiced, String.replace_suffix(produto["group"], "", "N"))
 
-          [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
-
+          # [Map.put(produto, "boxes", produto["boxes"] - Enum.sum(quantidades_boxes))] ++ acc
+            [Map.put(produto, "boxes", produto["boxes"])] ++ acc
         false ->
           [produto] ++ acc
       end
@@ -336,7 +340,8 @@ defmodule Tecnovix.App.ScreensProd do
           grupo = String.replace_suffix(produto["BM_YGRPTES"], "", "S")
 
           quantidade = Map.get(products_invoiced, grupo)
-          [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidade))] ++ acc
+          # [Map.put(produto, "tests", produto["tests"] - Enum.sum(quantidade))] ++ acc
+          [Map.put(produto, "tests", produto["tests"])] ++ acc
 
         false ->
           [produto] ++ acc
