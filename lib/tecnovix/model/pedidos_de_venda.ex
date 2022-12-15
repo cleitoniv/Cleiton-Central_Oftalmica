@@ -90,7 +90,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
         Enum.reduce(pedido.items, 0, fn items_pedido, acc ->
           case (items_pedido.status == 0 or items_pedido.status == 3) and items_pedido.operation == "13" and items_pedido.tests != "S" do
             true -> acc + items_pedido.valor_credito_finan * items_pedido.quantidade
-            false -> 0
+            false -> acc
           end
         end)
 
