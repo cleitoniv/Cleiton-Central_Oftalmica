@@ -1262,7 +1262,7 @@ defmodule Tecnovix.App.ScreensProd do
               Map.put(
                 map,
                 "image_url",
-                "http://portal.centraloftalmica.com/images/#{map["group"]}.jpg"
+                "http://187.64.129.117/images/#{map["group"]}.jpg"
               )
             end)
       end
