@@ -368,14 +368,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
                   [olho_esquerdo(items, map)]
 
                 map["olho_ambos"] != nil ->
-                  items =
-                    Map.put(items, "quantidade", (items["quantidade"] / 2) |> Kernel.trunc())
-
+                  olho_esquerdo = Map.put(items, "quantidade", items["quantity_for_eye"]["esquerdo"])
+                  
+                  olho_direito = Map.put(items, "quantidade", items["quantity_for_eye"]["direito"])
+                  
                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
 
                   [
-                    olho_direito(input_codigo(items, codigo), map),
-                    olho_esquerdo(input_codigo(items, codigo), map)
+                    olho_direito(input_codigo(olho_direito, codigo), map),
+                    olho_esquerdo(input_codigo(olho_esquerdo, codigo), map)
                   ]
 
                 map["olho_diferentes"] != nil ->
@@ -423,11 +424,15 @@ defmodule Tecnovix.PedidosDeVendaModel do
                   [olho_esquerdo(items, map)]
 
                 map["olho_ambos"] != nil ->
+                  olho_esquerdo = Map.put(items, "quantidade", items["quantity_for_eye"]["esquerdo"])
+                  
+                  olho_direito = Map.put(items, "quantidade", items["quantity_for_eye"]["direito"])
+                  
                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
 
                   [
-                    olho_direito(input_codigo(items, codigo), map),
-                    olho_esquerdo(input_codigo(items, codigo), map)
+                    olho_direito(input_codigo(olho_direito, codigo), map),
+                    olho_esquerdo(input_codigo(olho_esquerdo, codigo), map)
                   ]
 
                 map["olho_diferentes"] != nil ->
