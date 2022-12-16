@@ -333,6 +333,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def pedido_params(items, cliente, order, installment, taxa_entrega) do
+    IO.inspect(items, label: "336")
     pedido = %{
       "client_id" => cliente.id,
       "tipo_pagamento" => "CREDIT_CARD",
