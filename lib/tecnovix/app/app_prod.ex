@@ -1038,14 +1038,15 @@ defmodule Tecnovix.App.ScreensProd do
                       end
 
                     "07" ->
-                      0 + acc
+                      acc
 
                     "13" ->
-                      0 + acc
+                      acc
 
                     "04" ->
-                      0 + acc
-
+                      acc
+                    "03" ->
+                      acc
                     _ ->
                       map.virtotal + acc
                   end
@@ -1060,14 +1061,15 @@ defmodule Tecnovix.App.ScreensProd do
                       end
 
                     "07" ->
-                      0 + acc
+                      acc
 
                     "13" ->
-                      0 + acc
+                      acc
 
                     "04" ->
-                      0 + acc
-
+                      acc
+                    "03" ->
+                      acc
                     _ ->
                       map.virtotal + acc
                   end
@@ -1099,7 +1101,7 @@ defmodule Tecnovix.App.ScreensProd do
                             end
 
                           "04" ->
-                            0
+                            acc
 
                           "13" ->
                             item.valor_credito_finan * item.quantidade
@@ -1109,7 +1111,7 @@ defmodule Tecnovix.App.ScreensProd do
                               true -> 0
                               false -> item.valor_credito_prod * item.quantidade
                             end
-
+                          "03" -> acc
                           _ ->
                             item.prc_unitario * item.quantidade
                         end,
@@ -1139,14 +1141,14 @@ defmodule Tecnovix.App.ScreensProd do
               valor:
                 Enum.reduce(pedido.items, 0, fn map, acc ->
                   case map.operation do
-                    "07" -> 0 + acc
+                    "07" -> acc
                     _ -> map.virtotal + acc
                   end
                 end),
               valor_total:
                 Enum.reduce(pedido.items, 0, fn map, acc ->
                   case map.operation do
-                    "07" -> 0 + acc
+                    "07" -> acc
                     _ -> map.virtotal + acc
                   end
                 end) + pedido.taxa_entrega + pedido.taxa_wirecard,
