@@ -1056,7 +1056,7 @@ defmodule Tecnovix.App.ScreensProd do
                   case map.operation do
                     "01" ->
                       case map.tests do
-                        "S" -> 0 + acc
+                        "S" -> acc
                         "N" -> map.virtotal + acc
                       end
 
@@ -1100,8 +1100,7 @@ defmodule Tecnovix.App.ScreensProd do
                               "N" -> item.prc_unitario * item.quantidade
                             end
 
-                          "04" ->
-                            acc
+                          "04" -> 0
 
                           "13" ->
                             item.valor_credito_finan * item.quantidade
@@ -1111,7 +1110,7 @@ defmodule Tecnovix.App.ScreensProd do
                               true -> 0
                               false -> item.valor_credito_prod * item.quantidade
                             end
-                          "03" -> acc
+                          "03" -> 0
                           _ ->
                             item.prc_unitario * item.quantidade
                         end,
