@@ -238,8 +238,6 @@ defmodule Tecnovix.App.ScreensProd do
 
     list = ["boxes", "tests", "value", "value_produto", "value_finan"]
 
-    IO.inspect("grid ----")
-    IO.inspect(grid)
 
     produtos =
       Enum.map(grid, fn map ->
@@ -672,7 +670,6 @@ defmodule Tecnovix.App.ScreensProd do
 
   @impl true
   def get_detail_order(cliente, filtro) do
-    IO.inspect("detail order---")
     detail =
       Enum.map(
         PedidosDeVendaModel.get_pedidos(cliente.id, filtro),
@@ -737,7 +734,7 @@ defmodule Tecnovix.App.ScreensProd do
               end
           end
         end
-      ) |> IO.inspect
+      )
 
     detail =
       case filtro do

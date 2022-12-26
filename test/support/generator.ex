@@ -16,7 +16,7 @@ defmodule TecnovixWeb.Support.Generator do
 
   def vendedor_params() do
     %{
-      "email" => "victorasilva0707#{ECTO.UUID.autogenerate()}@gmail.com",
+      "email" => "victorasilva0707#{Ecto.UUID.autogenerate()}@gmail.com",
       "password" => "123456",
       "nome" => "Victor Augusto",
       "cnpj_cpf" => "167-939-737-03",
@@ -125,7 +125,7 @@ defmodule TecnovixWeb.Support.Generator do
       "primeiros_6_digitos" => "123456",
       "ultimos_4_digitos" => "1234",
       "mes_validade" => "06",
-      "ano_validade" => "2022",
+      "ano_validade" => "2023",
       "cartao_number" => "5555666677778884",
       "bandeira" => "Mastercard",
       "wirecard_cartao_credito_id" => "12",

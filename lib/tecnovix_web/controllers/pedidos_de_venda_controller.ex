@@ -212,6 +212,7 @@ defmodule TecnovixWeb.PedidosDeVendaController do
              "Pedido id #{pedido.id} feito. Em #{installment}x e com R$ #{taxa_entrega / 100} de pagamento no frete e cartão de credito id #{id_cartao}."
            ),
          {:ok, _notificacao} <- NotificacoesClienteModel.verify_notification(pedido, cliente) do
+
       conn
       |> put_status(200)
       |> put_resp_content_type("application/json")

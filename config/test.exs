@@ -35,6 +35,5 @@ config :tecnovix, Tecnovix.Mailer,
 
 config :tecnovix, :protheus_username, "TECNOVIX"
 config :tecnovix, :protheus_password, "TecnoVix200505"
-
-# config :tecnovix, :central_endpoint, "http://hom.app.centraloftalmica.com:8080"
-config :tecnovix, :central_endpoint, "http://177.39.232.201:8080"
+config :tecnovix, :central_endpoint, "http://hom.app.centraloftalmica.com:8080"
+#config :tecnovix, :central_endpoint, "http://177.39.232.201:8080"

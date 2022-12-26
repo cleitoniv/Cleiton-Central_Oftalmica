@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :tecnovix, Tecnovix.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "tecnovix_dev",
-  hostname: "localhost",
+  username: "tchfhslopielgqur",
+  password: "b523*0Hi7o@$lwRV",
+  database: "central_oftalmica_devs",
+  hostname: "34.75.189.220",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -76,8 +76,6 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
-
 config :tecnovix, :wirecard_endpoint, "https://sandbox.moip.com.br/v2/"
 
 config :tecnovix, :moip_access_token, "6dbff0e585964b018e77030a4d039b5a_v2"
@@ -102,4 +100,4 @@ config :tecnovix, Tecnovix.Mailer,
   adapter: Bamboo.SendGridAdapter,
   api_key: "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"
 
-config :tecnovix, :central_endpoint, "https://hom.app.centraloftalmica.com:8080"
+config :tecnovix, :central_endpoint, "http://hom.app.centraloftalmica.com:8080"

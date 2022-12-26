@@ -446,7 +446,6 @@ defmodule Tecnovix.ClientesModel do
         "55" <> phone_number -> phone_number
         _ -> phone_number
       end
-      |> IO.inspect()
 
     code_sms = String.to_integer(code_sms) |> IO.inspect()
 

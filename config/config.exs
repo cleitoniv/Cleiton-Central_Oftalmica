@@ -16,8 +16,8 @@ config :ssl, protocol_version: :"tlsv1.2"
 config :tecnovix, TecnovixWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "kiE/ehf+enHNN5krrOjDp0uTdWyryxB6aG5a798ywjuAReLSH4+y8gnxDyiiQwo8",
-  render_errors: [view: TecnovixWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Tecnovix.PubSub, adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: TecnovixWeb.ErrorView, accepts: ~w(html json)]
+  # pubsub: [name: Tecnovix.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,

@@ -83,7 +83,6 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       |> __MODULE__.order_params(params)
       |> CreditoFinanceiroModel.wirecard_order()
       |> Wirecard.create_order()
-      |> IO.inspect()
 
     case order do
       {:ok, %{status_code: 201}} -> order
@@ -233,7 +232,6 @@ defmodule Tecnovix.CreditoFinanceiroModel do
       14 -> "CNPJ"
       11 -> "CPF"
     end
-    |> IO.inspect()
 
     %{
       "installmentCount" => Enum.reduce(params, 0, fn map, _acc -> map["prestacoes"] end),

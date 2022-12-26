@@ -19,7 +19,7 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
     HTTPoison.post(url, [], [
       {"Authorization", "OAuth " <> @access_token},
       {"Content-Type", "application/json"}
-    ], [recv_timeout: 30_000]) |> IO.inpect
+    ], [recv_timeout: 30_000]) |> IO.inspect
   end
 
   def http_get(url) do

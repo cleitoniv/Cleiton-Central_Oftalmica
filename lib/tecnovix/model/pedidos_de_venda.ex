@@ -141,6 +141,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def somando_items(items) do
+    IO.inspect(items)
     Enum.reduce(items, 0, fn item, acc ->
       map =
         Enum.reduce(item, %{}, fn {key, value}, acc ->
@@ -150,6 +151,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
             _ -> acc
           end
         end)
+        IO.inspect(acc + map["price"] * map["quantidade"])
 
       acc + map["price"] * map["quantidade"]
     end)
@@ -195,6 +197,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
     order =
       cliente
       |> PedidosDeVendaModel.order_params(items)
+      |> IO.inspect(label: "retorno de ordem_params")
       |> PedidosDeVendaModel.wirecard_order(taxa_entrega, taxa)
       |> Wirecard.create_order()
 
@@ -202,6 +205,18 @@ defmodule Tecnovix.PedidosDeVendaModel do
       {:ok, %{status_code: 201}} -> order
       _ -> {:error, :order_not_created}
     end
+  end
+
+  def change_operation_and_tipo_venda(items) do
+    Enum.reduce(items, [], fn item, acc ->
+      with true <- item["operation"] == "00",
+          true <- item["type"] == "T" do
+        acc ++ [Map.put(item, "type", "C") |> Map.put("operation", "07")]
+      else
+        _ -> acc ++ [item]
+      end
+    end)
+    |> IO.inspect(label: "items depois de passar na função change_operation")
   end
 
   def update_order(changeset, status) do
@@ -370,9 +385,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
                 map["olho_ambos"] != nil ->
                   olho_esquerdo = Map.put(items, "quantidade", items["quantity_for_eye"]["esquerdo"])
-                  
+
                   olho_direito = Map.put(items, "quantidade", items["quantity_for_eye"]["direito"])
-                  
+
                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
 
                   [
@@ -426,9 +441,9 @@ defmodule Tecnovix.PedidosDeVendaModel do
 
                 map["olho_ambos"] != nil ->
                   olho_esquerdo = Map.put(items, "quantidade", items["quantity_for_eye"]["esquerdo"])
-                  
+
                   olho_direito = Map.put(items, "quantidade", items["quantity_for_eye"]["direito"])
-                  
+
                   codigo = String.slice(Ecto.UUID.autogenerate(), 0..10)
 
                   [
@@ -651,6 +666,8 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def order_params(cliente = %ClientesSchema{}, items) do
+    IO.inspect(cliente)
+    IO.inspect(items)
     fisica_jurid =
       case cliente.fisica_jurid do
         "F" -> "CPF"

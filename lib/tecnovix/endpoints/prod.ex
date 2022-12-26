@@ -10,7 +10,6 @@ defmodule Tecnovix.Endpoints.ProtheusProd do
 
     url = Protheus.generate_url("/rest/api/oauth2/v1/token", params)
 
-    IO.inspect(url)
     HTTPoison.post(url, [], @header)
   end
 

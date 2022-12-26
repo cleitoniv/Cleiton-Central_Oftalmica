@@ -298,6 +298,7 @@ defmodule TecnovixWeb.ClientesController do
            }),
          {:ok, grid, filters} <-
            stub.get_product_grid(products, cliente, filtro, product_invoiced) do
+
       conn
       |> put_resp_content_type("application/json")
       |> send_resp(
