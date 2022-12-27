@@ -168,7 +168,7 @@ objeto_create_credit_card =
     %{
       "items" => [
         %{
-          "descricao_generica_do_produto_id" => 80041,
+          "descricao_generica_do_produto_id" => 2,
           "duracao" => "180.00000",
           "filial" => "teste",
           "nocontrato" => "teste",

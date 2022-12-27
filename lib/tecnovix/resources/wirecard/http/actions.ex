@@ -46,6 +46,8 @@ defmodule Tecnovix.Resource.Wirecard.Actions do
   Cria um pagamento na wirecard baseado no order id.
   """
   def create_payment({:ok, params}, order_id) do
+    IO.inspect(params, label: "params do create de SDK")
+    IO.inspect(order_id, label: "order_id do create de SDK")
     %Payment{}
     |> Payment.changeset(params)
     |> SDK.create(order_id, :payment)

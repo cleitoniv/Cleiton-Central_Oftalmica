@@ -208,6 +208,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
   end
 
   def change_operation_and_tipo_venda(items) do
+    IO.inspect(items, label: "params do change")
     Enum.reduce(items, [], fn item, acc ->
       with true <- item["operation"] == "00",
           true <- item["type"] == "T" do
@@ -237,7 +238,7 @@ defmodule Tecnovix.PedidosDeVendaModel do
       |> Wirecard.create_payment(order_id)
 
     payment = Jason.decode!(payment.body)
-
+    IO.inspect(payment, label: "retorno de payment com sucesso")
     case payment["status"] do
       "CANCELLED" ->
         try do

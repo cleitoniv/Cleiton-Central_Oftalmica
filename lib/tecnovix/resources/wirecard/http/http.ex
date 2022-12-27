@@ -48,6 +48,7 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
   end
 
   def create(changeset = %Ecto.Changeset{valid?: true}, cliente_id, :credit_card) do
+    IO.inspect(changeset.params, label: "retorno do changeset com cliente_id como parametro")
     http_post(changeset.params, url(:customers) <> "/#{cliente_id}/fundinginstruments")
   end
 
@@ -58,6 +59,7 @@ defmodule Tecnovix.Resource.Wirecard.SDK do
   end
 
   def create(changeset = %Ecto.Changeset{valid?: true}, type) do
+    IO.inspect(changeset.params, label: "retorno do changeset com type como parametro")
     http_post(changeset.params, url(type))
   end
 

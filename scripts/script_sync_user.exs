@@ -451,7 +451,7 @@
     %{
       "items" => [
         %{
-          "descricao_generica_do_produto_id" => 80041,
+          "descricao_generica_do_produto_id" => 1,
           "duracao" => "180.00000",
           "filial" => "teste",
           "nocontrato" => "teste",
@@ -479,20 +479,26 @@
       "type" => "A"
     }
   ]
-  {:ok, clientecard} = ClientesModel.get_cliente(6113)
-  |>IO.inspect(label: "cliente")
-  {:ok, cards} = ScreensTest.get_cards(clientecard)
-  |> IO.inspect(label: "cartões")
+    {:ok, clientecard} = ClientesModel.get_cliente(6113)
+    |>IO.inspect(label: "cliente")
+    {:ok, cards} = ScreensTest.get_cards(clientecard)
+    [head | tail] = cards
+    card = Map.delete(head, :__meta__)
+    |> Map.delete(:__struct__)
+    IO.inspect(card, label: "cartones")
 
+    IO.inspect(label: "items vindos do change_operation")
 
 
   # {:ok, data, filters} = ScreensTest.get_product_grid(produtos_params, cliente_params, filtro_params, product_invoiced_params)
   items = PedidosDeVendaModel.change_operation_and_tipo_venda(items)
+  |> IO.inspect(label: "items vindos do change_operation")
   {:ok, items_order} = PedidosDeVendaModel.items_order(items)
   IO.inspect(items_order, label: "items da order")
   {:ok, order} = PedidosDeVendaModel.order(items_order, cliente_params, 200, "2")
-  {:ok, _payment} = PedidosDeVendaModel.payment(%{"id_cartao" => 35}, order, "123", "2")
+  {:ok, _payment} = PedidosDeVendaModel.payment(%{"id_cartao" => card.id}, order, "123", "2")
   {:ok, pedido} = PedidosDeVendaModel.create_pedido(items, cliente_params, order, "2", 200)
+  IO.inspect(pedido, label: "retorno de pedido create_pedido")
   # clientecard = ClientesModel.get_cliente(6117)
   # {:ok, cards} = ScreensTest.get_cards(clientecard)
   # |> IO.inspect()
